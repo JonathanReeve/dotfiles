@@ -116,7 +116,7 @@ fi
 set -o vi
 
 #makes ls colorful
-alias ls="ls --color"
+#alias ls="ls --color"
 alias grep="grep --color" 
 
 # Todo File Shortcut
@@ -187,8 +187,9 @@ alias syncdb="python3 ~/Apps/cca-django/manage.py syncdb"
 alias runserver="python3 ~/Apps/cca-django/manage.py runserver" 
 
 g() { 
-	grep -Ri "$1" * 
+	grep -RiI "$1" * 
 } 
+
 #adds script for doing that neat line across the terminal
 #if [ -f "$HOME/.bash_ps1" ]; then
 #. "$HOME/.bash_ps1"
@@ -199,9 +200,6 @@ export TERM=xterm-256color
 
 #get fancy prompt
 PS1="┌─[\d][\u@\h:\w]\n└─>" 
-
-#path
-export PATH="/var/lib/gems/1.8/bin:$PATH" 
 
 #my gpg key
 export GPGKEY=4C9615CC
