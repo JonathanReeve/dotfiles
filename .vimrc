@@ -12,7 +12,12 @@ set ignorecase
 
 " Sets swap directory to ~/.swap
 set directory=~/.vim/swap
+set backup
 set backupdir=~/.vim/backup
+
+" Enable persistent undo
+set undofile
+set undodir=$HOME/.vim/undo
 
 " Set location of tags file
 set tags=~/.vim/tags/tags
@@ -96,6 +101,19 @@ filetype plugin indent on     " required!
 
 " }}} 
 
+" Password File and Journal File {{{
+" Use Strong Encryption
+set cm=blowfish
+" Makes password file quit automagically after five minutes 
+autocmd BufReadPost,FileReadPost   .p10.txt set updatetime=300000
+autocmd CursorHold                 .p10.txt wq
+
+"Makes journal file quit automagically after five minutes
+autocmd BufReadPost,FileReadPost   .jnl.txt set updatetime=300000
+autocmd CursorHold                 .jnl.txt wq 
+autocmd CursorHoldI                .jnl.txt wq
+"}}}
+
 " Options for Vim Notes {{{
 " To set notes directory for :Note command
 let g:notes_directories = ['~/.vim/notes']
@@ -149,6 +167,9 @@ map ,t :!wn <cword> -synsa<CR>
 " Type ,b to load current page in browser
 map ,b :!firefox "%:p"<CR>
 
+" For todo items that look like [ ], fill in x and insert datestamp
+map ,x 0f[lrxll"=strftime("%m%d %H:%M")." "<CR>p
+
 " Allows you to press ,q to surround the line in quotes and press ,' from
 " within a quoted passage to change it from double quotes to single quotes,
 " and vice versa
@@ -172,7 +193,8 @@ map ,c [zjv]zg<C-g>
 map ,g :vimgrep <C-R><C-W> **<CR>:cw<CR> 
 
 "Php linting
-map ,p :!php -l %
+map ,p :!php -l %<CR>
+
 
 "Turn on tag completion for XML and HTML
 imap ,/ </<C-X><C-O>    
