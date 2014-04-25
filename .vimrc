@@ -82,6 +82,8 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'Colour-Sampler-Pack' 
 " New Colorscheme
 Bundle '29decibel/codeschool-vim-theme'  
+" Another Colorscheme
+Bundle 'Lokaltog/vim-distinguished' 
 " Vim outliner
 Bundle 'VOoM' 
 "For autocomplete and faster html typing
@@ -190,7 +192,8 @@ map ,c [zjv]zg<C-g>
 "map ,g :w<CR>:Git add %<CR><CR>:Gcommit<CR>i
 
 " Vimgrep word under cursor and open quicklist " market
-map ,g :vimgrep <C-R><C-W> **<CR>:cw<CR> 
+map ,gc :vimgrep /<C-R><C-W>/gj **/*.css<CR>:cw<CR> 
+map ,gp :vimgrep /<C-R><C-W>/gj **/*.php<CR>:cw<CR> 
 
 "Php linting
 map ,p :!php -l %<CR>
