@@ -157,6 +157,9 @@ imap <C-v> <Esc><C-v>a
 "Map :w to Ctrl+s to save files so I don't have to type :w all the time
 map <C-s> :update<CR>
 
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+cmap w!! w !sudo tee > /dev/null %
+
 "Make double click toggle folds
 nmap <2-LeftMouse> za 
 
