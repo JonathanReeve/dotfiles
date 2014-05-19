@@ -19,3 +19,4 @@ qmark s javascript:(function()%7BSP_HOST%3D%27//springpad.com%27%3Btry%7Bvar%20x
 qmark g https://mail.google.com/
 qmark v https://google.com/voice
 qmark c https://google.com/calendar
+qmark d http://dev.mlacommons.org
