@@ -22,15 +22,20 @@ set backupdir=~/.vim/backup
 " Set location of tags file
 set tags=~/.vim/tags/tags
 
-" Makes vim color adapter thing work
-set t_Co=256
 
 " Get vim increment to behave normally
 set nrformats-=octal
 
+" Makes vim color adapter thing work
+set t_Co=256
+
 " Sets Color Scheme
 " colorscheme desert
 colorscheme jellybeans
+
+" Highlight cursor depending on mode
+au InsertLeave * hi Cursor guibg=red
+au InsertEnter * hi Cursor guibg=green
 
 "Makes Unicode Work
 set encoding=utf-8
@@ -89,7 +94,7 @@ Bundle 'VOoM'
 "For autocomplete and faster html typing
 "Bundle 'garbas/vim-snipmate' 
 "For a pretty statusline
-"Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}  
+Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}  
 "PHP error checking
 "Bundle 'joonty/vim-phpqa.git' 
 "For better CSS
@@ -98,6 +103,8 @@ Bundle 'JulesWang/css.vim'
 "Bundle 'Valloric/YouCompleteMe' 
 " For writing in Pandoc markdown
 Bundle 'vim-pandoc/vim-pandoc' 
+" HTML Authoring Autocompletion 
+Bundle 'mattn/emmet-vim' 
 
 filetype plugin indent on     " required! 
 
