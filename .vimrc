@@ -16,8 +16,8 @@ set backup
 set backupdir=~/.vim/backup
 
 " Enable persistent undo
-set undofile
-set undodir=$HOME/.vim/undo
+"set undofile
+"set undodir=$HOME/.vim/undo
 
 " Set location of tags file
 set tags=~/.vim/tags/tags
@@ -82,7 +82,7 @@ Bundle 'scrooloose/nerdcommenter'
 " File browser. 
 Bundle 'scrooloose/nerdtree'
 " Makes colors work in term. 
-"Bundle 'godlygeek/csapprox'
+Bundle 'godlygeek/csapprox'
 " Pretty Colors
 Bundle 'Colour-Sampler-Pack' 
 " New Colorscheme
@@ -99,12 +99,16 @@ Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 "Bundle 'joonty/vim-phpqa.git' 
 "For better CSS
 Bundle 'JulesWang/css.vim' 
+"For Compass/SCSS/Sass
+Bundle 'cakebaker/scss-syntax.vim'
 " Autocompletion Magic
 "Bundle 'Valloric/YouCompleteMe' 
 " For writing in Pandoc markdown
 Bundle 'vim-pandoc/vim-pandoc' 
 " HTML Authoring Autocompletion 
 Bundle 'mattn/emmet-vim' 
+" Php folding
+Bundle 'rayburgemeestre/phpfolding.vim' 
 
 filetype plugin indent on     " required! 
 
@@ -112,7 +116,7 @@ filetype plugin indent on     " required!
 
 " Password File and Journal File {{{
 " Use Strong Encryption
-set cm=blowfish
+"set cm=blowfish
 " Makes password file quit automagically after five minutes 
 autocmd BufReadPost,FileReadPost   .p10.txt set updatetime=300000
 autocmd CursorHold                 .p10.txt wq
