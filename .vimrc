@@ -3,55 +3,6 @@
 " http://jonreeve.com
 " http://github.com/JonathanReeve/
 
-" Basic Settings {{{
-set nocompatible
-syntax on
-
-" Turn off case-sensitive searches and things
-set ignorecase
-
-" Sets swap directory to ~/.swap
-set directory=~/.vim/swap
-set backup
-set backupdir=~/.vim/backup
-
-" Enable persistent undo
-"set undofile
-"set undodir=$HOME/.vim/undo
-
-" Set location of tags file
-set tags=~/.vim/tags/tags
-
-
-" Get vim increment to behave normally
-set nrformats-=octal
-
-" Makes vim color adapter thing work
-set t_Co=256
-
-" Sets Color Scheme
-" colorscheme desert
-colorscheme jellybeans
-
-" Highlight cursor depending on mode
-au InsertLeave * hi Cursor guibg=red
-au InsertEnter * hi Cursor guibg=green
-
-"Makes Unicode Work
-set encoding=utf-8
-
-"Confirm saves rather than give errors
-set confirm 
-
-"Makes sure it doesn't add unnecessary line breaks
-set textwidth=0
-set wrapmargin=0 
-
-" To make plugins work
-filetype plugin on
-filetype indent on
-" }}} 
-
 " Plugins {{{
 
 "Vundle Stuff
@@ -112,6 +63,55 @@ Bundle 'rayburgemeestre/phpfolding.vim'
 
 filetype plugin indent on     " required! 
 
+" }}} 
+
+" Basic Settings {{{
+set nocompatible
+syntax on
+
+" Turn off case-sensitive searches and things
+set ignorecase
+
+" Sets swap directory to ~/.swap
+set directory=~/.vim/swap
+"set backup
+"set backupdir=~/.vim/backup
+
+" Enable persistent undo
+"set undofile
+"set undodir=$HOME/.vim/undo
+
+" Set location of tags file
+set tags=~/.vim/tags/tags
+
+
+" Get vim increment to behave normally
+set nrformats-=octal
+
+" Makes vim color adapter thing work
+set t_Co=256
+
+" Sets Color Scheme
+" colorscheme desert
+colorscheme jellybeans
+
+" Highlight cursor depending on mode
+au InsertLeave * hi Cursor guibg=red
+au InsertEnter * hi Cursor guibg=green
+
+"Makes Unicode Work
+set encoding=utf-8
+
+"Confirm saves rather than give errors
+set confirm 
+
+"Makes sure it doesn't add unnecessary line breaks
+set textwidth=0
+set wrapmargin=0 
+
+" To make plugins work
+filetype plugin on
+filetype indent on
 " }}} 
 
 " Password File and Journal File {{{
