@@ -129,7 +129,7 @@ autocmd CursorHoldI                .jnl.txt wq
 
 " Options for Vim Notes {{{
 " To set notes directory for :Note command
-let g:notes_directories = ['~/.vim/notes']
+let g:notes_directories = ['~/.vim/notes', '~/notes/']
 
 " This ensures that updating vim notes won't overwrite my blank default note. 
 let g:notes_shadowdir = '~/.vim/notes-shadow/' 

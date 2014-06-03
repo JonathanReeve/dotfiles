@@ -174,17 +174,17 @@ alias search='apt-cache search'
 alias update='sudo apt-get update && sudo apt-get upgrade'
 
 #for mounting dev directories over ssh
-alias dev="sshfs -oworkaround=rename jon:/home4/jonreeve/public_html/dev ~/Web/dev && cd ~/Web/dev && gvim ." 
-alias ccadev="sshfs -oworkaround=rename jon:/home4/jonreeve/public_html/cca ~/Web/dev && cd ~/Web/dev && gvim ." 
-alias wfdev="sshfs -oworkaround=rename wf:/home/jonreeve/webapps/cca/cca_project ~/Web/dev && cd ~/Web/dev && gvim ." 
-alias mladev="sshfs -oworkaround=rename mla:/ ~/Web/dev && cd ~/Web/dev && gvim ." 
-alias nodev="cd && fusermount -u ~/Web/dev" 
+#alias dev="sshfs -oworkaround=rename jon:/home4/jonreeve/public_html/dev ~/Web/dev && cd ~/Web/dev && gvim ." 
+#alias ccadev="sshfs -oworkaround=rename jon:/home4/jonreeve/public_html/cca ~/Web/dev && cd ~/Web/dev && gvim ." 
+#alias wfdev="sshfs -oworkaround=rename wf:/home/jonreeve/webapps/cca/cca_project ~/Web/dev && cd ~/Web/dev && gvim ." 
+#alias mladev="sshfs -oworkaround=rename mla:/ ~/Web/dev && cd ~/Web/dev && gvim ." 
+#alias nodev="cd && fusermount -u ~/Web/dev" 
 
 #I'm tired of CDing into this directory
-alias btc="cd ~/Dropbox/Apps/bitcoin-arbitrage/arbitrage/" 
+#alias btc="cd ~/Dropbox/Apps/bitcoin-arbitrage/arbitrage/" 
 
-alias syncdb="python3 ~/Apps/cca-django/manage.py syncdb" 
-alias runserver="python3 ~/Apps/cca-django/manage.py runserver" 
+#alias syncdb="python3 ~/Apps/cca-django/manage.py syncdb" 
+#alias runserver="python3 ~/Apps/cca-django/manage.py runserver" 
 
 g() { 
 	grep -RiI "$1" * 
@@ -203,3 +203,11 @@ PS1="┌─[\d][\u@\h:\w]\n└─>"
 
 #my gpg key
 export GPGKEY=4C9615CC
+
+#coover server
+export P='/home/admin/app/public/wp-content/plugins'
+export T='/home/admin/app/public/wp-content/themes'
+export M='/home/admin/app/public/wp-content/themes/cbox-mla'
+
+#use vim for the editor
+export EDITOR='vim'
