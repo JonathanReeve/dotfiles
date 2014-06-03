@@ -186,9 +186,13 @@ alias update='sudo apt-get update && sudo apt-get upgrade'
 #alias syncdb="python3 ~/Apps/cca-django/manage.py syncdb" 
 #alias runserver="python3 ~/Apps/cca-django/manage.py runserver" 
 
+#grep things better
 g() { 
 	grep -RiI "$1" * 
 } 
+
+#find things better
+alias f='find . -iname' 
 
 #adds script for doing that neat line across the terminal
 #if [ -f "$HOME/.bash_ps1" ]; then

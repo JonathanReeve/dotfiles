@@ -34,11 +34,11 @@ Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
 " Makes colors work in term. 
 Bundle 'godlygeek/csapprox'
-" Pretty Colors
+" A whole big pack of colors. 
 Bundle 'Colour-Sampler-Pack' 
-" New Colorscheme
+" More Colorschemes
 Bundle '29decibel/codeschool-vim-theme'  
-" Another Colorscheme
+Bundle 'ryu-blacknd/vim-nucolors' 
 Bundle 'Lokaltog/vim-distinguished' 
 " Vim outliner
 Bundle 'VOoM' 
@@ -60,6 +60,7 @@ Bundle 'vim-pandoc/vim-pandoc'
 Bundle 'mattn/emmet-vim' 
 " Php folding
 Bundle 'rayburgemeestre/phpfolding.vim' 
+
 
 filetype plugin indent on     " required! 
 
