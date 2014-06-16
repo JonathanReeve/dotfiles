@@ -21,7 +21,9 @@ Bundle 'gmarik/vundle'
 " Required by vim-notes
 Bundle 'xolox/vim-misc' 
 " Essential notes plugin.  
-Bundle 'xolox/vim-notes' 
+"Bundle 'xolox/vim-notes' 
+" Using my fork instead. 
+Bundle 'JonathanReeve/vim-notes'
 " Allows for opening of URLs and other files. 
 Bundle 'xolox/vim-shell'
 " For text surrounds like tags and quotes
@@ -34,11 +36,11 @@ Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
 " Makes colors work in term. 
 Bundle 'godlygeek/csapprox'
-" Pretty Colors
+" A whole big pack of colors. 
 Bundle 'Colour-Sampler-Pack' 
-" New Colorscheme
+" More Colorschemes
 Bundle '29decibel/codeschool-vim-theme'  
-" Another Colorscheme
+Bundle 'ryu-blacknd/vim-nucolors' 
 Bundle 'Lokaltog/vim-distinguished' 
 " Vim outliner
 Bundle 'VOoM' 
@@ -60,6 +62,7 @@ Bundle 'vim-pandoc/vim-pandoc'
 Bundle 'mattn/emmet-vim' 
 " Php folding
 Bundle 'rayburgemeestre/phpfolding.vim' 
+
 
 filetype plugin indent on     " required! 
 
@@ -129,7 +132,7 @@ autocmd CursorHoldI                .jnl.txt wq
 
 " Options for Vim Notes {{{
 " To set notes directory for :Note command
-let g:notes_directories = ['~/.vim/notes']
+let g:notes_directories = ['~/.vim/notes', '~/notes/']
 
 " This ensures that updating vim notes won't overwrite my blank default note. 
 let g:notes_shadowdir = '~/.vim/notes-shadow/' 

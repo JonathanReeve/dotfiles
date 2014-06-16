@@ -123,15 +123,15 @@ alias grep="grep --color"
 alias t='~/Apps/todo/todo.sh -d ~/Apps/todo/todo.cfg'
 
 #opens Journal
-alias jnl='vim ~/Dropbox/Personal/.jnl.txt'
+#alias jnl='vim ~/Dropbox/Personal/.jnl.txt'
 
 #opens password file
-alias pw='vim ~/Dropbox/Personal/.p10.txt'
+#alias pw='vim ~/Dropbox/Personal/.p10.txt'
 
 #makes find commmand more useful
 f() 
-{
-find -iname *"$1"*
+{ 
+	find . -iname "$1" 
 }
 
 #google calendar alias, requires googlecl
@@ -174,20 +174,21 @@ alias search='apt-cache search'
 alias update='sudo apt-get update && sudo apt-get upgrade'
 
 #for mounting dev directories over ssh
-alias dev="sshfs -oworkaround=rename jon:/home4/jonreeve/public_html/dev ~/Web/dev && cd ~/Web/dev && gvim ." 
-alias ccadev="sshfs -oworkaround=rename jon:/home4/jonreeve/public_html/cca ~/Web/dev && cd ~/Web/dev && gvim ." 
-alias wfdev="sshfs -oworkaround=rename wf:/home/jonreeve/webapps/cca/cca_project ~/Web/dev && cd ~/Web/dev && gvim ." 
-alias mladev="sshfs -oworkaround=rename mla:/ ~/Web/dev && cd ~/Web/dev && gvim ." 
-alias nodev="cd && fusermount -u ~/Web/dev" 
+#alias dev="sshfs -oworkaround=rename jon:/home4/jonreeve/public_html/dev ~/Web/dev && cd ~/Web/dev && gvim ." 
+#alias ccadev="sshfs -oworkaround=rename jon:/home4/jonreeve/public_html/cca ~/Web/dev && cd ~/Web/dev && gvim ." 
+#alias wfdev="sshfs -oworkaround=rename wf:/home/jonreeve/webapps/cca/cca_project ~/Web/dev && cd ~/Web/dev && gvim ." 
+#alias mladev="sshfs -oworkaround=rename mla:/ ~/Web/dev && cd ~/Web/dev && gvim ." 
+#alias nodev="cd && fusermount -u ~/Web/dev" 
 
 #I'm tired of CDing into this directory
-alias btc="cd ~/Dropbox/Apps/bitcoin-arbitrage/arbitrage/" 
+#alias btc="cd ~/Dropbox/Apps/bitcoin-arbitrage/arbitrage/" 
 
-alias syncdb="python3 ~/Apps/cca-django/manage.py syncdb" 
-alias runserver="python3 ~/Apps/cca-django/manage.py runserver" 
+#alias syncdb="python3 ~/Apps/cca-django/manage.py syncdb" 
+#alias runserver="python3 ~/Apps/cca-django/manage.py runserver" 
 
+#grep things better
 g() { 
-	grep -RiI "$1" * 
+	grep -RiI --exclude-dir=blogs.dir --exclude-dir=uploads "$1" * 
 } 
 
 #adds script for doing that neat line across the terminal
@@ -204,6 +205,16 @@ PS1="┌─[\d][\u@\h:\w]\n└─>"
 #my gpg key
 export GPGKEY=4C9615CC
 
+#shortcuts for MLA servers
+export P='/home/admin/app/public/wp-content/plugins'
+export T='/home/admin/app/public/wp-content/themes'
+export M='/home/admin/app/public/wp-content/themes/cbox-mla'
+export W='/home/admin/app/public/wp-content' 
+
+#use vim for the editor
+export EDITOR='vim'
+
+#better tmux/ssh integration
 ssh() {
 	tmux rename-window "$*"
 	command ssh "$@"

@@ -10,3 +10,5 @@
 	interactive = auto
 	ui = true
 	pager = true
+[core]
+	editor = vim
