@@ -205,7 +205,7 @@ PS1="┌─[\d][\u@\h:\w]\n└─>"
 #my gpg key
 export GPGKEY=4C9615CC
 
-#coover server
+#shortcuts for MLA servers
 export P='/home/admin/app/public/wp-content/plugins'
 export T='/home/admin/app/public/wp-content/themes'
 export M='/home/admin/app/public/wp-content/themes/cbox-mla'
@@ -213,3 +213,9 @@ export W='/home/admin/app/public/wp-content'
 
 #use vim for the editor
 export EDITOR='vim'
+
+#better tmux/ssh integration
+ssh() {
+	tmux rename-window "$*"
+	command ssh "$@"
+}
