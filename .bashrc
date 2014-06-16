@@ -207,4 +207,5 @@ export GPGKEY=4C9615CC
 ssh() {
 	tmux rename-window "$*"
 	command ssh "$@"
+	tmux rename-window "bash" 
 }
