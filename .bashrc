@@ -203,3 +203,8 @@ PS1="┌─[\d][\u@\h:\w]\n└─>"
 
 #my gpg key
 export GPGKEY=4C9615CC
+
+ssh() {
+	tmux rename-window "$*"
+	command ssh "$@"
+}
