@@ -1,0 +1,6 @@
+set gui=nonavigation
+set hintchars=asdfjkl;
+colorscheme indigo
+map J gt
+map K gT
+set gui=
