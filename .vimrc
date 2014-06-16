@@ -21,7 +21,9 @@ Bundle 'gmarik/vundle'
 " Required by vim-notes
 Bundle 'xolox/vim-misc' 
 " Essential notes plugin.  
-Bundle 'xolox/vim-notes' 
+"Bundle 'xolox/vim-notes' 
+" Using my fork instead. 
+Bundle 'JonathanReeve/vim-notes'
 " Allows for opening of URLs and other files. 
 Bundle 'xolox/vim-shell'
 " For text surrounds like tags and quotes

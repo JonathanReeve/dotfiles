@@ -123,15 +123,15 @@ alias grep="grep --color"
 alias t='~/Apps/todo/todo.sh -d ~/Apps/todo/todo.cfg'
 
 #opens Journal
-alias jnl='vim ~/Dropbox/Personal/.jnl.txt'
+#alias jnl='vim ~/Dropbox/Personal/.jnl.txt'
 
 #opens password file
-alias pw='vim ~/Dropbox/Personal/.p10.txt'
+#alias pw='vim ~/Dropbox/Personal/.p10.txt'
 
 #makes find commmand more useful
 f() 
-{
-find -iname *"$1"*
+{ 
+	find . -iname "$1" 
 }
 
 #google calendar alias, requires googlecl
@@ -188,11 +188,8 @@ alias update='sudo apt-get update && sudo apt-get upgrade'
 
 #grep things better
 g() { 
-	grep -RiI "$1" * 
+	grep -RiI --exclude-dir=blogs.dir --exclude-dir=uploads "$1" * 
 } 
-
-#find things better
-alias f='find . -iname' 
 
 #adds script for doing that neat line across the terminal
 #if [ -f "$HOME/.bash_ps1" ]; then
@@ -212,6 +209,7 @@ export GPGKEY=4C9615CC
 export P='/home/admin/app/public/wp-content/plugins'
 export T='/home/admin/app/public/wp-content/themes'
 export M='/home/admin/app/public/wp-content/themes/cbox-mla'
+export W='/home/admin/app/public/wp-content' 
 
 #use vim for the editor
 export EDITOR='vim'
