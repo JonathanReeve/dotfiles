@@ -33,7 +33,7 @@ unbind l
 bind C-a last-window
 
 # Enable mouse
-setw -g mode-mouse on
+#setw -g mode-mouse on
 
 # Bigger history
 set -g history-limit 10000
