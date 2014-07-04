@@ -219,3 +219,6 @@ ssh() {
 	tmux rename-window "$*"
 	command ssh "$@"
 }
+
+#frees up Ctrl+S and Ctrl+Q from xon/xoff
+stty -ixon -ixoff
