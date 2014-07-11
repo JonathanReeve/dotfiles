@@ -14,54 +14,66 @@ call vundle#rc()
 
 " let Vundle manage Vundle
 " required! 
-Bundle 'gmarik/vundle' 
+Plugin 'gmarik/vundle' 
 
-" My bundles here: 
+" My Plugins here: 
 
 " Required by vim-notes
-Bundle 'xolox/vim-misc' 
+Plugin 'xolox/vim-misc' 
 " Essential notes plugin.  
-"Bundle 'xolox/vim-notes' 
+"Plugin 'xolox/vim-notes' 
 " Using my fork instead. 
-Bundle 'JonathanReeve/vim-notes'
+Plugin 'JonathanReeve/vim-notes'
 " Allows for opening of URLs and other files. 
-Bundle 'xolox/vim-shell'
+Plugin 'xolox/vim-shell'
 " For text surrounds like tags and quotes
-Bundle 'tpope/vim-surround'
+Plugin 'tpope/vim-surround'
 " Git wrapper. 
-Bundle 'tpope/vim-fugitive'
+Plugin 'tpope/vim-fugitive'
 " For Easy Commenting
-Bundle 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdcommenter'
 " File browser. 
-Bundle 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdtree'
 " Makes colors work in term. 
-Bundle 'godlygeek/csapprox'
-" A whole big pack of colors. 
-Bundle 'Colour-Sampler-Pack' 
-" More Colorschemes
-Bundle '29decibel/codeschool-vim-theme'  
-Bundle 'ryu-blacknd/vim-nucolors' 
-Bundle 'Lokaltog/vim-distinguished' 
+" Plugin 'godlygeek/csapprox'
+" Another script for trying to make colors work better in term.
+"Plugin 'vim-scripts/colorsupport.vim' 
+Plugin 'vim-scripts/ScrollColors'
+" Colors. 
+"Plugin 'Colour-Sampler-Pack' 
+"Plugin '29decibel/codeschool-vim-theme'  
+Plugin 'ryu-blacknd/vim-nucolors' 
+Plugin 'Lokaltog/vim-distinguished' 
+"Plugin 'tomasr/molokai'
+Plugin 'flazz/vim-colorschemes'
 " Vim outliner
-Bundle 'VOoM' 
+Plugin 'VOoM' 
 "For autocomplete and faster html typing
-"Bundle 'garbas/vim-snipmate' 
+"Plugin 'garbas/vim-snipmate' 
 "For a pretty statusline
-Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}  
-"PHP error checking
-"Bundle 'joonty/vim-phpqa.git' 
+"Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}  
+"A lighter-weight statusline
+Plugin 'bling/vim-airline'
 "For better CSS
-Bundle 'JulesWang/css.vim' 
+Plugin 'JulesWang/css.vim' 
 "For Compass/SCSS/Sass
-Bundle 'cakebaker/scss-syntax.vim'
+Plugin 'cakebaker/scss-syntax.vim'
 " Autocompletion Magic
-"Bundle 'Valloric/YouCompleteMe' 
+"Plugin 'Valloric/YouCompleteMe' 
 " For writing in Pandoc markdown
-Bundle 'vim-pandoc/vim-pandoc' 
+"Plugin 'vim-pandoc/vim-pandoc' 
 " HTML Authoring Autocompletion 
-Bundle 'mattn/emmet-vim' 
+Plugin 'mattn/emmet-vim' 
 " Php folding
-Bundle 'rayburgemeestre/phpfolding.vim' 
+"Plugin 'rayburgemeestre/phpfolding.vim' 
+"PHP error checking
+"Plugin 'joonty/vim-phpqa' 
+"PHP xdebug integration
+Plugin 'joonty/vdebug' 
+"All kinds of syntax checking
+Plugin 'scrooloose/syntastic'
+"PHP IDE
+Plugin 'spf13/PIV'
 
 
 filetype plugin indent on     " required! 
@@ -87,16 +99,19 @@ set directory=~/.vim/swap
 " Set location of tags file
 set tags=~/.vim/tags/tags
 
-
 " Get vim increment to behave normally
 set nrformats-=octal
 
-" Makes vim color adapter thing work
-set t_Co=256
-
 " Sets Color Scheme
 " colorscheme desert
-colorscheme jellybeans
+" colorscheme jellybeans
+
+" Makes colors work in terminal
+"set t_Co=256
+"set background=dark 
+colorscheme hybrid
+highlight Normal ctermbg=NONE
+highlight nonText ctermbg=NONE
 
 " Highlight cursor depending on mode
 au InsertLeave * hi Cursor guibg=red
@@ -143,6 +158,11 @@ let g:notes_suffix = '.txt'
 " Turn off notes.vim highlighting for vim command syntax
 highlight link notesVimCmd Normal
 "}}}
+
+" Syntax higlighting. {{{ 
+" syntax highlighting for wordpress debug.log  
+au BufRead,BufNewFile debug.log setfiletype debuglog
+" }}} 
 
 " Better word processing. Copy and paste. {{{
 " Stuff to make vim useful as a word processor
@@ -197,7 +217,7 @@ map ," cs'"
 map ,n :NERDTreeToggle<CR>
 
 " Mapping for editing vimrc
-map ,v :e ~/.vimrc<CR>
+map ,v :sp ~/.vimrc<CR>
 
 " mapping to count the number of words in a fold section
 map ,c [zjv]zg<C-g>
@@ -217,7 +237,7 @@ map ,p :!php -l %<CR>
 imap ,/ </<C-X><C-O>    
 
 "Now pressing Tab allows you to switch between open windows
-map <Tab> <C-W><C-W>
+"map <Tab> <C-W><C-W>
 
 "Alt-something for navigating split windows
 map ∆ <C-W>j
@@ -243,6 +263,8 @@ map <Space> <C-f>
 "Yank current filename and line number
 map \yy :let @" = expand("%")<CR>
 map \yl :let @" = expand("%").":".line(".")<CR>
+" open filename mentioned under cursor and navigate to line number mentioned
+map \o Byt:f:l"1yw:e <C-r>0<CR>:<C-r>1<CR>
 
 " }}} 
 
@@ -275,6 +297,18 @@ autocmd BufRead *.mkd      set ai formatoptions=tcroqn2 comments=n:> ft=markdown
 autocmd BufRead *.md       set ai formatoptions=tcroqn2 comments=n:> ft=markdown
 autocmd BufRead *.markdown set ai formatoptions=tcroqn2 comments=n:> ft=markdown 
 " }}}
+
+" Airline {{{ 
+
+if !exists('g:airline_symbols')
+	let g:airline_symbols = {}
+endif
+
+let g:airline_left_sep = '»'
+let g:airline_right_sep = '«'
+let g:airline_symbols.branch = '⎇'
+
+" End Airline }}} 
 
 " Allows for folding in this file. 
 " vim:fdm=marker
