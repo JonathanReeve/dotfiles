@@ -196,9 +196,6 @@ g() {
 #. "$HOME/.bash_ps1"
 #fi 
 
-#get color terminal 
-export TERM=xterm-256color
-
 #get fancy prompt
 PS1="┌─[\d][\u@\h:\w]\n└─>" 
 
