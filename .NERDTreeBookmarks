@@ -1,0 +1,18 @@
+bbpress /home/admin/app/public/wp-content/plugins/bbpress/templates/default/bbpress
+bp-default /home/admin/app/public/wp-content/plugins/buddypress/bp-themes/bp-default
+buddypress /home/admin/app/public/wp-content/plugins/buddypress
+buddypress-docs /home/admin/app/public/wp-content/plugins/buddypress-docs
+cbox-auth /home/admin/app/public/wp-content/plugins/cbox-auth
+cbox-mla /home/admin/app/public/wp-content/themes/cbox-mla
+cbox-mla-blog /home/admin/app/public/wp-content/themes/cbox-mla-blog
+cbox-theme /home/admin/app/public/wp-content/themes/cbox-theme
+functions.php /home/admin/app/public/wp-content/themes/cbox-mla/functions.php
+languages /home/admin/app/public/wp-content/languages
+mla-admin-bar /home/admin/app/public/wp-content/plugins/mla-admin-bar
+mu-plugins /home/admin/app/public/wp-content/mu-plugins
+plugins /home/admin/app/public/wp-content/plugins
+style.scss /home/admin/app/public/wp-content/themes/cbox-mla/style.scss
+todo.txt /home/admin/notes/todo.txt
+wp-config.php /home/admin/app/wp-config.php
+wp-content /home/admin/app/public/wp-content
+
