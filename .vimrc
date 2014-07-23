@@ -30,6 +30,8 @@ Plugin 'xolox/vim-shell'
 Plugin 'tpope/vim-surround'
 " Git wrapper. 
 Plugin 'tpope/vim-fugitive'
+" Github issues!
+Plugin 'jaxbot/github-issues.vim'
 " For Easy Commenting
 Plugin 'scrooloose/nerdcommenter'
 " File browser. 
@@ -46,6 +48,7 @@ Plugin 'ryu-blacknd/vim-nucolors'
 Plugin 'Lokaltog/vim-distinguished' 
 "Plugin 'tomasr/molokai'
 Plugin 'flazz/vim-colorschemes'
+Plugin 'xolox/vim-colorscheme-switcher'
 " Vim outliner
 Plugin 'VOoM' 
 "For autocomplete and faster html typing
@@ -58,8 +61,6 @@ Plugin 'bling/vim-airline'
 Plugin 'JulesWang/css.vim' 
 "For Compass/SCSS/Sass
 Plugin 'cakebaker/scss-syntax.vim'
-" Autocompletion Magic
-"Plugin 'Valloric/YouCompleteMe' 
 " For writing in Pandoc markdown
 "Plugin 'vim-pandoc/vim-pandoc' 
 " HTML Authoring Autocompletion 
@@ -109,7 +110,7 @@ set nrformats-=octal
 " Makes colors work in terminal
 "set t_Co=256
 "set background=dark 
-colorscheme hybrid
+colorscheme maroloccio
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
 
@@ -145,7 +146,9 @@ autocmd CursorHold                 .jnl.txt wq
 autocmd CursorHoldI                .jnl.txt wq
 "}}}
 
-" Options for Vim Notes {{{
+" Options {{{
+
+" Vim Notes {{{2
 " To set notes directory for :Note command
 let g:notes_directories = ['~/.vim/notes', '~/notes/']
 
@@ -157,6 +160,13 @@ let g:notes_suffix = '.txt'
 
 " Turn off notes.vim highlighting for vim command syntax
 highlight link notesVimCmd Normal
+"}}}
+
+" Syntastic {{{2
+" Don't use style checkers for php. It's annoying. 
+let g:syntastic_php_checkers = ['php'] 
+"}}}
+
 "}}}
 
 " Syntax higlighting. {{{ 
@@ -231,7 +241,6 @@ map ,gp :vimgrep /<C-R><C-W>/gj **/*.php<CR>:cw<CR>
 
 "Php linting
 map ,p :!php -l %<CR>
-
 
 "Turn on tag completion for XML and HTML
 imap ,/ </<C-X><C-O>    
