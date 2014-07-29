@@ -131,7 +131,7 @@ alias t='~/Apps/todo/todo.sh -d ~/Apps/todo/todo.cfg'
 #makes find commmand more useful
 f() 
 { 
-	find . -iname "$1" 
+	find . -iname *"$1"*
 }
 
 #google calendar alias, requires googlecl
@@ -196,11 +196,8 @@ g() {
 #. "$HOME/.bash_ps1"
 #fi 
 
-#get color terminal 
-export TERM=xterm-256color
-
 #get fancy prompt
-PS1="┌─[\d][\u@\h:\w]\n└─>" 
+#PS1="┌─[\d][\u@\h:\w]\n└─>" 
 
 #my gpg key
 export GPGKEY=4C9615CC
@@ -219,4 +216,23 @@ ssh() {
 	tmux rename-window "$*"
 	command ssh "$@"
 	tmux rename-window "bash" 
+}
+
+#frees up Ctrl+S and Ctrl+Q from xon/xoff
+stty -ixon -ixoff
+
+# Fancy git statusline, stolen from https://github.com/chriszarate/dotfiles/blob/master/bash/bashrc
+## Prompt
+export PS1='\w\[\033[1;33m\]$(parse_git_status)\[\033[0m\]$ '
+
+# Get git repository status in shorthand form (branch name and cleanliness).
+function parse_git_status () {
+	git status -b --porcelain 2>/dev/null | awk -F'[#\./ ]+' '{print $2}' |
+	while read statusline; do
+		if [[ -n "$git_has_branch" && -n "$statusline" ]]; then
+			printf "\033[35m⌾"
+			break
+		fi
+		printf "⎇ $statusline" && git_has_branch="yes"
+	done
 }
