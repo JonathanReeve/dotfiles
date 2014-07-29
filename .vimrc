@@ -110,7 +110,7 @@ set nrformats-=octal
 " Makes colors work in terminal
 "set t_Co=256
 "set background=dark 
-colorscheme maroloccio
+colorscheme jellybeans
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
 
