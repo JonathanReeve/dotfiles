@@ -203,10 +203,11 @@ g() {
 export GPGKEY=4C9615CC
 
 #shortcuts for MLA servers
-export P='/home/admin/app/public/wp-content/plugins'
-export T='/home/admin/app/public/wp-content/themes'
-export M='/home/admin/app/public/wp-content/themes/cbox-mla'
-export W='/home/admin/app/public/wp-content' 
+export W=~/app/public/wp-content 
+export P=~/app/public/wp-content/plugins
+export T=~/app/public/wp-content/themes
+export M=~/app/public/wp-content/themes/cbox-mla
+export B=~/app/public/wp-content/themes/cbox-mla-blog
 
 #use vim for the editor
 export EDITOR='vim'
