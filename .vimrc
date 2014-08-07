@@ -98,7 +98,7 @@ set directory=~/.vim/swap
 "set undodir=$HOME/.vim/undo
 
 " Set location of tags file
-set tags=~/.vim/tags/tags
+set tags=~/app/tags
 
 " Get vim increment to behave normally
 set nrformats-=octal
@@ -164,7 +164,7 @@ highlight link notesVimCmd Normal
 
 " Syntastic {{{2
 " Don't use style checkers for php. It's annoying. 
-let g:syntastic_php_checkers = ['php'] 
+let g:syntastic_php_checkers = ['php', 'phpcs'] 
 "}}}
 
 "}}}
@@ -281,8 +281,7 @@ map \o Byt:f:l"1yw:e <C-r>0<CR>:<C-r>1<CR>
 
 " this sets tabstops to four spaces per python guidelines
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4
-
-
+autocmd Filetype php setlocal noexpandtab
 " }}} 
 
 " Autocomplete and autoreplace {{{
