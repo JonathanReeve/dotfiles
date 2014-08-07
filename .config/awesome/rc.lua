@@ -530,6 +530,7 @@ awful.rules.rules = {
                      border_color = beautiful.border_normal,
                      focus = awful.client.focus.filter,
                      keys = clientkeys,
+		     size_hints_honor = false, 
                      buttons = clientbuttons } },
     { rule = { class = "MPlayer" },
       properties = { floating = true } },
@@ -537,6 +538,10 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
+    --{ rule = { class = "Terminal" },
+    --  properties = { } },
+    -- { rule = { class = "Gvim" },
+    --  properties = { size_hints_honor = false } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
@@ -628,7 +633,6 @@ end
 --run_once("redshift -l 49.26:-123.23")
 --awful.util.spawn_with_shell("xmodmap ~/.speedswapper")
 awful.util.spawn_with_shell("gnome-session")
-awful.util.spawn_with_shell("kupfer")
 awful.util.spawn_with_shell("xcompmgr")
 
 -- {{ Turns off the terminal bell }} --
