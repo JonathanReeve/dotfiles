@@ -224,7 +224,7 @@ stty -ixon -ixoff
 
 # Fancy git statusline, stolen from https://github.com/chriszarate/dotfiles/blob/master/bash/bashrc
 ## Prompt
-export PS1='\w\[\033[1;33m\]$(parse_git_status)\[\033[0m\]$ '
+export PS1='┌─[\d][\u@\h:\w]\[\033[1;33m\]$(parse_git_status)\[\033[0m\]\n└─>'
 
 # Get git repository status in shorthand form (branch name and cleanliness).
 function parse_git_status () {
