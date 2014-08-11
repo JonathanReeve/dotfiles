@@ -53,10 +53,12 @@ Plugin 'xolox/vim-colorscheme-switcher'
 Plugin 'VOoM' 
 "For autocomplete and faster html typing
 "Plugin 'garbas/vim-snipmate' 
-"For a pretty statusline
-"Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}  
+"
 "A lighter-weight statusline
 Plugin 'bling/vim-airline'
+" Next config setting needed for airline
+set laststatus=2
+
 "For better CSS
 Plugin 'JulesWang/css.vim' 
 "For Compass/SCSS/Sass
@@ -249,10 +251,16 @@ imap ,/ </<C-X><C-O>
 "map <Tab> <C-W><C-W>
 
 "Alt-something for navigating split windows
-map ∆ <C-W>j
-map ˚ <C-W>k
-map ˙ <C-W>h
-map ¬ <C-W>l
+"Mac Versions
+"map ∆ <C-W>j
+"map ˚ <C-W>k
+"map ˙ <C-W>h
+"map ¬ <C-W>l
+"Linux Versions
+map <M-j> <C-W>j
+map <M-k> <C-W>k
+map <M-h> <C-W>h
+map <M-l> <C-W>l
 
 "Open stuff
 "nmap <CR> <F6>
@@ -275,6 +283,10 @@ map \yl :let @" = expand("%").":".line(".")<CR>
 " open filename mentioned under cursor and navigate to line number mentioned
 map \o Byt:f:l"1yw:e <C-r>0<CR>:<C-r>1<CR>
 
+" open filename mentioned in debug.log and navigate to line number mentioned
+" example error: 
+" [11-Aug-2014 13:49:41 UTC] PHP Parse error:  syntax error, unexpected $end in /vagrant/app/public/wp-content/plugins/buddypress-docs/includes/templates/docs/docs-loop.php on line 151
+map \do 0/app\/public<CR>"1yWW/\d<CR>"2yw:e ~/<C-r>1<CR>:<C-r>2<CR>
 " }}} 
 
 " Language Specific Stuff {{{ 
