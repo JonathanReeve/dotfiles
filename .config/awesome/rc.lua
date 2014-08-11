@@ -1,5 +1,5 @@
 -- Standard awesome library
-local gears = require("gears")
+--local gears = require("gears")
 local awful = require("awful")
 awful.rules = require("awful.rules")
 require("awful.autofocus")
@@ -96,11 +96,11 @@ local layouts =
 -- }}}
 
 -- {{{ Wallpaper
-if beautiful.wallpaper then
-    for s = 1, screen.count() do
-        gears.wallpaper.maximized(beautiful.wallpaper, s, true)
-    end
-end
+--if beautiful.wallpaper then
+    --for s = 1, screen.count() do
+        --gears.wallpaper.maximized(beautiful.wallpaper, s, true)
+    --end
+--end
 -- }}}
 
 -- {{{ Tags
@@ -631,9 +631,8 @@ end
 
 -- {{ I need redshift to save my eyes }} -
 --run_once("redshift -l 49.26:-123.23")
---awful.util.spawn_with_shell("xmodmap ~/.speedswapper")
 awful.util.spawn_with_shell("gnome-session")
-awful.util.spawn_with_shell("xcompmgr")
+awful.util.spawn_with_shell("xcompmgr -cfFn")
 
 -- {{ Turns off the terminal bell }} --
 awful.util.spawn_with_shell("/usr/bin/xset b off")
