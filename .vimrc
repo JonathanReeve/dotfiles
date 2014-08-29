@@ -5,6 +5,7 @@
 
 " Plugins {{{
 
+" Package Management. Required! {{{2
 "Vundle Stuff
 set nocompatible               " be iMproved
 filetype off                   " required!
@@ -15,27 +16,59 @@ call vundle#rc()
 " let Vundle manage Vundle
 " required! 
 Plugin 'gmarik/vundle' 
+" }}} 
 
-" My Plugins here: 
-
+" Notes {{{2
 " Required by vim-notes
 Plugin 'xolox/vim-misc' 
 " Essential notes plugin.  
 "Plugin 'xolox/vim-notes' 
 " Using my fork instead. 
 Plugin 'JonathanReeve/vim-notes'
-" Allows for opening of URLs and other files. 
-Plugin 'xolox/vim-shell'
-" For text surrounds like tags and quotes
-Plugin 'tpope/vim-surround'
+" To set notes directory for :Note command
+let g:notes_directories = ['~/.vim/notes', '~/notes/']
+" This ensures that updating vim notes won't overwrite my blank default note. 
+let g:notes_shadowdir = '~/.vim/notes-shadow/' 
+"set file extension for notes (notes.vim plugin)
+let g:notes_suffix = '.txt'
+" Turn off notes.vim highlighting for vim command syntax
+highlight link notesVimCmd Normal
+
+" Vim outliner
+Plugin 'VOoM' 
+"}}}
+
+" Git {{{2
 " Git wrapper. 
 Plugin 'tpope/vim-fugitive'
 " Github issues!
 Plugin 'jaxbot/github-issues.vim'
-" For Easy Commenting
-Plugin 'scrooloose/nerdcommenter'
+" }}}
+
+" Browsers {{{2
 " File browser. 
 Plugin 'scrooloose/nerdtree'
+"Open nerdtree
+map ,n :NERDTreeToggle<CR>
+
+" Buffer browser. 
+Plugin 'techlivezheng/vim-plugin-minibufexpl' 
+"Open minibufexplorer
+map ,m :MBEToggle<CR>
+
+" Tag browser.
+Plugin 'majutsushi/tagbar' 
+" Make Tagbar look like NERDTree. 
+let g:tagbar_iconchars = ['▸', '▾']
+highlight link TagbarFoldIcon Title
+"Open Tagbar
+map ,t :TagbarToggle<CR>
+
+"Open Quickfix List
+map ,c :cw<CR>
+" }}} 
+
+" Colors {{{2
 " Makes colors work in term. 
 " Plugin 'godlygeek/csapprox'
 " Another script for trying to make colors work better in term.
@@ -46,19 +79,13 @@ Plugin 'vim-scripts/ScrollColors'
 "Plugin '29decibel/codeschool-vim-theme'  
 Plugin 'ryu-blacknd/vim-nucolors' 
 Plugin 'Lokaltog/vim-distinguished' 
+Plugin 'chriskempson/base16-vim' 
 "Plugin 'tomasr/molokai'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'xolox/vim-colorscheme-switcher'
-" Vim outliner
-Plugin 'VOoM' 
-"For autocomplete and faster html typing
-"Plugin 'garbas/vim-snipmate' 
-"
-"A lighter-weight statusline
-Plugin 'bling/vim-airline'
-" Next config setting needed for airline
-set laststatus=2
+" }}}
 
+" HTML/CSS Plugins Etc {{{2
 "For better CSS
 Plugin 'JulesWang/css.vim' 
 "For Compass/SCSS/Sass
@@ -67,21 +94,65 @@ Plugin 'cakebaker/scss-syntax.vim'
 "Plugin 'vim-pandoc/vim-pandoc' 
 " HTML Authoring Autocompletion 
 Plugin 'mattn/emmet-vim' 
+" Improved matching for html tags
+Plugin 'tmhedberg/matchit'
+" HTML Tag Matching
+" Plugin 'Valloric/MatchTagAlways'
+"For autocomplete and faster html typing
+"Plugin 'garbas/vim-snipmate' 
+
+" }}}
+
+" IDE Stuff {{{2
 " Php folding
 "Plugin 'rayburgemeestre/phpfolding.vim' 
 "PHP error checking
 "Plugin 'joonty/vim-phpqa' 
 "PHP xdebug integration
-Plugin 'joonty/vdebug' 
+"Plugin 'joonty/vdebug' 
 "All kinds of syntax checking
 Plugin 'scrooloose/syntastic'
+" Syntastic Options
+" Don't use style checkers for php. It's annoying. 
+let g:syntastic_php_checkers = ['php', 'phpcs'] 
+let g:syntastic_php_phpcs_args = '--standard=/home/jreeve/Documents/WordPress-Coding-Standards/WordPress/ruleset.xml'
 "PHP IDE
-Plugin 'spf13/PIV'
+"Plugin 'spf13/PIV'
+" }}}
 
+" Misc {{{2
+" Allows for opening of URLs and other files. 
+Plugin 'xolox/vim-shell'
+" For text surrounds like tags and quotes
+Plugin 'tpope/vim-surround'
+" For Easy Commenting
+Plugin 'scrooloose/nerdcommenter'
+" tail -f Emulation for Watching Files
+Plugin 'vim-scripts/Tail-Bundle' 
+"Grepping Stuff
+Bundle 'mileszs/ack.vim' 
+" }}}
+
+" Fancy Statusline {{{ 
+
+"A lighter-weight statusline
+Plugin 'bling/vim-airline'
+" Next config setting needed for airline
+set laststatus=2
+
+if !exists('g:airline_symbols')
+	let g:airline_symbols = {}
+endif
+
+let g:airline_left_sep = '»'
+let g:airline_right_sep = '«'
+let g:airline_symbols.branch = '⎇'
+
+" End Airline }}} 
 
 filetype plugin indent on     " required! 
 
-" }}} 
+" End Plugins }}} 
 
 " Basic Settings {{{
 set nocompatible
@@ -112,7 +183,7 @@ set nrformats-=octal
 " Makes colors work in terminal
 "set t_Co=256
 "set background=dark 
-colorscheme jellybeans
+colorscheme hybrid
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
 
@@ -146,29 +217,6 @@ autocmd CursorHold                 .p10.txt wq
 autocmd BufReadPost,FileReadPost   .jnl.txt set updatetime=300000
 autocmd CursorHold                 .jnl.txt wq 
 autocmd CursorHoldI                .jnl.txt wq
-"}}}
-
-" Options {{{
-
-" Vim Notes {{{2
-" To set notes directory for :Note command
-let g:notes_directories = ['~/.vim/notes', '~/notes/']
-
-" This ensures that updating vim notes won't overwrite my blank default note. 
-let g:notes_shadowdir = '~/.vim/notes-shadow/' 
-
-"set file extension for notes (notes.vim plugin)
-let g:notes_suffix = '.txt'
-
-" Turn off notes.vim highlighting for vim command syntax
-highlight link notesVimCmd Normal
-"}}}
-
-" Syntastic {{{2
-" Don't use style checkers for php. It's annoying. 
-let g:syntastic_php_checkers = ['php', 'phpcs'] 
-"}}}
-
 "}}}
 
 " Syntax higlighting. {{{ 
@@ -225,8 +273,6 @@ map ,q ^i“<ESC>A”
 map ,' cs"'
 map ," cs'"
 
-"Open nerdtree
-map ,n :NERDTreeToggle<CR>
 
 " Mapping for editing vimrc
 map ,v :sp ~/.vimrc<CR>
@@ -286,7 +332,7 @@ map \o Byt:f:l"1yw:e <C-r>0<CR>:<C-r>1<CR>
 " open filename mentioned in debug.log and navigate to line number mentioned
 " example error: 
 " [11-Aug-2014 13:49:41 UTC] PHP Parse error:  syntax error, unexpected $end in /vagrant/app/public/wp-content/plugins/buddypress-docs/includes/templates/docs/docs-loop.php on line 151
-map \do 0/app\/public<CR>"1yWW/\d<CR>"2yw:e ~/<C-r>1<CR>:<C-r>2<CR>
+map \do 0/ in <CR>/app\/public<CR>"1yWW/\d<CR>"2yw:e ~/<C-r>1<CR>:<C-r>2<CR>
 " }}} 
 
 " Language Specific Stuff {{{ 
@@ -302,6 +348,8 @@ iabbrev t4 ∴
 
 " Autoreplace 'teh' with 'the'
 iabbrev teh the
+iabbrev haev have
+iabbrev liek like
 
 " Autocorrect spelling mistakes
 " I put this in a function because it slowed down the load time too much
@@ -317,18 +365,6 @@ autocmd BufRead *.mkd      set ai formatoptions=tcroqn2 comments=n:> ft=markdown
 autocmd BufRead *.md       set ai formatoptions=tcroqn2 comments=n:> ft=markdown
 autocmd BufRead *.markdown set ai formatoptions=tcroqn2 comments=n:> ft=markdown 
 " }}}
-
-" Airline {{{ 
-
-if !exists('g:airline_symbols')
-	let g:airline_symbols = {}
-endif
-
-let g:airline_left_sep = '»'
-let g:airline_right_sep = '«'
-let g:airline_symbols.branch = '⎇'
-
-" End Airline }}} 
 
 " Allows for folding in this file. 
 " vim:fdm=marker
