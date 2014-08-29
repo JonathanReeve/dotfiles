@@ -210,6 +210,9 @@ export M=~/app/public/wp-content/themes/cbox-mla
 export B=~/app/public/wp-content/themes/cbox-mla-blog
 export C=~/app/public/wp-content/themes/cbox-theme
 
+# I'm doing a lot of work on CACAP lately 
+export CA=$P/cac-advanced-profiles
+
 #use vim for the editor
 export EDITOR='vim'
 
