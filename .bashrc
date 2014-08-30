@@ -232,7 +232,7 @@ export PS1='┌─[\d][\u@\h:\w]\[\033[1;33m\]$(parse_git_status)\[\033[0m\]\n�
 
 # Get git repository status in shorthand form (branch name and cleanliness).
 function parse_git_status () {
-	git status -b --porcelain 2>/dev/null | awk -F'[#\./ ]+' '{print $2}' |
+	git status -b --porcelain 2>/dev/null | awk -F'[#./ ]+' '{print $2}' |
 	while read statusline; do
 		if [[ -n "$git_has_branch" && -n "$statusline" ]]; then
 			printf "\033[35m⌾"
