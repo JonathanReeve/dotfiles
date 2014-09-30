@@ -241,3 +241,7 @@ function parse_git_status () {
 		printf "⎇ $statusline" && git_has_branch="yes"
 	done
 }
+
+if [ -f ~/.aws-vars.sh ]; then
+	source ~/.aws-vars.sh 
+fi
