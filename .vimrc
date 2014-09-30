@@ -1,5 +1,4 @@
-" This is my .vimrc! 
-" Jonathan Reeve
+" This is my .vimrc!  " Jonathan Reeve
 " http://jonreeve.com
 " http://github.com/JonathanReeve/
 
@@ -26,7 +25,7 @@ Plugin 'xolox/vim-misc'
 " Using my fork instead. 
 Plugin 'JonathanReeve/vim-notes'
 " To set notes directory for :Note command
-let g:notes_directories = ['~/.vim/notes', '~/notes/']
+let g:notes_directories = ['~/Notes/']
 " This ensures that updating vim notes won't overwrite my blank default note. 
 let g:notes_shadowdir = '~/.vim/notes-shadow/' 
 "set file extension for notes (notes.vim plugin)
@@ -66,6 +65,16 @@ map ,t :TagbarToggle<CR>
 
 "Open Quickfix List
 map ,c :cw<CR>
+
+"Open debug log
+map \d :sp $W/debug.log<CR>
+
+"Open todo file
+map \t :sp ~/Notes/todo.txt<CR>
+
+"Open vimrc 
+map \v :sp ~/.vimrc<CR>
+
 " }}} 
 
 " Colors {{{2
@@ -113,9 +122,10 @@ Plugin 'tmhedberg/matchit'
 "All kinds of syntax checking
 Plugin 'scrooloose/syntastic'
 " Syntastic Options
-" Don't use style checkers for php. It's annoying. 
 let g:syntastic_php_checkers = ['php', 'phpcs'] 
 let g:syntastic_php_phpcs_args = '--standard=/home/jreeve/Documents/WordPress-Coding-Standards/WordPress/ruleset.xml'
+let g:syntastic_javascript_checkers = ['jshint'] 
+
 "PHP IDE
 "Plugin 'spf13/PIV'
 " }}}
@@ -128,9 +138,16 @@ Plugin 'tpope/vim-surround'
 " For Easy Commenting
 Plugin 'scrooloose/nerdcommenter'
 " tail -f Emulation for Watching Files
-Plugin 'vim-scripts/Tail-Bundle' 
+"Plugin 'vim-scripts/Tail-Bundle' 
+
+"A bunch of mappings that do cool stuff
+Plugin 'tpope/vim-unimpaired' 
+
 "Grepping Stuff
 Bundle 'mileszs/ack.vim' 
+" Better grepping with Ack (grep-ack)
+map ,a :Ack <C-R><C-W><CR>
+
 " }}}
 
 " Fancy Statusline {{{ 
@@ -255,10 +272,10 @@ map <C-s> :update<CR>
 nmap <2-LeftMouse> za 
 
 " Wordnet lookup
-map ,d :!wn <cword> -over<CR>
+" map ,d :!wn <cword> -over<CR>
 
 " Wordnet thesaurus
-map ,t :!wn <cword> -synsa<CR>
+" map ,t :!wn <cword> -synsa<CR>
 
 " Type ,b to load current page in browser
 map ,b :!firefox "%:p"<CR>
@@ -273,9 +290,8 @@ map ,q ^i“<ESC>A”
 map ,' cs"'
 map ," cs'"
 
-
 " Mapping for editing vimrc
-map ,v :sp ~/.vimrc<CR>
+"map ,v :sp ~/.vimrc<CR>
 
 " mapping to count the number of words in a fold section
 map ,c [zjv]zg<C-g>
@@ -286,6 +302,9 @@ map ,c [zjv]zg<C-g>
 " Vimgrep word under cursor and open quicklist " market
 map ,gc :vimgrep /<C-R><C-W>/gj **/*.css<CR>:cw<CR> 
 map ,gp :vimgrep /<C-R><C-W>/gj **/*.php<CR>:cw<CR> 
+
+"Press F4 to search for tags
+map <F4> :execute "vimgrep /" . expand("<cword>") . "/j ~/Notes/*" <Bar> cw<CR> 
 
 "Php linting
 map ,p :!php -l %<CR>
@@ -311,9 +330,6 @@ map <M-l> <C-W>l
 "Open stuff
 "nmap <CR> <F6>
 
-"Press F4 to search for tags
-map <F4> :execute "vimgrep /" . expand("<cword>") . "/j ~/Notes/*" <Bar> cw<CR> 
-
 " Press F8 to set showbreak
 map <F8> :set breakindent<CR>:set showbreak=\ \ <CR>
 
@@ -333,6 +349,12 @@ map \o Byt:f:l"1yw:e <C-r>0<CR>:<C-r>1<CR>
 " example error: 
 " [11-Aug-2014 13:49:41 UTC] PHP Parse error:  syntax error, unexpected $end in /vagrant/app/public/wp-content/plugins/buddypress-docs/includes/templates/docs/docs-loop.php on line 151
 map \do 0/ in <CR>/app\/public<CR>"1yWW/\d<CR>"2yw:e ~/<C-r>1<CR>:<C-r>2<CR>
+
+" loggy loggy: create log expression for variable under cursor
+map \ll yiwo_log( '<Esc>pA is:' );<CR>_log( $<Esc>pA );<Esc> 
+" spacey spacey: add spaces to parentheses to appease phpcs  
+map \ss :s/(/( /<CR>:s/)/ )/<CR>
+
 " }}} 
 
 " Language Specific Stuff {{{ 
