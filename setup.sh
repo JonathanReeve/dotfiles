@@ -15,4 +15,5 @@ ln -s $PWD/.pentadactylrc ~/.pentadactylrc
 ln -s $PWD/.tmux.conf-child ~/.tmux.conf
 ln -s $PWD/.inputrc ~/.inputrc
 ln -s $PWD/.gitconfig ~/.gitconfig
+git submodule update --init --recursive
 sudo apt-get install vim-nox weechat markdown pandoc php-codesniffer
