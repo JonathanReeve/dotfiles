@@ -2,6 +2,7 @@ set gui=nonavigation
 set hintchars=asdfjkl;
 map J gt
 map K gT
+map B :bmark -T 
 set gui=
 
 " ==VimperatorColorSchema==
@@ -37,7 +38,7 @@ hi PromptText color: #1c1c1c; background: #d0d0f0; font-size: 12px;
 
 hi CmdOutput white-space: pre;
 hi CmdLine font-size: 14px; background: black; color: #d0d0d0; -moz-transition: all 0.25s;
-hi CmdLine>* font-family: monospace;
+hi CmdLine>* font-family: "Anonymous Pro";
 
 hi ContentSeparator border: none; display: -moz-box;
 
@@ -74,7 +75,7 @@ hi URL:hover text-decoration: underline; cursor: pointer;
 hi FrameIndicator background-color: red; opacity: 0.5; z-index: 999; position: fixed; top: 0; bottom: 0; left: 0; right: 0;
 
 hi Bell border: none; background-color: #d0d0d0;
-hi Hint font-family: monospace; font-size: 14px; font-weight: normal; color: #dddddd; background-color: #1c1c1c; border: none; margin: -0.7em 0 0 -0.7em; padding: 0px 5px;
+hi Hint font-family: "Anonymous Pro"; font-size: 14px; font-weight: normal; color: #dddddd; background-color: #1c1c1c; border: none; margin: -0.7em 0 0 -0.7em; padding: 0px 5px;
 hi Hint::after content: attr(number);
 hi HintElem background-color: rgba(208, 208, 240, 0.8); color: #1c1c1c;
 hi HintActive background-color: rgba( 85, 102, 187, 0.8); color: #dddded;
