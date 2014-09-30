@@ -26,8 +26,8 @@ set-window-option -g pane-base-index 1
 # Set color scheme.
 set-option -g status-left-length 52
 set-option -g status-right-length 18
-set-option -g status-fg white
-set-option -g status-bg black
+set-option -g status-fg red
+set-option -g status-bg default
 set-option -g pane-border-fg colour245
 set-option -g pane-active-border-fg colour39
 set-option -g message-fg colour16
