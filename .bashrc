@@ -123,10 +123,10 @@ alias grep="grep --color"
 alias t='~/Apps/todo/todo.sh -d ~/Apps/todo/todo.cfg'
 
 #opens Journal
-#alias jnl='vim ~/Dropbox/Personal/.jnl.txt'
+alias jnl='vim ~/Dropbox/Personal/.jnl.txt'
 
 #opens password file
-#alias pw='vim ~/Dropbox/Personal/.p10.txt'
+alias pw='vim ~/Dropbox/Personal/.p10.txt'
 
 #makes find commmand more useful
 f() 
