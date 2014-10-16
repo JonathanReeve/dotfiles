@@ -88,6 +88,7 @@ Plugin 'vim-scripts/ScrollColors'
 "Plugin '29decibel/codeschool-vim-theme'  
 Plugin 'ryu-blacknd/vim-nucolors' 
 Plugin 'Lokaltog/vim-distinguished' 
+Plugin 'whatyouhide/vim-gotham'
 Plugin 'chriskempson/base16-vim' 
 "Plugin 'tomasr/molokai'
 Plugin 'flazz/vim-colorschemes'
@@ -128,6 +129,9 @@ let g:syntastic_javascript_checkers = ['jshint']
 
 "PHP IDE
 "Plugin 'spf13/PIV'
+
+" PHP Manual
+Plugin 'alvan/vim-php-manual'
 " }}}
 
 " Misc {{{2
@@ -200,7 +204,7 @@ set nrformats-=octal
 " Makes colors work in terminal
 "set t_Co=256
 "set background=dark 
-colorscheme hybrid
+colorscheme gotham
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
 
