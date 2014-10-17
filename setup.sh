@@ -16,11 +16,8 @@ git submodule update --init --recursive
 sudo apt-get install vim weechat markdown pandoc php-codesniffer git 
 
 # todo.txt
-mkdir -p ~/Apps
-cd ~/Apps
-git clone https://github.com/ginatrapani/todo.txt-cli.git todo
-mv ~/Apps/todo/todo.cfg bak/
-ln -s $PWD/todo.cfg ~/Apps/todo/
+mv scripts/todo/todo.cfg bak/
+ln -s $PWD/todo.cfg scripts/todo/todo.cfg 
 
 # Uncomment for GUI systems
 #mv ~/.vimperatorrc bak/
