@@ -120,7 +120,7 @@ set -o vi
 alias grep="grep --color" 
 
 # Todo File Shortcut
-alias t='~/Apps/todo/todo.sh -d ~/Apps/todo/todo.cfg'
+alias t='~/dotfiles/scripts/todo/todo.sh -d ~/dotfiles/scripts/todo/todo.cfg'
 
 #opens Journal
 alias jnl='vim ~/Dropbox/Personal/.jnl.txt'
