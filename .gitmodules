@@ -1,7 +1,6 @@
 [submodule ".vim/bundle/vundle"]
 	path = .vim/bundle/vundle
 	url = https://github.com/gmarik/Vundle.vim.git
-
-[submodule "awesome-powerarrow"]
-	path = awesome-powerarrow
-	url = https://github.com/esn89/powerarrow.git
+[submodule "scripts/todo"]
+	path = scripts/todo
+	url = https://github.com/ginatrapani/todo.txt-cli.git

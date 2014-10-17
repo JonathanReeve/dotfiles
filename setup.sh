@@ -13,7 +13,14 @@ ln -s $PWD/.tmux.conf-child ~/.tmux.conf
 ln -s $PWD/.inputrc ~/.inputrc
 ln -s $PWD/.gitconfig ~/.gitconfig
 git submodule update --init --recursive
-sudo apt-get install vim weechat markdown pandoc php-codesniffer 
+sudo apt-get install vim weechat markdown pandoc php-codesniffer git 
+
+# todo.txt
+mkdir -p ~/Apps
+cd ~/Apps
+git clone https://github.com/ginatrapani/todo.txt-cli.git todo
+mv ~/Apps/todo/todo.cfg bak/
+ln -s $PWD/todo.cfg ~/Apps/todo/
 
 # Uncomment for GUI systems
 #mv ~/.vimperatorrc bak/
