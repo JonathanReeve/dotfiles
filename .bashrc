@@ -120,7 +120,7 @@ set -o vi
 alias grep="grep --color" 
 
 # Todo File Shortcut
-alias t='~/dotfiles/scripts/todo/todo.sh -d ~/dotfiles/todo.cfg'
+alias t='~/Documents/Settings/dotfiles/scripts/todo/todo.sh -d ~/Documents/Settings/dotfiles/todo.cfg'
 
 #opens Journal
 alias jnl='vim ~/Dropbox/Personal/.jnl.txt'
@@ -169,9 +169,9 @@ nls() {
 }
 
 #makes installing stuff easier
-alias install='sudo apt-get install' 
+alias install='sudo yum install' 
 alias search='apt-cache search' 
-alias update='sudo apt-get update && sudo apt-get upgrade'
+alias update='sudo yum update'
 
 #for mounting dev directories over ssh
 #alias dev="sshfs -oworkaround=rename jon:/home4/jonreeve/public_html/dev ~/Web/dev && cd ~/Web/dev && gvim ." 

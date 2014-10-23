@@ -25,7 +25,7 @@ Plugin 'xolox/vim-misc'
 " Using my fork instead. 
 Plugin 'JonathanReeve/vim-notes'
 " To set notes directory for :Note command
-let g:notes_directories = ['~/Notes/']
+let g:notes_directories = ['~/Dropbox/Notes']
 " This ensures that updating vim notes won't overwrite my blank default note. 
 let g:notes_shadowdir = '~/.vim/notes-shadow/' 
 "set file extension for notes (notes.vim plugin)

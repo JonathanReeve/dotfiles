@@ -1,4 +1,4 @@
-mkdir bak
+#mkdir bak
 mv ~/.bashrc bak/
 mv ~/.vim bak/
 mv ~/.vimrc bak/
@@ -12,12 +12,12 @@ ln -s $PWD/.vimrc ~/.vimrc
 ln -s $PWD/.tmux.conf-child ~/.tmux.conf
 ln -s $PWD/.inputrc ~/.inputrc
 ln -s $PWD/.gitconfig ~/.gitconfig
-git submodule update --init --recursive
-sudo apt-get install vim weechat markdown pandoc php-codesniffer git 
+#sudo yum install vim weechat markdown pandoc php-codesniffer git 
+#git submodule update --init --recursive
 
 # todo.txt
-mv scripts/todo/todo.cfg bak/
-ln -s $PWD/todo.cfg scripts/todo/todo.cfg 
+#mv scripts/todo/todo.cfg bak/
+#ln -s $PWD/todo.cfg scripts/todo/todo.cfg 
 
 # Uncomment for GUI systems
 #mv ~/.vimperatorrc bak/
@@ -26,4 +26,4 @@ ln -s $PWD/todo.cfg scripts/todo/todo.cfg
 #ln -s $PWD/.pentadactylrc ~/.pentadactylrc
 #mv ~/.i3/config bak/
 #ln -s $PWD/.i3/config ~/.i3/config
-#sudo apt-get install i3 kupfer chromium-browser ubuntu-restricted-extras firefox
+#sudo yum install i3 kupfer chromium-browser vim-gnome ttf-anonymous-pro
