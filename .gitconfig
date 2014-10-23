@@ -12,8 +12,6 @@
 	pager = true
 [core]
 	editor = vim
-[push]
-	default = simple
 [alias]
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	br = log --all --graph --decorate --oneline --simplify-by-decoration

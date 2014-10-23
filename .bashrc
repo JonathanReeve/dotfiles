@@ -203,12 +203,12 @@ g() {
 export GPGKEY=4C9615CC
 
 #shortcuts for MLA servers
-export W=~/app/public/wp-content 
-export P=~/app/public/wp-content/plugins
-export T=~/app/public/wp-content/themes
-export M=~/app/public/wp-content/themes/cbox-mla
-export B=~/app/public/wp-content/themes/cbox-mla-blog
-export C=~/app/public/wp-content/themes/cbox-theme
+export W=/vagrant/app/public/wp-content 
+export P=/vagrant/app/public/wp-content/plugins
+export T=/vagrant/app/public/wp-content/themes
+export M=/vagrant/app/public/wp-content/themes/cbox-mla
+export B=/vagrant/app/public/wp-content/themes/cbox-mla-blog
+export C=/vagrant/app/public/wp-content/themes/cbox-theme
 
 # I'm doing a lot of work on CACAP lately 
 export CA=$P/cac-advanced-profiles
