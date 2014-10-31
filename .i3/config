@@ -23,6 +23,13 @@ font pango:Anonymous Pro 11
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+# Better handling for floating dialogs
+# Adapted from the Arch Wiki article at https://wiki.archlinux.org/index.php/i3#Tabbed_or_stacked_web-browsing 
+
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [title="Preferences$"] floating enable 
+
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
 
@@ -49,7 +56,7 @@ bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
 # split in horizontal orientation
-#bindsym $mod+h split h
+bindsym $mod+s split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -58,8 +65,8 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
+bindsym $mod+w layout stacking
+bindsym $mod+t layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
@@ -139,6 +146,5 @@ new_window pixel 2
 # Applications to be run on startup
 exec setxkbmap -layout us -option caps:escape
 exec xcompmgr -cfFn
-exec dropbox 
-exec touchegg
 exec feh --bg-fill --random /usr/share/backgrounds
+
