@@ -1,23 +1,31 @@
-mkdir bak
+#mkdir bak
 mv ~/.bashrc bak/
-mv ~/.vim bak/
-mv ~/.vimrc bak/
 mv ~/.tmux.conf bak/
 mv ~/.inputrc bak/
 mv ~/.gitconfig bak/
 mv ~/.i3/config bak/
 ln -s $PWD/.bashrc ~/.bashrc
-ln -s $PWD/.vim ~/.vim
-ln -s $PWD/.vimrc ~/.vimrc
 ln -s $PWD/.tmux.conf-child ~/.tmux.conf
 ln -s $PWD/.inputrc ~/.inputrc
 ln -s $PWD/.gitconfig ~/.gitconfig
+
+#sudo yum install vim weechat markdown pandoc php-codesniffer git 
+sudo apt-get install weechat markdown pandoc php-codesniffer git 
+
+# set up vim environment
+mv ~/.vim bak/
+mv ~/.vimrc bak/
+ln -s $PWD/.vim ~/.vim
+ln -s $PWD/.vimrc ~/.vimrc
+sudo apt-get install vim
+
+# get vundle and other submodules
 git submodule update --init --recursive
-sudo apt-get install vim weechat markdown pandoc php-codesniffer git 
+vim -c PluginInstall
 
 # todo.txt
-mv scripts/todo/todo.cfg bak/
-ln -s $PWD/todo.cfg scripts/todo/todo.cfg 
+#mv scripts/todo/todo.cfg bak/
+#ln -s $PWD/todo.cfg scripts/todo/todo.cfg 
 
 # Uncomment for GUI systems
 #mv ~/.vimperatorrc bak/
@@ -26,4 +34,4 @@ ln -s $PWD/todo.cfg scripts/todo/todo.cfg
 #ln -s $PWD/.pentadactylrc ~/.pentadactylrc
 #mv ~/.i3/config bak/
 #ln -s $PWD/.i3/config ~/.i3/config
-#sudo apt-get install i3 kupfer chromium-browser ubuntu-restricted-extras firefox
+#sudo yum install i3 kupfer chromium-browser vim-gnome ttf-anonymous-pro
