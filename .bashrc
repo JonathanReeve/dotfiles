@@ -230,6 +230,9 @@ stty -ixon -ixoff
 ## Prompt
 export PS1='┌─[\d][\u@\h:\w]\[\033[1;33m\]$(parse_git_status)\[\033[0m\]\n└─>'
 
+# Change title of gnome-terminal to reflect current directory, etc. 
+PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"' 
+
 # Get git repository status in shorthand form (branch name and cleanliness).
 function parse_git_status () {
 	git status -b --porcelain 2>/dev/null | awk -F'[#./ ]+' '{print $2}' |
