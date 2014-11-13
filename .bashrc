@@ -144,13 +144,13 @@ alias py='python3'
 
 d()
 {
-wn "$1" -over |tee -a ~/Notes/vocab
+	wn "$1" -over |tee -a ~/Notes/vocab
 }
 
 #searches vocab file
 v()
 {
-grep "$1" ~/Notes/vocab
+	grep "$1" ~/Notes/vocab
 }
 
 # Opens a note
@@ -168,10 +168,20 @@ nls() {
         ls -c ~/Notes/ | egrep -i "$*"
 }
 
-#makes installing stuff easier
-alias install='sudo yum install' 
-alias search='apt-cache search' 
-alias update='sudo yum update'
+# Determine Linux version 
+OS=$(lsb_release -si)
+if [ $OS == "Ubuntu" ]
+then 
+	alias install='sudo apt-get install' 
+	alias search='apt-cache search' 
+	alias update='sudo apt-get update && sudo apt-get upgrade'
+fi
+if [ $OS == "Fedora" ] 
+then 
+	alias install='sudo yum install' 
+	alias search='yum search' 
+	alias update='sudo yum update'
+fi
 
 #for mounting dev directories over ssh
 #alias dev="sshfs -oworkaround=rename jon:/home4/jonreeve/public_html/dev ~/Web/dev && cd ~/Web/dev && gvim ." 
@@ -202,13 +212,16 @@ g() {
 #my gpg key
 export GPGKEY=4C9615CC
 
+WP=$HOME
+#WP=/vagrant
+
 #shortcuts for MLA servers
-export W=/vagrant/app/public/wp-content 
-export P=/vagrant/app/public/wp-content/plugins
-export T=/vagrant/app/public/wp-content/themes
-export M=/vagrant/app/public/wp-content/themes/cbox-mla
-export B=/vagrant/app/public/wp-content/themes/cbox-mla-blog
-export C=/vagrant/app/public/wp-content/themes/cbox-theme
+export W=$WP/app/public/wp-content 
+export P=$WP/app/public/wp-content/plugins
+export T=$WP/app/public/wp-content/themes
+export M=$WP/app/public/wp-content/themes/cbox-mla
+export B=$WP/app/public/wp-content/themes/cbox-mla-blog
+export C=$WP/app/public/wp-content/themes/cbox-theme
 
 # I'm doing a lot of work on CACAP lately 
 export CA=$P/cac-advanced-profiles
