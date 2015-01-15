@@ -35,3 +35,6 @@ vim -c PluginInstall
 #mv ~/.i3/config bak/
 #ln -s $PWD/.i3/config ~/.i3/config
 #sudo yum install i3 kupfer chromium-browser vim-gnome ttf-anonymous-pro
+
+#sudo apt-get install dwb
+#ln -s $PWD/.dwb/* ~/.config/dwb/
