@@ -212,19 +212,17 @@ g() {
 #my gpg key
 export GPGKEY=4C9615CC
 
-WP=$HOME
-#WP=/vagrant
-
 #shortcuts for MLA servers
+export WP=$HOME
 export W=$WP/app/public/wp-content 
 export P=$WP/app/public/wp-content/plugins
 export T=$WP/app/public/wp-content/themes
-export M=$WP/app/public/wp-content/themes/cbox-mla
-export B=$WP/app/public/wp-content/themes/cbox-mla-blog
-export C=$WP/app/public/wp-content/themes/cbox-theme
-
-# I'm doing a lot of work on CACAP lately 
+export M=$T/cbox-mla
+export B=$T/cbox-mla-blog
+export C=$T/cbox-theme
+export A=$P/cbox-auth
 export CA=$P/cac-advanced-profiles
+export MA=$P/mla-admin-bar
 
 #use vim for the editor
 export EDITOR='vim'
@@ -258,6 +256,25 @@ function parse_git_status () {
 	done
 }
 
+# Get sensitive AWS vars from local file
 if [ -f ~/.aws-vars.sh ]; then
 	source ~/.aws-vars.sh 
 fi
+
+# Stuff to get local Node.js commands to work 
+NPM_PACKAGES="/home/jreeve/.npm-packages"
+NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
+PATH="$NPM_PACKAGES/bin:$PATH"
+# Unset manpath so we can inherit from /etc/manpath via the `manpath`
+# command
+unset MANPATH  # delete if you already modified MANPATH elsewhere in your config
+MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
+
+export NVM_DIR="/home/jreeve/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
+
+#Needed for WP / BP tests
+export WP_TESTS_DIR="/home/jreeve/Apps/wordpress-develop/tests/phpunit" 
