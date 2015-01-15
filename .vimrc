@@ -40,8 +40,13 @@ Plugin 'VOoM'
 " Git {{{2
 " Git wrapper. 
 Plugin 'tpope/vim-fugitive'
+
 " Github issues!
 Plugin 'jaxbot/github-issues.vim'
+" Source Oauth Token from private file for Using Github Issues Plugin
+if !empty(glob('~/.vim-private')) "if file exists 
+	source ~/.vim-private
+endif
 " }}}
 
 " Browsers {{{2
@@ -126,6 +131,7 @@ Plugin 'scrooloose/syntastic'
 let g:syntastic_php_checkers = ['php', 'phpcs'] 
 let g:syntastic_php_phpcs_args = '--standard=/home/jreeve/Documents/WordPress-Coding-Standards/WordPress/ruleset.xml'
 let g:syntastic_javascript_checkers = ['jshint'] 
+map <F12> :SyntasticToggleMode<CR>
 
 "PHP IDE
 "Plugin 'spf13/PIV'
@@ -168,9 +174,9 @@ inoremap <expr><C-l>     neocomplete#complete_common_string()
 " <CR>: close popup and save indent.
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function()
-  return neocomplete#close_popup() . "\<CR>"
+  " return neocomplete#close_popup() . "\<CR>"
   " For no inserting <CR> key.
-  "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+  return pumvisible() ? neocomplete#close_popup() : "\<CR>"
 endfunction
 " <TAB>: completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -287,13 +293,11 @@ set tags=~/app/tags
 set nrformats-=octal
 
 " Sets Color Scheme
-" colorscheme desert
-" colorscheme jellybeans
-
 " Makes colors work in terminal
 "set t_Co=256
-"set background=dark 
-colorscheme gotham
+"colorscheme gotham
+set background=dark 
+colorscheme base16-ocean
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
 
@@ -479,6 +483,9 @@ iabbrev liek like
 autocmd BufRead *.mkd      set ai formatoptions=tcroqn2 comments=n:> ft=markdown
 autocmd BufRead *.md       set ai formatoptions=tcroqn2 comments=n:> ft=markdown
 autocmd BufRead *.markdown set ai formatoptions=tcroqn2 comments=n:> ft=markdown 
+" }}}
+
+" Misc {{{
 " }}}
 
 " Allows for folding in this file. 
