@@ -9,6 +9,8 @@ ln -s $PWD/.tmux.conf-child ~/.tmux.conf
 ln -s $PWD/.inputrc ~/.inputrc
 ln -s $PWD/.gitconfig ~/.gitconfig
 
+source ~/.bashrc 
+
 #sudo yum install vim weechat markdown pandoc php-codesniffer git 
 sudo apt-get install weechat markdown pandoc php-codesniffer git 
 
