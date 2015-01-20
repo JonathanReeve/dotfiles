@@ -276,5 +276,8 @@ export NVM_DIR="/home/jreeve/.nvm"
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
+# add my own scripts 
+export PATH="$HOME/dotfiles/scripts:$PATH"
+
 #Needed for WP / BP tests
 export WP_TESTS_DIR="/home/jreeve/Apps/wordpress-develop/tests/phpunit" 
