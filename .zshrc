@@ -80,6 +80,9 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
 
+# Get history search working again
+bindkey "^R" history-incremental-search-backward 
+
 #shortcuts for MLA servers
 export WP=$HOME
 export W=$WP/app/public/wp-content 
