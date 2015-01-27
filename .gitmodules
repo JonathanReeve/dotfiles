@@ -4,3 +4,7 @@
 [submodule "scripts/todo"]
 	path = scripts/todo
 	url = https://github.com/ginatrapani/todo.txt-cli.git
+[submodule "scripts/todo-plugins"]
+	path = scripts/todo-plugins
+	url = https://github.com/ginatrapani/todo.txt-cli.git
+	branch = addons
