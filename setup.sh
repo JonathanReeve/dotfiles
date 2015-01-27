@@ -43,6 +43,7 @@ vim -c PluginInstall
 # todo.txt
 #mv scripts/todo/todo.cfg bak/
 #ln -s $PWD/todo.cfg scripts/todo/todo.cfg 
+#chmod +x scripts/todo-plugins/.todo.actions.d/birdseye
 
 # Check for GUI
 if [[ $DISPLAY ]]
