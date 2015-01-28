@@ -45,7 +45,7 @@ ZSH_THEME="juanghurtado"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git common-aliases debian dirhistory extract fasd python vagrant vi-mode web-search)
+plugins=(git common-aliases colorize dirhistory extract fasd python vagrant vi-mode web-search)
 
 # User configuration
 
@@ -83,8 +83,24 @@ source $ZSH/oh-my-zsh.sh
 # Get history search working again
 bindkey "^R" history-incremental-search-backward 
 
+# Aliases for package management in Ubuntu and Fedora 
+OS=$(lsb_release -si)
+if [[ $OS == "Ubuntu" ]] 
+then 
+	alias install='sudo apt-get install' 
+	alias search='apt-cache search' 
+	alias update='sudo apt-get update && sudo apt-get upgrade'
+fi
+if [[ $OS == "Fedora" ]] 
+then 
+	alias install='sudo yum install' 
+	alias search='yum search' 
+	alias update='sudo yum update'
+fi
+
 #shortcuts for MLA servers
 export WP=$HOME
+export V=~/Documents/commons-playbooks
 export W=$WP/app/public/wp-content 
 export P=$WP/app/public/wp-content/plugins
 export T=$WP/app/public/wp-content/themes
@@ -96,11 +112,20 @@ export CA=$P/cac-advanced-profiles
 export MA=$P/mla-admin-bar
 
 # Get sensitive AWS vars from local file
-[[ -f ~/.aws-vars.sh ]] && source ~/.aws-vars.sh 
+if [[ -f ~/.aws-vars.sh ]] 
+then 
+	source ~/.aws-vars.sh 
+fi 
 
-# Check whether in graphical environment or not, 
-# and if so, open gvim instead of vim
-#[[ $DISPLAY = ":0" ]] && alias vim='gvim'
+# Aliases for graphical environments. 
+# (Assumes GNOME is installed.)  
+if [[ $DISPLAY = ":0" ]] 
+then 
+	alias edit='gvim'
+	alias open='gnome-open' 
+fi
+
+# *** Personal Files *** 
 
 # Todo File Shortcut
 alias t='~/Documents/Settings/dotfiles/scripts/todo/todo.sh -d ~/Documents/Settings/dotfiles/todo.cfg'
