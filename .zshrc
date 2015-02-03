@@ -159,3 +159,6 @@ nn() { gvim -c :Note }
 
 # Searches Notes
 nls() { ls -c ~/Notes/ | egrep -i "$*" }
+
+# Better grepping
+a() { ack-grep -iR "$1" * } 
