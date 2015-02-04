@@ -448,7 +448,7 @@ map \o Byt:f:l"1yw:e <C-r>0<CR>:<C-r>1<CR>
 map \do 0/ in <CR>/app\/public<CR>"1yWW/\d<CR>"2yw:e ~/<C-r>1<CR>:<C-r>2<CR>
 
 " loggy loggy: create log expression for variable under cursor
-map \ll yiwo_log( '<Esc>pA is:' );<CR>_log( $<Esc>pA );<Esc> 
+map \ll yiwo_log( '<C-o>p is:', $<C-o>p );<Esc>
 " spacey spacey: add spaces to parentheses to appease phpcs  
 map \ss :s/(/( /<CR>:s/)/ )/<CR>
 
