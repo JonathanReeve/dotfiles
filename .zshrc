@@ -15,6 +15,8 @@ zgen load zsh-users/zsh-completions src
 
 # -- Theme -- 
 zgen oh-my-zsh themes/juanghurtado
+#zgen load caiogondim/bullet-train-oh-my-zsh-theme 
+zgen load caiogondim/bullet-train-oh-my-zsh-theme 
 
 # -- Settings -- 
 
@@ -89,7 +91,7 @@ fi
 # -- Aliases --
 
 # Todo File Shortcut
-alias t='~/Documents/Settings/dotfiles/scripts/todo/todo.sh -d ~/Documents/Settings/dotfiles/todo.cfg'
+alias t='$DOTFILES/scripts/todo/todo.sh -d $DOTFILES/todo.cfg'
 
 #opens Journal
 alias jnl='vim ~/Dropbox/Personal/.jnl.txt'
@@ -98,7 +100,7 @@ alias jnl='vim ~/Dropbox/Personal/.jnl.txt'
 alias pw='vim ~/Dropbox/Personal/.p10.txt'
 
 #google calendar alias, requires googlecl
-alias gc='google calendar add'
+alias caladd='google calendar add'
 
 #python alias
 alias py='python3'
