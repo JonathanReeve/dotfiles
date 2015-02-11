@@ -8,3 +8,6 @@
 	path = scripts/todo-plugins
 	url = https://github.com/ginatrapani/todo.txt-cli.git
 	branch = addons
+[submodule "scripts/zgen"]
+	path = scripts/zgen
+	url = https://github.com/tarjoilija/zgen.git
