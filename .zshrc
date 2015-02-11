@@ -90,6 +90,10 @@ fi
 
 # -- Aliases --
 
+# Extra Git Aliases
+alias gcam='git commit -a -m'
+compdef _git gcam=git-commit
+
 # Todo File Shortcut
 alias t='$DOTFILES/scripts/todo/todo.sh -d $DOTFILES/todo.cfg'
 
@@ -125,6 +129,9 @@ nls() { ls -c ~/Notes/ | egrep -i "$*" }
 
 # Better grepping
 a() { ack-grep -iR "$1" * } 
+
+# Change GitHub URLs to SSH
+alias git-ssh='git config url.ssh://git@github.com/.insteadOf https://github.com/'
 
 # -- PATH -- 
 export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/home/jreeve/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
