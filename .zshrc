@@ -118,7 +118,10 @@ alias caladd='google calendar add'
 #python alias
 alias py='python3'
 
-#makes find commmand more useful
+#Use SSH on GitHub instead of HTTPs 
+alias git-ssh='git config url.ssh://git@github.com/.insteadOf https://github.com/' 
+
+# makes find commmand more useful
 f() { find . -iname *"$1"* }
 
 #dictionary hack
