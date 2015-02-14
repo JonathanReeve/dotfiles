@@ -5,11 +5,13 @@ mv ~/.inputrc bak/
 mv ~/.gitconfig bak/
 mv ~/.i3/config bak/
 mv ~/.zshrc bak/
+mv ~/.config/uzbl/config bak/
 ln -s $PWD/.bashrc ~/.bashrc
 ln -s $PWD/.tmux.conf-child ~/.tmux.conf
 ln -s $PWD/.inputrc ~/.inputrc
 ln -s $PWD/.gitconfig ~/.gitconfig
 ln -s $PWD/.zshrc ~/.zshrc
+ln -S $PWD/.uzbl-config ~/.config/uzbl/config
 source ~/.bashrc 
 
 # Determine Linux version 
@@ -56,7 +58,7 @@ then
 	ln -s $PWD/.pentadactylrc ~/.pentadactylrc
 	ln -s $PWD/.gvimrc ~/.gvimrc
 	ln -s $PWD/.i3/config ~/.i3/config
-	$INSTALL i3 kupfer chromium-browser vim-gnome ttf-anonymous-pro
+	$INSTALL i3 kupfer vim-gnome ttf-anonymous-pro
 fi 
 #sudo apt-get install dwb
 #ln -s $PWD/.dwb/* ~/.config/dwb/
