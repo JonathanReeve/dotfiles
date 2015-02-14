@@ -1,4 +1,4 @@
-export DOTFILES=~/dotfiles
+export DOTFILES=~/Documents/Settings/dotfiles
 source $DOTFILES/scripts/zgen/zgen.zsh 
 
 # -- Plugins -- 
@@ -51,6 +51,12 @@ then
 	alias install='sudo yum install' 
 	alias search='yum search' 
 	alias update='sudo yum update'
+fi
+if [[ $OS == "Arch" ]] 
+then 
+	alias install='sudo pacman -S' 
+	alias search='pacman -Ss' 
+	alias update='sudo pacman -Syu'
 fi
 
 # -- Shortcuts -- 
