@@ -97,6 +97,9 @@ fi
 # -- Aliases --
 
 # Extra Git Aliases
+alias gcm='git commit -m'
+compdef _git gcm=git-commit
+
 alias gcam='git commit -a -m'
 compdef _git gcam=git-commit
 
