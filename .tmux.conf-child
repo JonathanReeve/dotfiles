@@ -1,11 +1,11 @@
 # Bind to C-a instead of C-b.
-set-option -g prefix C-a
+set-option -g prefix C-b
 
 # Use screen-like binding for last window.
-bind-key C-a last-window
+bind-key C-b last-window
 
 # Send bind-key to nested sessions.
-bind-key a send-prefix
+bind-key b send-prefix
 
 # Enable mouse.
 set-window-option -g mode-mouse on
