@@ -91,8 +91,17 @@ fi
 # -- Aliases --
 
 # Extra Git Aliases
+alias gcm='git commit -m'
+compdef _git gcm=git-commit
+
 alias gcam='git commit -a -m'
 compdef _git gcam=git-commit
+
+alias gcom='git checkout master' 
+compdef _git gcd=git-checkout
+
+alias gcod='git checkout develop' 
+compdef _git gcod=git-checkout
 
 # Todo File Shortcut
 alias t='$DOTFILES/scripts/todo/todo.sh -d $DOTFILES/todo.cfg'
@@ -110,7 +119,7 @@ alias caladd='google calendar add'
 alias py='python3'
 
 #makes find commmand more useful
-f() { find . -iname *"$1"* }
+f() { find . -iname "$1" }
 
 #dictionary hack
 #d() { wn "$1" -over |tee -a ~/Notes/vocab }
