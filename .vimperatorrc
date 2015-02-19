@@ -5,6 +5,12 @@ map K gT
 map B :bmark -T 
 set gui=
 
+" ** Useful Mappings **
+" These are tabs I often have open, and often need to switch to. 
+map gm :b gmail<CR>
+map gw :b waffle<CR>
+map gs :b slack<CR> 
+
 " ==VimperatorColorSchema==
 " name: indigo
 " author: mashiro
