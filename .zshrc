@@ -1,4 +1,4 @@
-export DOTFILES=~/Documents/Settings/dotfiles
+export DOTFILES=~/dotfiles
 source $DOTFILES/scripts/zgen/zgen.zsh 
 
 # -- Plugins -- 
@@ -108,6 +108,10 @@ compdef _git gcd=git-checkout
 
 alias gcod='git checkout develop' 
 compdef _git gcod=git-checkout
+
+# git checkout a new branch
+alias gcob='git checkout -b'
+compdef _git gcob=git-checkout
 
 # Todo File Shortcut
 alias t='$DOTFILES/scripts/todo/todo.sh -d $DOTFILES/todo.cfg'
