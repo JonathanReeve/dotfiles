@@ -39,7 +39,7 @@ bindkey "^R" history-incremental-search-backward
 
 # Aliases for package management in Ubuntu and Fedora 
 OS=$(lsb_release -si)
-if [ $OS == "Ubuntu" ] || [ $OS == "Debian" ] 
+if [[ $OS == "Ubuntu" ]] || [[ $OS == "Debian" ]] 
 then 
 	alias install='sudo apt-get install' 
 	alias search='apt-cache search' 
