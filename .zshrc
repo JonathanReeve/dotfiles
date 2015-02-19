@@ -10,7 +10,6 @@ zgen oh-my-zsh plugins/extract
 zgen oh-my-zsh plugins/vagrant
 zgen oh-my-zsh plugins/vi-mode
 zgen load zsh-users/zsh-syntax-highlighting
-
 zgen load zsh-users/zsh-completions src
 
 # -- Theme -- 
@@ -40,7 +39,7 @@ bindkey "^R" history-incremental-search-backward
 
 # Aliases for package management in Ubuntu and Fedora 
 OS=$(lsb_release -si)
-if [[ $OS == "Ubuntu" ]] 
+if [ $OS == "Ubuntu" ] || [ $OS == "Debian" ] 
 then 
 	alias install='sudo apt-get install' 
 	alias search='apt-cache search' 
@@ -60,7 +59,15 @@ then
 fi
 
 # -- Shortcuts -- 
-export WP=$HOME
+
+# If connected over SSH, this is probably a vagrant box. 
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]
+then 
+	export WP=/vagrant
+else 
+	export WP=$HOME
+fi
+
 export V=~/Documents/commons-playbooks
 export W=$WP/app/public/wp-content 
 export P=$WP/app/public/wp-content/plugins
