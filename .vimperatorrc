@@ -1,18 +1,34 @@
-set gui=nonavigation
-set hintchars=asdfjkl;
-map J gt
-map K gT
-map B :bmark -T 
-set gui=
+" ---- General Settings ----
 
-" ** Useful Mappings **
+" Use home keys for following links. 
+set hintchars=asdfjkl;
+
+" ---- Appearance ----
+
+" Minimal GUI
+set gui=nonavigation
+
+" ---- Useful Mappings ----
+
+" Quickly open a private browsing window. 
+map \p :winopen -private<CR> 
+
 " Switch back to the previous tab really quickly. 
 map gb <C-^>
+
+# Bookmarking with tags. 
+map B :bmark -T 
+
+" Faster switching between adjacent tabs. 
+map J gt
+map K gT
 
 " These are tabs I often have open, and often need to switch to. 
 map gm :b gmail<CR>
 map gw :b waffle<CR>
 map gs :b slack<CR> 
+
+" ---- Color Scheme ----
 
 " ==VimperatorColorSchema==
 " name: indigo
