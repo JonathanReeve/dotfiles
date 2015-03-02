@@ -92,12 +92,13 @@ Plugin 'vim-scripts/ScrollColors'
 "Plugin 'Colour-Sampler-Pack' 
 "Plugin '29decibel/codeschool-vim-theme'  
 Plugin 'ryu-blacknd/vim-nucolors' 
-Plugin 'Lokaltog/vim-distinguished' 
-Plugin 'whatyouhide/vim-gotham'
+"Plugin 'Lokaltog/vim-distinguished' 
+"Plugin 'whatyouhide/vim-gotham'
 Plugin 'chriskempson/base16-vim' 
 "Plugin 'tomasr/molokai'
 Plugin 'flazz/vim-colorschemes'
-Plugin 'xolox/vim-colorscheme-switcher'
+"Plugin 'xolox/vim-colorscheme-switcher'
+Plugin 'ajh17/Spacegray.vim' 
 " }}}
 
 " HTML/CSS Plugins Etc {{{2
@@ -296,8 +297,9 @@ set nrformats-=octal
 " Makes colors work in terminal
 "set t_Co=256
 "colorscheme gotham
+"colorscheme base16-ocean
+colorscheme mopkai
 set background=dark 
-colorscheme base16-ocean
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
 
