@@ -6,6 +6,9 @@ map B :bmark -T
 set gui=
 
 " ** Useful Mappings **
+" Switch back to the previous tab really quickly. 
+map gb <C-^>
+
 " These are tabs I often have open, and often need to switch to. 
 map gm :b gmail<CR>
 map gw :b waffle<CR>
