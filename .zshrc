@@ -141,6 +141,11 @@ f() { find . -iname "$1" }
 #Use SSH on GitHub instead of HTTPs 
 alias git-ssh='git config url.ssh://git@github.com/.insteadOf https://github.com/' 
 
+# Open SSH sessions in new tmux window and connect to a nested tmux session.
+function tmux-ssh () {
+	tmux new-window -n "$1" """ssh -t "$1" '(command -v tmux >/dev/null 2>&1 && (tmux attach || tmux new-session -s ssh)) || bash -l'""" 
+}
+
 #dictionary hack
 #d() { wn "$1" -over |tee -a ~/Notes/vocab }
 
