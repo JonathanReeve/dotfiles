@@ -121,6 +121,10 @@ alias py='python3'
 #Use SSH on GitHub instead of HTTPs 
 alias git-ssh='git config url.ssh://git@github.com/.insteadOf https://github.com/' 
 
+#Smart rsync copy. (a)rchival, (i)temized, (b)ackup, 
+#(u) - only newer files, (z) compression, (P)artial and progress. 
+alias rsync-smart='rsync -abviuzP'
+
 # makes find commmand more useful
 f() { find . -iname *"$1"* }
 
@@ -149,6 +153,18 @@ alias :e='edit'
 
 # Change GitHub URLs to SSH
 alias git-ssh='git config url.ssh://git@github.com/.insteadOf https://github.com/'
+
+# -- Colorized Man Pages -- 
+man() {
+    env LESS_TERMCAP_mb=$'\E[01;31m' \
+    LESS_TERMCAP_md=$'\E[01;38;5;74m' \
+    LESS_TERMCAP_me=$'\E[0m' \
+    LESS_TERMCAP_se=$'\E[0m' \
+    LESS_TERMCAP_so=$'\E[38;5;246m' \
+    LESS_TERMCAP_ue=$'\E[0m' \
+    LESS_TERMCAP_us=$'\E[04;38;5;146m' \
+    man "$@"
+} 
 
 # -- PATH -- 
 export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/home/jreeve/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
