@@ -25,8 +25,11 @@ then
 	export INSTALL='sudo yum install' 
 fi
 
-#Install Essential Packages 
-$INSTALL vim git 
+# DOTFILES environment variable needed by .zshrc
+export DOTFILES=$PWD
+
+#Install Essential Packages
+$INSTALL vim git zsh
 
 # Install Other Packages
 $INSTALL markdown pandoc php-codesniffer 

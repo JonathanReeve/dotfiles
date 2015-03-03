@@ -92,12 +92,13 @@ Plugin 'vim-scripts/ScrollColors'
 "Plugin 'Colour-Sampler-Pack' 
 "Plugin '29decibel/codeschool-vim-theme'  
 Plugin 'ryu-blacknd/vim-nucolors' 
-Plugin 'Lokaltog/vim-distinguished' 
-Plugin 'whatyouhide/vim-gotham'
+"Plugin 'Lokaltog/vim-distinguished' 
+"Plugin 'whatyouhide/vim-gotham'
 Plugin 'chriskempson/base16-vim' 
 "Plugin 'tomasr/molokai'
 Plugin 'flazz/vim-colorschemes'
-Plugin 'xolox/vim-colorscheme-switcher'
+"Plugin 'xolox/vim-colorscheme-switcher'
+Plugin 'ajh17/Spacegray.vim' 
 " }}}
 
 " HTML/CSS Plugins Etc {{{2
@@ -131,7 +132,7 @@ Plugin 'scrooloose/syntastic'
 let g:syntastic_php_checkers = ['php', 'phpcs'] 
 let g:syntastic_php_phpcs_args = '--standard=/home/jreeve/Documents/WordPress-Coding-Standards/WordPress/ruleset.xml'
 let g:syntastic_javascript_checkers = ['jshint'] 
-map <F12> :SyntasticToggleMode<CR>
+map ,s :SyntasticToggleMode<CR>
 
 "PHP IDE
 "Plugin 'spf13/PIV'
@@ -296,8 +297,9 @@ set nrformats-=octal
 " Makes colors work in terminal
 "set t_Co=256
 "colorscheme gotham
+"colorscheme base16-ocean
+colorscheme mopkai
 set background=dark 
-colorscheme base16-ocean
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
 
@@ -449,8 +451,9 @@ map \do 0/ in <CR>/app\/public<CR>"1yWW/\d<CR>"2yw:e ~/<C-r>1<CR>:<C-r>2<CR>
 
 " loggy loggy: create log expression for variable under cursor
 map \ll yiwo_log( '<C-o>p is:', $<C-o>p );<Esc>
-" spacey spacey: add spaces to parentheses to appease phpcs  
-map \ss :s/(/( /<CR>:s/)/ )/<CR>
+" ss = 'spacey spacey.' Add spaces to parentheses to update code to WP coding
+" standards. 
+map \ss :s/(\([^ )]\)/( \1/g<CR>:s/\([^ (]\))/\1 )/g<CR>
 
 " }}} 
 
