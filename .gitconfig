@@ -17,3 +17,5 @@
 	br = log --all --graph --decorate --oneline --simplify-by-decoration
 [push]
 	default = simple
+[mergetool]
+	keepBackup = false
