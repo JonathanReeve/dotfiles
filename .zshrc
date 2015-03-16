@@ -141,6 +141,13 @@ f() { find . -iname "$1" }
 #Use SSH on GitHub instead of HTTPs 
 alias git-ssh='git config url.ssh://git@github.com/.insteadOf https://github.com/' 
 
+#Smart rsync copy. (a)rchival, (i)temized, (b)ackup, 
+#(u) - only newer files, (z) compression, (P)artial and progress. 
+alias rsync-smart='rsync -abviuzP'
+
+# makes find commmand more useful
+f() { find . -iname *"$1"* }
+
 # Open SSH sessions in new tmux window and connect to a nested tmux session.
 function tmux-ssh () {
 	tmux new-window -n "$1" """ssh -t "$1" '(command -v tmux >/dev/null 2>&1 && (tmux attach || tmux new-session -s ssh)) || bash -l'""" 
@@ -172,7 +179,7 @@ alias :e='edit'
 # Change GitHub URLs to SSH
 alias git-ssh='git config url.ssh://git@github.com/.insteadOf https://github.com/'
 
-# -- Colorize Man Pages --
+# -- Colorized Man Pages -- 
 
 man() {
     env LESS_TERMCAP_mb=$'\E[01;31m' \
@@ -185,7 +192,7 @@ man() {
     man "$@"
 }
 
-#   -- PATH -- 
+# -- PATH -- 
 export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/home/jreeve/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
 # export MANPATH="/usr/local/man:$MANPATH"
 
