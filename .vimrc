@@ -142,7 +142,8 @@ Plugin 'alvan/vim-php-manual'
 " }}}
 
 " Neocomplete {{{2
-Plugin 'Shougo/neocomplete'
+
+Plugin 'Shougo/neocomplete' 
 
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
@@ -159,7 +160,7 @@ let g:neocomplete#sources#dictionary#dictionaries = {
     \ 'default' : '',
     \ 'vimshell' : $HOME.'/.vimshell_hist',
     \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
+	\ }
 
 " Define keyword.
 if !exists('g:neocomplete#keyword_patterns')
@@ -264,6 +265,10 @@ endif
 let g:airline_left_sep = '»'
 let g:airline_right_sep = '«'
 let g:airline_symbols.branch = '⎇'
+
+" Tmuxline
+"Bundle 'edkolev/tmuxline.vim' 
+"let g:tmuxline_powerline_separators = 0
 
 " End Airline }}} 
 
