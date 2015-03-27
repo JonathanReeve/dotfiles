@@ -104,6 +104,11 @@ fi
 # -- Aliases --
 
 # Extra Git Aliases
+
+# `lg` is defined in .gitconfig
+alias glg='git lg' 
+compdef _git glg=git-log
+
 alias gcm='git commit -m'
 compdef _git gcm=git-commit
 
