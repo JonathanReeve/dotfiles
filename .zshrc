@@ -1,4 +1,10 @@
-export DOTFILES=~/dotfiles
+if [[ -n $SSH_CONNECTION ]]; then
+	#I tend to keep dotfiles here in VMs
+	export DOTFILES=~/dotfiles 
+else
+	#...and here on my personal machines. 
+	export DOTFILES=~/Documents/Settings/dotfiles
+fi
 source $DOTFILES/scripts/zgen/zgen.zsh 
 
 # -- Plugins -- 
@@ -192,7 +198,8 @@ man() {
 } 
 
 # -- PATH -- 
-export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/home/jreeve/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/home/jreeve/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/jon/.gem/ruby/2.2.0/bin"
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 export NODE_PATH=/home/jreeve/.nvm/v0.10.33/lib/node_modules:/home/jreeve/.npm-packages/lib/node_modules
