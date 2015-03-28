@@ -16,7 +16,7 @@ map \p :winopen -private<CR>
 " Switch back to the previous tab really quickly. 
 map gb <C-^>
 
-# Bookmarking with tags. 
+" Bookmarking with tags. 
 map B :bmark -T 
 
 " Faster switching between adjacent tabs. 

@@ -110,6 +110,11 @@ fi
 # -- Aliases --
 
 # Extra Git Aliases
+
+# `lg` is defined in .gitconfig
+alias glg='git lg' 
+compdef _git glg=git-log
+
 alias gcm='git commit -m'
 compdef _git gcm=git-commit
 
@@ -186,6 +191,7 @@ alias :e='edit'
 alias git-ssh='git config url.ssh://git@github.com/.insteadOf https://github.com/'
 
 # -- Colorized Man Pages -- 
+
 man() {
     env LESS_TERMCAP_mb=$'\E[01;31m' \
     LESS_TERMCAP_md=$'\E[01;38;5;74m' \
@@ -195,7 +201,7 @@ man() {
     LESS_TERMCAP_ue=$'\E[0m' \
     LESS_TERMCAP_us=$'\E[04;38;5;146m' \
     man "$@"
-} 
+}
 
 # -- PATH -- 
 export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/home/jreeve/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/jon/.gem/ruby/2.2.0/bin"
