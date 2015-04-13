@@ -42,11 +42,11 @@ Plugin 'VOoM'
 Plugin 'tpope/vim-fugitive'
 
 " Github issues!
-Plugin 'jaxbot/github-issues.vim'
-" Source Oauth Token from private file for Using Github Issues Plugin
-if !empty(glob('~/.vim-private')) "if file exists 
-	source ~/.vim-private
-endif
+"Plugin 'jaxbot/github-issues.vim'
+"" Source Oauth Token from private file for Using Github Issues Plugin
+"if !empty(glob('~/.vim-private')) "if file exists 
+	"source ~/.vim-private
+"endif
 " }}}
 
 " Browsers {{{2
@@ -127,7 +127,7 @@ Plugin 'tmhedberg/matchit'
 "PHP xdebug integration
 "Plugin 'joonty/vdebug' 
 "All kinds of syntax checking
-"Plugin 'scrooloose/syntastic'
+Plugin 'scrooloose/syntastic'
 " Syntastic Options
 let g:syntastic_php_checkers = ['php', 'phpcs'] 
 let g:syntastic_php_phpcs_args = '--standard=/home/jreeve/Documents/WordPress-Coding-Standards/WordPress/ruleset.xml'
@@ -238,14 +238,8 @@ Plugin 'xolox/vim-shell'
 Plugin 'tpope/vim-surround'
 " For Easy Commenting
 Plugin 'scrooloose/nerdcommenter'
-" tail -f Emulation for Watching Files
-"Plugin 'vim-scripts/Tail-Bundle' 
-
 "A bunch of mappings that do cool stuff
 Plugin 'tpope/vim-unimpaired' 
-
-
-
 "Grepping Stuff
 Bundle 'mileszs/ack.vim' 
 " Better grepping with Ack (grep-ack)
@@ -492,6 +486,12 @@ autocmd BufRead *.markdown set ai formatoptions=tcroqn2 comments=n:> ft=markdown
 
 " Misc {{{
 " }}}
+
+" Enable this for profiling stuff, in case vim is being slow. 
+" Put it at the top of the file to enable profiling startup
+"profile start profile.log
+"profile func * 
+"profile file * 
 
 " Allows for folding in this file. 
 " vim:fdm=marker
