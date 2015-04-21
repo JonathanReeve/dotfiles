@@ -11,7 +11,7 @@ set gui=nonavigation
 " ---- Useful Mappings ----
 
 " Quickly open a private browsing window. 
-map \p :winopen -private<CR> 
+map <Leader>p :winopen -private<CR> 
 
 " Switch back to the previous tab really quickly. 
 map gb <C-^>
