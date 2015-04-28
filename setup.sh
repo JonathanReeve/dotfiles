@@ -16,7 +16,7 @@ source ~/.bashrc
 
 # Determine Linux version 
 OS=$(lsb_release -si)
-if [ $OS == "Ubuntu" ]
+if [ $OS == "Ubuntu" ] || [ $OS == "Debian" ]
 then 
 	export INSTALL='sudo apt-get install' 
 fi
@@ -31,6 +31,8 @@ export DOTFILES=$PWD
 #Install Essential Packages
 $INSTALL vim git zsh
 
+chsh -s /bin/zsh
+
 # Install Other Packages
 $INSTALL markdown pandoc php-codesniffer 
 
@@ -40,6 +42,7 @@ mv ~/.vimrc bak/
 ln -s $PWD/.vim ~/.vim
 ln -s $PWD/.vimrc ~/.vimrc
 $INSTALL vim
+
 
 # get vundle and other submodules
 git submodule update --init --recursive
