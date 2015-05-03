@@ -276,6 +276,9 @@ filetype plugin indent on     " required!
 set nocompatible
 syntax on
 
+" Stop vim from making annoying error sounds
+set noerrorbells visualbell t_vb= 
+
 " Turn off case-sensitive searches and things
 set ignorecase
 
