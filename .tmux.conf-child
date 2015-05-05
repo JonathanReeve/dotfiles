@@ -58,8 +58,8 @@ set -g status-bg black
 set -g status-fg blue
 set -g status-interval 5
 set -g status-utf8 on
-setw -g window-status-format "#[bg=blue,fg=black] #I #[bg=blue,fg=black] #{pane_current_command} "
-setw -g window-status-current-format "#[bg=cyan,fg=black] #I #[bg=blue,fg=black] #{pane_current_command} "
+setw -g window-status-format "#[bg=blue,fg=black] #I #[bg=blue,fg=black] #W "
+setw -g window-status-current-format "#[bg=cyan,fg=black] #I #[bg=blue,fg=black] #W "
 set -g status-justify left
 set-option -g status-right '#[bg=blue,fg=black] #H #[default] #[bg=blue,fg=black] %H:%M #[default]' 
 set-option -g status-left '' 
