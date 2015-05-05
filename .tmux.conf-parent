@@ -1,4 +1,11 @@
-# Trimmed from https://github.com/skwp/dotfiles
+# Bind to C-a instead of C-b.
+set-option -g prefix C-a
+
+# Use screen-like binding for last window.
+bind-key C-a last-window
+
+# Send bind-key to nested sessions.
+bind-key a send-prefix
 
 # Ring the bell if any background window rang a bell
 set -g bell-action any
@@ -28,10 +35,6 @@ set-window-option -g window-status-current-format "#[fg=black,bg=yellow,norevers
 # No escape time for vi mode
 set -sg escape-time 0
 
-# Screen like binding for last window
-unbind l
-bind C-a last-window
-
 # Enable mouse
 #setw -g mode-mouse on
 
@@ -45,4 +48,3 @@ if-shell "[ -f ~/.tmux.conf.user ]" 'source ~/.tmux.conf.user'
 set-window-option -g mode-keys vi
 bind-key -t vi-copy 'v' begin-selection
 bind-key -t vi-copy 'y' copy-selection
-
