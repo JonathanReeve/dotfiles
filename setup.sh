@@ -7,12 +7,18 @@ mv ~/.i3/config bak/
 mv ~/.zshrc bak/
 mv ~/.config/uzbl/config bak/
 ln -s $PWD/.bashrc ~/.bashrc
-ln -s $PWD/.tmux.conf-child ~/.tmux.conf
 ln -s $PWD/.inputrc ~/.inputrc
 ln -s $PWD/.gitconfig ~/.gitconfig
 ln -s $PWD/.zshrc ~/.zshrc
 ln -S $PWD/.uzbl-config ~/.config/uzbl/config
 source ~/.bashrc 
+
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]
+then 
+	ln -s $PWD/.tmux.conf-child ~/.tmux.conf
+else
+	ln -s $PWD/.tmux.conf-parent ~/.tmux.conf
+fi
 
 # Determine Linux version 
 OS=$(lsb_release -si)
