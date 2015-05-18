@@ -1,3 +1,7 @@
+# Don't auto-update oh-my-zsh; 
+# let zgen handle that. 
+DISABLE_AUTO_UPDATE="true" 
+
 if [[ -n $SSH_CONNECTION ]]; then
 	#I tend to keep dotfiles here in VMs
 	export DOTFILES=~/dotfiles 
@@ -5,6 +9,7 @@ else
 	#...and here on my personal machines. 
 	export DOTFILES=~/Documents/Settings/dotfiles
 fi
+
 source $DOTFILES/scripts/zgen/zgen.zsh 
 
 # -- Plugins -- 
@@ -20,7 +25,6 @@ zgen load zsh-users/zsh-completions src
 
 # -- Theme -- 
 zgen oh-my-zsh themes/juanghurtado
-#zgen load caiogondim/bullet-train-oh-my-zsh-theme 
 zgen load caiogondim/bullet-train-oh-my-zsh-theme 
 
 # -- Settings -- 
@@ -204,7 +208,7 @@ man() {
 }
 
 # -- PATH -- 
-export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/jon/.gem/ruby/2.2.0/bin:/home/jreeve/.npm-packages/bin"
+export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/home/jreeve/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/jon/.gem/ruby/2.2.0/bin:/home/jon/.cabal/bin"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
