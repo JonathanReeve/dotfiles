@@ -76,10 +76,7 @@ bind-key -t vi-copy 'v' begin-selection
 
 # Allow tmux copying to get to the system clipboard, too. 
 # source: http://unix.stackexchange.com/questions/131011/use-system-clipboard-in-vi-copy-mode-in-tmux 
-#bind -t vi-copy y copy-pipe 'xclip -in -selection clipboard' 
-
-bind -t vi-copy y copy-pipe "xclip"
-
+bind-key -t vi-copy y copy-pipe 'xclip -in -selection clipboard'
 
 # When you run "tmux attach", create a session if one does not already exist.
 new-session -s "tmux"
