@@ -106,6 +106,8 @@ Plugin 'ajh17/Spacegray.vim'
 Plugin 'JulesWang/css.vim' 
 "For Compass/SCSS/Sass
 Plugin 'cakebaker/scss-syntax.vim'
+"For coffeescript
+Plugin 'kchmck/vim-coffee-script' 
 " For writing in Pandoc markdown
 "Plugin 'vim-pandoc/vim-pandoc' 
 " HTML Authoring Autocompletion 
@@ -278,6 +280,7 @@ syntax on
 
 " Stop vim from making annoying error sounds
 set noerrorbells visualbell t_vb= 
+autocmd GUIEnter * set vb t_vb=
 
 " Turn off case-sensitive searches and things
 set ignorecase
@@ -500,3 +503,4 @@ autocmd BufRead *.markdown set ai formatoptions=tcroqn2 comments=n:> ft=markdown
 
 " Allows for folding in this file. 
 " vim:fdm=marker
+
