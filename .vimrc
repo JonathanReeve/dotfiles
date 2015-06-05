@@ -13,56 +13,56 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 " let Vundle manage Vundle
-" required! 
-Plugin 'gmarik/vundle' 
-" }}} 
+" required!
+Plugin 'gmarik/vundle'
+" }}}
 
 " Notes {{{2
 " Required by vim-notes
-Plugin 'xolox/vim-misc' 
-" Essential notes plugin.  
-"Plugin 'xolox/vim-notes' 
-" Using my fork instead. 
+Plugin 'xolox/vim-misc'
+" Essential notes plugin.
+"Plugin 'xolox/vim-notes'
+" Using my fork instead.
 Plugin 'JonathanReeve/vim-notes'
 " To set notes directory for :Note command
 let g:notes_directories = ['~/Dropbox/Notes']
-" This ensures that updating vim notes won't overwrite my blank default note. 
-let g:notes_shadowdir = '~/.vim/notes-shadow/' 
+" This ensures that updating vim notes won't overwrite my blank default note.
+let g:notes_shadowdir = '~/.vim/notes-shadow/'
 "set file extension for notes (notes.vim plugin)
 let g:notes_suffix = '.txt'
 " Turn off notes.vim highlighting for vim command syntax
 highlight link notesVimCmd Normal
 
 " Vim outliner
-Plugin 'VOoM' 
+Plugin 'VOoM'
 "}}}
 
 " Git {{{2
-" Git wrapper. 
+" Git wrapper.
 Plugin 'tpope/vim-fugitive'
 
 " Github issues!
 "Plugin 'jaxbot/github-issues.vim'
 "" Source Oauth Token from private file for Using Github Issues Plugin
-"if !empty(glob('~/.vim-private')) "if file exists 
+"if !empty(glob('~/.vim-private')) "if file exists
 	"source ~/.vim-private
 "endif
 " }}}
 
 " Browsers {{{2
-" File browser. 
+" File browser.
 Plugin 'scrooloose/nerdtree'
 "Open nerdtree
 map ,n :NERDTreeToggle<CR>
 
-" Buffer browser. 
-Plugin 'techlivezheng/vim-plugin-minibufexpl' 
+" Buffer browser.
+Plugin 'techlivezheng/vim-plugin-minibufexpl'
 "Open minibufexplorer
 map ,m :MBEToggle<CR>
 
 " Tag browser.
-Plugin 'majutsushi/tagbar' 
-" Make Tagbar look like NERDTree. 
+Plugin 'majutsushi/tagbar'
+" Make Tagbar look like NERDTree.
 let g:tagbar_iconchars = ['▸', '▾']
 highlight link TagbarFoldIcon Title
 "Open Tagbar
@@ -77,63 +77,63 @@ map \d :sp $W/debug.log<CR>
 "Open todo file
 map \t :sp ~/Notes/todo.txt<CR>
 
-"Open vimrc 
+"Open vimrc
 map \v :sp ~/.vimrc<CR>
 
-" }}} 
+" }}}
 
 " Colors {{{2
-" Makes colors work in term. 
+" Makes colors work in term.
 " Plugin 'godlygeek/csapprox'
 " Another script for trying to make colors work better in term.
-"Plugin 'vim-scripts/colorsupport.vim' 
+"Plugin 'vim-scripts/colorsupport.vim'
 Plugin 'vim-scripts/ScrollColors'
-" Colors. 
-"Plugin 'Colour-Sampler-Pack' 
-"Plugin '29decibel/codeschool-vim-theme'  
-Plugin 'ryu-blacknd/vim-nucolors' 
-"Plugin 'Lokaltog/vim-distinguished' 
+" Colors.
+"Plugin 'Colour-Sampler-Pack'
+"Plugin '29decibel/codeschool-vim-theme'
+Plugin 'ryu-blacknd/vim-nucolors'
+"Plugin 'Lokaltog/vim-distinguished'
 "Plugin 'whatyouhide/vim-gotham'
-Plugin 'chriskempson/base16-vim' 
+Plugin 'chriskempson/base16-vim'
 "Plugin 'tomasr/molokai'
 Plugin 'JonathanReeve/vim-colorschemes'
 "Plugin 'xolox/vim-colorscheme-switcher'
-Plugin 'ajh17/Spacegray.vim' 
+Plugin 'ajh17/Spacegray.vim'
 " }}}
 
-" HTML/CSS Plugins Etc {{{2
+" Language-Specific Plugins {{{2
 "For better CSS
-Plugin 'JulesWang/css.vim' 
+Plugin 'hail2u/vim-css3-syntax'
 "For Compass/SCSS/Sass
 Plugin 'cakebaker/scss-syntax.vim'
 "For coffeescript
-Plugin 'kchmck/vim-coffee-script' 
+Plugin 'kchmck/vim-coffee-script'
 " For writing in Pandoc markdown
-"Plugin 'vim-pandoc/vim-pandoc' 
-" HTML Authoring Autocompletion 
-Plugin 'mattn/emmet-vim' 
+"Plugin 'vim-pandoc/vim-pandoc'
+" HTML Authoring Autocompletion
+Plugin 'mattn/emmet-vim'
 " Improved matching for html tags
 Plugin 'tmhedberg/matchit'
 " HTML Tag Matching
 " Plugin 'Valloric/MatchTagAlways'
 "For autocomplete and faster html typing
-"Plugin 'garbas/vim-snipmate' 
+"Plugin 'garbas/vim-snipmate'
 
 " }}}
 
 " IDE Stuff {{{2
 " Php folding
-"Plugin 'rayburgemeestre/phpfolding.vim' 
+"Plugin 'rayburgemeestre/phpfolding.vim'
 "PHP error checking
-"Plugin 'joonty/vim-phpqa' 
+"Plugin 'joonty/vim-phpqa'
 "PHP xdebug integration
-"Plugin 'joonty/vdebug' 
+"Plugin 'joonty/vdebug'
 "All kinds of syntax checking
 Plugin 'scrooloose/syntastic'
 " Syntastic Options
-let g:syntastic_php_checkers = ['php', 'phpcs'] 
+let g:syntastic_php_checkers = ['php', 'phpcs']
 let g:syntastic_php_phpcs_args = '--standard=/home/jreeve/Documents/WordPress-Coding-Standards/WordPress/ruleset.xml'
-let g:syntastic_javascript_checkers = ['jshint'] 
+let g:syntastic_javascript_checkers = ['jshint']
 map ,s :SyntasticToggleMode<CR>
 
 "PHP IDE
@@ -145,8 +145,8 @@ map ,s :SyntasticToggleMode<CR>
 
 "" Neocomplete {{{2
 
-""Plugin 'Shougo/neocomplete' 
-""Plugin 'Shougo/neocomplcache' 
+""Plugin 'Shougo/neocomplete'
+""Plugin 'Shougo/neocomplcache'
 
 "" Use neocomplcache.
 "let g:neocomplcache_enable_at_startup = 1
@@ -231,25 +231,25 @@ map ,s :SyntasticToggleMode<CR>
 "let g:neocomplcache_force_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 "let g:neocomplcache_force_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
-""  }}} 
+""  }}}
 
 " Misc {{{2
-" Allows for opening of URLs and other files. 
+" Allows for opening of URLs and other files.
 Plugin 'xolox/vim-shell'
 " For text surrounds like tags and quotes
 Plugin 'tpope/vim-surround'
 " For Easy Commenting
 Plugin 'scrooloose/nerdcommenter'
 "A bunch of mappings that do cool stuff
-Plugin 'tpope/vim-unimpaired' 
+Plugin 'tpope/vim-unimpaired'
 "Grepping Stuff
-Bundle 'mileszs/ack.vim' 
+Bundle 'mileszs/ack.vim'
 " Better grepping with Ack (grep-ack)
 map ,a :Ack <C-R><C-W><CR>
 
 " }}}
 
-"" Fancy Statusline {{{ 
+" Fancy Statusline {{{
 
 ""A lighter-weight statusline
 "Plugin 'bling/vim-airline'
@@ -265,21 +265,33 @@ map ,a :Ack <C-R><C-W><CR>
 "let g:airline_symbols.branch = '⎇'
 
 "" Tmuxline
-""Bundle 'edkolev/tmuxline.vim' 
+""Bundle 'edkolev/tmuxline.vim'
 ""let g:tmuxline_powerline_separators = 0
 
-"" End Airline }}} 
+"" End Airline }}}
 
-filetype plugin indent on     " required! 
+" Language Specific Stuff {{{
 
-" End Plugins }}} 
+" this sets tabstops to four spaces per python guidelines
+autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4
+autocmd Filetype php setlocal noexpandtab
+
+Plugin 'editorconfig/editorconfig-vim'
+
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
+" }}}
+
+filetype plugin indent on     " required!
+
+" End Plugins }}}
 
 " Basic Settings {{{
 set nocompatible
 syntax on
 
 " Stop vim from making annoying error sounds
-set noerrorbells visualbell t_vb= 
+set noerrorbells visualbell t_vb=
 autocmd GUIEnter * set vb t_vb=
 
 " Turn off case-sensitive searches and things
@@ -306,7 +318,7 @@ set nrformats-=octal
 "colorscheme gotham
 "colorscheme base16-ocean
 colorscheme nucolors
-set background=dark 
+set background=dark
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
 
@@ -318,34 +330,34 @@ au InsertEnter * hi Cursor guibg=green
 set encoding=utf-8
 
 "Confirm saves rather than give errors
-set confirm 
+set confirm
 
 "Makes sure it doesn't add unnecessary line breaks
 set textwidth=0
-set wrapmargin=0 
+set wrapmargin=0
 
 " To make plugins work
 filetype plugin on
 filetype indent on
-" }}} 
+" }}}
 
 " Password File and Journal File {{{
 " Use Strong Encryption
 "set cm=blowfish
-" Makes password file quit automagically after five minutes 
+" Makes password file quit automagically after five minutes
 autocmd BufReadPost,FileReadPost   .p10.txt set updatetime=300000
 autocmd CursorHold                 .p10.txt wq
 
 "Makes journal file quit automagically after five minutes
 autocmd BufReadPost,FileReadPost   .jnl.txt set updatetime=300000
-autocmd CursorHold                 .jnl.txt wq 
+autocmd CursorHold                 .jnl.txt wq
 autocmd CursorHoldI                .jnl.txt wq
 "}}}
 
-" Syntax higlighting. {{{ 
-" syntax highlighting for wordpress debug.log  
+" Syntax higlighting. {{{
+" syntax highlighting for wordpress debug.log
 au BufRead,BufNewFile debug.log setfiletype debuglog
-" }}} 
+" }}}
 
 " Better word processing. Copy and paste. {{{
 " Stuff to make vim useful as a word processor
@@ -364,18 +376,18 @@ map <C-x> "+x
 
 " groovyness in Insert mode (lets you paste and keep on typing)
 " This blows away i_CTRL-V though (see :help i_CTRL-V)
-imap <C-v> <Esc><C-v>a 
-" }}} 
+imap <C-v> <Esc><C-v>a
+" }}}
 
 " Useful mappings. {{{
 " Show wrapped lines by indenting them three spaces (mostly used for notes)
-" set showbreak=\ \ \ 
+" set showbreak=\ \ \
 
 "Map :w to Ctrl+s to save files so I don't have to type :w all the time
 map <C-s> :update<CR>
 
 "Make double click toggle folds
-nmap <2-LeftMouse> za 
+nmap <2-LeftMouse> za
 
 " Wordnet lookup
 " map ,d :!wn <cword> -over<CR>
@@ -402,21 +414,21 @@ map ," cs'"
 " mapping to count the number of words in a fold section
 map ,c [zjv]zg<C-g>
 
-"Git add and commit current file (uses Fugitive) 
+"Git add and commit current file (uses Fugitive)
 "map ,g :w<CR>:Git add %<CR><CR>:Gcommit<CR>i
 
 " Vimgrep word under cursor and open quicklist " market
-map ,gc :vimgrep /<C-R><C-W>/gj **/*.css<CR>:cw<CR> 
-map ,gp :vimgrep /<C-R><C-W>/gj **/*.php<CR>:cw<CR> 
+map ,gc :vimgrep /<C-R><C-W>/gj **/*.css<CR>:cw<CR>
+map ,gp :vimgrep /<C-R><C-W>/gj **/*.php<CR>:cw<CR>
 
 "Press F4 to search for tags
-map <F4> :execute "vimgrep /" . expand("<cword>") . "/j ~/Notes/*" <Bar> cw<CR> 
+map <F4> :execute "vimgrep /" . expand("<cword>") . "/j ~/Notes/*" <Bar> cw<CR>
 
 "Php linting
 map ,p :!php -l %<CR>
 
 "Turn on tag completion for XML and HTML
-imap ,/ </<C-X><C-O>    
+imap ,/ </<C-X><C-O>
 
 "Now pressing Tab allows you to switch between open windows
 "map <Tab> <C-W><C-W>
@@ -446,25 +458,18 @@ map \yl :let @" = expand("%").":".line(".")<CR>
 map \o Byt:f:l"1yw:e <C-r>0<CR>:<C-r>1<CR>
 
 " open filename mentioned in debug.log and navigate to line number mentioned
-" example error: 
-" [11-Aug-2014 13:49:41 UTC] PHP Parse error:  syntax error, unexpected $end in 
+" example error:
+" [11-Aug-2014 13:49:41 UTC] PHP Parse error:  syntax error, unexpected $end in
 " /vagrant/app/public/wp-content/plugins/buddypress-docs/includes/templates/docs/docs-loop.php on line 151
 map \do 0/ in <CR>/app\/public<CR>"1yWW/\d<CR>"2yw:e ~/<C-r>1<CR>:<C-r>2<CR>
 
 " loggy loggy: create log expression for variable under cursor
 map \ll yiwo_log( '<C-o>p is:', $<C-o>p );<Esc>
 " ss = 'spacey spacey.' Add spaces to parentheses to update code to WP coding
-" standards. 
+" standards.
 map \ss :s/(\([^ )]\)/( \1/g<CR>:s/\([^ (]\))/\1 )/g<CR>
 
-" }}} 
-
-" Language Specific Stuff {{{ 
-
-" this sets tabstops to four spaces per python guidelines
-autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4
-autocmd Filetype php setlocal noexpandtab
-" }}} 
+" }}}
 
 " Autocomplete and autoreplace {{{
 " Autoreplace t4 with the therefore symbol
@@ -483,24 +488,24 @@ iabbrev langauge language
 " fun! Ac()
 "	source /home/jon/.vim/autocorrect.vim
 " endfu
-" }}} 
+" }}}
 
 " Markdown fixes {{{
-"Make vim recognize *.md files as markdown. No idea why this isn't default.  
+"Make vim recognize *.md files as markdown. No idea why this isn't default.
 autocmd BufRead *.mkd      set ai formatoptions=tcroqn2 comments=n:> ft=markdown
 autocmd BufRead *.md       set ai formatoptions=tcroqn2 comments=n:> ft=markdown
-autocmd BufRead *.markdown set ai formatoptions=tcroqn2 comments=n:> ft=markdown 
+autocmd BufRead *.markdown set ai formatoptions=tcroqn2 comments=n:> ft=markdown
 " }}}
 
 " Misc {{{
 " }}}
 
-" Enable this for profiling stuff, in case vim is being slow. 
+" Enable this for profiling stuff, in case vim is being slow.
 " Put it at the top of the file to enable profiling startup
 "profile start profile.log
-"profile func * 
-"profile file * 
+"profile func *
+"profile file *
 
-" Allows for folding in this file. 
+" Allows for folding in this file.
 " vim:fdm=marker
 
