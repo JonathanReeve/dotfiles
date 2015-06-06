@@ -19,3 +19,13 @@
 	keepBackup = false
 [push]
 	default = simple
+
+# gh: is a shorthand for git@github.com
+[url "git@github.com:"]
+	insteadOf = "gh:"
+	pushInsteadOf = "github:"
+	pushInsteadOf = "git://github.com/"
+
+# github: is a shorthand for git://github.com/
+[url "git://github.com/"]
+	insteadOf = "github:"
