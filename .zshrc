@@ -208,8 +208,11 @@ man() {
 }
 
 # -- PATH -- 
-export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/home/jreeve/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/jon/.gem/ruby/2.2.0/bin:/home/jon/.cabal/bin"
+export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/home/jreeve/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/jon/.gem/ruby/2.2.0/bin:/home/jon/.cabal/bin:/home/jon/.composer/vendor/bin"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
 export NODE_PATH=/home/jreeve/.nvm/v0.10.33/lib/node_modules:/home/jreeve/.npm-packages/lib/node_modules
+
+# -- Laravel -- 
+alias vm="ssh vagrant@127.0.0.1 -p 2222"

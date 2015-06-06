@@ -32,6 +32,8 @@ let g:notes_shadowdir = '~/.vim/notes-shadow/'
 let g:notes_suffix = '.txt'
 " Turn off notes.vim highlighting for vim command syntax
 highlight link notesVimCmd Normal
+" Temporarily don't use curly quotes
+" let g:notes_smart_quotes = 0
 
 " Vim outliner
 Plugin 'VOoM' 
