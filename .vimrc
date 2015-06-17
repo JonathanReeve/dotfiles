@@ -471,6 +471,9 @@ map \ll yiwo_log( '<C-o>p is:', $<C-o>p );<Esc>
 " standards.
 map \ss :s/(\([^ )]\)/( \1/g<CR>:s/\([^ (]\))/\1 )/g<CR>
 
+map <Leader>w :Gwrite<CR>:Gcommit -m "
+
+map <Leader>s :!sass-convert -F scss -T sass<CR>
 " }}}
 
 " Autocomplete and autoreplace {{{
