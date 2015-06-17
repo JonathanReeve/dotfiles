@@ -104,8 +104,10 @@ Plugin 'ajh17/Spacegray.vim'
 " Language-Specific Plugins {{{2
 "For better CSS
 Plugin 'hail2u/vim-css3-syntax'
-"For Compass/SCSS/Sass
-Plugin 'cakebaker/scss-syntax.vim'
+"For Compass/SCSS/Sass. Old.
+"Plugin 'cakebaker/scss-syntax.vim'
+" For real Sass
+Plugin 'tpope/vim-haml'
 "For coffeescript
 Plugin 'kchmck/vim-coffee-script'
 " For writing in Pandoc markdown
