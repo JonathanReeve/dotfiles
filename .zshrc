@@ -73,15 +73,15 @@ fi
 # If connected over SSH, this is probably a vagrant box.
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]
 then
-	export WP=/vagrant
+	export WP=/src/www/commons
 else
-	export WP=$HOME
+	export WP=$HOME/app
 fi
 
-export V=~/Documents/commons-playbooks
-export W=$WP/app/public/wp-content
-export P=$WP/app/public/wp-content/plugins
-export T=$WP/app/public/wp-content/themes
+export V=~/Documents/commons-playbooks/vagrant
+export W=$WP/web/app
+export P=$WP/web/app/plugins
+export T=$WP/web/app/themes
 export M=$T/cbox-mla
 export B=$T/cbox-mla-blog
 export C=$T/cbox-theme
@@ -214,6 +214,8 @@ export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.n
 # export MANPATH="/usr/local/man:$MANPATH"
 
 export NODE_PATH=/home/jreeve/.nvm/v0.10.33/lib/node_modules:/home/jreeve/.npm-packages/lib/node_modules
+
+export GEM_HOME=$HOME/.gem
 
 bpcp() {
 	file=$TT/buddypress/$1
