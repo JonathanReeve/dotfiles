@@ -217,6 +217,9 @@ export NODE_PATH=/home/jreeve/.nvm/v0.10.33/lib/node_modules:/home/jreeve/.npm-p
 
 export GEM_HOME=$HOME/.gem
 
+# -- Laravel --
+alias vm="ssh vagrant@127.0.0.1 -p 2222"
+
 bpcp() {
 	file=$TT/buddypress/$1
 	mkdir -p ${file:h}
