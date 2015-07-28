@@ -321,7 +321,7 @@ set nrformats-=octal
 "set t_Co=256
 "colorscheme gotham
 "colorscheme base16-ocean
-colorscheme nucolors
+colorscheme apprentice
 set background=dark
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
