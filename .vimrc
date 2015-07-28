@@ -475,7 +475,7 @@ map \ss :s/(\([^ )]\)/( \1/g<CR>:s/\([^ (]\))/\1 )/g<CR>
 
 map <Leader>w :Gwrite<CR>:Gcommit -m "
 
-map <Leader>s :!sass-convert -F scss -T sass<CR>
+map <Leader>s :!sass-convert -F sass -T scss<CR>
 " }}}
 
 " Autocomplete and autoreplace {{{
