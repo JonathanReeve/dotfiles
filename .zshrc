@@ -17,6 +17,7 @@ zgen oh-my-zsh
 zgen oh-my-zsh plugins/git
 zgen oh-my-zsh plugins/common-aliases
 zgen oh-my-zsh plugins/colorize
+zgen oh-my-zsh plugins/jump
 zgen oh-my-zsh plugins/extract
 zgen oh-my-zsh plugins/vagrant
 zgen oh-my-zsh plugins/vi-mode
