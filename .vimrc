@@ -256,7 +256,7 @@ map ,a :Ack <C-R><C-W><CR>
 " Fancy Statusline {{{
 
 ""A lighter-weight statusline
-"Plugin 'bling/vim-airline'
+Plugin 'bling/vim-airline'
 "" Next config setting needed for airline
 "set laststatus=2
 
@@ -280,7 +280,7 @@ map ,a :Ack <C-R><C-W><CR>
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4
 autocmd Filetype php setlocal noexpandtab
 
-Plugin 'editorconfig/editorconfig-vim'
+"Plugin 'editorconfig/editorconfig-vim'
 
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
