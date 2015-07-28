@@ -74,7 +74,7 @@ fi
 # If connected over SSH, this is probably a vagrant box.
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]
 then
-	export WP=/src/www/commons/current
+	export WP=/srv/www/commons/current
 else
 	export WP=$HOME/app
 fi
