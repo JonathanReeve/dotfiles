@@ -1,6 +1,6 @@
 # Don't auto-update oh-my-zsh;
 # let zgen handle that.
-DISABLE_AUTO_UPDATE="true"
+DISABLE_AUTO_UPDATE=true
 
 if [[ -n $SSH_CONNECTION ]]; then
 	#I tend to keep dotfiles here in VMs
