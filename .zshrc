@@ -226,5 +226,3 @@ bpcp() {
 	mkdir -p ${file:h}
 	cp $P/buddypress/bp-templates/bp-legacy/buddypress/$1 $TT/buddypress/$1
 }
-
-
