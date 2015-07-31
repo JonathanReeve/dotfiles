@@ -5,16 +5,24 @@ mv ~/.inputrc bak/
 mv ~/.gitconfig bak/
 mv ~/.i3/config bak/
 mv ~/.zshrc bak/
+mv ~/.config/uzbl/config bak/
 ln -s $PWD/.bashrc ~/.bashrc
-ln -s $PWD/.tmux.conf-child ~/.tmux.conf
 ln -s $PWD/.inputrc ~/.inputrc
 ln -s $PWD/.gitconfig ~/.gitconfig
 ln -s $PWD/.zshrc ~/.zshrc
+ln -S $PWD/.uzbl-config ~/.config/uzbl/config
 source ~/.bashrc 
+
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]
+then 
+	ln -s $PWD/.tmux.conf-child ~/.tmux.conf
+else
+	ln -s $PWD/.tmux.conf-parent ~/.tmux.conf
+fi
 
 # Determine Linux version 
 OS=$(lsb_release -si)
-if [ $OS == "Ubuntu" ]
+if [ $OS == "Ubuntu" ] || [ $OS == "Debian" ]
 then 
 	export INSTALL='sudo apt-get install' 
 fi
@@ -23,8 +31,13 @@ then
 	export INSTALL='sudo yum install' 
 fi
 
-#Install Essential Packages 
-$INSTALL vim git 
+# DOTFILES environment variable needed by .zshrc
+export DOTFILES=$PWD
+
+#Install Essential Packages
+$INSTALL vim git zsh
+
+chsh -s /bin/zsh
 
 # Install Other Packages
 $INSTALL markdown pandoc php-codesniffer 
@@ -35,6 +48,7 @@ mv ~/.vimrc bak/
 ln -s $PWD/.vim ~/.vim
 ln -s $PWD/.vimrc ~/.vimrc
 $INSTALL vim
+
 
 # get vundle and other submodules
 git submodule update --init --recursive
@@ -61,7 +75,7 @@ then
 	ln -s $PWD/.pentadactylrc ~/.pentadactylrc
 	ln -s $PWD/.gvimrc ~/.gvimrc
 	ln -s $PWD/.i3/config ~/.i3/config
-	$INSTALL i3 kupfer chromium-browser vim-gnome ttf-anonymous-pro
+	$INSTALL i3 kupfer vim-gnome ttf-anonymous-pro
 fi 
 #sudo apt-get install dwb
 #ln -s $PWD/.dwb/* ~/.config/dwb/
