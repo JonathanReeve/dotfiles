@@ -146,7 +146,7 @@ alias jnl='vim ~/Dropbox/Personal/.jnl.txt'
 alias pw='vim ~/Dropbox/Personal/.p10.txt'
 
 #google calendar alias, requires googlecl
-alias caladd='google calendar add'
+alias caladd="gcalcli --calendar 'jon.reeve@gmail.com' quick" 
 
 #python alias
 alias py='python3'
