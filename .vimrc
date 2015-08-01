@@ -251,7 +251,7 @@ Plugin 'scrooloose/nerdcommenter'
 "A bunch of mappings that do cool stuff
 Plugin 'tpope/vim-unimpaired'
 "Grepping Stuff
-Bundle 'mileszs/ack.vim'
+Plugin 'mileszs/ack.vim'
 " Better grepping with Ack (grep-ack)
 map ,a :Ack <C-R><C-W><CR>
 
