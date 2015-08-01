@@ -17,7 +17,7 @@ call vundle#rc()
 Plugin 'gmarik/vundle'
 " }}}
 
-" Notes {{{2
+" Prose Writing {{{2
 " Required by vim-notes
 Plugin 'xolox/vim-misc'
 " Essential notes plugin.
@@ -37,6 +37,10 @@ highlight link notesVimCmd Normal
 
 " Vim outliner
 Plugin 'VOoM'
+
+" Distraction-Free Writing Mode
+Plugin 'junegunn/goyo.vim' 
+
 "}}}
 
 " Git {{{2
@@ -248,6 +252,8 @@ Plugin 'tpope/vim-unimpaired'
 Bundle 'mileszs/ack.vim'
 " Better grepping with Ack (grep-ack)
 map ,a :Ack <C-R><C-W><CR>
+
+Plugin 'freitass/todo.txt-vim'
 
 " }}}
 
