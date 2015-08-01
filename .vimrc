@@ -110,8 +110,10 @@ Plugin 'ajh17/Spacegray.vim'
 " Language-Specific Plugins {{{2
 "For better CSS
 Plugin 'hail2u/vim-css3-syntax'
-"For Compass/SCSS/Sass
-Plugin 'cakebaker/scss-syntax.vim'
+"For Compass/SCSS/Sass. Old.
+"Plugin 'cakebaker/scss-syntax.vim'
+" For real Sass
+Plugin 'tpope/vim-haml'
 "For coffeescript
 Plugin 'kchmck/vim-coffee-script'
 " For writing in Pandoc markdown
@@ -260,7 +262,7 @@ Plugin 'freitass/todo.txt-vim'
 " Fancy Statusline {{{
 
 ""A lighter-weight statusline
-"Plugin 'bling/vim-airline'
+Plugin 'bling/vim-airline'
 "" Next config setting needed for airline
 "set laststatus=2
 
@@ -284,7 +286,7 @@ Plugin 'freitass/todo.txt-vim'
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4
 autocmd Filetype php setlocal noexpandtab
 
-Plugin 'editorconfig/editorconfig-vim'
+"Plugin 'editorconfig/editorconfig-vim'
 
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
@@ -325,7 +327,7 @@ set nrformats-=octal
 "set t_Co=256
 "colorscheme gotham
 "colorscheme base16-ocean
-colorscheme nucolors
+colorscheme apprentice
 set background=dark
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
@@ -477,6 +479,9 @@ map \ll yiwo_log( '<C-o>p is:', $<C-o>p );<Esc>
 " standards.
 map \ss :s/(\([^ )]\)/( \1/g<CR>:s/\([^ (]\))/\1 )/g<CR>
 
+map <Leader>w :Gwrite<CR>:Gcommit -m "
+
+map <Leader>s :!sass-convert -F sass -T scss<CR>
 " }}}
 
 " Autocomplete and autoreplace {{{

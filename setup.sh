@@ -59,6 +59,11 @@ vim -c PluginInstall
 #ln -s $PWD/todo.cfg scripts/todo/todo.cfg 
 #chmod +x scripts/todo-plugins/.todo.actions.d/birdseye
 
+#Install ZSH
+$INSTALL zsh
+wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
+chsh -s `which zsh`
+ 
 # Check for GUI
 if [[ $DISPLAY ]]
 then

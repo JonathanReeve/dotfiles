@@ -1,6 +1,6 @@
 # Don't auto-update oh-my-zsh;
 # let zgen handle that.
-DISABLE_AUTO_UPDATE="true"
+DISABLE_AUTO_UPDATE=true
 
 if [[ -n $SSH_CONNECTION ]]; then
 	#I tend to keep dotfiles here in VMs
@@ -17,6 +17,7 @@ zgen oh-my-zsh
 zgen oh-my-zsh plugins/git
 zgen oh-my-zsh plugins/common-aliases
 zgen oh-my-zsh plugins/colorize
+zgen oh-my-zsh plugins/jump
 zgen oh-my-zsh plugins/extract
 zgen oh-my-zsh plugins/vagrant
 zgen oh-my-zsh plugins/vi-mode
@@ -73,15 +74,15 @@ fi
 # If connected over SSH, this is probably a vagrant box.
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]
 then
-	export WP=/vagrant
+	export WP=/srv/www/commons/current
 else
-	export WP=$HOME
+	export WP=$HOME/app
 fi
 
-export V=~/Documents/commons-playbooks
-export W=$WP/app/public/wp-content
-export P=$WP/app/public/wp-content/plugins
-export T=$WP/app/public/wp-content/themes
+export V=~/Documents/commons-playbooks/vagrant
+export W=$WP/web/app
+export P=$WP/web/app/plugins
+export T=$WP/web/app/themes
 export M=$T/cbox-mla
 export B=$T/cbox-mla-blog
 export C=$T/cbox-theme
@@ -209,13 +210,15 @@ man() {
 }
 
 # -- PATH --
-export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/home/jreeve/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/jon/.gem/ruby/2.2.0/bin:/home/jon/.cabal/bin"
+export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/home/jreeve/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/jon/.gem/ruby/2.2.0/bin:/home/jon/.cabal/bin:/home/jreeve/bin/:/opt/ghc/7.10.1/bin"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
 export NODE_PATH=/home/jreeve/.nvm/v0.10.33/lib/node_modules:/home/jreeve/.npm-packages/lib/node_modules
 
-# -- Laravel -- 
+export GEM_HOME=$HOME/.gem
+
+# -- Laravel --
 alias vm="ssh vagrant@127.0.0.1 -p 2222"
 
 bpcp() {
