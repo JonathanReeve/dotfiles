@@ -104,6 +104,8 @@ if [[ $DISPLAY = ":0" ]]
 then
 	alias edit='gvim'
 	alias open='gnome-open'
+else
+	alias edit='vim'
 fi
 
 # Preferred editor for local and remote sessions
@@ -139,6 +141,7 @@ compdef _git gcob=git-checkout
 
 # Todo File Shortcut
 alias t='$DOTFILES/scripts/todo/todo.sh -d $DOTFILES/todo.cfg'
+alias todo='edit ~/Dropbox/Personal/Todo/todo.txt'
 
 #opens Journal
 alias jnl='vim ~/Dropbox/Personal/.jnl.txt'
