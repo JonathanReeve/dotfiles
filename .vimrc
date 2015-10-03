@@ -393,20 +393,12 @@ imap <C-v> <Esc><C-v>a
 " }}}
 
 " Useful mappings. {{{
-" Show wrapped lines by indenting them three spaces (mostly used for notes)
-" set showbreak=\ \ \
 
 "Map :w to Ctrl+s to save files so I don't have to type :w all the time
 map <C-s> :update<CR>
 
 "Make double click toggle folds
 nmap <2-LeftMouse> za
-
-" Wordnet lookup
-" map ,d :!wn <cword> -over<CR>
-
-" Wordnet thesaurus
-" map ,t :!wn <cword> -synsa<CR>
 
 " Type ,b to load current page in browser
 map ,b :!firefox "%:p"<CR>
@@ -420,9 +412,6 @@ map ,x 0f[lrxll"=strftime("%m%d %H:%M")." "<CR>p
 map ,q ^i“<ESC>A”
 map ,' cs"'
 map ," cs'"
-
-" Mapping for editing vimrc
-"map ,v :sp ~/.vimrc<CR>
 
 " mapping to count the number of words in a fold section
 map ,c [zjv]zg<C-g>
@@ -443,17 +432,11 @@ map ,p :!php -l %<CR>
 "Turn on tag completion for XML and HTML
 imap ,/ </<C-X><C-O>
 
-"Now pressing Tab allows you to switch between open windows
-"map <Tab> <C-W><C-W>
-
 "Ctrl-something for navigating split windows
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
-
-"Open stuff
-"nmap <CR> <F6>
 
 " Press F8 to set showbreak
 map <F8> :set breakindent<CR>:set showbreak=\ \ <CR>
@@ -511,9 +494,6 @@ iabbrev langauge language
 autocmd BufRead *.mkd      set ai formatoptions=tcroqn2 comments=n:> ft=markdown
 autocmd BufRead *.md       set ai formatoptions=tcroqn2 comments=n:> ft=markdown
 autocmd BufRead *.markdown set ai formatoptions=tcroqn2 comments=n:> ft=markdown
-" }}}
-
-" Misc {{{
 " }}}
 
 " Enable this for profiling stuff, in case vim is being slow.
