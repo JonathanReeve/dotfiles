@@ -21,9 +21,9 @@ Plugin 'gmarik/vundle'
 " Required by vim-notes
 Plugin 'xolox/vim-misc'
 " Essential notes plugin.
-"Plugin 'xolox/vim-notes'
+Plugin 'xolox/vim-notes'
 " Using my fork instead.
-Plugin 'JonathanReeve/vim-notes'
+"Plugin 'JonathanReeve/vim-notes'
 " To set notes directory for :Note command
 let g:notes_directories = ['~/Dropbox/Notes']
 " This ensures that updating vim notes won't overwrite my blank default note.
@@ -66,13 +66,13 @@ Plugin 'techlivezheng/vim-plugin-minibufexpl'
 "Open minibufexplorer
 map ,m :MBEToggle<CR>
 
-" Tag browser.
-Plugin 'majutsushi/tagbar'
-" Make Tagbar look like NERDTree.
-let g:tagbar_iconchars = ['▸', '▾']
-highlight link TagbarFoldIcon Title
-"Open Tagbar
-map ,t :TagbarToggle<CR>
+"" Tag browser.
+"Plugin 'majutsushi/tagbar'
+"" Make Tagbar look like NERDTree.
+"let g:tagbar_iconchars = ['▸', '▾']
+"highlight link TagbarFoldIcon Title
+""Open Tagbar
+"map ,t :TagbarToggle<CR>
 
 "Open Quickfix List
 map ,c :cw<CR>
@@ -115,7 +115,7 @@ Plugin 'hail2u/vim-css3-syntax'
 " For real Sass
 Plugin 'tpope/vim-haml'
 "For coffeescript
-Plugin 'kchmck/vim-coffee-script'
+"Plugin 'kchmck/vim-coffee-script'
 " For writing in Pandoc markdown
 "Plugin 'vim-pandoc/vim-pandoc'
 " HTML Authoring Autocompletion
@@ -251,12 +251,15 @@ Plugin 'scrooloose/nerdcommenter'
 "A bunch of mappings that do cool stuff
 Plugin 'tpope/vim-unimpaired'
 "Grepping Stuff
-Plugin 'mileszs/ack.vim'
+"Plugin 'mileszs/ack.vim'
+Plugin 'rking/ag.vim'
+
 " Better grepping with Ack (grep-ack)
-map ,a :Ack <C-R><C-W><CR>
+" map ,a :Ack <C-R><C-W><CR>
 
 Plugin 'freitass/todo.txt-vim'
-
+au BufRead,BufNewFile todo.txt setfiletype todo
+command Todo edit ~/Dropbox/Personal/Todo/todo.txt
 " }}}
 
 " Fancy Statusline {{{
