@@ -36,10 +36,13 @@ highlight link notesVimCmd Normal
 " let g:notes_smart_quotes = 0
 
 " Vim outliner
-Plugin 'VOoM'
+"Plugin 'VOoM'
 
 " Distraction-Free Writing Mode
 Plugin 'junegunn/goyo.vim' 
+
+" Dictionary
+Plugin 'szw/vim-dict'
 
 "}}}
 
