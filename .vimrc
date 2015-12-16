@@ -2,11 +2,21 @@
 " http://jonreeve.com
 " http://github.com/JonathanReeve/
 
+" Very Basics {{{ 
+
+" Vim-only, not nvim. 
+if !has('nvim')
+	set nocompatible   " be iMproved
+	set cm=blowfish2   " use strong encryption
+	set encoding=utf-8 " unicode is not standard on vim
+endif
+
+" }}} 
+
 " Plugins {{{
 
 " Package Management. {{{2
 "Vundle Stuff
-set nocompatible               " be iMproved
 filetype off                   " required!
 
 set rtp+=~/.vim/bundle/vundle/
@@ -22,7 +32,7 @@ Plugin 'gmarik/vundle'
 Plugin 'xolox/vim-misc'
 " Essential notes plugin.
 Plugin 'xolox/vim-notes'
-" Using my fork instead.
+" Use my fork instead.
 "Plugin 'JonathanReeve/vim-notes'
 " To set notes directory for :Note command
 let g:notes_directories = ['~/Dropbox/Notes']
@@ -92,19 +102,14 @@ map \v :sp ~/.vimrc<CR>
 " }}}
 
 " Colors {{{2
-" Makes colors work in term.
-" Plugin 'godlygeek/csapprox'
-" Another script for trying to make colors work better in term.
-"Plugin 'vim-scripts/colorsupport.vim'
 Plugin 'vim-scripts/ScrollColors'
 " Colors.
-"Plugin 'Colour-Sampler-Pack'
 "Plugin '29decibel/codeschool-vim-theme'
 "Plugin 'ryu-blacknd/vim-nucolors'
 "Plugin 'Lokaltog/vim-distinguished'
 Plugin 'whatyouhide/vim-gotham'
 Plugin 'zenorocha/dracula-theme', {'rtp': 'vim/'}
-"Plugin 'chriskempson/base16-vim'
+Plugin 'chriskempson/base16-vim'
 "Plugin 'tomasr/molokai'
 Plugin 'JonathanReeve/vim-colorschemes'
 "Plugin 'xolox/vim-colorscheme-switcher'
@@ -137,12 +142,6 @@ Plugin 'ivanov/vim-ipython'
 " }}}
 
 " IDE Stuff {{{2
-" Php folding
-"Plugin 'rayburgemeestre/phpfolding.vim'
-"PHP error checking
-"Plugin 'joonty/vim-phpqa'
-"PHP xdebug integration
-"Plugin 'joonty/vdebug'
 "All kinds of syntax checking
 Plugin 'scrooloose/syntastic'
 " Syntastic Options
@@ -152,12 +151,6 @@ let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_xml_checkers = ['xmllint']
 let g:syntastic_xml_xmlling_args = '--dtdvalid tei_all.dtd' 
 map ,s :SyntasticToggleMode<CR>
-
-"PHP IDE
-"Plugin 'spf13/PIV'
-
-" PHP Manual
-"Plugin 'alvan/vim-php-manual'
 " }}}
 
 "" Neocomplete {{{2
@@ -260,18 +253,7 @@ Plugin 'scrooloose/nerdcommenter'
 "A bunch of mappings that do cool stuff
 Plugin 'tpope/vim-unimpaired'
 "Grepping Stuff
-"Plugin 'mileszs/ack.vim'
 Plugin 'rking/ag.vim'
-
-" Better grepping with Ack (grep-ack)
-" map ,a :Ack <C-R><C-W><CR>
-
-Plugin 'freitass/todo.txt-vim'
-au BufRead,BufNewFile todo.txt setfiletype todo
-command Todo edit ~/Dropbox/Personal/Todo/todo.txt
-
-" Toggl Experiments
-Plugin 'termoshtt/toggl.vim'
 
 " Timer adapted from this StackOverflow answer: http://superuser.com/a/982728/83457 
 function! s:Start()
@@ -410,9 +392,6 @@ set background=dark
 au InsertLeave * hi Cursor guibg=red
 au InsertEnter * hi Cursor guibg=green
 
-"Makes Unicode Work
-set encoding=utf-8
-
 "Confirm saves rather than give errors
 set confirm
 
@@ -425,9 +404,11 @@ filetype plugin on
 filetype indent on
 " }}}
 
-" Password File and Journal File {{{
-" Use Strong Encryption
-"set cm=blowfish
+" Personal Stuff {{{
+" Use Strong Encryption. Only works on vim, not nvim.
+if !has('nvim')
+endif
+
 " Makes password file quit automagically after five minutes
 autocmd BufReadPost,FileReadPost   .p10.txt set updatetime=300000
 autocmd CursorHold                 .p10.txt wq
@@ -436,6 +417,14 @@ autocmd CursorHold                 .p10.txt wq
 autocmd BufReadPost,FileReadPost   .jnl.txt set updatetime=300000
 autocmd CursorHold                 .jnl.txt wq
 autocmd CursorHoldI                .jnl.txt wq
+
+" Todo List
+Plugin 'freitass/todo.txt-vim'
+au BufRead,BufNewFile todo.txt setfiletype todo
+command! Todo edit ~/Dropbox/Personal/Todo/todo.txt
+
+" Toggl Experiments
+" Plugin 'termoshtt/toggl.vim'
 "}}}
 
 " Syntax higlighting. {{{
@@ -454,6 +443,7 @@ setlocal smartindent
 setlocal spelllang=en_us
 
 " Makes for Regular-Style Copy and Paste to the System Clipboard
+set clipboard+=unnamedplus 
 map <C-v> "+gp
 map <C-c> "+y
 map <C-x> "+x
@@ -516,7 +506,7 @@ map <F8> :set breakindent<CR>:set showbreak=\ \ <CR>
 map <F7> :Voom markdown<CR>
 
 "Space does the same thing as Ctrl+F
-map <Space> <C-f>
+nmap <Space> <C-f>
 
 "Yank current filename and line number
 map \yy :let @" = expand("%")<CR>
@@ -524,19 +514,6 @@ map \yl :let @" = expand("%").":".line(".")<CR>
 
 " open filename mentioned under cursor and navigate to line number mentioned
 map \o Byt:f:l"1yw:e <C-r>0<CR>:<C-r>1<CR>
-
-" open filename mentioned in debug.log and navigate to line number mentioned
-" example error:
-" [11-Aug-2014 13:49:41 UTC] PHP Parse error:  syntax error, unexpected $end in
-" /vagrant/app/public/wp-content/plugins/buddypress-docs/includes/templates/docs/docs-loop.php on line 151
-map \do 0/ in <CR>/app\/public<CR>"1yWW/\d<CR>"2yw:e ~/<C-r>1<CR>:<C-r>2<CR>
-
-" loggy loggy: create log expression for variable under cursor
-map \ll yiwo_log( '<C-o>p is:', $<C-o>p );<Esc>
-
-" ss = 'spacey spacey.' Add spaces to parentheses to update code to WP coding
-" standards.
-map \ss :s/(\([^ )]\)/( \1/g<CR>:s/\([^ (]\))/\1 )/g<CR>
 
 map <Leader>w :Gwrite<CR>:Gcommit -m "
 
