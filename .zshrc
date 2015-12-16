@@ -21,12 +21,13 @@ zgen oh-my-zsh plugins/jump
 zgen oh-my-zsh plugins/extract
 zgen oh-my-zsh plugins/vagrant
 zgen oh-my-zsh plugins/vi-mode
+zgen oh-my-zsh plugins/virtualenvwrapper
 zgen load zsh-users/zsh-syntax-highlighting
 zgen load zsh-users/zsh-completions src
 
 # -- Theme --
-zgen oh-my-zsh themes/juanghurtado
-zgen load caiogondim/bullet-train-oh-my-zsh-theme
+#zgen oh-my-zsh themes/juanghurtado
+zgen load caiogondim/bullet-train-oh-my-zsh-theme bullet-train
 
 # -- Settings --
 
