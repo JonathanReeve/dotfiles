@@ -80,6 +80,7 @@ bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
+bindsym $mod+` workspace back_and_forth
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1
@@ -141,7 +142,9 @@ new_window pixel 2
 # Applications to be run on startup
 exec setxkbmap -layout us -option caps:escape
 exec xcompmgr -cfFn
-exec feh --bg-fill --random /usr/share/backgrounds
+exec feh --bg-fill --random ~/Pictures/Wallpapers
+
+exec /usr/libexec/gnome-settings-daemon
 
 # In '~/.config/i3/config':
 # use 'exec gnome-session-quit --logout'    : logout dialog
