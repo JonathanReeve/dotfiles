@@ -269,6 +269,72 @@ Plugin 'rking/ag.vim'
 Plugin 'freitass/todo.txt-vim'
 au BufRead,BufNewFile todo.txt setfiletype todo
 command Todo edit ~/Dropbox/Personal/Todo/todo.txt
+
+" Toggl Experiments
+Plugin 'termoshtt/toggl.vim'
+
+" Timer adapted from this StackOverflow answer: http://superuser.com/a/982728/83457 
+function! s:Start()
+    if exists('b:CountMinutesStart')
+        echohl ERROR
+        echomsg "Already counting."
+        echohl NONE
+        return
+    endif
+
+    echohl TODO
+    echomsg "Counting started."
+    echohl NONE
+    let b:CountMinutesStart = localtime()
+endfunction
+
+function! s:Stop()
+    if !exists('b:CountMinutesStart')
+        echohl ERROR
+        echomsg "Not counting."
+        echohl NONE
+        return -1
+    endif
+
+    let l:start = b:CountMinutesStart
+    let l:end = localtime()
+    unlet b:CountMinutesStart
+    let l:elapsed = l:end - l:start
+
+    echohl TODO
+    echomsg "Elapsed time since start: " . s:Format(l:elapsed)
+    echohl NONE
+
+    return l:elapsed
+endfunction
+
+function! s:Format(seconds)
+    let l:minutes = a:seconds / 60
+    let l:seconds = a:seconds % 60
+    return printf('time:%02d:%02d', l:minutes, l:seconds)
+endfunction
+
+function! s:InsertTime()
+    let l:seconds = s:Stop()
+    if l:seconds == -1
+        return
+    endif
+    let l:line = getline('.')
+    if l:line =~ 'time:\d\{2}:\d\{2}'
+        let l:tmp = split(substitute(l:line, '.*time:\(\d\{2}\):\(\d\{2}\).*', '\1 \2', ''), ' ')
+        let l:seconds = l:seconds + (l:tmp[0] * 60 + l:tmp[1])
+        call setline('.', substitute(l:line, 'time:\d\{2}:\d\{2}', s:Format(l:seconds), ''))
+    else
+        exe 'normal A' . ' ' . s:Format(l:seconds)
+    endif
+endfunction
+
+command! StartCounting call s:Start()
+command! StopCounting call s:InsertTime()
+
+nmap <silent> <leader>sc :StartCounting<cr>
+nmap <silent> <leader>ec :StopCounting<cr>
+
 " }}}
 
 " Fancy Statusline {{{
