@@ -65,9 +65,9 @@ Plugin 'scrooloose/nerdtree'
 map ,n :NERDTreeToggle<CR>
 
 " Buffer browser.
-Plugin 'techlivezheng/vim-plugin-minibufexpl'
+"Plugin 'techlivezheng/vim-plugin-minibufexpl'
 "Open minibufexplorer
-map ,m :MBEToggle<CR>
+"map ,m :MBEToggle<CR>
 
 "" Tag browser.
 "Plugin 'majutsushi/tagbar'
@@ -100,36 +100,40 @@ Plugin 'vim-scripts/ScrollColors'
 " Colors.
 "Plugin 'Colour-Sampler-Pack'
 "Plugin '29decibel/codeschool-vim-theme'
-Plugin 'ryu-blacknd/vim-nucolors'
+"Plugin 'ryu-blacknd/vim-nucolors'
 "Plugin 'Lokaltog/vim-distinguished'
-"Plugin 'whatyouhide/vim-gotham'
-Plugin 'chriskempson/base16-vim'
+Plugin 'whatyouhide/vim-gotham'
+Plugin 'zenorocha/dracula-theme', {'rtp': 'vim/'}
+"Plugin 'chriskempson/base16-vim'
 "Plugin 'tomasr/molokai'
 Plugin 'JonathanReeve/vim-colorschemes'
 "Plugin 'xolox/vim-colorscheme-switcher'
-Plugin 'ajh17/Spacegray.vim'
+"Plugin 'ajh17/Spacegray.vim'
 " }}}
 
 " Language-Specific Plugins {{{2
 "For better CSS
-Plugin 'hail2u/vim-css3-syntax'
+"Plugin 'hail2u/vim-css3-syntax'
 "For Compass/SCSS/Sass. Old.
 "Plugin 'cakebaker/scss-syntax.vim'
 " For real Sass
-Plugin 'tpope/vim-haml'
+"Plugin 'tpope/vim-haml'
 "For coffeescript
 "Plugin 'kchmck/vim-coffee-script'
+
 " For writing in Pandoc markdown
-"Plugin 'vim-pandoc/vim-pandoc'
+Plugin 'vim-pandoc/vim-pandoc'
+Plugin 'vim-pandoc/vim-pandoc-syntax'
+
 " HTML Authoring Autocompletion
 Plugin 'mattn/emmet-vim'
 " Improved matching for html tags
 Plugin 'tmhedberg/matchit'
 " HTML Tag Matching
-" Plugin 'Valloric/MatchTagAlways'
+Plugin 'Valloric/MatchTagAlways'
 "For autocomplete and faster html typing
 "Plugin 'garbas/vim-snipmate'
-
+Plugin 'ivanov/vim-ipython'
 " }}}
 
 " IDE Stuff {{{2
