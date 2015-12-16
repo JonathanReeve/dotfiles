@@ -389,8 +389,8 @@ set directory=~/.vim/swap
 "set backupdir=~/.vim/backup
 
 " Enable persistent undo
-"set undofile
-"set undodir=$HOME/.vim/undo
+set undofile
+set undodir=$HOME/.vim/undo
 
 " Set location of tags file
 set tags=~/app/tags
