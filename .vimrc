@@ -355,10 +355,6 @@ let g:airline_powerline_fonts = 1
 "let g:airline_right_sep = '«'
 "let g:airline_symbols.branch = '⎇'
 
-"" Tmuxline
-""Bundle 'edkolev/tmuxline.vim'
-""let g:tmuxline_powerline_separators = 0
-
 "" End Airline }}}
 
 " Language Specific Stuff {{{
