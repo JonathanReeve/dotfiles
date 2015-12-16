@@ -149,6 +149,8 @@ Plugin 'scrooloose/syntastic'
 let g:syntastic_php_checkers = ['php', 'phpcs']
 let g:syntastic_php_phpcs_args = '--standard=/home/jreeve/Documents/WordPress-Coding-Standards/WordPress/ruleset.xml'
 let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_xml_checkers = ['xmllint']
+let g:syntastic_xml_xmlling_args = '--dtdvalid tei_all.dtd' 
 map ,s :SyntasticToggleMode<CR>
 
 "PHP IDE
