@@ -374,7 +374,6 @@ filetype plugin indent on     " required!
 " End Plugins }}}
 
 " Basic Settings {{{
-set nocompatible
 syntax on
 
 " Stop vim from making annoying error sounds
