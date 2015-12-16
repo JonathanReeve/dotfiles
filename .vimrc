@@ -401,12 +401,10 @@ set nrformats-=octal
 " Sets Color Scheme
 " Makes colors work in terminal
 "set t_Co=256
-"colorscheme gotham
-"colorscheme base16-ocean
 colorscheme apprentice
 set background=dark
-highlight Normal ctermbg=NONE
-highlight nonText ctermbg=NONE
+"highlight Normal ctermbg=NONE
+"highlight nonText ctermbg=NONE
 
 " Highlight cursor depending on mode
 au InsertLeave * hi Cursor guibg=red
@@ -523,6 +521,7 @@ map <Space> <C-f>
 "Yank current filename and line number
 map \yy :let @" = expand("%")<CR>
 map \yl :let @" = expand("%").":".line(".")<CR>
+
 " open filename mentioned under cursor and navigate to line number mentioned
 map \o Byt:f:l"1yw:e <C-r>0<CR>:<C-r>1<CR>
 
@@ -534,6 +533,7 @@ map \do 0/ in <CR>/app\/public<CR>"1yWW/\d<CR>"2yw:e ~/<C-r>1<CR>:<C-r>2<CR>
 
 " loggy loggy: create log expression for variable under cursor
 map \ll yiwo_log( '<C-o>p is:', $<C-o>p );<Esc>
+
 " ss = 'spacey spacey.' Add spaces to parentheses to update code to WP coding
 " standards.
 map \ss :s/(\([^ )]\)/( \1/g<CR>:s/\([^ (]\))/\1 )/g<CR>
@@ -571,10 +571,9 @@ autocmd BufRead *.markdown set ai formatoptions=tcroqn2 comments=n:> ft=markdown
 
 " Enable this for profiling stuff, in case vim is being slow.
 " Put it at the top of the file to enable profiling startup
-"profile start profile.log
-"profile func *
-"profile file *
+" profile start profile.log
+" profile func *
+" profile file *
 
 " Allows for folding in this file.
 " vim:fdm=marker
-
