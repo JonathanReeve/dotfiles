@@ -341,8 +341,11 @@ nmap <silent> <leader>ec :StopCounting<cr>
 
 ""A lighter-weight statusline
 Plugin 'bling/vim-airline'
+set laststatus=2
 "" Next config setting needed for airline
-"set laststatus=2
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
 
 "if !exists('g:airline_symbols')
 	"let g:airline_symbols = {}
