@@ -31,6 +31,10 @@ map gs :b slack<CR>
 " Type `gor` to save a page to Readability
 qmark r javascript:(%0A%28function%28%29%7Bwindow.baseUrl%3D%27//www.readability.com%27%3Bwindow.readabilityToken%3D%27ps4SFzrhzkS2EdzFE5Dp9pEdYZC3qVg2vdZqrvJd%27%3Bvar%20s%3Ddocument.createElement%28%27script%27%29%3Bs.setAttribute%28%27type%27%2C%27text/javascript%27%29%3Bs.setAttribute%28%27charset%27%2C%27UTF-8%27%29%3Bs.setAttribute%28%27src%27%2CbaseUrl%2B%27/bookmarklet/save.js%27%29%3Bdocument.documentElement.appendChild%28s%29%3B%7D%29%28%29)
 
+" Type `goh` to open hypothes.is
+qmark h javascript:(function(){window.hypothesisConfig=function(){return{showHighlights:true};};var%20d=document,s=d.createElement('script');s.setAttribute('src','https://hypothes.is/app/embed.js');d.body.appendChild(s)})();
+
+" Type `goz` to open zotero 
 qmark z javascript:var%20d=document,s=d.createElement('script');s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement).appendChild(s);void(0);
 
 " Insert "Herp Derpsum" dummy text.
@@ -71,7 +75,7 @@ hi PromptText color: #1c1c1c; background: #d0d0f0; font-size: 12px;
 
 hi CmdOutput white-space: pre;
 hi CmdLine font-size: 14px; background: black; color: #d0d0d0; -moz-transition: all 0.25s;
-hi CmdLine>* font-family: "Anonymous Pro";
+hi CmdLine>* font-family: "Droid Sans Mono";
 
 hi ContentSeparator border: none; display: -moz-box;
 
@@ -108,7 +112,7 @@ hi URL:hover text-decoration: underline; cursor: pointer;
 hi FrameIndicator background-color: red; opacity: 0.5; z-index: 999; position: fixed; top: 0; bottom: 0; left: 0; right: 0;
 
 hi Bell border: none; background-color: #d0d0d0;
-hi Hint font-family: "Anonymous Pro"; font-size: 14px; font-weight: normal; color: #dddddd; background-color: #1c1c1c; border: none; margin: -0.7em 0 0 -0.7em; padding: 0px 5px;
+hi Hint font-family: "Droid Sans Mono"; font-size: 14px; font-weight: normal; color: #dddddd; background-color: #1c1c1c; border: none; margin: -0.7em 0 0 -0.7em; padding: 0px 5px;
 hi Hint::after content: attr(number);
 hi HintElem background-color: rgba(208, 208, 240, 0.8); color: #1c1c1c;
 hi HintActive background-color: rgba( 85, 102, 187, 0.8); color: #dddded;
