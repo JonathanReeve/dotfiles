@@ -230,3 +230,6 @@ bpcp() {
 	mkdir -p ${file:h}
 	cp $P/buddypress/bp-templates/bp-legacy/buddypress/$1 $TT/buddypress/$1
 }
+
+# Get true colors in nvim
+export NVIM_TUI_ENABLE_TRUE_COLOR=1
