@@ -10,6 +10,8 @@ floating_modifier $mod
 # Better handling for floating dialogs
 # Adapted from the Arch Wiki article at https://wiki.archlinux.org/index.php/i3#Tabbed_or_stacked_web-browsing 
 
+for_window [class="Xfce4-notifyd" instance="xfce4-notifyd"] floating enable
+for_window [class="Xfce4-notifyd" instance="xfce4-notifyd"] border none
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="task_dialog"] floating enable
 for_window [title="Preferences$"] floating enable 
@@ -17,6 +19,15 @@ for_window [title="Preferences$"] floating enable
 # }}} 
 
 # Keybindings {{{ 
+
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+# Sreen brightness controls
+#bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
+#bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
 
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
@@ -141,10 +152,13 @@ new_window pixel 2
 
 # Applications to be run on startup
 exec setxkbmap -layout us -option caps:escape
+#exec --no-startup-id /usr/libexec/gnome-settings-daemon
 exec xcompmgr -cfFn
+exec --no-startup-id nm-applet
+exec --no-startup-id xfsettingsd --disable-wm-check 
+exec --no-startup-id /usr/bin/xfce4-power-manager
+exec --no-startup-id xfce4-volumed
 exec feh --bg-fill --random ~/Pictures/Wallpapers
-
-exec /usr/libexec/gnome-settings-daemon
 
 # In '~/.config/i3/config':
 # use 'exec gnome-session-quit --logout'    : logout dialog
