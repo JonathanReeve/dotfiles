@@ -1,5 +1,5 @@
 " This is my .vimrc!  " Jonathan Reeve
-" http://jonreeve.com
+
 " http://github.com/JonathanReeve/
 
 " Very Basics {{{ 
@@ -11,6 +11,16 @@ if !has('nvim')
 	set encoding=utf-8 " unicode is not standard on vim
 endif
 
+" Nvim-only, not vim 
+if has('nvim')
+	" 24-bit true color!
+	let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+	" Hack to get C-h working in neovim
+	nmap <BS> <C-W>h
+	" Use escape to get out of terminal mode.
+	tnoremap <Esc> <C-\><C-n>
+	tnoremap <C-h> <C-\><C-W>h
+endif
 " }}} 
 
 " Plugins {{{
@@ -50,6 +60,7 @@ highlight link notesVimCmd Normal
 
 " Distraction-Free Writing Mode
 Plugin 'junegunn/goyo.vim' 
+nnoremap <Leader>g :Goyo<CR>
 
 " Dictionary
 Plugin 'szw/vim-dict'
@@ -108,6 +119,7 @@ Plugin 'vim-scripts/ScrollColors'
 "Plugin 'ryu-blacknd/vim-nucolors'
 "Plugin 'Lokaltog/vim-distinguished'
 Plugin 'whatyouhide/vim-gotham'
+Plugin 'mhartington/oceanic-next'
 Plugin 'zenorocha/dracula-theme', {'rtp': 'vim/'}
 Plugin 'chriskempson/base16-vim'
 "Plugin 'tomasr/molokai'
@@ -374,16 +386,13 @@ set directory=~/.vim/swap
 set undofile
 set undodir=$HOME/.vim/undo
 
-" Set location of tags file
-set tags=~/app/tags
-
 " Get vim increment to behave normally
 set nrformats-=octal
 
 " Sets Color Scheme
 " Makes colors work in terminal
 "set t_Co=256
-colorscheme apprentice
+colorscheme kolor
 set background=dark
 "highlight Normal ctermbg=NONE
 "highlight nonText ctermbg=NONE
@@ -402,6 +411,9 @@ set wrapmargin=0
 " To make plugins work
 filetype plugin on
 filetype indent on
+
+"Keeps the cursor in the center of the screen.
+set scrolloff=5
 " }}}
 
 " Personal Stuff {{{
@@ -494,10 +506,10 @@ map ,p :!php -l %<CR>
 imap ,/ </<C-X><C-O>
 
 "Ctrl-something for navigating split windows
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
+nnoremap <C-j> <C-W>j
+nnoremap <C-k> <C-W>k
+nnoremap <C-h> <C-W>h
+nnoremap <C-l> <C-W>l
 
 " Press F8 to set showbreak
 map <F8> :set breakindent<CR>:set showbreak=\ \ <CR>
