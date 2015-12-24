@@ -14,6 +14,7 @@ source $DOTFILES/scripts/zgen/zgen.zsh
 
 # -- Plugins --
 zgen oh-my-zsh
+zgen oh-my-zsh plugins/autojump
 zgen oh-my-zsh plugins/git
 zgen oh-my-zsh plugins/common-aliases
 zgen oh-my-zsh plugins/colorize
@@ -99,21 +100,14 @@ then
 	source ~/.aws-vars.sh
 fi
 
-# Aliases for graphical environments.
-# (Assumes GNOME is installed.)
-if [[ $DISPLAY = ":0" ]]
-then
-	alias edit='gvim'
-	alias open='gnome-open'
-else
-	alias edit='vim'
-fi
+alias edit='nvim'
+alias open='gnome-open'
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
 	export EDITOR='vim'
 else
-	export EDITOR='gvim'
+	export EDITOR='nvim'
 fi
 
 # -- Aliases --
@@ -214,22 +208,10 @@ man() {
 }
 
 # -- PATH --
-export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/home/jreeve/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/jon/.gem/ruby/2.2.0/bin:/home/jon/.cabal/bin:/home/jreeve/bin/:/opt/ghc/7.10.1/bin"
+export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/home/jreeve/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/jon/.gem/ruby/2.2.0/bin:/home/jon/.cabal/bin:/home/jreeve/bin/:/opt/ghc/7.10.1/bin:/home/jon/Dropbox/Settings/scripts"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
 export NODE_PATH=/home/jreeve/.nvm/v0.10.33/lib/node_modules:/home/jreeve/.npm-packages/lib/node_modules
 
 export GEM_HOME=$HOME/.gem
-
-# -- Laravel --
-alias vm="ssh vagrant@127.0.0.1 -p 2222"
-
-bpcp() {
-	file=$TT/buddypress/$1
-	mkdir -p ${file:h}
-	cp $P/buddypress/bp-templates/bp-legacy/buddypress/$1 $TT/buddypress/$1
-}
-
-# Get true colors in nvim
-export NVIM_TUI_ENABLE_TRUE_COLOR=1
