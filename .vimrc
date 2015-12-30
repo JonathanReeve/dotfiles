@@ -19,7 +19,7 @@ if has('nvim')
 	nmap <BS> <C-W>h
 	" Use escape to get out of terminal mode.
 	tnoremap <Esc> <C-\><C-n>
-	tnoremap <C-h> <C-\><C-W>h
+	tnoremap <C-h> <C-\><C-n><C-w>h
 endif
 " }}} 
 
@@ -392,7 +392,7 @@ set nrformats-=octal
 " Sets Color Scheme
 " Makes colors work in terminal
 "set t_Co=256
-colorscheme kolor
+colorscheme OceanicNext
 set background=dark
 "highlight Normal ctermbg=NONE
 "highlight nonText ctermbg=NONE
