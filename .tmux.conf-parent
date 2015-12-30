@@ -47,7 +47,7 @@ set -g message-attr bold
 set -g status-left "#[fg=black,bg=colour248,noreverse,bold] #(whoami)@#(hostname -s):#S "
 set -g status-right ""
 set-window-option -g window-status-format "#[fg=colour248,bg=colour241,noreverse] #I #W "
-set-window-option -g window-status-current-format "#[fg=black,bg=yellow,noreverse,bold] #I #W "
+set-window-option -g window-status-current-format "#[fg=black,bg=colour38,noreverse,bold] #I #W "
 
 # No escape time for vi mode
 set -sg escape-time 0
