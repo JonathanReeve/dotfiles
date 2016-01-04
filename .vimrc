@@ -434,7 +434,10 @@ au BufRead,BufNewFile todo.txt setfiletype=todo
 command! Todo edit ~/Dropbox/Personal/Todo/todo.txt
 
 " Toggl Experiments
-" Plugin 'termoshtt/toggl.vim'
+Plugin 'JonathanReeve/toggl.vim'
+Plugin 'vim-jp/vital.vim'
+source ~/Dropbox/Personal/.toggl-api-key
+Plugin 'Shougo/unite.vim'
 "}}}
 
 " Syntax higlighting. {{{
