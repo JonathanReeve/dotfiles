@@ -391,6 +391,7 @@ set nrformats-=octal
 "set t_Co=256
 colorscheme OceanicNext
 set background=dark
+let g:airline_theme='oceanicnext'
 "highlight Normal ctermbg=NONE
 "highlight nonText ctermbg=NONE
 
