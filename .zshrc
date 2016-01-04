@@ -86,34 +86,9 @@ else
 	export WP=$HOME/app
 fi
 
-export V=~/Documents/commons-playbooks/vagrant
-export W=$WP/web/app
-export P=$WP/web/app/plugins
-export T=$WP/web/app/themes
-export M=$T/cbox-mla
-export B=$T/cbox-mla-blog
-export C=$T/cbox-theme
-export TT=$T/tuileries
-export A=$P/cbox-auth
-export CA=$P/cac-advanced-profiles
-export MA=$P/mla-admin-bar
-
-# -- Context-Dependent Aliases --
-# Get sensitive AWS vars from local file
-if [[ -f ~/.aws-vars.sh ]]
-then
-	source ~/.aws-vars.sh
-fi
-
-alias edit='nvim'
+alias edit='editception'
+export EDITOR='editception'
 alias open='gnome-open'
-
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-	export EDITOR='vim'
-else
-	export EDITOR='nvim'
-fi
 
 # -- Aliases --
 
@@ -135,7 +110,7 @@ compdef _git gcd=git-checkout
 alias gcod='git checkout develop'
 compdef _git gcod=git-checkout
 
-# git checkout a new branch
+# Git checkout a new branch
 alias gcob='git checkout -b'
 compdef _git gcob=git-checkout
 
@@ -213,7 +188,7 @@ man() {
 }
 
 # -- PATH --
-export PATH="/home/jreeve/dotfiles/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/home/jreeve/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/jon/.gem/ruby/2.2.0/bin:/home/jon/.cabal/bin:/home/jreeve/bin/:/opt/ghc/7.10.1/bin:/home/jon/Dropbox/Settings/scripts"
+export PATH="$DOTFILES/scripts:/home/jon/Dropbox/Settings/scripts:/usr/local/heroku/bin:/home/jreeve/.nvm/v0.10.33/bin:/home/jreeve/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/jon/.gem/ruby/2.3.0/bin:/home/jon/.cabal/bin:/home/jreeve/bin/:/opt/ghc/7.10.1/bin"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
