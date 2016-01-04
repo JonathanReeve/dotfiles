@@ -430,7 +430,7 @@ autocmd CursorHoldI                .jnl.txt wq
 
 " Todo List
 Plugin 'freitass/todo.txt-vim'
-au BufRead,BufNewFile todo.txt setfiletype todo
+au BufRead,BufNewFile todo.txt setfiletype=todo
 command! Todo edit ~/Dropbox/Personal/Todo/todo.txt
 
 " Toggl Experiments
