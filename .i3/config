@@ -141,7 +141,6 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
         status_command i3status
-	font pango:Anonymous Pro 11 
 }
 
 new_window pixel 2
