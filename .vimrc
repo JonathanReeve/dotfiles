@@ -104,9 +104,6 @@ map ,c :cw<CR>
 "Open debug log
 map \d :sp $W/debug.log<CR>
 
-"Open todo file
-map \t :sp ~/Notes/todo.txt<CR>
-
 "Open vimrc
 map \v :sp ~/.vimrc<CR>
 
