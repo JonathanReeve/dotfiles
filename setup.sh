@@ -53,11 +53,13 @@ chsh -s /bin/zsh
 $INSTALL markdown pandoc
 
 # Set up vim environment
+$INSTALL vim
 mv ~/.vim bak/
 mv ~/.vimrc bak/
 ln -s $PWD/.vim ~/.vim
 ln -s $PWD/.vimrc ~/.vimrc
-$INSTALL vim
+mkdir -p $HOME/.vim/autoload
+sudo ln -s $PWD/scripts/vim-plug/plug.vim $HOME/.vim/autoload/plug.vim
 
 # Set up neovim
 mkdir -p ${XDG_CONFIG_HOME:=$HOME/.config}
