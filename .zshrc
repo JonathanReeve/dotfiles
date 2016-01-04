@@ -50,8 +50,13 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 # Get history search working again
 bindkey "^R" history-incremental-search-backward
 
-# Aliases for package management in Ubuntu and Fedora
-OS=$(lsb_release -si)
+# Aliases for package management.
+if [ -f "/etc/arch-release" ]; then
+	OS="Arch"
+else
+	OS=$(lsb_release -si)
+fi
+
 if [[ $OS == "Ubuntu" ]] || [[ $OS == "Debian" ]]
 then
 	alias install='sudo apt-get install'
