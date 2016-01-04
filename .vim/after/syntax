@@ -1,0 +1,1 @@
+syn spell toplevel
