@@ -14,3 +14,6 @@
 [submodule "scripts/scripts/toggl-cli"]
 	path = scripts/scripts/toggl-cli
 	url = https://github.com/drobertadams/toggl-cli
+[submodule "scripts/vim-plug"]
+	path = scripts/vim-plug
+	url = https://github.com/junegunn/vim-plug.git
