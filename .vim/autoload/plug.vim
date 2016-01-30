@@ -1,1 +1,1 @@
-/home/jon/Documents/Settings/dotfiles/scripts/vim-plug/scripts/vim-plug/plug.vim
+/home/jon/Documents/Settings/dotfiles/scripts/vim-plug/plug.vim
