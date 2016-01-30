@@ -25,84 +25,52 @@ endif
 
 " Plugins {{{
 
-" Package Management. {{{2
-"Vundle Stuff
-filetype off                   " required!
-
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-
-" let Vundle manage Vundle
-" required!
-Plugin 'gmarik/vundle'
-" }}}
+call plug#begin('~/.vim/plugged')
 
 " Prose Writing {{{2
-" Required by vim-notes
-Plugin 'xolox/vim-misc'
-" Essential notes plugin.
-Plugin 'xolox/vim-notes'
-" Use my fork instead.
-"Plugin 'JonathanReeve/vim-notes'
-" To set notes directory for :Note command
+
+Plug 'xolox/vim-misc'          " Required by vim-notes
+Plug 'xolox/vim-notes'         " Essential notes plugin.
 let g:notes_directories = ['~/Dropbox/Notes']
 " This ensures that updating vim notes won't overwrite my blank default note.
-let g:notes_shadowdir = '~/.vim/notes-shadow/'
-"set file extension for notes (notes.vim plugin)
+let g:notes_shadowdir = '~/.vim/notes-shadow/' 
+" Set file extension for notes.
 let g:notes_suffix = '.txt'
-" Turn off notes.vim highlighting for vim command syntax
+" Turn off notes.vim highlighting for vim command syntax.
 highlight link notesVimCmd Normal
-" Temporarily don't use curly quotes
+" Don't use curly quotes. 
 " let g:notes_smart_quotes = 0
 
-" Vim outliner
-"Plugin 'VOoM'
+"Plug 'VOoM'                    " Vim outliner
 
-" Distraction-Free Writing Mode
-Plugin 'junegunn/goyo.vim' 
+Plug 'junegunn/goyo.vim'       " Distraction-Free Writing Mode
 nnoremap <Leader>g :Goyo<CR>
 
-" Dictionary
-Plugin 'szw/vim-dict'
+Plug 'szw/vim-dict'            " Dictionary
+Plug 'vim-pandoc/vim-pandoc'   " For writing in Pandoc markdown
+Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'mattn/emmet-vim'         " HTML Authoring Autocompletion
 
 "}}}
 
 " Git {{{2
-" Git wrapper.
-Plugin 'tpope/vim-fugitive'
 
-" Github issues!
-"Plugin 'jaxbot/github-issues.vim'
+Plug 'tpope/vim-fugitive'          " Git wrapper.
+
+"Plugin 'jaxbot/github-issues.vim' " Github issues!
 "" Source Oauth Token from private file for Using Github Issues Plugin
 "if !empty(glob('~/.vim-private')) "if file exists
 	"source ~/.vim-private
 "endif
+
 " }}}
 
 " Browsers {{{2
-" File browser.
-Plugin 'scrooloose/nerdtree'
-"Open nerdtree
-map ,n :NERDTreeToggle<CR>
 
-" Buffer browser.
-"Plugin 'techlivezheng/vim-plugin-minibufexpl'
-"Open minibufexplorer
-"map ,m :MBEToggle<CR>
+Plug 'scrooloose/nerdtree' " File browser.
 
-"" Tag browser.
-"Plugin 'majutsushi/tagbar'
-"" Make Tagbar look like NERDTree.
-"let g:tagbar_iconchars = ['▸', '▾']
-"highlight link TagbarFoldIcon Title
-""Open Tagbar
-"map ,t :TagbarToggle<CR>
-
-"Open Quickfix List
-map ,c :cw<CR>
-
-"Open debug log
-map \d :sp $W/debug.log<CR>
+" Open nerdtree
+map ,n :NERDTreeToggle<CR>  
 
 "Open vimrc
 map \v :sp ~/.vimrc<CR>
@@ -110,159 +78,46 @@ map \v :sp ~/.vimrc<CR>
 " }}}
 
 " Colors {{{2
-Plugin 'vim-scripts/ScrollColors'
-" Colors.
-"Plugin '29decibel/codeschool-vim-theme'
-"Plugin 'ryu-blacknd/vim-nucolors'
-"Plugin 'Lokaltog/vim-distinguished'
-Plugin 'whatyouhide/vim-gotham'
-Plugin 'mhartington/oceanic-next'
-Plugin 'zenorocha/dracula-theme', {'rtp': 'vim/'}
-Plugin 'chriskempson/base16-vim'
-"Plugin 'tomasr/molokai'
-Plugin 'JonathanReeve/vim-colorschemes'
-"Plugin 'xolox/vim-colorscheme-switcher'
-"Plugin 'ajh17/Spacegray.vim'
+
+Plug 'vim-scripts/ScrollColors' " Easily switch colorschemes.
+"Plug '29decibel/codeschool-vim-theme'
+"Plug 'ryu-blacknd/vim-nucolors'
+"Plug 'Lokaltog/vim-distinguished'
+Plug 'whatyouhide/vim-gotham'
+Plug 'mhartington/oceanic-next'
+Plug 'zenorocha/dracula-theme', {'rtp': 'vim/'}
+Plug 'chriskempson/base16-vim'
+Plug 'JonathanReeve/vim-colorschemes'
 " }}}
 
-" Language-Specific Plugins {{{2
-"For better CSS
-"Plugin 'hail2u/vim-css3-syntax'
-"For Compass/SCSS/Sass. Old.
-"Plugin 'cakebaker/scss-syntax.vim'
-" For real Sass
-"Plugin 'tpope/vim-haml'
-"For coffeescript
-"Plugin 'kchmck/vim-coffee-script'
 
-" For writing in Pandoc markdown
-Plugin 'vim-pandoc/vim-pandoc'
-Plugin 'vim-pandoc/vim-pandoc-syntax'
+Plug 'tmhedberg/matchit'       " Improved matching for html tags
+Plug 'Valloric/MatchTagAlways' " HTML Tag Matching
 
-" HTML Authoring Autocompletion
-Plugin 'mattn/emmet-vim'
-" Improved matching for html tags
-Plugin 'tmhedberg/matchit'
-" HTML Tag Matching
-Plugin 'Valloric/MatchTagAlways'
-"For autocomplete and faster html typing
-"Plugin 'garbas/vim-snipmate'
-Plugin 'ivanov/vim-ipython'
+Plug 'ivanov/vim-ipython'      " IPython
+
 " }}}
 
 " IDE Stuff {{{2
+
 "All kinds of syntax checking
-Plugin 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic'
 " Syntastic Options
 let g:syntastic_php_checkers = ['php', 'phpcs']
-let g:syntastic_php_phpcs_args = '--standard=/home/jreeve/Documents/WordPress-Coding-Standards/WordPress/ruleset.xml'
 let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_xml_checkers = ['xmllint']
 let g:syntastic_xml_xmlling_args = '--dtdvalid tei_all.dtd' 
 map ,s :SyntasticToggleMode<CR>
+
 " }}}
 
-"" Neocomplete {{{2
-
-""Plugin 'Shougo/neocomplete'
-""Plugin 'Shougo/neocomplcache'
-
-"" Use neocomplcache.
-"let g:neocomplcache_enable_at_startup = 1
-"" Use smartcase.
-"let g:neocomplcache_enable_smart_case = 1
-"" Set minimum syntax keyword length.
-"let g:neocomplcache_min_syntax_length = 3
-"let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
-
-"" Enable heavy features.
-"" Use camel case completion.
-""let g:neocomplcache_enable_camel_case_completion = 1
-"" Use underbar completion.
-""let g:neocomplcache_enable_underbar_completion = 1
-
-"" Define dictionary.
-"let g:neocomplcache_dictionary_filetype_lists = {
-    "\ 'default' : '',
-    "\ 'vimshell' : $HOME.'/.vimshell_hist',
-    "\ 'scheme' : $HOME.'/.gosh_completions'
-	"\ }
-
-"" Define keyword.
-"if !exists('g:neocomplcache_keyword_patterns')
-    "let g:neocomplcache_keyword_patterns = {}
-"endif
-"let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
-
-"" Plugin key-mappings.
-"inoremap <expr><C-g>     neocomplcache#undo_completion()
-"inoremap <expr><C-l>     neocomplcache#complete_common_string()
-
-"" Recommended key-mappings.
-"" <CR>: close popup and save indent.
-"inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-"function! s:my_cr_function()
-  "return neocomplcache#smart_close_popup() . "\<CR>"
-  "" For no inserting <CR> key.
-  ""return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
-"endfunction
-"" <TAB>: completion.
-"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-"" <C-h>, <BS>: close popup and delete backword char.
-"inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-"inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-"inoremap <expr><C-y>  neocomplcache#close_popup()
-"inoremap <expr><C-e>  neocomplcache#cancel_popup()
-"" Close popup by <Space>.
-""inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
-
-"" For cursor moving in insert mode(Not recommended)
-""inoremap <expr><Left>  neocomplcache#close_popup() . "\<Left>"
-""inoremap <expr><Right> neocomplcache#close_popup() . "\<Right>"
-""inoremap <expr><Up>    neocomplcache#close_popup() . "\<Up>"
-""inoremap <expr><Down>  neocomplcache#close_popup() . "\<Down>"
-"" Or set this.
-""let g:neocomplcache_enable_cursor_hold_i = 1
-"" Or set this.
-""let g:neocomplcache_enable_insert_char_pre = 1
-
-"" AutoComplPop like behavior.
-""let g:neocomplcache_enable_auto_select = 1
-
-"" Shell like behavior(not recommended).
-""set completeopt+=longest
-""let g:neocomplcache_enable_auto_select = 1
-""let g:neocomplcache_disable_auto_complete = 1
-""inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
-"" Enable omni completion.
-"autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-"autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-"autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-"autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-"autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-"" Enable heavy omni completion.
-"if !exists('g:neocomplcache_force_omni_patterns')
-  "let g:neocomplcache_force_omni_patterns = {}
-"endif
-"let g:neocomplcache_force_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-"let g:neocomplcache_force_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-"let g:neocomplcache_force_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
-""  }}}
-
 " Misc {{{2
-" Allows for opening of URLs and other files.
-Plugin 'xolox/vim-shell'
-" For text surrounds like tags and quotes
-Plugin 'tpope/vim-surround'
-" For Easy Commenting
-Plugin 'scrooloose/nerdcommenter'
-"A bunch of mappings that do cool stuff
-Plugin 'tpope/vim-unimpaired'
-"Grepping Stuff
-Plugin 'rking/ag.vim'
+
+Plug 'xolox/vim-shell'          " Allows for opening of URLs and other files. 
+Plug 'tpope/vim-surround'       " For text surrounds like tags and quotes
+Plug 'scrooloose/nerdcommenter' " For Easy Commenting
+Plug 'tpope/vim-unimpaired'     " A bunch of mappings that do cool stuff
+Plug 'rking/ag.vim'             " Grepping Stuff
 
 " Timer adapted from this StackOverflow answer: http://superuser.com/a/982728/83457 
 function! s:Start()
@@ -330,21 +185,10 @@ nmap <silent> <leader>ec :StopCounting<cr>
 
 " Fancy Statusline {{{
 
-""A lighter-weight statusline
-Plugin 'bling/vim-airline'
+Plug 'bling/vim-airline'     " A lighter-weight statusline
 set laststatus=2
-"" Next config setting needed for airline
-
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
-
-"if !exists('g:airline_symbols')
-	"let g:airline_symbols = {}
-"endif
-
-"let g:airline_left_sep = '»'
-"let g:airline_right_sep = '«'
-"let g:airline_symbols.branch = '⎇'
 
 "" End Airline }}}
 
@@ -361,6 +205,19 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " }}}
 
 filetype plugin indent on     " required!
+
+
+Plug 'freitass/todo.txt-vim'    " Todo List
+au BufRead,BufNewFile todo.txt setfiletype=todo
+command! Todo edit ~/Dropbox/Personal/Todo/todo.txt
+
+
+Plug 'JonathanReeve/toggl.vim'  " Toggl Experiments
+Plug 'vim-jp/vital.vim'         " Required by Toggl
+Plug 'Shougo/unite.vim'         " Also required by Toggl
+source ~/Dropbox/Personal/.toggl-api-key
+
+call plug#end()
 
 " End Plugins }}}
 
@@ -428,16 +285,6 @@ autocmd BufReadPost,FileReadPost   .jnl.txt set updatetime=300000
 autocmd CursorHold                 .jnl.txt wq
 autocmd CursorHoldI                .jnl.txt wq
 
-" Todo List
-Plugin 'freitass/todo.txt-vim'
-au BufRead,BufNewFile todo.txt setfiletype=todo
-command! Todo edit ~/Dropbox/Personal/Todo/todo.txt
-
-" Toggl Experiments
-Plugin 'JonathanReeve/toggl.vim'
-Plugin 'vim-jp/vital.vim'
-source ~/Dropbox/Personal/.toggl-api-key
-Plugin 'Shougo/unite.vim'
 "}}}
 
 " Syntax higlighting. {{{
@@ -554,9 +401,9 @@ iabbrev langauge language
 
 " Markdown fixes {{{
 "Make vim recognize *.md files as markdown. No idea why this isn't default.
-autocmd BufRead *.mkd      set ai formatoptions=tcroqn2 comments=n:> ft=markdown
-autocmd BufRead *.md       set ai formatoptions=tcroqn2 comments=n:> ft=markdown
-autocmd BufRead *.markdown set ai formatoptions=tcroqn2 comments=n:> ft=markdown
+autocmd BufRead *.mkd      set ft=markdown
+autocmd BufRead *.md       set ft=markdown
+autocmd BufRead *.markdown set ft=markdown
 " }}}
 
 " Enable this for profiling stuff, in case vim is being slow.
