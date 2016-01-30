@@ -73,7 +73,7 @@ if [[ $OS == "Arch" ]]
 then
 	alias install='sudo pacman -S'
 	alias search='pacman -Ss'
-	alias update='sudo yaourt -Syu --aur'
+	alias update='yaourt -Syu --aur'
 fi
 
 # -- Shortcuts --
