@@ -59,30 +59,30 @@ hi Key font-weight: bold;
 hi Enabled color: #d0ffd0;
 hi Disabled color: red;
 
-hi Normal color: #d0d0d0; background: #1c1c1c; font-size: 12px;
-hi ErrorMsg color: #ffffff; background: #440000; font-size: 12px;
-hi InfoMsg color: #d0d0d0; background: #1c1c1c; font-size: 12px;
-hi ModeMsg color: #d0d0d0; background: #1c1c1c; font-size: 12px;
-hi MoreMsg color: #d0ffd0; background: #1c1c1c; font-size: 12px;
-hi WarningMsg color: #ff0000; background: #1c1c1c; font-size: 12px;
-hi Message white-space: normal; min-width: 100%; padding-left: 2em; text-indent: -2em; display: block; font-size: 12px;
-hi NonText color: #a0a0d0; min-height: 16px; padding-left: 2px; font-size: 12px;
-hi Preview color: #a0a0d0; font-size: 12px;
+hi Normal color: #d0d0d0; background: #1c1c1c; font-size: 16px;
+hi ErrorMsg color: #ffffff; background: #440000; font-size: 16px;
+hi InfoMsg color: #d0d0d0; background: #1c1c1c; font-size: 16px;
+hi ModeMsg color: #d0d0d0; background: #1c1c1c; font-size: 16px;
+hi MoreMsg color: #d0ffd0; background: #1c1c1c; font-size: 16px;
+hi WarningMsg color: #ff0000; background: #1c1c1c; font-size: 16px;
+hi Message white-space: normal; min-width: 100%; padding-left: 2em; text-indent: -2em; display: block; font-size: 16px;
+hi NonText color: #a0a0d0; min-height: 16px; padding-left: 2px; font-size: 16px;
+hi Preview color: #a0a0d0; font-size: 16px;
 hi Prompt background: url("chrome://liberator/skin/prompt.png"); width: 10px; background-position: center; background-repeat: no-repeat;
-hi PromptText color: #1c1c1c; background: #d0d0f0; font-size: 12px;
+hi PromptText color: #1c1c1c; background: #d0d0f0; font-size: 16px;
 
 hi CmdOutput white-space: pre;
-hi CmdLine font-size: 14px; background: black; color: #d0d0d0; -moz-transition: all 0.25s;
+hi CmdLine font-size: 16px; background: black; color: #d0d0d0; -moz-transition: all 0.25s;
 hi CmdLine>* font-family: "Droid Sans Mono";
 
 hi ContentSeparator border: none; display: -moz-box;
 
 "hi CompGroup
 hi CompGroup:not(:first-of-type) margin-top: 1ex;
-hi CompTitle font-size: 12px; font-weight: bold; background: -moz-linear-gradient(19% 75% 90deg, #2c2c2f, #2a2a2f, #2f2f2f 100%);
+hi CompTitle font-size: 16px; font-weight: bold; background: -moz-linear-gradient(19% 75% 90deg, #2c2c2f, #2a2a2f, #2f2f2f 100%);
 hi CompTitle>* color: #a0a0d0; border-bottom: 1px solid #3c3c3f; padding: 1px 0.5ex; text-shadow: 1px 1px 0px #0c0c0c;
 hi CompMsg font-style: italic; margin-left: 16px;
-hi CompItem font-size: 12px;
+hi CompItem font-size: 16px;
 hi CompItem[selected] color: #dddddd; background: #3c3c3f;
 hi CompItem>* height: 18px; min-height: 18px; padding: 0 0.5ex;
 hi CompIcon width: 16px; min-width: 16px; display: inline-block; margin-right: .5ex;
@@ -99,7 +99,7 @@ hi Tag color: #a0a0d0;
 hi LineNr color: #ffd0d0; background: #1c1c1c;
 hi Question color: #a0a0d0; background: #1c1c1c; font-weight: bold;
 
-hi StatusLine color: #7090d0; background: transparent; font-weight: normal; font-size: 12px;
+hi StatusLine color: #7090d0; background: transparent; font-weight: normal; font-size: 16px;
 
 hi TabNumber font-weight: bold; margin: 0px; padding-right: .3ex;
 
