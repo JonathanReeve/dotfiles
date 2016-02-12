@@ -124,6 +124,10 @@ alias jnl='vim ~/Dropbox/Personal/.jnl.txt'
 #opens password file
 alias pw='vim ~/Dropbox/Personal/.p10.txt'
 
+alias vault='encfs ~/Dropbox/Personal/.Vault_encfs ~/Documents/Settings/.private-mount'
+
+alias unvault='fusermount -u ~/Documents/Settings/.private-mount'
+
 #google calendar alias, requires googlecl
 alias caladd="gcalcli --calendar 'jon.reeve@gmail.com' quick" 
 
