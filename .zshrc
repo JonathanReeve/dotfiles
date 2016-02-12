@@ -159,10 +159,10 @@ function tmux-ssh () {
 #v() { grep "$1" ~/Notes/vocab }
 
 # Opens a note
-n() { nvim note:"$*" }
+n() { edit note:"$*" }
 
 ## New Note: calls vim notes plugin
-nn() { nvim -c :Note }
+nn() { edit -c :Note }
 
 # Searches Notes
 nls() { ls -c ~/Notes/ | egrep -i "$*" }
