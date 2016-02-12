@@ -25,8 +25,6 @@ map K gT
 
 " These are tabs I often have open, and often need to switch to.
 map gm :b gmail<CR>
-map gw :b waffle<CR>
-map gs :b slack<CR>
 
 " Type `gor` to save a page to Readability
 qmark r javascript:(%0A%28function%28%29%7Bwindow.baseUrl%3D%27//www.readability.com%27%3Bwindow.readabilityToken%3D%27ps4SFzrhzkS2EdzFE5Dp9pEdYZC3qVg2vdZqrvJd%27%3Bvar%20s%3Ddocument.createElement%28%27script%27%29%3Bs.setAttribute%28%27type%27%2C%27text/javascript%27%29%3Bs.setAttribute%28%27charset%27%2C%27UTF-8%27%29%3Bs.setAttribute%28%27src%27%2CbaseUrl%2B%27/bookmarklet/save.js%27%29%3Bdocument.documentElement.appendChild%28s%29%3B%7D%29%28%29)
