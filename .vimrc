@@ -29,8 +29,23 @@ call plug#begin('~/.vim/plugged')
 
 " Prose Writing {{{2
 
-Plug 'xolox/vim-misc'          " Required by vim-notes
-Plug 'xolox/vim-notes'         " Essential notes plugin.
+Plug 'kana/vim-textobj-user'    " Needed by vim-textobj-quote
+Plug 'reedes/vim-textobj-quote' " For curly quotes. 
+let g:textobj#quote#matchit = 1 " Turn on matching of curly quotes. Requires matchit. 
+
+map <silent> <leader>qc <Plug>ReplaceWithCurly
+map <silent> <leader>qs <Plug>ReplaceWithStraight
+
+augroup textobj_quote
+  autocmd!
+  autocmd FileType markdown call textobj#quote#init()
+  autocmd FileType textile call textobj#quote#init()
+  autocmd FileType text call textobj#quote#init({'educate': 0})
+  autocmd FileType notes call textobj#quote#init({'educate': 1})
+augroup END
+
+Plug 'xolox/vim-misc'           " Required by vim-notes
+Plug 'xolox/vim-notes'          " Essential notes plugin.
 let g:notes_directories = ['~/Dropbox/Notes']
 " This ensures that updating vim notes won't overwrite my blank default note.
 let g:notes_shadowdir = '~/.vim/notes-shadow/' 
@@ -39,7 +54,7 @@ let g:notes_suffix = '.txt'
 " Turn off notes.vim highlighting for vim command syntax.
 highlight link notesVimCmd Normal
 " Don't use curly quotes. 
-" let g:notes_smart_quotes = 0
+"let g:notes_smart_quotes = 0
 
 "Plug 'VOoM'                    " Vim outliner
 
@@ -50,6 +65,11 @@ Plug 'szw/vim-dict'            " Dictionary
 Plug 'vim-pandoc/vim-pandoc'   " For writing in Pandoc markdown
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'mattn/emmet-vim'         " HTML Authoring Autocompletion
+
+Plug 'msprev/unite-bibtex'
+let g:unite_bibtex_bib_files=['/home/jon/Dropbox/Papers/library.bib']
+let g:unite_bibtex_bib_files=['/home/jon/Dropbox/Papers/library.bib']
+let g:unite_bibtex_cache_dir='/tmp'
 
 "}}}
 
@@ -94,7 +114,8 @@ Plug 'JonathanReeve/vim-colorschemes'
 Plug 'tmhedberg/matchit'       " Improved matching for html tags
 Plug 'Valloric/MatchTagAlways' " HTML Tag Matching
 
-Plug 'ivanov/vim-ipython'      " IPython
+"Plug 'ivanov/vim-ipython'      " IPython
+Plug 'bfredl/nvim-ipy'
 
 " }}}
 
@@ -246,7 +267,8 @@ set nrformats-=octal
 " Sets Color Scheme
 " Makes colors work in terminal
 "set t_Co=256
-colorscheme OceanicNext
+"colorscheme OceanicNext
+colorscheme apprentice
 set background=dark
 let g:airline_theme='oceanicnext'
 "highlight Normal ctermbg=NONE
