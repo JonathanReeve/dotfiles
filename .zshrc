@@ -204,3 +204,5 @@ export GEM_HOME=$HOME/.gem
 export BROWSER='firefox'
 
 export WORKON_HOME=~/.virtualenvs
+
+export BULLETTRAIN_VIRTUALENV_PREFIX='venv:'
