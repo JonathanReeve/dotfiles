@@ -178,6 +178,12 @@ alias :e='edit'
 # Change GitHub URLs to SSH
 alias git-ssh='git config url.ssh://git@github.com/.insteadOf https://github.com/'
 
+tagwatch() { 
+	while inotifywait -e close_write "$1"
+	do 
+		ctags "$1"
+	done
+} 
 # -- Colorized Man Pages --
 
 man() {

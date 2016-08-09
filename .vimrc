@@ -352,12 +352,9 @@ map ,x 0f[lrxll"=strftime("%m%d %H:%M")." "<CR>p
 " Allows you to press ,q to surround the line in quotes and press ,' from
 " within a quoted passage to change it from double quotes to single quotes,
 " and vice versa
-map ,q ^i“<ESC>A”
+map ,q V:s#“\|”\|"#'#g<CR>^i“<ESC>A”
 map ,' cs"'
 map ," cs'"
-
-" mapping to count the number of words in a fold section
-map ,c [zjv]zg<C-g>
 
 "Git add and commit current file (uses Fugitive)
 "map ,g :w<CR>:Git add %<CR><CR>:Gcommit<CR>i
@@ -368,9 +365,6 @@ map ,gp :vimgrep /<C-R><C-W>/gj **/*.php<CR>:cw<CR>
 
 "Press F4 to search for tags
 map <F4> :execute "vimgrep /" . expand("<cword>") . "/j ~/Notes/*" <Bar> cw<CR>
-
-"Php linting
-map ,p :!php -l %<CR>
 
 "Turn on tag completion for XML and HTML
 imap ,/ </<C-X><C-O>
