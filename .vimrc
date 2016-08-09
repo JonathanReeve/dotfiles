@@ -299,9 +299,6 @@ set scrolloff=5
 " }}}
 
 " Personal Stuff {{{
-" Use Strong Encryption. Only works on vim, not nvim.
-if !has('nvim')
-endif
 
 " Makes password file quit automagically after five minutes
 autocmd BufReadPost,FileReadPost   .p10.txt set updatetime=300000
@@ -312,12 +309,10 @@ autocmd BufReadPost,FileReadPost   .jnl.txt set updatetime=300000
 autocmd CursorHold                 .jnl.txt wq
 autocmd CursorHoldI                .jnl.txt wq
 
+autocmd BufRead                    .jnl.txt setfiletype journal
+
 "}}}
 
-" Syntax higlighting. {{{
-" syntax highlighting for wordpress debug.log
-au BufRead,BufNewFile debug.log setfiletype debuglog
-" }}}
 
 " Better word processing. Copy and paste. {{{
 " Stuff to make vim useful as a word processor
