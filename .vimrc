@@ -56,7 +56,7 @@ highlight link notesVimCmd Normal
 " Don't use curly quotes. 
 "let g:notes_smart_quotes = 0
 
-"Plug 'VOoM'                    " Vim outliner
+Plug 'VOoM'                    " Vim outliner
 
 Plug 'junegunn/goyo.vim'       " Distraction-Free Writing Mode
 nnoremap <Leader>g :Goyo<CR>
