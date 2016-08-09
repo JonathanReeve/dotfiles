@@ -150,13 +150,14 @@ new_window pixel 2
 # Startup Apps {{{ 
 
 # Applications to be run on startup
-exec --no-startup-id xrandr --dpi 192
+#exec --no-startup-id xrandr --dpi 192
+exec xrandr --output eDP1 --mode 1920x1080
 exec setxkbmap -layout us -option caps:escape
 exec --no-startup-id /usr/libexec/gnome-settings-daemon
 exec xcompmgr -cfFn
-exec --no-startup-id nm-applet
+#exec --no-startup-id nm-applet
 #exec --no-startup-id xfsettingsd --disable-wm-check 
-#exec --no-startup-id /usr/bin/xfce4-power-manager
+exec --no-startup-id /usr/bin/xfce4-power-manager
 #exec --no-startup-id xfce4-volumed
 exec feh --bg-fill --random ~/Pictures/Wallpapers
 
