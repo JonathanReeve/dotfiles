@@ -68,8 +68,10 @@ Plug 'mattn/emmet-vim'         " HTML Authoring Autocompletion
 
 Plug 'msprev/unite-bibtex'
 let g:unite_bibtex_bib_files=['/home/jon/Dropbox/Papers/library.bib']
-let g:unite_bibtex_bib_files=['/home/jon/Dropbox/Papers/library.bib']
 let g:unite_bibtex_cache_dir='/tmp'
+let g:pandoc#biblio#bibs=['/home/jon/Dropbox/Papers/library.bib']
+nmap ,c i[<Esc>:Unite bibtex -start-insert<CR>
+nmap ,i ?[@<CR>yf]<C-o>p 
 
 "}}}
 
