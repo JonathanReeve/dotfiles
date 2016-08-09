@@ -7,9 +7,6 @@ bind-key C-a last-window
 # Send bind-key to nested sessions.
 bind-key a send-prefix
 
-# Enable mouse.
-set-window-option -g mode-mouse on
-
 # Ring the bell if any background window rang a bell
 set -g bell-action any
 
@@ -51,9 +48,6 @@ set-window-option -g window-status-current-format "#[fg=black,bg=colour38,noreve
 
 # No escape time for vi mode
 set -sg escape-time 0
-
-# Enable mouse
-#setw -g mode-mouse on
 
 # Bigger history
 set -g history-limit 10000
