@@ -272,7 +272,8 @@ set nrformats-=octal
 " Makes colors work in terminal
 "set t_Co=256
 "colorscheme OceanicNext
-colorscheme apprentice
+"colorscheme apprentice
+colorscheme desertedocean
 set background=dark
 let g:airline_theme='oceanicnext'
 "highlight Normal ctermbg=NONE
