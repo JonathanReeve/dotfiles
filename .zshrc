@@ -86,8 +86,8 @@ else
 	export WP=$HOME/app
 fi
 
-alias edit='editception'
-export EDITOR='editception'
+alias edit='nvim'
+export EDITOR='nvim'
 alias open='gnome-open'
 
 # -- Aliases --
