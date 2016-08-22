@@ -212,3 +212,21 @@ export BROWSER='firefox'
 export WORKON_HOME=~/.virtualenvs
 
 export BULLETTRAIN_VIRTUALENV_PREFIX='venv:'
+
+# If var is not set, set it. 
+if [ -z ${DONETHISWEEK+x} ]
+then 
+	DONETHISWEEK=`donethisweek`
+fi
+
+# If var is not set, set it. 
+if [ -z ${DONETODAY+x} ]
+then 
+	DONETODAY=`donetoday`
+fi
+
+if [ $DONETHISWEEK -gt 0 ]
+then
+	export BULLETTRAIN_CUSTOM_MSG="$DONETODAY-$DONETHISWEEK"
+	BULLETTRAIN_CUSTOM_BG=green
+fi

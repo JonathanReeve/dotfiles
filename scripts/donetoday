@@ -1,0 +1,13 @@
+#!/bin/zsh
+TODOFILE=~/Dropbox/Personal/Todo/todo.txt
+DONEFILE=~/Dropbox/Personal/Todo/done.txt
+
+DONE1=$(grep -c "x `date +%Y-%m-%d`" $TODOFILE)
+DONE2=$(grep -c "x `date +%Y-%m-%d`" $DONEFILE)
+DONETODAY=`echo "$DONE1+$DONE2" | bc`
+
+# Set prompt value
+BULLETTRAIN_CUSTOM_MSG=$DONETODAY
+export BULLETTRAIN_CUSTOM_MSG
+
+echo $DONETODAY
