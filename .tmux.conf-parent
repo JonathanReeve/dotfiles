@@ -31,6 +31,11 @@ bind-key -n M-7 select-window -t 7
 bind-key -n M-8 select-window -t 8
 bind-key -n M-9 select-window -t 9
 
+bind-key -n M-k select-pane -U
+bind-key -n M-j select-pane -D
+bind-key -n M-h select-pane -L
+bind-key -n M-l select-pane -R
+
 # color scheme
 set -g status-left-length 52
 set -g status-right-length 18
@@ -59,3 +64,9 @@ if-shell "[ -f ~/.tmux.conf.user ]" 'source ~/.tmux.conf.user'
 set-window-option -g mode-keys vi
 bind-key -t vi-copy 'v' begin-selection
 bind-key -t vi-copy y copy-pipe 'xclip -in -selection clipboard'
+
+# Enable mouse mode
+set -g mouse on
+
+# Enable mouse scrolling. See https://github.com/tmux/tmux/issues/145#issuecomment-150736967
+bind -n WheelUpPane if-shell -F -t = "#{mouse_any_flag}" "send-keys -M" "if -Ft= '#{pane_in_mode}' 'send-keys -M' 'copy-mode -e'"
