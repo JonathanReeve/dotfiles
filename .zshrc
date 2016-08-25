@@ -116,6 +116,7 @@ compdef _git gcob=git-checkout
 
 # Todo File Shortcut
 alias t='$DOTFILES/scripts/todo/todo.sh -d $DOTFILES/todo.cfg'
+alias tb='t birdseye | less'
 alias todo='edit ~/Dropbox/Personal/Todo/todo.txt'
 
 #opens Journal
@@ -227,6 +228,6 @@ fi
 
 if [ $DONETHISWEEK -gt 0 ]
 then
-	export BULLETTRAIN_CUSTOM_MSG="$DONETODAY-$DONETHISWEEK"
+	export BULLETTRAIN_CUSTOM_MSG="$DONETHISWEEK-$DONETODAY"
 	BULLETTRAIN_CUSTOM_BG=green
 fi
