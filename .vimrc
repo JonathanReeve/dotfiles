@@ -109,6 +109,8 @@ Plug 'whatyouhide/vim-gotham'
 Plug 'mhartington/oceanic-next'
 Plug 'zenorocha/dracula-theme', {'rtp': 'vim/'}
 Plug 'chriskempson/base16-vim'
+Plug 'rakr/vim-two-firewatch'
+Plug 'tyrannicaltoucan/vim-deep-space'
 Plug 'JonathanReeve/vim-colorschemes'
 " }}}
 
@@ -271,9 +273,7 @@ set nrformats-=octal
 " Sets Color Scheme
 " Makes colors work in terminal
 "set t_Co=256
-"colorscheme OceanicNext
-"colorscheme apprentice
-colorscheme desertedocean
+colorscheme OceanicNext
 set background=dark
 let g:airline_theme='oceanicnext'
 "highlight Normal ctermbg=NONE
