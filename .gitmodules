@@ -17,3 +17,6 @@
 [submodule "scripts/vim-plug"]
 	path = scripts/vim-plug
 	url = https://github.com/junegunn/vim-plug.git
+[submodule "scripts/i3blocks-contrib"]
+	path = scripts/i3blocks-contrib
+	url = https://github.com/vivien/i3blocks-contrib.git
