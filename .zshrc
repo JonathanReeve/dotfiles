@@ -73,7 +73,7 @@ if [[ $OS == "Arch" ]]
 then
 	alias install='sudo pacman -S'
 	alias search='pacman -Ss'
-	alias update='yaourt -Syu --aur'
+	alias update='yaourt -Syu --aur --noconfirm'
 fi
 
 # -- Shortcuts --
@@ -199,7 +199,7 @@ man() {
 }
 
 # -- PATH --
-export PATH="$DOTFILES/scripts:/home/jon/Dropbox/Settings/scripts:/usr/local/heroku/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/jon/.gem/ruby/2.3.0/bin:/home/jon/.cabal/bin:/home/jon/.local/bin:/opt/android-sdk/platform-tools"
+export PATH="$DOTFILES/scripts:/home/jon/Dropbox/Settings/scripts:/usr/local/heroku/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/jon/.gem/ruby/2.3.0/bin:/home/jon/.cabal/bin:/home/jon/.local/bin:/opt/android-sdk/platform-tools:/usr/bin/core_perl"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 

@@ -71,7 +71,7 @@ vim -c PlugInstall
 # Check for GUI
 if [[ $DISPLAY ]]
 then
-	for f in vimperatorrc i3/config 
+	for f in vimperatorrc i3/config i3blocks.conf
 	do 
 		mv ~/.$f bak/
 		ln -s $PWD/.$f ~/.$f
