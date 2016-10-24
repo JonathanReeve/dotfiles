@@ -245,7 +245,7 @@ Plug 'Shougo/unite.vim'         " Also required by Toggl
 source ~/Dropbox/Personal/.toggl-api-key
 
 " Hacky way to run `:TogglStart my task` with a todo.txt line
-map <leader>tt 0/ [A-Za-z].*<CR>ly$:TogglStart <C-R>0<CR> 
+map <leader>tt :TogglStart .<CR>
 map <leader>ts :TogglStop<CR>
 
 call plug#end()
