@@ -4,6 +4,12 @@
 set $mod Mod4
 font pango:Anonymous Pro 11 
 
+# First set resolution
+exec --no-startup-id xrandr --dpi 192
+
+# for Sway
+#output eDP-1 scale 2
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -16,27 +22,34 @@ for_window [window_role="pop-up"] floating enable
 for_window [window_role="task_dialog"] floating enable
 for_window [title="Preferences$"] floating enable 
 
+# For gaps
+gaps inner 15
+
 # }}} 
 
 # Keybindings {{{ 
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 +5% #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -5% #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle # mute sound
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 +5% && pkill -RTMIN+10 i3blocks #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -5% && pkill -RTMIN+10 i3blocks #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle && pkill -RTMIN+10 i3blocks # mute sound
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+bindsym XF86MonBrightnessUp exec xbacklight -inc 10 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 10 # decrease screen brightness
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+#bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec xfce4-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run
+#bindsym $mod+d exec dmenu_run
+bindsym $mod+d exec j4-dmenu-desktop
+bindsym $mod+Shift+d exec dmenu_run
+
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -139,8 +152,15 @@ bindsym $mod+r mode "resize"
 # Status Bar {{{ 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
+set $transparent #00000080
 bar {
-        status_command i3status
+	#status_command i3status
+	i3bar_command i3bar -t
+	status_command i3blocks
+	height 50
+	colors { 
+		background $transparent
+	}
 }
 
 new_window pixel 2
@@ -150,16 +170,18 @@ new_window pixel 2
 # Startup Apps {{{ 
 
 # Applications to be run on startup
-#exec --no-startup-id xrandr --dpi 192
-exec xrandr --output eDP1 --mode 1920x1080
+#exec xrandr --output eDP1 --mode 1920x1080
 exec setxkbmap -layout us -option caps:escape
-exec --no-startup-id /usr/libexec/gnome-settings-daemon
-exec xcompmgr -cfFn
+#exec gnome-session
+#exec --no-startup-id /usr/lib/gnome-settings-daemon/gnome-settings-daemon
+#exec xcompmgr -cfFn
+exec compton
+exec dropbox
 #exec --no-startup-id nm-applet
 #exec --no-startup-id xfsettingsd --disable-wm-check 
 exec --no-startup-id /usr/bin/xfce4-power-manager
 #exec --no-startup-id xfce4-volumed
-exec feh --bg-fill --random ~/Pictures/Wallpapers
+exec feh --bg-fill --random /usr/share/backgrounds/gnome
 
 # In '~/.config/i3/config':
 # use 'exec gnome-session-quit --logout'    : logout dialog
