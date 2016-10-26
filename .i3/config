@@ -25,6 +25,15 @@ for_window [title="Preferences$"] floating enable
 # For gaps
 gaps inner 15
 
+bindsym $mod+Shift+g mode "resize-gaps"
+
+mode "resize-gaps" {
+	bindsym 0     gaps inner all set 0
+	bindsym plus  gaps inner all plus 5
+        bindsym minus gaps inner all minus 5
+        bindsym Escape mode "default"
+}
+
 # }}} 
 
 # Keybindings {{{ 
@@ -163,7 +172,7 @@ bar {
 	}
 }
 
-new_window pixel 2
+new_window pixel 4
 
 # End Status Bar }}} 
 
