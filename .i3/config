@@ -2,7 +2,7 @@
 
 # General Settings {{{
 set $mod Mod4
-font pango:Anonymous Pro 11 
+font pango:Terminus (TTF) 12
 
 # First set resolution
 exec --no-startup-id xrandr --dpi 192
