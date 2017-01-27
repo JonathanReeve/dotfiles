@@ -151,4 +151,10 @@ js services.services.autoCompleteSearch.class_="@mozilla.org/autocomplete/search
 " Prevent status line from disappearing in full screen mode
 set statuslinevisibility=visible
 
+" Ignore keyboard shortcuts for Google Inbox
+ignorekeys add -except=JKt: inbox\\.google\\.com
+
+command! -nargs=1 bm execute "!echo " + content.location.href + " >> /home/jon/Dropbox/Notes/<args>.txt"
+
+
 " vim: ft=vimperator
