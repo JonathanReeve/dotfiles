@@ -23,7 +23,7 @@ for_window [window_role="task_dialog"] floating enable
 for_window [title="Preferences$"] floating enable 
 
 # For gaps
-gaps inner 15
+#gaps inner 15
 
 bindsym $mod+Shift+g mode "resize-gaps"
 
