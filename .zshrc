@@ -214,6 +214,7 @@ export WORKON_HOME=~/.virtualenvs
 
 export BULLETTRAIN_VIRTUALENV_PREFIX='venv:'
 
+
 # If var is not set, set it. 
 if [ -z ${DONETHISWEEK+x} ]
 then 

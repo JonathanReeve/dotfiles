@@ -56,6 +56,9 @@ highlight link notesVimCmd Normal
 " Don't use curly quotes. 
 "let g:notes_smart_quotes = 0
 
+autocmd FileType notes set showbreak="  "
+autocmd FileType notes set breakindent
+
 Plug 'VOoM'                    " Vim outliner
 
 Plug 'junegunn/goyo.vim'       " Distraction-Free Writing Mode
@@ -94,6 +97,9 @@ Plug 'scrooloose/nerdtree' " File browser.
 " Open nerdtree
 map ,n :NERDTreeToggle<CR>  
 
+" Open clist
+map ,e :copen<CR>
+
 "Open vimrc
 map \v :sp ~/.vimrc<CR>
 
@@ -112,6 +118,12 @@ Plug 'chriskempson/base16-vim'
 Plug 'rakr/vim-two-firewatch'
 Plug 'tyrannicaltoucan/vim-deep-space'
 Plug 'JonathanReeve/vim-colorschemes'
+Plug 'itchyny/landscape.vim'
+Plug 'dikiaap/minimalist'
+Plug 'kamwitsta/nordisk'
+Plug 'KeitaNakamura/neodark.vim'
+Plug 'liuchengxu/space-vim-dark'
+
 " }}}
 
 
@@ -126,14 +138,26 @@ Plug 'bfredl/nvim-ipy'
 " IDE Stuff {{{2
 
 "All kinds of syntax checking
-Plug 'scrooloose/syntastic'
-" Syntastic Options
-let g:syntastic_php_checkers = ['php', 'phpcs']
-let g:syntastic_javascript_checkers = ['jshint']
-let g:syntastic_xml_checkers = ['xmllint']
-let g:syntastic_xml_xmlling_args = '--dtdvalid tei_all.dtd' 
-map ,s :SyntasticToggleMode<CR>
+"Plug 'scrooloose/syntastic'
+"" Syntastic Options
+"let g:syntastic_php_checkers = ['php', 'phpcs']
+"let g:syntastic_javascript_checkers = ['jshint']
+"let g:syntastic_xml_checkers = ['xmllint']
+"let g:syntastic_xml_xmlling_args = '--dtdvalid tei_all.dtd' 
+"map ,s :SyntasticToggleMode<CR>
 
+Plug 'neomake/neomake'
+let g:neomake_xml_lint_maker = {
+			\ 'exe': 'xmllint',
+			\ 'args': ['--valid'], 
+			\ } 
+
+let g:neomake_xml_tei_maker = {
+			\ 'exe': 'xmllint',
+			\ 'args': ['--dtdvalid dtd/tei_all.dtd'], 
+			\ } 
+
+map <leader>m :Neomake!<CR>
 " }}}
 
 " Misc {{{2
@@ -242,6 +266,9 @@ command! Todo edit ~/Dropbox/Personal/Todo/todo.txt
 Plug 'JonathanReeve/toggl.vim'  " Toggl Experiments
 Plug 'vim-jp/vital.vim'         " Required by Toggl
 Plug 'Shougo/unite.vim'         " Also required by Toggl
+
+map <leader>b :Unite buffer<CR>
+map <leader>f :Unite file<CR>
 source ~/Dropbox/Personal/.toggl-api-key
 
 " Hacky way to run `:TogglStart my task` with a todo.txt line
@@ -277,11 +304,12 @@ set nrformats-=octal
 " Sets Color Scheme
 " Makes colors work in terminal
 "set t_Co=256
-colorscheme OceanicNext
+colorscheme space-vim-dark
 set background=dark
-let g:airline_theme='oceanicnext'
-"highlight Normal ctermbg=NONE
-"highlight nonText ctermbg=NONE
+"let g:airline_theme='deep_space'
+let g:airline_theme='twofirewatch'
+
+command! Transparent highlight Normal ctermbg=NONE
 
 " Highlight cursor depending on mode
 au InsertLeave * hi Cursor guibg=red
@@ -316,7 +344,6 @@ autocmd CursorHoldI                .jnl.txt wq
 autocmd BufRead                    .jnl.txt setfiletype journal
 
 "}}}
-
 
 " Better word processing. Copy and paste. {{{
 " Stuff to make vim useful as a word processor
