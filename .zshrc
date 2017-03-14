@@ -203,9 +203,14 @@ export PATH="$DOTFILES/scripts:/home/jon/Dropbox/Settings/scripts:/usr/local/her
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
-export NODE_PATH=/home/jreeve/.nvm/v0.10.33/lib/node_modules:/home/jreeve/.npm-packages/lib/node_modules
+PATH="$HOME/.node_modules/bin:$PATH"
+export npm_config_prefix=~/.node_modules
 
 export GEM_HOME=$HOME/.gem
+
+if which ruby >/dev/null && which gem >/dev/null; then
+    PATH="$(ruby -rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+fi
 
 # Set default browser for Jupyter etc. 
 export BROWSER='firefox'
