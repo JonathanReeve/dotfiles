@@ -31,6 +31,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'kana/vim-textobj-user'    " Needed by vim-textobj-quote
 Plug 'reedes/vim-textobj-quote' " For curly quotes. 
+Plug 'tmhedberg/matchit'        " Improved matching for html tags
 let g:textobj#quote#matchit = 1 " Turn on matching of curly quotes. Requires matchit. 
 
 map <silent> <leader>qc <Plug>ReplaceWithCurly
@@ -127,7 +128,6 @@ Plug 'liuchengxu/space-vim-dark'
 " }}}
 
 
-Plug 'tmhedberg/matchit'       " Improved matching for html tags
 Plug 'Valloric/MatchTagAlways' " HTML Tag Matching
 
 "Plug 'ivanov/vim-ipython'      " IPython
@@ -244,6 +244,9 @@ let g:airline#extensions#whitespace#checks = [ ]
 "" End Airline }}}
 
 " Language Specific Stuff {{{
+
+Plug 'kchmck/vim-coffee-script' 
+Plug 'digitaltoad/vim-pug' 
 
 " this sets tabstops to four spaces per python guidelines
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4
