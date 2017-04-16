@@ -1,0 +1,8 @@
+[Unit]
+Description=Todo Recur
+
+[Service]
+ExecStart=/home/jon/Documents/Settings/dotfiles/scripts/t-recur.sh
+
+[Install]
+WantedBy=multi-user.target
