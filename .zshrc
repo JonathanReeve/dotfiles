@@ -2,14 +2,6 @@
 # let zgen handle that.
 DISABLE_AUTO_UPDATE=true
 
-if [[ -n $SSH_CONNECTION ]]; then
-	#I tend to keep dotfiles here in VMs
-	export DOTFILES=~/dotfiles
-else
-	#...and here on my personal machines.
-	export DOTFILES=~/Documents/Settings/dotfiles
-fi
-
 source $DOTFILES/scripts/zgen/zgen.zsh
 
 # -- Plugins --
@@ -27,25 +19,8 @@ zgen load zsh-users/zsh-syntax-highlighting
 zgen load zsh-users/zsh-completions src
 
 # -- Theme --
-#zgen oh-my-zsh themes/juanghurtado
-zgen load caiogondim/bullet-train-oh-my-zsh-theme bullet-train
-
-# -- Settings --
-
-# Enable command auto-correction.
-ENABLE_CORRECTION="true"
-
-# Display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
-
-# You may need to manually set your language environment
-export LANG=en_US.UTF-8
-
-# Compilation flags
-export ARCHFLAGS="-arch x86_64"
-
-# SSH Keys
-export SSH_KEY_PATH="~/.ssh/rsa_id"
+zgen oh-my-zsh themes/juanghurtado
+# zgen load caiogondim/bullet-train-oh-my-zsh-theme bullet-train
 
 # Get history search working again
 bindkey "^R" history-incremental-search-backward
@@ -78,17 +53,6 @@ fi
 
 # -- Shortcuts --
 
-# If connected over SSH, this is probably a vagrant box.
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]
-then
-	export WP=/srv/www/commons/current
-else
-	export WP=$HOME/app
-fi
-
-alias edit='nvim'
-export EDITOR='nvim'
-alias open='gnome-open'
 
 # -- Aliases --
 
@@ -115,9 +79,7 @@ alias gcob='git checkout -b'
 compdef _git gcob=git-checkout
 
 # Todo File Shortcut
-alias t='$DOTFILES/scripts/todo/todo.sh -d $DOTFILES/todo.cfg'
-alias tb='t birdseye | less'
-alias todo='edit ~/Dropbox/Personal/Todo/todo.txt'
+alias todo='edit ~/Dropbox/Org/Projects/todo.org'
 
 #opens Journal
 alias jnl='vim ~/Dropbox/Personal/.jnl.txt'
@@ -126,7 +88,6 @@ alias jnl='vim ~/Dropbox/Personal/.jnl.txt'
 alias pw='vim ~/Dropbox/Personal/.p10.txt'
 
 alias vault='encfs ~/Dropbox/Personal/.Vault_encfs ~/Documents/Settings/.private-mount'
-
 alias unvault='fusermount -u ~/Documents/Settings/.private-mount'
 
 #google calendar alias, requires googlecl
@@ -134,6 +95,9 @@ alias caladd="gcalcli --calendar 'jon.reeve@gmail.com' quick"
 
 #python alias
 alias py='python3'
+
+#Jupyter notebook
+alias jn="jupyter notebook --browser=$BROWSER" 
 
 #makes find commmand more useful
 f() { find . -iname "$1" }
@@ -153,23 +117,10 @@ function tmux-ssh () {
 	tmux new-window -n "$1" """ssh -t "$1" '(command -v tmux >/dev/null 2>&1 && (tmux attach || tmux new-session -s ssh)) || bash -l'"""
 }
 
-#dictionary hack
-#d() { wn "$1" -over |tee -a ~/Notes/vocab }
-
-#searches vocab file
-#v() { grep "$1" ~/Notes/vocab }
+NOTES_DIR=/home/jon/Dropbox/Org
 
 # Opens a note
-n() { edit note:"$*" }
-
-## New Note: calls vim notes plugin
-nn() { edit -c :Note }
-
-# Searches Notes
-nls() { ls -c ~/Notes/ | egrep -i "$*" }
-
-# Better grepping
-a() { ack-grep -i "$1" * }
+n() { edit NOTES_DIR/"$*" }
 
 # Vim all the things!
 alias :q='exit'
@@ -179,14 +130,7 @@ alias :e='edit'
 # Change GitHub URLs to SSH
 alias git-ssh='git config url.ssh://git@github.com/.insteadOf https://github.com/'
 
-tagwatch() { 
-	while inotifywait -e close_write "$1"
-	do 
-		ctags "$1"
-	done
-} 
 # -- Colorized Man Pages --
-
 man() {
     env LESS_TERMCAP_mb=$'\E[01;31m' \
     LESS_TERMCAP_md=$'\E[01;38;5;74m' \
@@ -197,43 +141,3 @@ man() {
     LESS_TERMCAP_us=$'\E[04;38;5;146m' \
     man "$@"
 }
-
-# -- PATH --
-export PATH="$DOTFILES/scripts:/home/jon/Dropbox/Settings/scripts:/usr/local/heroku/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/jon/.gem/ruby/2.3.0/bin:/home/jon/.cabal/bin:/home/jon/.local/bin:/opt/android-sdk/platform-tools:/usr/bin/core_perl"
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-PATH="$HOME/.node_modules/bin:$PATH"
-export npm_config_prefix=~/.node_modules
-
-export GEM_HOME=$HOME/.gem
-
-if which ruby >/dev/null && which gem >/dev/null; then
-    PATH="$(ruby -rubygems -e 'puts Gem.user_dir')/bin:$PATH"
-fi
-
-# Set default browser for Jupyter etc. 
-export BROWSER='firefox'
-
-export WORKON_HOME=~/.virtualenvs
-
-export BULLETTRAIN_VIRTUALENV_PREFIX='venv:'
-
-
-# If var is not set, set it. 
-if [ -z ${DONETHISWEEK+x} ]
-then 
-	DONETHISWEEK=`donethisweek`
-fi
-
-# If var is not set, set it. 
-if [ -z ${DONETODAY+x} ]
-then 
-	DONETODAY=`donetoday`
-fi
-
-if [ $DONETHISWEEK -gt 0 ]
-then
-	export BULLETTRAIN_CUSTOM_MSG="$DONETHISWEEK-$DONETODAY"
-	BULLETTRAIN_CUSTOM_BG=green
-fi
