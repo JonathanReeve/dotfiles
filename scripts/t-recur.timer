@@ -1,9 +1,0 @@
-[Unit]
-Description=Run `t recur`, adding recurring todo.txt items
-
-[Timer]
-OnCalendar=daily
-Persistent=true
-
-[Install]
-WantedBy=timers.target
