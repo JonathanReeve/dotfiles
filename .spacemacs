@@ -44,7 +44,7 @@ values."
      emacs-lisp
      bibtex
      ;; mu4e
-     ;; gnus
+     gnus
      git
      markdown
      python
@@ -334,8 +334,9 @@ you should place your code here."
         org-ref-bibliography-notes "~/Dropbox/Papers/notes.org")
   (setq org-agenda-files (list "~/Dropbox/Org/Projects/"))
   (setq neo-theme 'nerd)
+
   ;; (add-hook 'org-mode-hook 'org-indent-mode)
-  (add-hook 'org-mode-hook 'visual-line-mode)
+  ;; (add-hook 'org-mode-hook 'visual-line-mode)
   ;; (setq org-todo-keywords
   ;;       '(
   ;;         (sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)")
@@ -368,90 +369,51 @@ you should place your code here."
   ;;       mu4e-view-show-addresses t)
 
   ;; Get email, and store in nnml
-  ;; (setq gnus-secondary-select-methods
-  ;;       '(
-  ;;         (nnimap "gmail"
-  ;;                 (nnimap-address
-  ;;                  "imap.gmail.com")
-  ;;                 (nnimap-server-port 993)
-  ;;                 (nnimap-stream ssl))
-  ;;         ))
+  (setq gnus-secondary-select-methods
+        '(
+          (nnimap "gmail"
+                  (nnimap-address
+                   "imap.gmail.com")
+                  (nnimap-server-port 993)
+                  (nnimap-stream ssl))
+          ))
 
-  ;; ;; Send email via Gmail:
-  ;; (setq message-send-mail-function 'smtpmail-send-it
-  ;;       smtpmail-default-smtp-server "smtp.gmail.com")
+  ;; Send email via Gmail:
+  (setq message-send-mail-function 'smtpmail-send-it
+        smtpmail-default-smtp-server "smtp.gmail.com")
 
-  ;; ;; Archive outgoing email in Sent folder on imap.gmail.com:
-  ;; (setq gnus-message-archive-method '(nnimap "imap.gmail.com")
-  ;;       gnus-message-archive-group "[Gmail]/Sent Mail")
+  ;; Archive outgoing email in Sent folder on imap.gmail.com:
+  (setq gnus-message-archive-method '(nnimap "imap.gmail.com")
+        gnus-message-archive-group "[Gmail]/Sent Mail")
 
-  ;; ;; set return email address based on incoming email address
-  ;; (setq gnus-posting-styles
-  ;;       '(((header "to" "jonathan.reeve@columbia.edu")
-  ;;          (address "jonathan.reeve@columbia.edu"))
-  ;;         ((header "to" "jon.reeve@gmail.com")
-  ;;          (address "jon.reeve@gmail.com"))))
+  ;; set return email address based on incoming email address
+  (setq gnus-posting-styles
+        '(((header "to" "jonathan.reeve@columbia.edu")
+           (address "jonathan.reeve@columbia.edu"))
+          ((header "to" "jon.reeve@gmail.com")
+           (address "jon.reeve@gmail.com"))))
 
-  ;; ;; store email in ~/gmail directory
-  ;; (setq nnml-directory "~/Mail")
-  ;; (setq message-directory "~/Mail")
-
-  ;; J/K from within wrapped lines. 
-  ;; (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
-  ;; (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
-
-  ;; IMAP, gmail
-
-  ;; (autoload 'wl "wl" "Wanderlust" t)
-  ;; (autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
-  ;; (autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)
-
-  ;; (setq elmo-imap4-default-server "imap.gmail.com"
-  ;;       elmo-imap4-default-user "jon.reeve@gmail.com"
-  ;;       elmo-imap4-default-authenticate-type 'clear
-  ;;       elmo-imap4-default-port '993
-  ;;       elmo-imap4-default-stream-type 'ssl
-
-  ;;       ;; For non ascii-characters in folder-names
-  ;;       elmo-imap4-use-modified-utf7 t)
-
-  ;; ;; SMTP
-  ;; (setq wl-smtp-connection-type 'starttls
-  ;;       wl-smtp-posting-port 587
-  ;;       wl-smtp-authenticate-type "plain"
-  ;;       wl-smtp-posting-user "jon.reeve"
-  ;;       wl-smtp-posting-server "smtp.gmail.com"
-  ;;       wl-local-domain "gmail.com"
-  ;;       wl-message-id-domain "smtp.gmail.com")
-
-  ;; (setq wl-from "Jonathan Reeve <jon.reeve@gmail.com>"
-
-  ;;       ;; All system folders (draft, trash, spam, etc) are placed in the
-  ;;       ;; [Gmail]-folder, except inbox. "%" means it's an IMAP-folder
-  ;;       wl-default-folder "%inbox"
-  ;;       wl-default-spec "%"
-  ;;       wl-draft-folder   "%[Gmail]/Drafts"
-  ;;       wl-trash-folder   "%[Gmail]/Trash"
-  ;;       ;; The below is not necessary when you send mail through Gmail's SMTP server,
-  ;;       ;; see https://support.google.com/mail/answer/78892?hl=en&rd=1
-  ;;       ;; wl-fcc            "%[Gmail]/Sent"
-
-  ;;       ;; Mark sent messages as read (sent messages get sent back to you and
-  ;;       ;; placed in the folder specified by wl-fcc)
-  ;;       wl-fcc-force-as-read    t
-  ;;       wl-folder-check-async t
-
-  ;;       ;; For auto-completing foldernames
-  ;;       wl-default-spec "%")
-
-  ;; (autoload 'wl-user-agent-compose "wl-draft" nil t)
-  ;; (if (boundp 'mail-user-agent)
-  ;;     (setq mail-user-agent 'wl-user-agent))
-  ;; (if (fboundp 'define-mail-user-agent)
-  ;;     (define-mail-user-agent
-  ;;       'wl-user-agent
-  ;;       'wl-user-agent-compose
-  ;;       'wl-draft-send
-  ;;       'wl-draft-kill
-  ;;       'mail-send-hook))
+  ;; store email in ~/gmail directory
+  (setq nnml-directory "~/Mail")
+  (setq message-directory "~/Mail")
   )
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (restart-emacs org-ref ivy live-py-mode jbeans-theme gotham-theme evil-mc apropospriate-theme smartparens flycheck company helm helm-core projectile magit zonokai-theme zenburn-theme zen-and-art-theme yapfify yaml-mode xterm-color ws-butler winum which-key web-mode volatile-highlights vi-tilde-fringe uuidgen use-package underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme tronesque-theme toxi-theme toc-org tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit symon sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spaceline spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smeargle slim-mode shell-pop seti-theme scss-mode sass-mode reverse-theme rainbow-delimiters railscasts-theme pyvenv pytest pyenv-mode py-isort purple-haze-theme pug-mode professional-theme popwin planet-theme pkg-info pip-requirements phoenix-dark-pink-theme phoenix-dark-mono-theme persp-mode pcre2el pastels-on-dark-theme paradox orgit organic-green-theme org-projectile org-present org-pomodoro org-download org-bullets open-junk-file omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme niflheim-theme neotree naquadah-theme mustang-theme multi-term move-text monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minimal-theme material-theme markdown-toc majapahit-theme magit-gitflow madhat2r-theme macrostep lush-theme lorem-ipsum linum-relative link-hint light-soap-theme less-css-mode key-chord jazz-theme ir-black-theme inkpot-theme info+ indent-guide hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt heroku-theme hemisu-theme help-fns+ helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-bibtex helm-ag hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-commit gh-md gandalf-theme fuzzy flyspell-correct-helm flycheck-pos-tip flx-ido flatui-theme flatland-theme firebelly-theme fill-column-indicator farmhouse-theme fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu espresso-theme eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dumb-jump dracula-theme django-theme define-word darktooth-theme darkokai-theme darkmine-theme darkburn-theme dakrone-theme cython-mode cyberpunk-theme company-web company-statistics company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme clean-aindent-mode cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile anti-zenburn-theme ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+)
