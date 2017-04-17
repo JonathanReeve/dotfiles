@@ -1,10 +1,6 @@
 [submodule "scripts/todo"]
 	path = scripts/todo
 	url = https://github.com/ginatrapani/todo.txt-cli.git
-[submodule "scripts/todo-plugins"]
-	path = scripts/todo-plugins
-	url = https://github.com/ginatrapani/todo.txt-cli.git
-	branch = addons
 [submodule "scripts/zgen"]
 	path = scripts/zgen
 	url = https://github.com/tarjoilija/zgen.git
