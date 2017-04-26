@@ -60,6 +60,8 @@ highlight link notesVimCmd Normal
 autocmd FileType notes set showbreak="  "
 autocmd FileType notes set breakindent
 
+Plug 'hsitz/VimOrganizer'      " Org-mode emulation
+
 Plug 'VOoM'                    " Vim outliner
 
 Plug 'junegunn/goyo.vim'       " Distraction-Free Writing Mode
@@ -76,6 +78,8 @@ let g:unite_bibtex_cache_dir='/tmp'
 let g:pandoc#biblio#bibs=['/home/jon/Dropbox/Papers/library.bib']
 nmap ,c i[<Esc>:Unite bibtex -start-insert<CR>
 nmap ,i ?[@<CR>yf]<C-o>p 
+
+Plug 'dhruvasagar/vim-table-mode' " For Tables
 
 "}}}
 
@@ -124,6 +128,7 @@ Plug 'dikiaap/minimalist'
 Plug 'kamwitsta/nordisk'
 Plug 'KeitaNakamura/neodark.vim'
 Plug 'liuchengxu/space-vim-dark'
+Plug 'danilo-augusto/vim-afterglow'
 
 " }}}
 
@@ -237,7 +242,7 @@ nmap <silent> <leader>ec :StopCounting<cr>
 Plug 'bling/vim-airline'     " A lighter-weight statusline
 set laststatus=2
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 1
+"let g:airline_powerline_fonts = 1
 " Don't check for trailing whitespace. 
 let g:airline#extensions#whitespace#checks = [ ]
 
@@ -307,10 +312,12 @@ set nrformats-=octal
 " Sets Color Scheme
 " Makes colors work in terminal
 "set t_Co=256
-colorscheme space-vim-dark
-set background=dark
-"let g:airline_theme='deep_space'
-let g:airline_theme='twofirewatch'
+"colorscheme space-vim-dark
+"colorscheme afterglow
+colorscheme hybrid
+"set background=dark
+let g:airline_theme='afterglow'
+"let g:airline_theme='twofirewatch'
 
 command! Transparent highlight Normal ctermbg=NONE
 
