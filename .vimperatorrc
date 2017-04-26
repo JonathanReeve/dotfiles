@@ -128,8 +128,8 @@ hi -append HintActive text-decoration: none; -moz-border-radius: 4px; -moz-box-s
 
 " ==FxDevtoolsDark_ColorScheme_Settings==
 
-highlight CmdLine color:  #93a1a1;  background: #171B1F; font-size: 12px;font-family: Arial,sans-serif;
-highlight CmdLine>* border: 0;font-family: Arial,sans-serif;
+highlight CmdLine color:  #93a1a1;  background: #171B1F;
+highlight CmdLine>* border: 0;
 highlight CompDesc color: #d33682;
 highlight CompItem>* height: auto; padding: 2px 5px;
 highlight CompItem[selected] color: cyan;  background: #1D4F73;
@@ -147,13 +147,13 @@ highlight LineNr color:  #dc322f; background: #002b36; font-size: 12px;
 highlight ModeMsg background: #1D4F73; border-top: 2px solid #d7f1ff; border-bottom: 2px solid #173F5C; padding: 3px 5px 0 5px; color: #EDF0F1;
 highlight MoreMsg color:  #859900; background: #002b36;
 highlight NonText background: #000;
-highlight Normal color:  #93a1a1;  background: #171b1f; font-size: 12px; opacity: 1.0; font-family: Arial,sans-serif; border-top: 1px solid #2F363F;
+highlight Normal color:  #93a1a1;  background: #171b1f; opacity: 1.0; border-top: 1px solid #2F363F;
 highlight Null color: CornflowerBlue;
 highlight Number color:  #002b36;
 highlight Object color: #2aa198;
 highlight PromptText background: #1D4F73; border-top: 2px solid #d7f1ff; border-bottom: 2px solid #173F5C; padding: 3px 5px 0 5px; color: #EDF0F1;
 highlight Question color: #b58900;  background: #002b36;  font-size: 12px;
-highlight StatusLine color: #F5F7FA; font-size: 12px; padding: 5px;font-family: Arial,sans-serif;
+highlight StatusLine color: #F5F7FA; font-size: 12px; padding: 5px;
 highlight String color:  #002b36;
 highlight TabNumber color: #002b36; font-weight: bold; font-size:10px;
 highlight Tag color: CornflowerBlue;
