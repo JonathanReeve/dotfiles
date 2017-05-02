@@ -187,7 +187,7 @@ js services.services.autoCompleteSearch.class_="@mozilla.org/autocomplete/search
 set statuslinevisibility=visible
 
 " Ignore keyboard shortcuts for Google Inbox
-ignorekeys add -except=J -except=K -except=t -except=: inbox\\.google\\.com
+" ignorekeys add -except=J -except=K -except=t -except=: inbox\\.google\\.com
 
 command! -nargs=1 bm execute "!echo " + content.location.href + " >> /home/jon/Dropbox/Notes/<args>.txt"
 
