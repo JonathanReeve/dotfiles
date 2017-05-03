@@ -1,3 +1,4 @@
+
 bbpress /home/admin/app/public/wp-content/plugins/bbpress/templates/default/bbpress
 bp-default /home/admin/app/public/wp-content/plugins/buddypress/bp-themes/bp-default
 buddypress /home/admin/app/public/wp-content/plugins/buddypress
@@ -15,4 +16,3 @@ style.scss /home/admin/app/public/wp-content/themes/cbox-mla/style.scss
 todo.txt /home/admin/notes/todo.txt
 wp-config.php /home/admin/app/wp-config.php
 wp-content /home/admin/app/public/wp-content
-

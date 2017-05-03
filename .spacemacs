@@ -322,6 +322,9 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
+  ;; General
+  (setq vc-follow-symlinks t) ;; Always follow symlinks. 
+
   ;; Org Mode
   (setq org-startup-indented t)
 
@@ -337,9 +340,10 @@ you should place your code here."
   ;; Org Calendar and Diary
   (setq diary-file "~/Dropbox/Org/diary")
   (setq org-agenda-include-diary t)
-  (add-hook 'calendar-load-hook
+  (add-hook 'org-agenda-mode-hook
             (lambda ()
-              (calendar-set-date-style 'european)))
+              (calendar-set-date-style 'iso)))
+  (add-hook 'diary-mode-hook 'diary-fancy-display-mode)
 
   ;; Org Agenda
   (setq org-agenda-files (list "~/Dropbox/Org/Projects/"))
