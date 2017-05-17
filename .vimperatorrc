@@ -35,6 +35,15 @@ map gm :b gmail<CR>
 " Type `goz` to open zotero 
 "qmark z javascript:var%20d=document,s=d.createElement('script');s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement).appendChild(s);void(0);
 
+" Type `gol` to capture a link
+qmark l javascript:location.href='org-protocol://capture?template=l&url='+encodeURIComponent(content.location.href)+'&title='+encodeURIComponent(content.document.title)+'&body='+encodeURIComponent(content.document.getSelection())
+
+" Type `got` to capture a link
+qmark t javascript:location.href='org-protocol://capture?template=t&url='+encodeURIComponent(content.location.href)+'&title='+encodeURIComponent(content.document.title)+'&body='+encodeURIComponent(content.document.getSelection())
+
+" Type `gom` to capture a movie
+qmark m javascript:location.href='org-protocol://capture?template=m&url='+encodeURIComponent(content.location.href)+'&title='+encodeURIComponent(content.document.title)+'&body='+encodeURIComponent(content.document.getSelection())
+
 " Insert "Herp Derpsum" dummy text.
 imap <C-h> Herp derpsum perp dee derp, mer herderder. Sherp berp derpler, herpem serp tee perper merpus terp dee. Sherpus berps herpsum herpler. Berps herderder herpsum herpderpsmer herp? Derperker der herpler derp derpsum berps perp sherpus. Merpus mer perper derpler perp tee. Berps derpus, derpler ler mer nerpy herpem derp der derps. Terp tee herpsum derpus der nerpy herpderpsmer dee. Merpus derp terp ner sherlamer. Derps herpler serp derpus. Derpler sherlamer derpy sherp sherper, ler dee derps. Ler ner derp herpsum sherp. Ler merpus, derp der derpy derperker perp. Der derpler sherlamer herp mer. Herpler derpus mer, derps ner herpy! Merpus herp, nerpy merp herderder. Ler herpsum derperker herpderpsmer herderder perper sherp. Serp derpler herderder berps. Derpus mer, merp derp herpler. Herpem terp serp derps herpsum sherper.
 

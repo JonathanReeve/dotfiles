@@ -167,11 +167,11 @@ bar {
 	#status_command i3status
 	#i3bar_command i3bar -t
 	status_command i3blocks
-	height 50
+	#height 50
 	#colors { 
 		#background $transparent
 	#}
-	tray_output none
+	#tray_output none
 }
 
 new_window pixel 4
