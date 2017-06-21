@@ -27,8 +27,8 @@ zgen load zsh-users/zsh-syntax-highlighting
 zgen load zsh-users/zsh-completions src
 
 # -- Theme --
-zgen oh-my-zsh themes/juanghurtado
-# zgen load caiogondim/bullet-train-oh-my-zsh-theme bullet-train
+#zgen oh-my-zsh themes/juanghurtado
+zgen load caiogondim/bullet-train-oh-my-zsh-theme bullet-train
 
 # Get history search working again
 bindkey "^R" history-incremental-search-backward

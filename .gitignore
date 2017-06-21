@@ -1,7 +1,9 @@
 bak/
-.vim/undo
-.vim/plugged/
-.vim/spell/en.utf-8.spl
-.vim/spell/en.utf-8.sug
-.vim/init.vim
-.vim/.netrwhist
+dotfiles/.vim/undo
+dotfiles/.vim/plugged/
+dotfiles/.vim/spell/en.utf-8.spl
+dotfiles/.vim/spell/en.utf-8.sug
+dotfiles/.vim/init.vim
+dotfiles/.vim/.netrwhist
+dotfiles/.vim/swap/
+dotfiles/.vim/backup/

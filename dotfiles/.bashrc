@@ -281,3 +281,7 @@ export PATH="$HOME/dotfiles/scripts:$PATH"
 
 #Needed for WP / BP tests
 export WP_TESTS_DIR="/home/jreeve/Apps/wordpress-develop/tests/phpunit" 
+# >>> BEGIN ADDED BY CNCHI INSTALLER
+BROWSER=/usr/bin/chromium
+EDITOR=/usr/bin/nano
+# <<< END ADDED BY CNCHI INSTALLER
