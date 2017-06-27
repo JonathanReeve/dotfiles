@@ -7,3 +7,6 @@
 [submodule "scripts/i3blocks-contrib"]
 	path = scripts/i3blocks-contrib
 	url = https://github.com/vivien/i3blocks-contrib.git
+[submodule "scripts/oh-my-fish"]
+	path = scripts/oh-my-fish
+	url = https://github.com/oh-my-fish/oh-my-fish

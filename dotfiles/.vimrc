@@ -62,7 +62,7 @@ autocmd FileType notes set breakindent
 
 Plug 'hsitz/VimOrganizer'      " Org-mode emulation
 
-Plug 'VOoM'                    " Vim outliner
+"Plug 'VOoM'                    " Vim outliner
 
 Plug 'junegunn/goyo.vim'       " Distraction-Free Writing Mode
 nnoremap <Leader>g :Goyo<CR>
@@ -420,7 +420,7 @@ nnoremap <C-l> <C-W>l
 map <F8> :set breakindent<CR>:set showbreak=\ \ <CR>
 
 "Press F7 to start Voom outliner mode
-map <F7> :Voom markdown<CR>
+"map <F7> :Voom markdown<CR>
 
 "Space does the same thing as Ctrl+F
 nmap <Space> <C-f>
