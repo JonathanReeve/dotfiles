@@ -256,11 +256,6 @@ function parse_git_status () {
 	done
 }
 
-# Get sensitive AWS vars from local file
-if [ -f ~/.aws-vars.sh ]; then
-	source ~/.aws-vars.sh 
-fi
-
 # Stuff to get local Node.js commands to work 
 NPM_PACKAGES="/home/jreeve/.npm-packages"
 NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
@@ -273,15 +268,5 @@ MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 export NVM_DIR="/home/jreeve/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
-
 # add my own scripts 
 export PATH="$HOME/dotfiles/scripts:$PATH"
-
-#Needed for WP / BP tests
-export WP_TESTS_DIR="/home/jreeve/Apps/wordpress-develop/tests/phpunit" 
-# >>> BEGIN ADDED BY CNCHI INSTALLER
-BROWSER=/usr/bin/chromium
-EDITOR=/usr/bin/nano
-# <<< END ADDED BY CNCHI INSTALLER
