@@ -9,6 +9,10 @@ abbr -a gp git push
 abbr -a gc git commit
 abbr -a gcam git commit -am 
 abbr -a gcm git commit -m
+abbr -a gd git diff
+abbr -a gdc git diff --cached
+abbr -a glg git lg
+abbr -a gcod git checkout develop
 
 abbr -a install sudo pacman -S
 abbr -a search pacman -Ss

@@ -2,7 +2,7 @@
 
 # General Settings {{{
 set $mod Mod4
-font pango:Terminus (TTF) 12
+font pango:Source Code Pro 12
 
 # First set resolution
 exec --no-startup-id xrandr --dpi 192
@@ -23,7 +23,7 @@ for_window [window_role="task_dialog"] floating enable
 for_window [title="Preferences$"] floating enable 
 
 # For gaps
-#gaps inner 15
+gaps inner 15
 
 bindsym $mod+Shift+g mode "resize-gaps"
 
@@ -171,7 +171,7 @@ bar {
 	#colors { 
 		#background $transparent
 	#}
-	#tray_output none
+	tray_output none
 }
 
 new_window pixel 4
@@ -188,6 +188,7 @@ exec setxkbmap -layout us -variant altgr-intl -option caps:escape
 #exec xcompmgr -cfFn
 exec compton
 exec dropbox
+exec kupfer
 #exec --no-startup-id nm-applet
 #exec --no-startup-id xfsettingsd --disable-wm-check 
 #exec --no-startup-id /usr/bin/xfce4-power-manager

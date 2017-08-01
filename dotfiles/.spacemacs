@@ -30,29 +30,23 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(shell-scripts
+   '(csv
+     shell-scripts
      javascript
-     ;; vimscript
      yaml
      html
-     ;; ----------------------------------------------------------------
-     ;; Example of useful layers you may want to use right away.
-     ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
-     ;; <M-m f e R> (Emacs style) to install them.
-     ;; ----------------------------------------------------------------
      helm
      haskell
+     ;;(keyboard-layout :variables kl-layout 'colemak-hnei)
      (auto-completion :variables
                       spacemacs-default-company-backends
                       '(company-files company-capf ein:company-backend))
      emacs-lisp
      google-calendar
-     ;; emoji
      bibtex
      ipython-notebook
      (mu4e :variables mu4e-account-alist t)
-     ;; gnus
-     (elfeed :variables rmh-elfeed-org-files (list "~/Dropbox/Org/RSS.org"))
+     ;;(elfeed :variables rmh-elfeed-org-files (list "~/Dropbox/Org/RSS.org"))
      git
      markdown
      python
@@ -64,7 +58,6 @@ values."
      themes-megapack
      spell-checking
      syntax-checking
-     ;; version-control
      vinegar
      )
    ;; List of additional packages that will be installed without being
@@ -73,6 +66,7 @@ values."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(
                                       (stylus-mode :location (recipe :fetcher github :repo "vladh/stylus-mode"))
+                                      (ereader :location (recipe :fetcher github :repo "bddean/emacs-ereader"))
                                       )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -153,7 +147,7 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("Droid Sans Mono Dotted for Powerline" 
+   dotspacemacs-default-font '("Source Code Pro" 
                                :size 30
                                :weight normal
                                :width normal
@@ -391,6 +385,21 @@ you should place your code here."
   (setq evil-org-key-theme '(textobjects navigation additional insert todo))
   (setq org-default-priority ?C)
   (setq org-lowest-priority ?G)
+  (setq org-time-clocksum-format '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
+
+
+  ;; Fancy custom syntax highlighting of quoted strings!
+  ;; (add-hook 'org-mode-hook
+  ;;           (lambda ()
+  ;;             (font-lock-add-keywords nil '(("\".*?\"" 1 font-lock-constant-face t)
+  ;;                                           ("'.*?'" 1 font-lock-doc-face t)))))
+
+  (defun org-journal-new-entry ()
+    "Inserts header with inactive timestamp, hours and minutes. 
+A custom journal helper function."
+    (interactive)
+    (org-insert-heading)
+    (org-insert-time-stamp (current-time) t t))
 
   ;; Enable visual-line-mode by default in Org Mode. 
   (add-hook 'org-mode-hook 'visual-line-mode)
@@ -434,6 +443,9 @@ you should place your code here."
   (setq org-gcal-client-secret (get-authinfo "gcal.api" "9999"))
 
   (setq org-modules '(org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-protocol))
+
+  ;; My Autolinks mode. 
+  ;;(load-file "~/.emacs.d/private/org-autolinks/autolinks-mode.el")
 
   ;; Org Agenda
   (setq org-agenda-files (list "~/Dropbox/Org/Projects/"))
@@ -540,33 +552,68 @@ the entry of interest in the bibfile.  but does not check that."
         smtpmail-default-smtp-server "smtp.gmail.com")
 
   (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
+  (setq mu4e-html2text-command "w3m -T text/html")
 
   ;; configure orgmode support in mu4e
-  ;;(require 'org-mu4e)
+  ;; (require 'org-mu4e)
   ;; when mail is sent, automatically convert org body to HTML
   (setq org-mu4e-convert-to-html t)
 
   ;; Better looking HTML mail
   ;; (setq shr-color-visible-luminance-min 80)
-  (setq shr-use-colors nil)
+  ;; (setq shr-use-colors nil)
 
-  (setq mu4e-account-alist
-        '(("gmail"
-           (mu4e-sent-messages-behavior delete)
-           (mu4e-sent-folder "/gmail/[Gmail]/.Sent Mail")
-           (mu4e-drafts-folder "/gmail/[Gmail]/.Drafts")
-           (user-mail-address "jon.reeve@gmail.com")
-           (user-full-name "Jonathan Reeve")
-           (smtpmail-smtp-user "jon.reeve")
-           )
-          ("columbia"
-           (mu4e-sent-messages-behavior sent)
-           (mu4e-sent-folder "/columbia/[Gmail]/.Sent Mail")
-           (mu4e-drafts-folder "/columbia/[Gmail]/.Drafts")
-           (user-mail-address "jonathan.reeve@columbia.edu")
-           (smtpmail-smtp-user "jpr2152@columbia.edu")
-           (user-full-name "Jonathan Reeve"))))
-  (mu4e/mail-account-reset)
+  (setq mu4e-contexts
+        `( ,(make-mu4e-context
+             :name "Gmail"
+             :enter-func (lambda () (mu4e-message "Switch to Gmail."))
+             ;; leave-func not defined
+             :match-func (lambda (msg)
+                           (when msg
+                             (mu4e-message-contact-field-matches msg
+                                                                 :to "jon.reeve@gmail.com")))
+             :vars '(  ( user-mail-address  . "jon.reeve@gmail.com" )
+                       ( user-full-name     . "Jonathan Reeve" )
+                       ( mu4e-sent-folder   . "/gmail/[Gmail]/.Sent Mail" )
+                       ( mu4e-drafts-folder . "/gmail/[Gmail]/.Drafts" )
+                       ( smtpmail-smtp-user . "jon.reeve" )
+
+                       ;; ( mu4e-compose-signature .
+                       ;;                          (concat
+                       ;;                           "Alice Derleth\n"
+                       ;;                           "Lauttasaari, Finland\n"))
+                       ))
+           ,(make-mu4e-context
+             :name "Columbia"
+             :enter-func (lambda () (mu4e-message "Switch to Columbia."))
+             ;; leave-fun not defined
+             :match-func (lambda (msg)
+                           (when msg
+                             (or 
+                              (mu4e-message-contact-field-matches msg
+                                                                  :to "jonathan.reeve@columbia.edu")
+                              (mu4e-message-contact-field-matches msg
+                                                                  :to "jpr2152@columbia.edu"))
+                             ))
+             :vars '(  ( user-mail-address   . "jonathan.reeve@columbia.edu" )
+                       ( user-full-name      . "Jonathan Reeve" )
+                       ( mu4e-sent-folder    . "/columbia/[Gmail]/.Sent Mail" )
+                       ( mu4e-drafts-folder  . "/columbia/[Gmail]/.Drafts" )
+                       ( smtpmail-smtp-user  . "jpr2152@columbia.edu" )
+
+                       ;; ( mu4e-compose-signature .
+                       ;;                          (concat
+                       ;;                           "Prof. Alice Derleth\n"
+                       ;;                           "Miskatonic University, Dept. of Occult Sciences\n"))
+                       ))))
+
+  ;; start with the first (default) context;
+  ;; default is to ask-if-none (ask when there's no context yet, and none match)
+  (setq mu4e-context-policy 'pick-first)
+
+  ;; compose with the current context is no context matches;
+  ;; default is to ask
+  (setq mu4e-compose-context-policy nil)
 
   (setq mu4e-maildir "~/Mail"
         mu4e-trash-folder "/Trash"
@@ -574,9 +621,8 @@ the entry of interest in the bibfile.  but does not check that."
         mu4e-get-mail-command "mbsync -a"
         mu4e-update-interval 900
         mu4e-view-show-images t
-        mu4e-view-show-addresses t)
-
-  (setq mu4e-compose-dont-reply-to-self t)
+        mu4e-view-show-addresses t
+        mu4e-compose-dont-reply-to-self t)
 
   ;; Bookmarks
   (setq mu4e-bookmarks
@@ -594,30 +640,6 @@ the entry of interest in the bibfile.  but does not check that."
             (defun shr-fill-line () nil)))
   (add-hook 'elfeed-show-mode-hook 'visual-line-mode)
 
-  ;; ;; Get email, and store in nnml
-  ;; (setq gnus-secondary-select-methods
-  ;;       '(
-  ;;         (nnimap "gmail"
-  ;;                 (nnimap-address
-  ;;                  "imap.gmail.com")
-  ;;                 (nnimap-server-port 993)
-  ;;                 (nnimap-stream ssl))
-  ;;         ))
-
-  ;; ;; Archive outgoing email in Sent folder on imap.gmail.com:
-  ;; (setq gnus-message-archive-method '(nnimap "imap.gmail.com")
-  ;;       gnus-message-archive-group "[Gmail]/Sent Mail")
-
-  ;; ;; set return email address based on incoming email address
-  ;; (setq gnus-posting-styles
-  ;;       '(((header "to" "jonathan.reeve@columbia.edu")
-  ;;          (address "jonathan.reeve@columbia.edu"))
-  ;;         ((header "to" "jon.reeve@gmail.com")
-  ;;          (address "jon.reeve@gmail.com"))))
-
-  ;; ;; store email in ~/gmail directory
-  ;; (setq nnml-directory "~/Mail")
-  ;; (setq message-directory "~/Mail")
   )
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
@@ -631,8 +653,6 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
- '(ansi-color-names-vector
-   ["#3c3836" "#fb4934" "#b8bb26" "#fabd2f" "#83a598" "#d3869b" "#8ec07c" "#ebdbb2"])
  '(auth-source-save-behavior nil)
  '(evil-want-Y-yank-to-eol nil)
  '(fci-rule-color "#373b41" t)
@@ -642,10 +662,10 @@ This function is called at the very end of Spacemacs initialization."
     ("~/Dropbox/Org/Projects/books.org" "/home/jon/Dropbox/Org/Projects/orals.org" "/home/jon/Dropbox/Org/Projects/DH Box.org" "/home/jon/Dropbox/Org/Projects/Joyce TEI.org" "/home/jon/Dropbox/Org/Projects/Middlemarch.org" "/home/jon/Dropbox/Org/Projects/University Writing.org" "/home/jon/Dropbox/Org/Projects/annotags.org" "/home/jon/Dropbox/Org/Projects/chapters.org" "/home/jon/Dropbox/Org/Projects/late style.org" "/home/jon/Dropbox/Org/Projects/macro-etym.org" "/home/jon/Dropbox/Org/Projects/prospectus.org" "/home/jon/Dropbox/Org/Projects/schedule.org" "/home/jon/Dropbox/Org/Projects/todo.org")))
  '(org-modules
    (quote
-    (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-protocol org-rmail org-w3m)))
+    (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-protocol org-rmail org-w3m org-wikinodes)))
  '(package-selected-packages
    (quote
-    (insert-shebang flycheck-bashate fish-mode company-shell autothemer window-purpose imenu-list async org-brain impatient-mode evil-org ereader org-notebook add-node-modules-path request-deferred ht helm-bibtex alert log4e gntp intero hlint-refactor hindent helm-hoogle parsebib haskell-snippets haml-mode gitignore-mode flyspell-correct pos-tip flycheck-haskell magit-popup git-commit simple-httpd ace-jump-mode noflet websocket dante web-completion-data company-ghci company-ghc ghc haskell-mode company-cabal cmm-mode biblio biblio-core anaconda-mode pythonic auto-complete password-generator key-chord evil-lion editorconfig ivy company elfeed smartparens evil flycheck helm helm-core yasnippet markdown-mode deferred org-plus-contrib magit with-editor dash pdf-tools tablist livid-mode json-mode js2-refactor company-tern dash-functional web-beautify skewer-mode json-snatcher json-reformat multiple-cursors js2-mode js-doc tern coffee-mode zonokai-theme zenburn-theme zen-and-art-theme yapfify yaml-mode xterm-color ws-butler winum white-sand-theme which-key web-mode volatile-highlights vi-tilde-fringe uuidgen use-package underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme tronesque-theme toxi-theme toc-org tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit symon sunny-day-theme sublime-themes subatomic256-theme subatomic-theme string-inflection spaceline spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smeargle slim-mode shell-pop seti-theme scss-mode sass-mode reverse-theme restart-emacs rebecca-theme rainbow-delimiters railscasts-theme pyvenv pytest pyenv-mode py-isort purple-haze-theme pug-mode professional-theme planet-theme pip-requirements phoenix-dark-pink-theme phoenix-dark-mono-theme persp-mode pcre2el pastels-on-dark-theme paradox orgit organic-green-theme org-ref org-projectile org-present org-pomodoro org-gcal org-download org-bullets open-junk-file omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme niflheim-theme neotree naquadah-theme mustang-theme multi-term mu4e-maildirs-extension mu4e-alert move-text monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minimal-theme material-theme markdown-toc majapahit-theme magit-gitflow madhat2r-theme macrostep lush-theme lorem-ipsum live-py-mode linum-relative link-hint light-soap-theme less-css-mode jbeans-theme jazz-theme ir-black-theme inkpot-theme info+ indent-guide hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt heroku-theme hemisu-theme help-fns+ helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md gandalf-theme fuzzy flyspell-correct-helm flycheck-pos-tip flx-ido flatui-theme flatland-theme firebelly-theme fill-column-indicator farmhouse-theme fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu espresso-theme eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav elfeed-web elfeed-org elfeed-goodies ein dumb-jump dracula-theme django-theme define-word darktooth-theme darkokai-theme darkmine-theme darkburn-theme dakrone-theme cython-mode cyberpunk-theme company-web company-statistics company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme clean-aindent-mode cherry-blossom-theme calfw busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme ace-window ace-link ace-jump-helm-line ac-ispell)))
+    (stylus-mode spinner hydra parent-mode projectile flx iedit anzu goto-chg highlight powerline popwin request diminish pkg-info epl bind-map bind-key packed f s avy popup csv-mode undo-tree xml+ insert-shebang flycheck-bashate fish-mode company-shell autothemer window-purpose imenu-list async org-brain impatient-mode evil-org ereader org-notebook add-node-modules-path request-deferred ht helm-bibtex alert log4e gntp intero hlint-refactor hindent helm-hoogle parsebib haskell-snippets haml-mode gitignore-mode flyspell-correct pos-tip flycheck-haskell magit-popup git-commit simple-httpd ace-jump-mode noflet websocket dante web-completion-data company-ghci company-ghc ghc haskell-mode company-cabal cmm-mode biblio biblio-core anaconda-mode pythonic auto-complete password-generator key-chord evil-lion editorconfig ivy company elfeed smartparens evil flycheck helm helm-core yasnippet markdown-mode deferred org-plus-contrib magit with-editor dash pdf-tools tablist livid-mode json-mode js2-refactor company-tern dash-functional web-beautify skewer-mode json-snatcher json-reformat multiple-cursors js2-mode js-doc tern coffee-mode zonokai-theme zenburn-theme zen-and-art-theme yapfify yaml-mode xterm-color ws-butler winum white-sand-theme which-key web-mode volatile-highlights vi-tilde-fringe uuidgen use-package underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme tronesque-theme toxi-theme toc-org tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit symon sunny-day-theme sublime-themes subatomic256-theme subatomic-theme string-inflection spaceline spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smeargle slim-mode shell-pop seti-theme scss-mode sass-mode reverse-theme restart-emacs rebecca-theme rainbow-delimiters railscasts-theme pyvenv pytest pyenv-mode py-isort purple-haze-theme pug-mode professional-theme planet-theme pip-requirements phoenix-dark-pink-theme phoenix-dark-mono-theme persp-mode pcre2el pastels-on-dark-theme paradox orgit organic-green-theme org-ref org-projectile org-present org-pomodoro org-gcal org-download org-bullets open-junk-file omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme niflheim-theme neotree naquadah-theme mustang-theme multi-term mu4e-maildirs-extension mu4e-alert move-text monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minimal-theme material-theme markdown-toc majapahit-theme magit-gitflow madhat2r-theme macrostep lush-theme lorem-ipsum live-py-mode linum-relative link-hint light-soap-theme less-css-mode jbeans-theme jazz-theme ir-black-theme inkpot-theme info+ indent-guide hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt heroku-theme hemisu-theme help-fns+ helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md gandalf-theme fuzzy flyspell-correct-helm flycheck-pos-tip flx-ido flatui-theme flatland-theme firebelly-theme fill-column-indicator farmhouse-theme fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu espresso-theme eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav elfeed-web elfeed-org elfeed-goodies ein dumb-jump dracula-theme django-theme define-word darktooth-theme darkokai-theme darkmine-theme darkburn-theme dakrone-theme cython-mode cyberpunk-theme company-web company-statistics company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme clean-aindent-mode cherry-blossom-theme calfw busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme ace-window ace-link ace-jump-helm-line ac-ispell)))
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
    (quote
@@ -668,11 +688,10 @@ This function is called at the very end of Spacemacs initialization."
      (340 . "#f0c674")
      (360 . "#b5bd68"))))
  '(vc-annotate-very-old-color nil))
-   
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-)
+) 
