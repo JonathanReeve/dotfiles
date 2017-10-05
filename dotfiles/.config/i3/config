@@ -49,6 +49,7 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 10 # decrease screen brightne
 
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
+#bindsym $mod+Return exec gnome-terminal
 bindsym $mod+Return exec xfce4-terminal
 
 # kill focused window
@@ -171,7 +172,7 @@ bar {
 	#colors { 
 		#background $transparent
 	#}
-	tray_output none
+	#tray_output none
 }
 
 new_window pixel 4
@@ -194,6 +195,7 @@ exec kupfer
 #exec --no-startup-id /usr/bin/xfce4-power-manager
 #exec --no-startup-id xfce4-volumed
 exec feh --bg-fill --random /usr/share/backgrounds/gnome
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # In '~/.config/i3/config':
 # use 'exec gnome-session-quit --logout'    : logout dialog
