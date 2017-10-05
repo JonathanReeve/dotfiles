@@ -139,15 +139,29 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(gotham
+   dotspacemacs-themes '(sanityinc-tomorrow-eighties
+                         gotham
+                         inkpot
+                         brin
+                         bubbleberry
+                         jazz
+                         jbeans
+                         junio
+                         mustang
+                         noctilux
+                         planet
+                         purple-haze
                          sanityinc-tomorrow-night
+                         spacegray
+                         subatomic
                          gruvbox
-                         spacemacs-dark)
+                         spacemacs-dark
+                         )
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("Source Code Pro" 
+   dotspacemacs-default-font '("Input Mono" 
                                :size 30
                                :weight normal
                                :width normal
@@ -449,6 +463,7 @@ A custom journal helper function."
 
   ;; Org Agenda
   (setq org-agenda-files (list "~/Dropbox/Org/Projects/"))
+  (add-to-list 'org-agenda-files "~/Code/SOPS/Jonathan/SOPS.org")
   (setq org-refile-targets '((nil :maxlevel . 9)
                              (org-agenda-files :maxlevel . 9)))
   (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
@@ -464,6 +479,8 @@ A custom journal helper function."
           ("m" "Movie" entry (file+headline "/home/jon/Dropbox/Org/movies.org" "To Watch")
            "* %a\n %?\n %i")
           ("l" "Link" entry (file+olp "/home/jon/Dropbox/Org/notes.org" "Web Links")
+           "* %a\n %?\n %i")
+          ("r" "Research" entry (file+olp "/home/jon/Dropbox/Org/Projects/SOPS.org" "Links")
            "* %a\n %?\n %i")))
 
   ;; Disable holidays. Is there an easier way of doing this? 
@@ -553,6 +570,9 @@ the entry of interest in the bibfile.  but does not check that."
 
   (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
   (setq mu4e-html2text-command "w3m -T text/html")
+  ;;(setq mu4e-html2text-command "pandoc --wrap=none -f html -t org")
+  ;;(setq mu4e-html2text-command "html2text -b 0") ;; python-html2text
+  ;;(setq mu4e-html2text-command "html2text -utf8 -nobs -width 72") ;; CLI html2text
 
   ;; configure orgmode support in mu4e
   ;; (require 'org-mu4e)
@@ -560,8 +580,8 @@ the entry of interest in the bibfile.  but does not check that."
   (setq org-mu4e-convert-to-html t)
 
   ;; Better looking HTML mail
-  ;; (setq shr-color-visible-luminance-min 80)
-  ;; (setq shr-use-colors nil)
+  ;;(setq shr-color-visible-luminance-min 80)
+  ;;(setq shr-use-colors nil)
 
   (setq mu4e-contexts
         `( ,(make-mu4e-context
@@ -622,7 +642,8 @@ the entry of interest in the bibfile.  but does not check that."
         mu4e-update-interval 900
         mu4e-view-show-images t
         mu4e-view-show-addresses t
-        mu4e-compose-dont-reply-to-self t)
+        mu4e-compose-dont-reply-to-self t
+        mu4e-user-mail-address-list '("jon.reeve@gmail.com" "jonathan.reeve@columbia.edu" "jpr2152@columbia.edu"))
 
   ;; Bookmarks
   (setq mu4e-bookmarks
@@ -655,17 +676,20 @@ This function is called at the very end of Spacemacs initialization."
    [default bold shadow italic underline bold bold-italic bold])
  '(auth-source-save-behavior nil)
  '(evil-want-Y-yank-to-eol nil)
- '(fci-rule-color "#373b41" t)
+ '(fci-rule-color "#373b41")
  '(flycheck-color-mode-line-face-to-color (quote mode-line-buffer-id))
  '(org-agenda-files
    (quote
-    ("~/Dropbox/Org/Projects/books.org" "/home/jon/Dropbox/Org/Projects/orals.org" "/home/jon/Dropbox/Org/Projects/DH Box.org" "/home/jon/Dropbox/Org/Projects/Joyce TEI.org" "/home/jon/Dropbox/Org/Projects/Middlemarch.org" "/home/jon/Dropbox/Org/Projects/University Writing.org" "/home/jon/Dropbox/Org/Projects/annotags.org" "/home/jon/Dropbox/Org/Projects/chapters.org" "/home/jon/Dropbox/Org/Projects/late style.org" "/home/jon/Dropbox/Org/Projects/macro-etym.org" "/home/jon/Dropbox/Org/Projects/prospectus.org" "/home/jon/Dropbox/Org/Projects/schedule.org" "/home/jon/Dropbox/Org/Projects/todo.org")))
+    ("/home/jon/Dropbox/Org/Projects/DH Box.org" "/home/jon/Dropbox/Org/Projects/Joyce TEI.org" "/home/jon/Dropbox/Org/Projects/Middlemarch.org" "/home/jon/Dropbox/Org/Projects/University Writing.org" "/home/jon/Dropbox/Org/Projects/annotags.org" "/home/jon/Dropbox/Org/Projects/books.org" "/home/jon/Dropbox/Org/Projects/chapters.org" "/home/jon/Dropbox/Org/Projects/dh2017.org" "/home/jon/Dropbox/Org/Projects/late style.org" "/home/jon/Dropbox/Org/Projects/macro-etym.org" "/home/jon/Dropbox/Org/Projects/orals.org" "/home/jon/Dropbox/Org/Projects/prospectus.org" "/home/jon/Dropbox/Org/Projects/schedule.org" "/home/jon/Dropbox/Org/Projects/todo.org")))
  '(org-modules
    (quote
-    (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-protocol org-rmail org-w3m org-wikinodes)))
+    (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-protocol org-rmail org-w3m)))
  '(package-selected-packages
    (quote
-    (stylus-mode spinner hydra parent-mode projectile flx iedit anzu goto-chg highlight powerline popwin request diminish pkg-info epl bind-map bind-key packed f s avy popup csv-mode undo-tree xml+ insert-shebang flycheck-bashate fish-mode company-shell autothemer window-purpose imenu-list async org-brain impatient-mode evil-org ereader org-notebook add-node-modules-path request-deferred ht helm-bibtex alert log4e gntp intero hlint-refactor hindent helm-hoogle parsebib haskell-snippets haml-mode gitignore-mode flyspell-correct pos-tip flycheck-haskell magit-popup git-commit simple-httpd ace-jump-mode noflet websocket dante web-completion-data company-ghci company-ghc ghc haskell-mode company-cabal cmm-mode biblio biblio-core anaconda-mode pythonic auto-complete password-generator key-chord evil-lion editorconfig ivy company elfeed smartparens evil flycheck helm helm-core yasnippet markdown-mode deferred org-plus-contrib magit with-editor dash pdf-tools tablist livid-mode json-mode js2-refactor company-tern dash-functional web-beautify skewer-mode json-snatcher json-reformat multiple-cursors js2-mode js-doc tern coffee-mode zonokai-theme zenburn-theme zen-and-art-theme yapfify yaml-mode xterm-color ws-butler winum white-sand-theme which-key web-mode volatile-highlights vi-tilde-fringe uuidgen use-package underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme tronesque-theme toxi-theme toc-org tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit symon sunny-day-theme sublime-themes subatomic256-theme subatomic-theme string-inflection spaceline spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smeargle slim-mode shell-pop seti-theme scss-mode sass-mode reverse-theme restart-emacs rebecca-theme rainbow-delimiters railscasts-theme pyvenv pytest pyenv-mode py-isort purple-haze-theme pug-mode professional-theme planet-theme pip-requirements phoenix-dark-pink-theme phoenix-dark-mono-theme persp-mode pcre2el pastels-on-dark-theme paradox orgit organic-green-theme org-ref org-projectile org-present org-pomodoro org-gcal org-download org-bullets open-junk-file omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme niflheim-theme neotree naquadah-theme mustang-theme multi-term mu4e-maildirs-extension mu4e-alert move-text monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minimal-theme material-theme markdown-toc majapahit-theme magit-gitflow madhat2r-theme macrostep lush-theme lorem-ipsum live-py-mode linum-relative link-hint light-soap-theme less-css-mode jbeans-theme jazz-theme ir-black-theme inkpot-theme info+ indent-guide hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt heroku-theme hemisu-theme help-fns+ helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md gandalf-theme fuzzy flyspell-correct-helm flycheck-pos-tip flx-ido flatui-theme flatland-theme firebelly-theme fill-column-indicator farmhouse-theme fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu espresso-theme eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav elfeed-web elfeed-org elfeed-goodies ein dumb-jump dracula-theme django-theme define-word darktooth-theme darkokai-theme darkmine-theme darkburn-theme dakrone-theme cython-mode cyberpunk-theme company-web company-statistics company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme clean-aindent-mode cherry-blossom-theme calfw busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme ace-window ace-link ace-jump-helm-line ac-ispell)))
+    (exotica-theme org-category-capture stylus-mode spinner hydra parent-mode projectile flx iedit anzu goto-chg highlight powerline popwin request diminish pkg-info epl bind-map bind-key packed f s avy popup csv-mode undo-tree xml+ insert-shebang flycheck-bashate fish-mode company-shell autothemer window-purpose imenu-list async org-brain impatient-mode evil-org ereader org-notebook add-node-modules-path request-deferred ht helm-bibtex alert log4e gntp intero hlint-refactor hindent helm-hoogle parsebib haskell-snippets haml-mode gitignore-mode flyspell-correct pos-tip flycheck-haskell magit-popup git-commit simple-httpd ace-jump-mode noflet websocket dante web-completion-data company-ghci company-ghc ghc haskell-mode company-cabal cmm-mode biblio biblio-core anaconda-mode pythonic auto-complete password-generator key-chord evil-lion editorconfig ivy company elfeed smartparens evil flycheck helm helm-core yasnippet markdown-mode deferred org-plus-contrib magit with-editor dash pdf-tools tablist livid-mode json-mode js2-refactor company-tern dash-functional web-beautify skewer-mode json-snatcher json-reformat multiple-cursors js2-mode js-doc tern coffee-mode zonokai-theme zenburn-theme zen-and-art-theme yapfify yaml-mode xterm-color ws-butler winum white-sand-theme which-key web-mode volatile-highlights vi-tilde-fringe uuidgen use-package underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme tronesque-theme toxi-theme toc-org tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit symon sunny-day-theme sublime-themes subatomic256-theme subatomic-theme string-inflection spaceline spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smeargle slim-mode shell-pop seti-theme scss-mode sass-mode reverse-theme restart-emacs rebecca-theme rainbow-delimiters railscasts-theme pyvenv pytest pyenv-mode py-isort purple-haze-theme pug-mode professional-theme planet-theme pip-requirements phoenix-dark-pink-theme phoenix-dark-mono-theme persp-mode pcre2el pastels-on-dark-theme paradox orgit organic-green-theme org-ref org-projectile org-present org-pomodoro org-gcal org-download org-bullets open-junk-file omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme niflheim-theme neotree naquadah-theme mustang-theme multi-term mu4e-maildirs-extension mu4e-alert move-text monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minimal-theme material-theme markdown-toc majapahit-theme magit-gitflow madhat2r-theme macrostep lush-theme lorem-ipsum live-py-mode linum-relative link-hint light-soap-theme less-css-mode jbeans-theme jazz-theme ir-black-theme inkpot-theme info+ indent-guide hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt heroku-theme hemisu-theme help-fns+ helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md gandalf-theme fuzzy flyspell-correct-helm flycheck-pos-tip flx-ido flatui-theme flatland-theme firebelly-theme fill-column-indicator farmhouse-theme fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu espresso-theme eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav elfeed-web elfeed-org elfeed-goodies ein dumb-jump dracula-theme django-theme define-word darktooth-theme darkokai-theme darkmine-theme darkburn-theme dakrone-theme cython-mode cyberpunk-theme company-web company-statistics company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme clean-aindent-mode cherry-blossom-theme calfw busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme ace-window ace-link ace-jump-helm-line ac-ispell)))
+ '(safe-local-variable-values
+   (quote
+    ((org-ref-bibliography-notes . "~/Dropbox/Org/Projects/SOPS.org"))))
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
    (quote
