@@ -661,6 +661,11 @@ the entry of interest in the bibfile.  but does not check that."
             (defun shr-fill-line () nil)))
   (add-hook 'elfeed-show-mode-hook 'visual-line-mode)
 
+  ;; Keybindings
+  (global-set-key (kbd "<f2>") 'org-agenda-list)
+  (global-set-key (kbd "<f3>") 'org-todo-list)
+  (global-set-key (kbd "<f4>") 'mu4e)
+
   )
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
@@ -676,11 +681,8 @@ This function is called at the very end of Spacemacs initialization."
    [default bold shadow italic underline bold bold-italic bold])
  '(auth-source-save-behavior nil)
  '(evil-want-Y-yank-to-eol nil)
- '(fci-rule-color "#373b41")
+ '(fci-rule-color "#373b41" t)
  '(flycheck-color-mode-line-face-to-color (quote mode-line-buffer-id))
- '(org-agenda-files
-   (quote
-    ("/home/jon/Dropbox/Org/Projects/DH Box.org" "/home/jon/Dropbox/Org/Projects/Joyce TEI.org" "/home/jon/Dropbox/Org/Projects/Middlemarch.org" "/home/jon/Dropbox/Org/Projects/University Writing.org" "/home/jon/Dropbox/Org/Projects/annotags.org" "/home/jon/Dropbox/Org/Projects/books.org" "/home/jon/Dropbox/Org/Projects/chapters.org" "/home/jon/Dropbox/Org/Projects/dh2017.org" "/home/jon/Dropbox/Org/Projects/late style.org" "/home/jon/Dropbox/Org/Projects/macro-etym.org" "/home/jon/Dropbox/Org/Projects/orals.org" "/home/jon/Dropbox/Org/Projects/prospectus.org" "/home/jon/Dropbox/Org/Projects/schedule.org" "/home/jon/Dropbox/Org/Projects/todo.org")))
  '(org-modules
    (quote
     (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-protocol org-rmail org-w3m)))
