@@ -1,5 +1,6 @@
 ! Swap caps lock and escape
-remove Lock = Caps_Lock
-keycode 9 = grave asciitilde
-keysym Caps_Lock = Escape
-add Lock = Caps_Lock
+! remove Lock = Caps_Lock
+! keycode 9 = grave asciitilde
+! keysym Caps_Lock = Escape
+! add Lock = Caps_Lock
+keycode 20 = minus underscore minus underscore emdash dead_belowdot emdash
