@@ -3,7 +3,7 @@ set -x PATH ~/.local/bin ~/.node/bin (ruby -rubygems -e "puts Gem.user_dir")/bin
 set -e EDITOR
 set -e BROWSER
 set -Ux EDITOR vim
-set -Ux BROWSER firefox
+set -Ux BROWSER qutebrowser
 
 # Emacs ansi-term support
 if test -n "$EMACS"
