@@ -177,22 +177,9 @@ bindsym $mod+r mode "resize"
 
 # End Keybindings }}} 
 
-# Status Bar {{{ 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
 set $transparent #00000080
-bar {
-	#status_command i3status
-	#i3bar_command i3bar -t
-	status_command i3blocks
-	#height 50
-	#colors { 
-		#background $transparent
-	#}
-	#tray_output none
-}
 
-new_window pixel 4
+new_window pixel 5
 
 # End Status Bar }}} 
 
