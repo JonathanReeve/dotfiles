@@ -1,14 +1,32 @@
+# Set colors from Xresources
+# Change 'color7' and 'color2' to whatever colors you want i3 to use 
+# from the generated scheme.
+# NOTE: The '#f0f0f0' in the lines below is the color i3 will use if
+# it fails to get colors from Xresources.
+set_from_resource $fg i3wm.color7 #f0f0f0
+set_from_resource $bg i3wm.color2 #f0f0f0
+set_from_resource $text i3wm.color7 #f0f0f0
+
+## class                 border  backgr. text indicator child_border
+client.focused          $fg     $fg     $bg  $fg       $fg
+client.focused_inactive $bg     $bg     $text  $bg       $bg
+client.unfocused        $bg     $bg     $text  $bg       $bg
+client.urgent           $bg     $bg     $text  $bg       $bg
+client.placeholder      $bg     $bg     $text  $bg       $bg
+
+client.background       $bg
+
 # Jonathan Reeve's i3 config 
 
 # General Settings {{{
 set $mod Mod4
-font pango:Source Code Pro 12
+font pango:Input Mono 11
 
 # First set resolution
 exec --no-startup-id xrandr --dpi 192
 
 # for Sway
-#output eDP-1 scale 2
+# output eDP-1 scale 2
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
