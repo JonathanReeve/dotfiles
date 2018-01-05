@@ -1,3 +1,8 @@
 #!/bin/bash
 
+## Debugging
+#QUTE_URL=https://competitions.codalab.org/competitions/17333 
+#QUTE_TITLE=CodaLab 
+#QUTE_SELECTED_TEXT=""  
+
 emacsclient "org-protocol://capture?template=l&url=$QUTE_URL&title=$QUTE_TITLE&body=$QUTE_SELECTED_TEXT"

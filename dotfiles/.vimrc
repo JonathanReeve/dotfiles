@@ -129,6 +129,7 @@ Plug 'kamwitsta/nordisk'
 Plug 'KeitaNakamura/neodark.vim'
 Plug 'liuchengxu/space-vim-dark'
 Plug 'danilo-augusto/vim-afterglow'
+Plug 'dylanaraps/wal.vim'
 
 " }}}
 
@@ -143,13 +144,13 @@ Plug 'bfredl/nvim-ipy'
 " IDE Stuff {{{2
 
 "All kinds of syntax checking
-"Plug 'scrooloose/syntastic'
-"" Syntastic Options
-"let g:syntastic_php_checkers = ['php', 'phpcs']
-"let g:syntastic_javascript_checkers = ['jshint']
-"let g:syntastic_xml_checkers = ['xmllint']
-"let g:syntastic_xml_xmlling_args = '--dtdvalid tei_all.dtd' 
-"map ,s :SyntasticToggleMode<CR>
+Plug 'scrooloose/syntastic'
+" Syntastic Options
+let g:syntastic_php_checkers = ['php', 'phpcs']
+let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_xml_checkers = ['xmllint']
+let g:syntastic_xml_xmlling_args = '--dtdvalid tei_all.dtd' 
+map ,s :SyntasticToggleMode<CR>
 
 Plug 'neomake/neomake'
 let g:neomake_xml_lint_maker = {

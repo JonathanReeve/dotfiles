@@ -270,3 +270,6 @@ export NVM_DIR="/home/jreeve/.nvm"
 
 # add my own scripts 
 export PATH="$HOME/dotfiles/scripts:$PATH"
+# >>> Added by cnchi installer
+BROWSER=/usr/bin/chromium
+EDITOR=/usr/bin/nano
