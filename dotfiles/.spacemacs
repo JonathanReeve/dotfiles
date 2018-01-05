@@ -37,7 +37,7 @@ values."
      html
      helm
      haskell
-     ;;(keyboard-layout :variables kl-layout 'colemak-hnei)
+     (keyboard-layout :variables kl-layout 'colemak-hnei)
      (auto-completion :variables
                       spacemacs-default-company-backends
                       '(company-files company-capf ein:company-backend))
