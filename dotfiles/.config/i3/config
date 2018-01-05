@@ -187,13 +187,14 @@ new_window pixel 5
 
 # Applications to be run on startup
 #exec xrandr --output eDP1 --mode 1920x1080
-exec setxkbmap -layout us -variant altgr-intl -option caps:escape
+exec setxkbmap -layout us,us -variant colemak,altgr-intl -option caps:escape,grp:alt_shift_toggle
+exec xmodmap ~/.Xmodmap
 #exec gnome-session
 #exec --no-startup-id /usr/lib/gnome-settings-daemon/gnome-settings-daemon
-#exec xcompmgr -cfFn
 exec compton
 exec dropbox
 exec kupfer
+exec xrdb /home/jon/.extend.Xresources
 #exec --no-startup-id nm-applet
 #exec --no-startup-id xfsettingsd --disable-wm-check 
 #exec --no-startup-id /usr/bin/xfce4-power-manager
