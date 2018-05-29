@@ -1,4 +1,4 @@
-set -x PATH ~/.local/bin ~/.node/bin (ruby -rubygems -e "puts Gem.user_dir")/bin $PATH
+set -x PATH ~/.local/bin ~/.node/bin ~/.gem/bin $PATH
 
 set -e EDITOR
 set -e BROWSER

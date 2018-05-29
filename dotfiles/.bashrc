@@ -273,3 +273,6 @@ export PATH="$HOME/dotfiles/scripts:$PATH"
 # >>> Added by cnchi installer
 BROWSER=/usr/bin/chromium
 EDITOR=/usr/bin/nano
+# >>> Added by cnchi installer
+BROWSER=/usr/bin/chromium
+EDITOR=/usr/bin/nano

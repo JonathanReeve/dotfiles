@@ -718,39 +718,39 @@ c.colors.tabs.selected.odd.bg = '#285577'
 
 ## Font used in the completion categories.
 ## Type: Font
-c.fonts.completion.category = '5pt monospace'
+c.fonts.completion.category = '10pt monospace'
 
 ## Font used in the completion widget.
 ## Type: Font
-c.fonts.completion.entry = '5pt monospace'
+c.fonts.completion.entry = '10pt monospace'
 
 ## Font used for the debugging console.
 ## Type: QtFont
-c.fonts.debug_console = '5pt monospace'
+c.fonts.debug_console = '10pt monospace'
 
 ## Font used for the downloadbar.
 ## Type: Font
-c.fonts.downloads = '5pt monospace'
+c.fonts.downloads = '10pt monospace'
 
 ## Font used for the hints.
 ## Type: Font
-c.fonts.hints = 'bold 5pt monospace'
+c.fonts.hints = 'bold 10pt monospace'
 
 ## Font used in the keyhint widget.
 ## Type: Font
-c.fonts.keyhint = '5pt monospace'
+c.fonts.keyhint = '10pt monospace'
 
 ## Font used for error messages.
 ## Type: Font
-c.fonts.messages.error = '5pt monospace'
+c.fonts.messages.error = '10pt monospace'
 
 ## Font used for info messages.
 ## Type: Font
-c.fonts.messages.info = '5pt monospace'
+c.fonts.messages.info = '10pt monospace'
 
 ## Font used for warning messages.
 ## Type: Font
-c.fonts.messages.warning = '5pt monospace'
+c.fonts.messages.warning = '10pt monospace'
 
 ## Default monospace fonts. Whenever "monospace" is used in a font
 ## setting, it's replaced with the fonts listed here.
@@ -759,15 +759,15 @@ c.fonts.monospace = '"Input Mono", "xos4 Terminus", Terminus, Monospace, "DejaVu
 
 ## Font used for prompts.
 ## Type: Font
-c.fonts.prompts = '5pt sans-serif'
+c.fonts.prompts = '10pt sans-serif'
 
 ## Font used in the statusbar.
 ## Type: Font
-c.fonts.statusbar = '5pt monospace'
+c.fonts.statusbar = '10pt monospace'
 
 ## Font used in the tab bar.
 ## Type: QtFont
-c.fonts.tabs = '5pt monospace'
+c.fonts.tabs = '10pt monospace'
 
 ## Font family for cursive fonts.
 ## Type: FontFamily
@@ -830,7 +830,7 @@ c.fonts.tabs = '5pt monospace'
 
 ## Chars used for hint strings.
 ## Type: UniqueCharString
-# c.hints.chars = 'asdfghjkl'
+c.hints.chars = 'arstdhneio'
 
 ## The dictionary file to be used by the word hints.
 ## Type: File
@@ -1262,7 +1262,8 @@ c.url.searchengines = {
         's': 'http://stackoverflow.com/search?q={}',
         'm': 'https://maps.google.com/maps?q={}',
         'c': 'https://clio.columbia.edu/quicksearch?q={}',
-        'gh': 'https://github.com/search?q={}&type=Repositories'
+        'gh': 'https://github.com/search?q={}&type=Repositories',
+        'h': 'https://hackage.haskell.org/packages/search?terms={}'
         }
 
 ## The page(s) to open at the start.

@@ -29,15 +29,16 @@ my_color15	= ${xrdb:color15}
 
 [bar/main_bar]
 ;monitor = ${env:MONITOR:HDMI-1}
-;monitor = ${env:MONITOR:eDP1}
+monitor = ${env:MONITOR:eDP-1}
 bottom = false
-width = 100%
 height = 50
-offset-x = 0
-offset-y = 0
-radius = 0.0
 fixed-center = true
 
+;; A bit more stylized
+;width = 96%
+;radius = 5
+;offset-x = 2%
+;offset-y = 1%
 
 background = ${colors.my_background}
 foreground =  ${colors.my_foreground}
@@ -48,19 +49,20 @@ line-color = ${colors.my_color4}
 border-size = 0
 border-color = ${colors.my_color2}
 
-padding-left = 0
-padding-right = 0
+padding-left = 0%
+padding-right = 1%
 
 module-margin-left = 1
 module-margin-right = 1
 
-font-2 = FontAwesome:fontformat=truetype:size=19;1
-font-0 = Input Mono:fontformat=truetype:size=19;1
-font-1 = Input Mono:fontformat=truetype:size=19;1
+font-3 = FontAwesome:fontformat=truetype:size=19;1
+font-2 = Terminus:fontformat=truetype:size=19;1
+font-1 = Linux Biolinum:fontformat=truetype:size=19;1
+font-0 = Input Mono Condensed:fontformat=truetype:size=19;1
 
-modules-left = i3 xwindow
+modules-left = bspwm xwindow
 modules-center = date 
-modules-right = org-clock filesystem memory battery network
+modules-right = org-clock volume backlight filesystem memory battery network
 
 ;tray-position = right
 ;tray-transparent = false
@@ -71,7 +73,7 @@ modules-right = org-clock filesystem memory battery network
 ;tray-detached = false
 ;tray-background = ${colors.my_background}
 
-wm-restack = i3
+wm-restack = bspwm
 
 ;override-redirect = true
 
@@ -104,6 +106,48 @@ label-urgent-background = ${colors.my_background}
 label-urgent-underline = ${colors.my_color8}
 label-urgent-padding = 2
 
+[module/bspwm]
+type = internal/bspwm
+format = <label-state> <label-mode>
+
+label-monocle = M
+label-fullscreen = F
+label-tiled =
+label-floating = S
+; Use fuzzy (partial) matching on labels when assigning 
+; icons to workspaces
+; Example: code;♚ will apply the icon to all workspaces 
+; containing 'code' in the label
+; Default: false
+fuzzy-match = true
+
+ws-icon-0 = 1;
+ws-icon-1 = 2;
+ws-icon-2 = 3;
+ws-icon-3 = 4;
+ws-icon-4 = 5;♞
+ws-icon-default = 
+
+label-mode-padding = 2
+label-mode-background = ${colors.my_color4}
+
+label-focused = %icon%
+label-focused-foreground = ${colors.my_foreground}
+label-focused-background = ${colors.my_background}
+label-focused-underline = ${colors.my_color4}
+label-focused-padding = 2
+
+label-empty =
+
+label-occupied = %icon%
+label-occupied-padding = 2
+
+label-urgent = %icon%
+label-urgent-foreground = ${colors.my_foreground}
+label-urgent-background = ${colors.my_background}
+label-urgent-underline = ${colors.my_color8}
+label-urgent-padding = 2
+
 [module/date]
 type = internal/date
 interval = 5
@@ -129,15 +173,16 @@ full-at = 99
 
 format-full-background = ${colors.my_background}
 format-charging-background = ${colors.my_background}
-format-charging = " <label-charging>"
+format-charging = " <label-charging> <ramp-capacity>"
 ;format-charging-underline = ${colors.my_color2}
 
 format-discharging-background = ${colors.my_background}
-format-discharging = <label-discharging> <ramp-capacity>
+format-discharging = <ramp-capacity> <label-discharging>
 ;format-discharging-underline = ${self.format-charging-underline}
 
 format-full-prefix-foreground = ${colors.my_background}
 ;format-full-underline = ${self.format-charging-underline}
+format-full =  
 
 format-charing-background = ${colors.my_background}
 
@@ -148,14 +193,6 @@ ramp-capacity-3 = 
 ramp-capacity-4 = 
 ramp-capacity-foreground = ${colors.my_foreground}
 
-animation-charging-0 = 
-animation-charging-1 = 
-animation-charging-2 = 
-animation-charging-3 = 
-animation-charging-4 = 
-animation-charging-foreground = ${colors.my_foreground}
-animation-charging-framerate = 750
-
 [settings]
 screenchange-reload = true
 ;compositing-background = xor
@@ -165,8 +202,8 @@ screenchange-reload = true
 
 
 [global/wm]
-margin-top = 5
-margin-bottom = 5
+margin-top = 0
+margin-bottom = 0
 
 [module/xwindow]
 type = internal/xwindow
@@ -205,7 +242,7 @@ label = " %percentage_used%%"
 
 [module/filesystem]
 type = internal/fs
-mount-0 = /
+mount-0 = /home
 label-mounted = " %percentage_free%%"
 ;format-mounted-underline = ${colors.my_color4}
 
@@ -213,3 +250,20 @@ label-mounted = " %percentage_free%%"
 type = custom/script
 interval = 10
 exec = /home/jon/Documents/Settings/dotfiles/scripts/org-clock.sh
+
+[module/volume]
+type = internal/volume
+label-volume = " %percentage%" 
+label-muted = ""
+
+
+[module/backlight]
+type = internal/backlight 
+format = <ramp>
+enable-scroll = false
+card = intel_backlight
+ramp-0 = 🌕
+ramp-1 = 🌔
+ramp-2 = 🌓
+ramp-3 = 🌒
+ramp-4 = 🌑

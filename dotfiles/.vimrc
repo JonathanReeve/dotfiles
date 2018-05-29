@@ -111,7 +111,7 @@ map \v :sp ~/.vimrc<CR>
 " }}}
 
 " Colors {{{2
-
+Plug 'vim-scripts/AnsiEsc.vim' " Show ANSI terminal colors. 
 Plug 'vim-scripts/ScrollColors' " Easily switch colorschemes.
 "Plug '29decibel/codeschool-vim-theme'
 "Plug 'ryu-blacknd/vim-nucolors'
@@ -315,9 +315,9 @@ set nrformats-=octal
 "set t_Co=256
 "colorscheme space-vim-dark
 "colorscheme afterglow
-colorscheme hybrid
+colorscheme wal
 "set background=dark
-let g:airline_theme='afterglow'
+let g:airline_theme='wal'
 "let g:airline_theme='twofirewatch'
 
 command! Transparent highlight Normal ctermbg=NONE

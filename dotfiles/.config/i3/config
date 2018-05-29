@@ -20,10 +20,10 @@ client.background       $bg
 
 # General Settings {{{
 set $mod Mod4
-font pango:Input Mono 11
+font pango:Inconsolata 11
 
 # First set resolution
-exec --no-startup-id xrandr --dpi 192
+# exec --no-startup-id xrandr --dpi 192
 
 # for Sway
 # output eDP-1 scale 2
@@ -191,9 +191,9 @@ exec setxkbmap -layout us,us -variant colemak,altgr-intl -option caps:escape,grp
 exec xmodmap ~/.Xmodmap
 #exec gnome-session
 #exec --no-startup-id /usr/lib/gnome-settings-daemon/gnome-settings-daemon
-exec compton
+exec compton -r 25 -o .85
 exec dropbox
-exec kupfer
+#exec kupfer
 exec xrdb /home/jon/.extend.Xresources
 #exec --no-startup-id nm-applet
 #exec --no-startup-id xfsettingsd --disable-wm-check 
@@ -201,6 +201,7 @@ exec xrdb /home/jon/.extend.Xresources
 #exec --no-startup-id xfce4-volumed
 exec feh --bg-fill --random /usr/share/backgrounds/gnome
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec gnome-session
 
 # In '~/.config/i3/config':
 # use 'exec gnome-session-quit --logout'    : logout dialog
