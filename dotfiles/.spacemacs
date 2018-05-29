@@ -24,12 +24,13 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(csv
+     elm
      shell-scripts
-     javascript
+     ;javascript
      yaml
      html
      helm
-     haskell
+     (haskell :variables haskell-font-lock-symbols t)
      (keyboard-layout :variables kl-layout 'colemak-hnei)
      (auto-completion :variables
                       spacemacs-default-company-backends
@@ -37,34 +38,33 @@ values."
      emacs-lisp
      google-calendar
      bibtex
-     ipython-notebook
+     ;ipython-notebook
      (mu4e :variables mu4e-account-alist t)
      ;(elfeed :variables rmh-elfeed-org-files (list "~/Dropbox/Org/RSS.org"))
      git
      markdown
      python
-     pdf-tools
      org
      (shell :variables
              shell-default-height 30
              shell-default-position 'bottom)
-     themes-megapack
      spell-checking
      syntax-checking
-     vinegar
+     ;vinegar
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(
-                                      (stylus-mode :location (recipe :fetcher github :repo "vladh/stylus-mode"))
                                       (ereader :location (recipe :fetcher github :repo "bddean/emacs-ereader"))
+                                      (nord-theme)
+                                      (base16-theme)
                                       )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '(adaptive-wrap)
+   dotspacemacs-excluded-packages '(adaptive-wrap smartparens)
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
    ;; `used-only' installs only explicitly used packages and uninstall any
@@ -132,30 +132,55 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(sanityinc-tomorrow-eighties
-                         gotham
-                         inkpot
-                         brin
-                         bubbleberry
-                         jazz
-                         jbeans
-                         junio
-                         mustang
-                         noctilux
-                         planet
-                         purple-haze
-                         sanityinc-tomorrow-night
-                         spacegray
-                         subatomic
-                         gruvbox
+   dotspacemacs-themes '(base16-eighties
+                         base16-atelier-cave
+                         base16-atelier-lakeside
+                         base16-atelier-plateau
+                         base16-atelier-savanna
+                         base16-codeschool
+                         base16-darktooth
+                         base16-default-dark
+                         base16-dracula
+                         base16-flat
+                         base16-gruvbox-dark-pale
+                         base16-harmonic-dark
+                         base16-materia
+                         base16-monokai
+                         base16-nord
+                         base16-oceanicnext
+                         base16-ocean
+                         base16-onedark
+                         base16-phd
+                         base16-railscasts
+                         base16-solarflare
+                         base16-tomorrow-night
+                         base16-tube
+                         base16-woodland
+                         ;; nord
+                         ;; inkpot
+                         ;; sanityinc-tomorrow-eighties
+                         ;; gotham
+                         ;; brin
+                         ;; bubbleberry
+                         ;; jazz
+                         ;; jbeans
+                         ;; junio
+                         ;; mustang
+                         ;; noctilux
+                         ;; planet
+                         ;; purple-haze
+                         ;; sanityinc-tomorrow-night
+                         ;; spacegray
+                         ;; subatomic
+                         ;; gruvbox
                          spacemacs-dark
                          )
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("Input Mono" 
-                               :size 30
+   dotspacemacs-default-font '("Input Mono Compressed" 
+                               :size 32
                                :weight normal
                                :width normal
                                :powerline-scale 1.2)
@@ -287,7 +312,7 @@ values."
    ;;                       text-mode
    ;;   :size-limit-kb 1000)
    ;; (default nil)
-   dotspacemacs-line-numbers nil
+   dotspacemacs-line-numbers nil 
    ;; Code folding method. Possible values are `evil' and `origami'.
    ;; (default 'evil)
    dotspacemacs-folding-method 'evil
@@ -364,6 +389,12 @@ you should place your code here."
   ;; General
   (setq vc-follow-symlinks t) ;; Always follow symlinks. 
 
+  ;; New function for displaying ANSI color codes
+  (require 'ansi-color)
+  (defun display-ansi-colors ()
+    (interactive)
+    (ansi-color-apply-on-region (point-min) (point-max)))
+
   ;; Don't prompt when opening journal or other large files
   (setq large-file-warning-threshold 20000000) 
 
@@ -395,8 +426,8 @@ you should place your code here."
   (setq evil-org-key-theme '(textobjects navigation additional insert todo))
   (setq org-default-priority ?C)
   (setq org-lowest-priority ?G)
-  (setq org-time-clocksum-format '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
-
+  ;; Show clock tables in hours, not days. 
+  (setq org-duration-format 'h:mm)
 
   ;; Fancy custom syntax highlighting of quoted strings!
   ;; (add-hook 'org-mode-hook
@@ -459,7 +490,6 @@ A custom journal helper function."
 
   ;; Org Agenda
   (setq org-agenda-files (list "~/Dropbox/Org/Projects/"))
-  (add-to-list 'org-agenda-files "~/Code/SOPS/Jonathan/SOPS.org")
   (setq org-refile-targets '((nil :maxlevel . 9)
                              (org-agenda-files :maxlevel . 9)))
   (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
@@ -476,8 +506,7 @@ A custom journal helper function."
            "* %a\n %?\n %i")
           ("l" "Link" entry (file+olp "/home/jon/Dropbox/Org/notes.org" "Web Links")
            "* %a\n %?\n %i")
-          ("r" "Research" entry (file+olp "/home/jon/Dropbox/Org/Projects/SOPS.org" "Links")
-           "* %a\n %?\n %i")))
+          ))
 
   ;; Disable holidays. Is there an easier way of doing this? 
   (setq holiday-christian-holidays nil)
@@ -503,6 +532,9 @@ A custom journal helper function."
   :YEAR: %y
  :END:
 ")
+  (setq org-ref-open-pdf-function
+        (lambda (fpath)
+          (start-process "okular" "*helm-bibtex-okular*" "/usr/bin/okular" fpath)))
 
   (defun org-ref-get-zotero-pdf-filename (key)
     "Return the pdf filename indicated by zotero file field.
@@ -519,7 +551,7 @@ Argument KEY is the bibtex key."
           (if (> (length e) 4)
               (let ((clean-field (replace-regexp-in-string "/+" "/" e)))
                 (let ((first-file (car (split-string clean-field ";" t))))
-                  (concat org-ref-pdf-directory first-file)))
+                  (concat "" first-file)))
             (message "PDF filename not found.")
             )))))
 
@@ -678,11 +710,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (overseer nameless zenburn-theme zen-and-art-theme yapfify yaml-mode xterm-color ws-butler winum white-sand-theme which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme toc-org tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit symon sunny-day-theme sublime-themes subatomic256-theme subatomic-theme stylus-mode string-inflection spaceline spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smeargle slim-mode shell-pop seti-theme scss-mode sass-mode reverse-theme restart-emacs rebecca-theme rainbow-delimiters railscasts-theme pyvenv pytest pyenv-mode py-isort purple-haze-theme pug-mode professional-theme popwin planet-theme pip-requirements phoenix-dark-pink-theme phoenix-dark-mono-theme persp-mode pcre2el password-generator paradox orgit organic-green-theme org-ref org-projectile org-present org-pomodoro org-gcal org-download org-bullets org-brain open-junk-file omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme neotree naquadah-theme mustang-theme multi-term mu4e-maildirs-extension mu4e-alert move-text monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minimal-theme material-theme markdown-toc majapahit-theme magit-gitflow madhat2r-theme macrostep lush-theme lorem-ipsum livid-mode live-py-mode linum-relative link-hint light-soap-theme less-css-mode json-mode js2-refactor js-doc jbeans-theme jazz-theme ir-black-theme intero insert-shebang inkpot-theme info+ indent-guide impatient-mode hy-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation hide-comnt heroku-theme hemisu-theme help-fns+ helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag hc-zenburn-theme haskell-snippets gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md gandalf-theme fuzzy flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-bashate flx-ido flatui-theme flatland-theme fish-mode fill-column-indicator farmhouse-theme fancy-battery eyebrowse expand-region exotica-theme exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu espresso-theme eshell-z eshell-prompt-extras esh-help ereader emmet-mode elisp-slime-nav ein editorconfig dumb-jump dracula-theme django-theme diminish define-word darktooth-theme darkokai-theme darkmine-theme darkburn-theme dante dakrone-theme cython-mode cyberpunk-theme csv-mode company-web company-tern company-statistics company-shell company-ghci company-ghc company-cabal company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized coffee-mode cmm-mode clues-theme clean-aindent-mode cherry-blossom-theme calfw busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme ace-window ace-link ace-jump-helm-line ac-ispell)))
- '(safe-local-variable-values
-   (quote
-    ((org-ref-bibliography-notes . "~/Dropbox/Org/Projects/SOPS.org")))))
+   '(yasnippet-snippets yaml-mode web-mode string-inflection pyvenv pug-mode pipenv persp-mode org-ref pdf-tools org-mime org-download org-brain live-py-mode link-hint intero insert-shebang importmagic impatient-mode simple-httpd htmlize hl-todo hindent helm-xref helm-projectile helm-mu helm-descbinds helm-bibtex git-link flyspell-correct-helm flyspell-correct eyebrowse evil-nerd-commenter evil-matchit evil-magit eval-sexp-fu emmet-mode editorconfig dumb-jump define-word dante lcr counsel-projectile counsel swiper ivy company-web company-anaconda base16-theme auto-yasnippet anaconda-mode avy smartparens flycheck haskell-mode yasnippet company window-purpose helm helm-core markdown-mode alert projectile magit with-editor pythonic spaceline s dash which-key evil async org-plus-contrib hydra bind-key yapfify xterm-color ws-butler winum web-completion-data web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree toc-org tagedit tablist symon spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters pytest pyenv-mode py-isort powerline popwin pippel pip-requirements pcre2el password-generator parsebib paradox overseer orgit org-projectile org-present org-pomodoro org-gcal org-bullets open-junk-file nord-theme neotree nameless multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum log4e less-css-mode key-chord indent-guide imenu-list hungry-delete hlint-refactor highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-purpose helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets goto-chg google-translate golden-ratio gnuplot gntp gitconfig-mode gitattributes-mode git-timemachine git-messenger git-commit ghub gh-md fuzzy font-lock+ flycheck-pos-tip flycheck-haskell flycheck-elm flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-mc evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help ereader epc elm-mode elisp-slime-nav diminish cython-mode csv-mode company-statistics company-shell company-ghci company-ghc company-cabal column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode calfw biblio auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
