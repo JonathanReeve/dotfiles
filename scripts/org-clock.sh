@@ -1,6 +1,6 @@
 #!/usr/bin/fish
 
-set CLOCKSTRING (emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string)(message "0"))' 2>&1 )
+set CLOCKSTRING (emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)' 2>&1 )
 
 #echo $CLOCKSTRING
 
