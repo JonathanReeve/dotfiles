@@ -13,8 +13,8 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  boot.plymouth.enable = true;
+  networking.hostName = "jon-laptop"; # Define your hostname.
   networking.networkmanager.enable = true;
 
   nixpkgs.config.allowUnfree = true;
@@ -32,24 +32,39 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-     fish 
+     fish   # Shell
+     home-manager
+     lsb-release
+     pass   # Passwords
+     gcc gnumake
      wget
-     emacs 
-     mu
-     isync
-     vim
-     qutebrowser
-     chromium 
-     networkmanager 
-     stack 
-     konversation
-     dolphin
+     w3m    # To display HTML mail in mu4e
+     mu     # For mu4e (emacs email)
+     isync  # Mail sync (mbsync)
+     pandoc # Document manipulation
+     git    # Version control
+     vim    # Text editor
+     emacs  # Text editor
+     qutebrowser    # Web browser
+     chromium       # Another web browser
+     networkmanager
+     # Haskell
+     stack
+     ghc
      libxml2
-     zotero
-     pandoc
+     # Python
      (python3.withPackages(ps: with ps; [ pandas jupyter ]))
+     # GUI
+     dropbox
+     zotero
+     # KDE
+     konversation # IRC
+     gwenview     # Image viewer
+     okular       # PDF viewer
+     dolphin      # File manager
    ];
 
+  # HiDPI
   environment.variables.PLASMA_USE_QT_SCALING = "1";
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -69,17 +84,21 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
+  # Enable emacs daemon, and set EDITOR to emacsclient
+  services.emacs.enable = true;
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
+
+  # Keyboard
   services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
+  services.xserver.xkbVariant = "altgr-intl,colemak";
+
+  # HiDPI
   services.xserver.dpi = 192;
 
   # Enable touchpad support.
@@ -89,25 +108,27 @@
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
 
+  # Shell
   programs.fish.enable = true;
 
-  users.users.jon = 
+  users.users.jon =
     { isNormalUser = true;
       home = "/home/jon";
       shell = pkgs.fish;
       description = "Jonathan Reeve";
       extraGroups = [ "wheel" "networkmanager" ];
     };
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.extraUsers.guest = {
-  #   isNormalUser = true;
-  #   uid = 1000;
-  # };
+  users.users.systemrestore =
+    { isNormalUser = true;
+      home = "/home/systemrestore";
+      shell = pkgs.fish;
+      description = "System Restore";
+      extraGroups = [ "wheel" "networkmanager" ];
+    };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "18.03"; # Did you read the comment?
-
 }
