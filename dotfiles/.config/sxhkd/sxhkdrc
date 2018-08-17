@@ -4,8 +4,7 @@
 
 # terminal emulator
 super + Return
-        xfce4-terminal
-	#urxvt
+  urxvt
 
 # program launcher
 super + @space
@@ -120,7 +119,7 @@ super + alt + shift + {h,n,e,i}
 # move a floating window
 super + {Left,Down,Up,Right}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
-
+  
 # move a floating window along the z axis
 super + shift + {Down, Up}
 	bspc node -l {below, above}

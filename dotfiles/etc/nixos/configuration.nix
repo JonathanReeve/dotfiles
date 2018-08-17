@@ -66,17 +66,24 @@
        pandas
        jupyter
      ]))
+     # Minimal computing
+     ranger         # File manager
+     scrot          # Screenshots
+     rofi           # Launcher
+     zathura        # PDF Viewer
+     polybar        # System monitor, etc.
+     compton        # Compositor
      # KDE
-     konversation # IRC
-     gwenview     # Image viewer
-     okular       # PDF viewer
-     dolphin      # File manager
-     kate         # Text editor
-     ark          # Archive management
-     spectacle    # Screenshots
-     #dragonplayer # Video player
+     # konversation # IRC
+     # gwenview     # Image viewer
+     # okular       # PDF viewer
+     # dolphin      # File manager
+     # kate         # Text editor
+     # ark          # Archive management
+     # spectacle    # Screenshots
+     ##dragonplayer # Video player
      # Android
-     androidsdk
+     # androidsdk
    ];
 
   # HiDPI
@@ -121,7 +128,8 @@
 
   # Enable the KDE Desktop Environment.
   services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  # services.xserver.desktopManager.plasma5.enable = true;
+  services.xserver.windowManager.bspwm.enable = true;
 
   # Shell
   programs.fish.enable = true;
