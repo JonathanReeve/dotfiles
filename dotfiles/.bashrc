@@ -276,3 +276,8 @@ EDITOR=/usr/bin/nano
 # >>> Added by cnchi installer
 BROWSER=/usr/bin/chromium
 EDITOR=/usr/bin/nano
+echo $PPID
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive
+export LOCALE_ARCHIVE="$(readlink ~/.nix-profile/lib/locale)/locale-archive"
