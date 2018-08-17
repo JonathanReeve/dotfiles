@@ -17,7 +17,10 @@
   networking.hostName = "jon-laptop"; # Define your hostname.
   networking.networkmanager.enable = true;
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    chromium.enablePepperFlash = true;
+  };
 
   # Select internationalisation properties.
   i18n = {
@@ -27,16 +30,20 @@
   };
 
   # Set your time zone.
-  time.timeZone = "America/Los_Angeles";
+  time.timeZone = "America/New_York";
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+     nix-index
      fish   # Shell
-     home-manager
-     lsb-release
      pass   # Passwords
+     aspell # Spell checker
+     home-manager
+     networkmanager
+     lsb-release
      gcc gnumake
+     gnupg
      wget
      w3m    # To display HTML mail in mu4e
      mu     # For mu4e (emacs email)
@@ -45,23 +52,31 @@
      git    # Version control
      vim    # Text editor
      emacs  # Text editor
+     dropbox-cli
+     # GUI
      qutebrowser    # Web browser
      chromium       # Another web browser
-     networkmanager
+     zotero
      # Haskell
      stack
      ghc
      libxml2
      # Python
-     (python3.withPackages(ps: with ps; [ pandas jupyter ]))
-     # GUI
-     dropbox
-     zotero
+     (python3.withPackages(ps: with ps; [
+       pandas
+       jupyter
+     ]))
      # KDE
      konversation # IRC
      gwenview     # Image viewer
      okular       # PDF viewer
      dolphin      # File manager
+     kate         # Text editor
+     ark          # Archive management
+     spectacle    # Screenshots
+     #dragonplayer # Video player
+     # Android
+     androidsdk
    ];
 
   # HiDPI

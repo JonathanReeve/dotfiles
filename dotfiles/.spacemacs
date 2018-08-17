@@ -23,13 +23,15 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(csv
+   '(ruby
+     csv
      elm
      shell-scripts
      ;javascript
      yaml
      html
      helm
+     nixos
      (haskell :variables haskell-font-lock-symbols t)
      (keyboard-layout :variables kl-layout 'colemak-hnei)
      (auto-completion :variables
@@ -132,7 +134,8 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(base16-eighties
+   dotspacemacs-themes '(base16-default-dark
+                         base16-eighties
                          base16-atelier-cave
                          base16-atelier-lakeside
                          base16-atelier-plateau
@@ -179,7 +182,7 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("Input Mono Compressed" 
+   dotspacemacs-default-font '("Hack"
                                :size 32
                                :weight normal
                                :width normal
@@ -697,6 +700,14 @@ the entry of interest in the bibfile.  but does not check that."
   (global-set-key (kbd "<f2>") 'org-agenda-list)
   (global-set-key (kbd "<f3>") 'org-todo-list)
   (global-set-key (kbd "<f4>") 'mu4e)
+  (global-unset-key (kbd "C-h"))
+  (global-unset-key (kbd "C-n"))
+  (global-unset-key (kbd "C-e"))
+  (global-unset-key (kbd "C-i"))
+  (global-set-key (kbd "C-h") 'evil-window-left)
+  (global-set-key (kbd "C-n") 'evil-window-down)
+  (global-set-key (kbd "C-e") 'evil-window-up)
+  (global-set-key (kbd "C-i") 'evil-window-right)
 
   )
 (defun dotspacemacs/emacs-custom-settings ()
@@ -710,7 +721,8 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(yasnippet-snippets yaml-mode web-mode string-inflection pyvenv pug-mode pipenv persp-mode org-ref pdf-tools org-mime org-download org-brain live-py-mode link-hint intero insert-shebang importmagic impatient-mode simple-httpd htmlize hl-todo hindent helm-xref helm-projectile helm-mu helm-descbinds helm-bibtex git-link flyspell-correct-helm flyspell-correct eyebrowse evil-nerd-commenter evil-matchit evil-magit eval-sexp-fu emmet-mode editorconfig dumb-jump define-word dante lcr counsel-projectile counsel swiper ivy company-web company-anaconda base16-theme auto-yasnippet anaconda-mode avy smartparens flycheck haskell-mode yasnippet company window-purpose helm helm-core markdown-mode alert projectile magit with-editor pythonic spaceline s dash which-key evil async org-plus-contrib hydra bind-key yapfify xterm-color ws-butler winum web-completion-data web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree toc-org tagedit tablist symon spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters pytest pyenv-mode py-isort powerline popwin pippel pip-requirements pcre2el password-generator parsebib paradox overseer orgit org-projectile org-present org-pomodoro org-gcal org-bullets open-junk-file nord-theme neotree nameless multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum log4e less-css-mode key-chord indent-guide imenu-list hungry-delete hlint-refactor highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-pydoc helm-purpose helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets goto-chg google-translate golden-ratio gnuplot gntp gitconfig-mode gitattributes-mode git-timemachine git-messenger git-commit ghub gh-md fuzzy font-lock+ flycheck-pos-tip flycheck-haskell flycheck-elm flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-mc evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help ereader epc elm-mode elisp-slime-nav diminish cython-mode csv-mode company-statistics company-shell company-ghci company-ghc company-cabal column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode calfw biblio auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell)))
+   (quote
+    (nix-mode helm-nixos-options company-nixos-options nixos-options yasnippet-snippets yapfify yaml-mode xterm-color ws-butler winum which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocop rspec-mode robe restart-emacs rbenv rake rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode popwin pippel pipenv pip-requirements persp-mode password-generator paradox overseer orgit org-ref org-projectile org-present org-pomodoro org-mime org-gcal org-download org-bullets org-brain open-junk-file nord-theme neotree nameless multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode minitest markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum live-py-mode linum-relative link-hint less-css-mode intero insert-shebang indent-guide importmagic impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-elm flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help ereader emmet-mode elm-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode diminish define-word dante cython-mode csv-mode counsel-projectile company-web company-statistics company-shell company-ghci company-ghc company-cabal company-anaconda column-enforce-mode cmm-mode clean-aindent-mode chruby centered-cursor-mode calfw bundler base16-theme auto-yasnippet auto-highlight-symbol auto-dictionary auto-complete auto-compile aggressive-indent ace-window ace-link ace-jump-helm-line))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

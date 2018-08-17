@@ -1,5 +1,9 @@
 set -U EDITOR vim
 set -U BROWSER firefox
+set -U LANG=en_US.UTF-8
+set -U LC_ALL=en_US.UTF-8
+#set -U LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive
+#set -U LOCALE_ARCHIVE="(readlink ~/.nix-profile/lib/locale)/locale-archive"
 
 abbr -a ga git add
 abbr -a gc git commit
