@@ -1,1 +1,1 @@
-rsync ~/.password-store ~/Dropbox/Settings/.password-store
+rsync -a ~/.password-store ~/Dropbox/Settings/.password-store
