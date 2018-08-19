@@ -1,4 +1,5 @@
-set -x PATH ~/.local/bin ~/.node/bin ~/.gem/bin $PATH
+#set -x PATH ~/.local/bin $PATH
+#set -x PATH ~/.local/bin ~/.node/bin ~/.gem/bin $PATH
 
 set -e EDITOR
 set -e BROWSER

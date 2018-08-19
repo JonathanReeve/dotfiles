@@ -4,6 +4,3 @@
 [submodule "scripts/scripts/toggl-cli"]
 	path = scripts/scripts/toggl-cli
 	url = https://github.com/drobertadams/toggl-cli
-[submodule "scripts/oh-my-fish"]
-	path = scripts/oh-my-fish
-	url = https://github.com/oh-my-fish/oh-my-fish
