@@ -29,6 +29,15 @@
     defaultLocale = "en_US.UTF-8";
   };
 
+  # Fonts!
+  fonts.fonts = with pkgs; [
+      noto-fonts
+      noto-fonts-cjk
+      noto-fonts-emoji
+      fira-code
+      fira-code-symbols
+      font-awesome-ttf
+  ];
   # Set your time zone.
   time.timeZone = "America/New_York";
 
@@ -72,6 +81,7 @@
      compton        # Compositor
      mpv            # Video player
      termite        # Terminal
+     pywal          # Wallpapers
      # KDE
      konversation # IRC
      gwenview     # Image viewer

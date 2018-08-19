@@ -249,13 +249,12 @@ label-mounted = " %percentage_free%%"
 [module/org-clock]
 type = custom/script
 interval = 10
-exec = /home/jon/Documents/Settings/dotfiles/scripts/org-clock.sh
+exec = /home/jon/Dotfiles/scripts/org-clock.sh
 
 [module/volume]
 type = internal/volume
 label-volume = " %percentage%" 
 label-muted = ""
-
 
 [module/backlight]
 type = internal/backlight 

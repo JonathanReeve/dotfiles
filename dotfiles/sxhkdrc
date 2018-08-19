@@ -134,13 +134,13 @@ super + w
 
 # adjust brightness
 XF86MonBrightness{Up,Down}
-  exec light {-A,-U} 10
+	exec light {-A,-U} 10
 
 XF86Audio{Raise,Lower}Volume
-  exec pactl set-sink-volume 1 {+,-}5%
+	exec pactl set-sink-volume 1 {+,-}5%
 
 XF86AudioMute
-  exec pactl set-sink-mute 1 toggle
+	exec pactl set-sink-mute 1 toggle
 
 super + k
 	setxkbmap -layout us -variant colemak -option caps:escape
