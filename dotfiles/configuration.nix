@@ -80,7 +80,7 @@
      kate         # Text editor
      ark          # Archive management
      spectacle    # Screenshots
-     dragon       # Video player
+     #dragon       # Video player
    ];
 
   # HiDPI

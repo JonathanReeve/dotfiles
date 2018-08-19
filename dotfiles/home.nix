@@ -1,7 +1,12 @@
 let
-  dots = "/home/jon/dotfiles/dotfiles";
+  dots = "/home/jon/Dotfiles/dotfiles";
+  scripts = "/home/jon/Dotfiles/scripts";
 in
 {
+  # Have home-manager manage itself. 
+  programs.home-manager.enable = true;
+  programs.home-manager.path = "https://github.com/rycee/home-manager/archive/release-18.03.tar.gz";
+
   programs.git = {
     enable = true;
     userName = "Jonathan Reeve";
@@ -13,13 +18,18 @@ in
 	  settings = { ignorecase = true; };
 	  extraConfig = ''
 		  set mouse=a
+      nnoremap n j
+      nnoremap e k
+      nnoremap i l
+      nnoremap l i
 		  '';
   };
-  # xsession = {
-  #   enable = true;
-  #     #pointerCursor.size =   32;
-  #   windowManager.command = "bspwm";
-  # };
+  #xsession = {
+    # enable = true;
+    # pointerCursor.name = "breeze";
+    # pointerCursor.size = 32;
+    # windowManager.command = "bspwm";
+  #};
   # xresources.properties = {
   #   Xft.antialias = 1;
   #   Xft.autohint = 0;
@@ -40,18 +50,16 @@ in
       set editing-mode vi
       set keymap vi-command
     '';
-
-    # Capture links from Qutebrowser to Org-Mode files. 
-    ".local/share/qutebrowser/userscripts/org-link".text =
-    ''
-      #!/bin/bash
-      emacsclient "org-protocol://capture?template=l&url=$QUTE_URL&title=$QUTE_TITLE&body=$QUTE_SELECTED_TEXT"
-    '';
   };
 
-  # Dotfiles for ~/.config
+  # Dotfiles for ~/.config, ~/.local/share, etc. 
   xdg = {
     enable = true;
+    dataFile = {
+      "qutebrowser/userscripts/password_fill".source = "${scripts}/password_fill";
+      "qutebrowser/userscripts/dict".source = "${scripts}/dict";
+      "qutebrowser/userscripts/org-link".source = "${scripts}/org-link";
+    };
     configFile = {
       "fish/config.fish".source = "${dots}/config.fish";
       "qutebrowser/config.py".source = "${dots}/qutebrowser.py";

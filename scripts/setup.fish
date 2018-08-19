@@ -4,7 +4,7 @@
 # then sets up fish shell functions and aliases that only need to be
 # set up once.
 
-set dots "$PWD/../dotfiles"
+set dots "/home/jon/Dotfiles/dotfiles"
 mkdir -p "$HOME/.config/nixpkgs"
 ln -s "$dots/home.nix" "$HOME/.config/nixpkgs/home.nix"
 sudo ln -s "$dots/configuration.nix" "$dots/hardware-configuration.nix" "/etc/nixos"
