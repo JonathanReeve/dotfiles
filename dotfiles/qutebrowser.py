@@ -755,7 +755,7 @@ c.fonts.messages.warning = '10pt monospace'
 ## Default monospace fonts. Whenever "monospace" is used in a font
 ## setting, it's replaced with the fonts listed here.
 ## Type: Font
-c.fonts.monospace = '"Input Mono", "xos4 Terminus", Terminus, Monospace, "DejaVu Sans Mono", Monaco, "Bitstream Vera Sans Mono", "Andale Mono", "Courier New", Courier, "Liberation Mono", monospace, Fixed, Consolas, Terminal'
+c.fonts.monospace = 'Hack, "Input Mono", "xos4 Terminus", Terminus, Monospace, "DejaVu Sans Mono", Monaco, "Bitstream Vera Sans Mono", "Andale Mono", "Courier New", Courier, "Liberation Mono", monospace, Fixed, Consolas, Terminal'
 
 ## Font used for prompts.
 ## Type: Font
@@ -1257,6 +1257,8 @@ c.url.searchengines = {
         'b': 'https://www.google.com/search?tbm=bks&q={}',
         'aw': 'https://wiki.archlinux.org/?search={}',
         'aur': 'https://aur.archlinux.org/packages/?O=0&K={}',
+        'o': 'https://nixos.org/nixos/options.html#{}',
+        'p': 'https://nixos.org/nixos/packages.html#{}',
         'w': 'https://en.wikipedia.org/w/index.php?search={}',
         'd': 'https://en.wiktionary.org/wiki/{}',
         's': 'http://stackoverflow.com/search?q={}',
