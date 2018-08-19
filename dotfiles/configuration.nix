@@ -36,22 +36,19 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
      nix-index
-     fish   # Shell
-     pass   # Passwords
-     aspell # Spell checker
+     fish       # Shell
+     vim emacs  # Text editor
+     pass       # Passwords
+     aspell     # Spell checker
      home-manager
      networkmanager
      lsb-release
      gcc gnumake
      gnupg
      wget
-     w3m    # To display HTML mail in mu4e
-     mu     # For mu4e (emacs email)
-     isync  # Mail sync (mbsync)
+     isync mu w3m # Mail
      pandoc # Document manipulation
      git    # Version control
-     vim    # Text editor
-     emacs  # Text editor
      dropbox-cli
      # GUI
      qutebrowser    # Web browser
@@ -73,38 +70,29 @@
      zathura        # PDF Viewer
      polybar        # System monitor, etc.
      compton        # Compositor
+     mpv            # Video player
+     termite        # Terminal
      # KDE
-     # konversation # IRC
-     # gwenview     # Image viewer
-     # okular       # PDF viewer
-     # dolphin      # File manager
-     # kate         # Text editor
-     # ark          # Archive management
-     # spectacle    # Screenshots
-     ##dragonplayer # Video player
-     # Android
-     # androidsdk
+     konversation # IRC
+     gwenview     # Image viewer
+     okular       # PDF viewer
+     dolphin      # File manager
+     kate         # Text editor
+     ark          # Archive management
+     spectacle    # Screenshots
+     dragon       # Video player
    ];
 
   # HiDPI
   environment.variables.PLASMA_USE_QT_SCALING = "1";
+  environment.variables.EDITOR = "emacsclient -c";
+  environment.variables.BROWSER = "qutebrowser";
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.bash.enableCompletion = true;
   # programs.mtr.enable = true;
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # Enable sound.
   sound.enable = true;
@@ -128,7 +116,7 @@
 
   # Enable the KDE Desktop Environment.
   services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
+  services.xserver.desktopManager.plasma5.enable = true;
   services.xserver.windowManager.bspwm.enable = true;
 
   # Shell

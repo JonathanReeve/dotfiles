@@ -29,37 +29,45 @@ in
   #   Xft.lcdfilter = "lcddefault";
   # };
   # services.dunst.enable = true;
+
+  # Dotfiles for the home root, ~/
   home.file = {
     ".spacemacs".source = "${dots}/spacemacs";
 
+    # Vim all the things!
     ".inputrc".text =
     ''
       set editing-mode vi
       set keymap vi-command
     '';
 
+    # Capture links from Qutebrowser to Org-Mode files. 
     ".local/share/qutebrowser/userscripts/org-link".text =
     ''
       #!/bin/bash
       emacsclient "org-protocol://capture?template=l&url=$QUTE_URL&title=$QUTE_TITLE&body=$QUTE_SELECTED_TEXT"
     '';
-
   };
+
+  # Dotfiles for ~/.config
   xdg = {
     enable = true;
     configFile = {
-      "polybar/config".source = "${dots}/polybar";
       "fish/config.fish".source = "${dots}/config.fish";
       "qutebrowser/config.py".source = "${dots}/qutebrowser.py";
-      "sxhkd/sxhkdrc".source = "${dots}/sxhkdrc";
 
+      # BSPWM stuff
+      "polybar/config".source = "${dots}/polybar";
+      "sxhkd/sxhkdrc".source = "${dots}/sxhkdrc";
+      "bspwm/bspwmrc".source = "${dots}/bspwmrc";
+
+      # Plasma configs
       "kcminputrc".text =
       ''
         [Mouse]
         cursorSize=48
         cursorTheme=breeze_cursors
       '';
-
 
       "konsolerc".text =
       ''
@@ -91,11 +99,6 @@ in
 
         [WM]
         activeFont=Noto Sans,12,-1,5,50,0,0,0,0,0,Bold
-      '';
-
-      "bspwm/bspwmrc".text =
-      ''
-
       '';
     };
   };
