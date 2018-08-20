@@ -85,7 +85,6 @@ in
     };
   };
 
-
   # Dotfiles for the home root, ~/
   home.file = {
     ".spacemacs".source = "${dots}/spacemacs";

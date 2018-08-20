@@ -107,10 +107,15 @@
      #dragon       # Video player
    ];
 
-  # HiDPI
   environment.variables = {
-    #QT_SCALE_FACTOR = "2";
+    # HiDPI Settings
     PLASMA_USE_QT_SCALING = "1";
+    QT_AUTO_SCREEN_SCALE_FACTOR = "0";
+    QT_QPA_PLATFORM = "xcb";
+    QT_QUICK_CONTROLS_STYLE = "org.kde.desktop";
+    QT_SCREEN_SCALE_FACTORS = "eDP1=2;HDMI1=2;VIRTUAL1=2;";
+
+    # Preferred applications
     EDITOR = "emacsclient -c";
     BROWSER = "qutebrowser";
   };
