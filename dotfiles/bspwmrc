@@ -11,8 +11,8 @@ bspc config presel_border_color "$color1"
 
 bspc monitor -d 1 2 3 4 5 6 7 8 9 10
 
-bspc config border_width        20
-bspc config window_gap          20
+bspc config border_width        15
+bspc config window_gap          25
 bspc config focus_follows_pointer true
 
 bspc config split_ratio          0.52
@@ -23,8 +23,10 @@ bspc rule -a emacs desktop='^1'
 bspc rule -a qutebrowser desktop='^2'
 bspc rule -a Gimp desktop='^8' state=floating follow=on
 
-polybar main_bar
+xrdb -merge ~/.extend.Xresources
 compton -r 25 -o .85 &
 # Set pointer, so that it's not an X
 # xsetroot -cursor_name left_ptr
-xrdb -merge ~/.extend.Xresources
+polybar main_bar &
+wal -ig ~/Pictures/Wallpapers
+sxhkd &

@@ -11,11 +11,18 @@
     ];
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.plymouth.enable = true;
-  networking.hostName = "jon-laptop"; # Define your hostname.
-  networking.networkmanager.enable = true;
+  boot = {
+    plymouth.enable = true;
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+  };
+
+  networking = {
+    hostName = "jon-laptop"; # Define your hostname.
+    networkmanager.enable = true;
+  };
 
   nixpkgs.config = {
     allowUnfree = true;
@@ -31,12 +38,12 @@
 
   # Fonts!
   fonts.fonts = with pkgs; [
-      noto-fonts
-      noto-fonts-cjk
-      noto-fonts-emoji
-      fira-code
-      fira-code-symbols
-      font-awesome-ttf
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    fira-code
+    fira-code-symbols
+    font-awesome-ttf
   ];
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -45,24 +52,26 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
      nix-index
-     fish       # Shell
-     vim emacs  # Text editor
-     pass       # Passwords
-     aspell     # Spell checker
-     home-manager
+     fish            # Shell
+     vim emacs       # Text editor
+     pass            # Passwords
+     aspell aspellDicts.en  # Spell checker
+     light           # Brightness control
+     home-manager    # Dotfiles management
      networkmanager
      lsb-release
      gcc gnumake
      gnupg
      wget
-     isync mu w3m # Mail
-     pandoc # Document manipulation
-     git    # Version control
+     isync mu w3m   # Mail
+     pandoc         # Document manipulation
+     git            # Version control
      dropbox-cli
      # GUI
      qutebrowser    # Web browser
      chromium       # Another web browser
      zotero
+     numix-cursor-theme
      # Haskell
      stack
      ghc
@@ -82,6 +91,7 @@
      mpv            # Video player
      termite        # Terminal
      pywal          # Wallpapers
+     bspwm sxhkd    # Window manager
      # KDE
      konversation # IRC
      gwenview     # Image viewer
@@ -94,15 +104,12 @@
    ];
 
   # HiDPI
-  environment.variables.PLASMA_USE_QT_SCALING = "1";
-  environment.variables.EDITOR = "emacsclient -c";
-  environment.variables.BROWSER = "qutebrowser";
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.bash.enableCompletion = true;
-  # programs.mtr.enable = true;
-  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+  environment.variables = {
+    #QT_SCALE_FACTOR = "2";
+    PLASMA_USE_QT_SCALING = "1";
+    EDITOR = "emacsclient -c";
+    BROWSER = "qutebrowser";
+  };
 
   # Enable sound.
   sound.enable = true;
@@ -111,41 +118,43 @@
   # Enable emacs daemon, and set EDITOR to emacsclient
   services.emacs.enable = true;
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Keyboard
-  services.xserver.layout = "us";
-  services.xserver.xkbVariant = "altgr-intl,colemak";
-
-  # HiDPI
-  services.xserver.dpi = 192;
-
-  # Enable touchpad support.
-  services.xserver.libinput.enable = true;
-
-  # Enable the KDE Desktop Environment.
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
-  services.xserver.windowManager.bspwm.enable = true;
+  # X
+  services.xserver = {
+    enable = true;
+    dpi = 180;
+    # Enable touchpad support.
+    libinput.enable = true;
+    # Keyboard settings
+    layout = "us";
+    xkbVariant = "altgr-intl,colemak";
+    # Enable the KDE Desktop Environment.
+    displayManager.sddm.enable = true;
+    desktopManager.plasma5.enable = true;
+    windowManager.bspwm.enable = true;
+  };
 
   # Shell
-  programs.fish.enable = true;
+  programs = {
+    fish.enable = true;
+    gnupg.agent = { enable = true; enableSSHSupport = true; };
+  };
 
-  users.users.jon =
-    { isNormalUser = true;
-      home = "/home/jon";
-      shell = pkgs.fish;
-      description = "Jonathan Reeve";
-      extraGroups = [ "wheel" "networkmanager" ];
-    };
-  users.users.systemrestore =
-    { isNormalUser = true;
-      home = "/home/systemrestore";
-      shell = pkgs.fish;
-      description = "System Restore";
-      extraGroups = [ "wheel" "networkmanager" ];
-    };
+  users.users = {
+    jon =
+      { isNormalUser = true;
+        home = "/home/jon";
+        shell = pkgs.fish;
+        description = "Jonathan Reeve";
+        extraGroups = [ "wheel" "networkmanager" ];
+      };
+    systemrestore =
+      { isNormalUser = true;
+        home = "/home/systemrestore";
+        shell = pkgs.fish;
+        description = "System Restore";
+        extraGroups = [ "wheel" "networkmanager" ];
+      };
+  };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
