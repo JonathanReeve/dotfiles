@@ -51,13 +51,17 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-     nix-index
+     # Nix stuff
+     nix-index       # Indexing files for nix-locate
+     nix-prefetch-git nix-prefetch-scripts # Help writing .nix files
+     cabal2nix       # Haskell packages to .nix expressions
+     home-manager    # Dotfiles management
+     # CLI
      fish            # Shell
      vim emacs       # Text editor
      pass            # Passwords
      aspell aspellDicts.en  # Spell checker
      light           # Brightness control
-     home-manager    # Dotfiles management
      networkmanager
      lsb-release
      gcc gnumake
