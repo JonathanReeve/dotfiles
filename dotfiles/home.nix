@@ -28,22 +28,47 @@ in
         nnoremap i l
         nnoremap l i
       '';
-    };
+     };
+    # Disabling this for the moment, since home-manager seems to think
+    # this program doesn't exist.
+    #  fish = {
+    #    enable = true;
+    #    shellAbbrs = {
+    #      # Git abbreviations
+    #      "ga" = "git add";
+    #      "gc" = "git commit";
+    #      "gcam" = "git commit -am";
+    #      "gcm" = "git commit -m";
+    #      "gco" = "git checkout";
+    #      "gcob" = "git checkout -b";
+    #      "gcom" = "git checkout master";
+    #      "gcod" = "git checkout develop";
+    #      "gd" = "git diff";
+    #      "gp" = "git push";
+    #      "gdc" = "git diff --cached";
+    #      "glg" = "git lg";
+    #      "gst" = "git status";
+    #      # Other abbreviations
+    #      "em" = "emacsclient -c";
+    #      "pw" = "vim ~/Dropbox/Personal/.p10.txt";
+    #    };
+    # };
     rofi = {
       enable = true;
       font = "Hack 20";
+      theme = "~/.cache/wal/colors-rofi-dark.rasi";
     };
     termite = {
       enable = true;
-      font = "Hack 12";
+      font = "Hack 11";
     };
   };
 
   xsession = {
     enable = true;
     pointerCursor = {
-        package = pkgs.paper-icon-theme;
-        name = "Paper";
+        package = pkgs.vanilla-dmz;
+        name = "Vanilla-DMZ";
         size = 64;
     };
     windowManager.command = "bspwm";
@@ -57,7 +82,7 @@ in
     "Xft.hintstyle" = "hintfull";
     "Xft.lcdfilter" = "lcddefault";
     "Xcursor.theme" = "breeze_cursors";
-    "Xcursor.size" = 64;
+    "Xcursor.size" = 48;
   };
 
   gtk = {
@@ -101,9 +126,10 @@ in
   xdg = {
     enable = true;
     dataFile = {
-      "qutebrowser/userscripts/password_fill".source = "${scripts}/password_fill";
-      "qutebrowser/userscripts/dict".source = "${scripts}/dict";
-      "qutebrowser/userscripts/org-link".source = "${scripts}/org-link";
+      "qutebrowser/userscripts/" = {
+        source = "${scripts}/qutebrowser-userscripts";
+        recursive = true;
+      };
     };
     configFile = {
       "fish/config.fish".source = "${dots}/config.fish";

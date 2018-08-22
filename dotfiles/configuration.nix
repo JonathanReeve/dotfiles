@@ -53,28 +53,28 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
      # Nix stuff
-     nix-index       # Indexing files for nix-locate
+     nix-index              # Indexing files for nix-locate
      nix-prefetch-git nix-prefetch-scripts # Help writing .nix files
-     cabal2nix       # Haskell packages to .nix expressions
-     home-manager    # Dotfiles management
+     cabal2nix              # Haskell packages to .nix expressions
+     home-manager           # Dotfiles management
      # CLI
-     fish            # Shell
-     vim emacs       # Text editor
-     pass            # Passwords
+     fish                   # Shell
+     vim emacs              # Text editor
+     pass                   # Passwords
      aspell aspellDicts.en  # Spell checker
-     light           # Brightness control
+     xorg.xbacklight        # Brightness control
      networkmanager
      lsb-release
      gcc gnumake
      gnupg
      wget
-     isync mu w3m   # Mail
-     pandoc         # Document manipulation
-     git            # Version control
+     isync mu w3m           # Mail
+     pandoc                 # Document manipulation
+     git                    # Version control
      dropbox-cli
      # GUI
-     qutebrowser    # Web browser
-     chromium       # Another web browser
+     qutebrowser            # Web browser
+     chromium               # Another web browser
      zotero
      numix-cursor-theme
      # Haskell
