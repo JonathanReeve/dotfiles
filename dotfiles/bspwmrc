@@ -30,3 +30,4 @@ compton -r 25 -o .85 &
 polybar main_bar &
 wal -ig ~/Pictures/Wallpapers
 sxhkd &
+wal -R
