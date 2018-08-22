@@ -134,7 +134,10 @@ super + w
 
 # adjust brightness
 XF86MonBrightness{Up,Down}
-	exec light {-A,-U} 10
+	exec xbacklight {-inc,-dec} 10
+
+F{7,8}
+	exec xbacklight {-dec,-inc} 10
 
 XF86Audio{Raise,Lower}Volume
 	exec pactl set-sink-volume 1 {+,-}5%
