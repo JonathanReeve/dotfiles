@@ -58,7 +58,7 @@ module-margin-right = 1
 font-3 = FontAwesome:fontformat=truetype:size=19;1
 font-2 = Terminus:fontformat=truetype:size=19;1
 font-1 = Linux Biolinum:fontformat=truetype:size=19;1
-font-0 = Input Mono Condensed:fontformat=truetype:size=19;1
+font-0 = Hack:fontformat=truetype:size=19;1
 
 modules-left = bspwm xwindow
 modules-center = date 
