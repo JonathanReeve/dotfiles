@@ -139,57 +139,6 @@ in
       "polybar/config".source = "${dots}/polybar";
       "sxhkd/sxhkdrc".source = "${dots}/sxhkdrc";
       "bspwm/bspwmrc".source = "${dots}/bspwmrc";
-
-      # Plasma configs
-      # Disabling these for now. 
-
-      # "plasma-workspace/env/set_window_manager.sh" = {
-      #   text =
-      #   ''
-      #     #!/run/current-system/sw/bin/bash
-      #     export KDEWM=/run/current-system/sw/bin/bspwm
-      #   '';
-      #   executable = true;
-      # };
-
-      # "kcminputrc".text =
-      # ''
-      #   [Mouse]
-      #   cursorSize=48
-      #   cursorTheme=breeze_cursors
-      # '';
-
-      # "konsolerc".text =
-      # ''
-      #   [MainWindow]
-      #   Height 1800=1196
-      #   Height 900=743
-      #   MenuBar=Disabled
-      #   State=AAAA/wAAAAD9AAAAAAAAAoAAAAHgAAAABAAAAAQAAAAIAAAACPwAAAAA
-      #   ToolBarsMovable=Disabled
-      #   Width 1600=964
-      #   Width 3200=1855
-      # '';
-
-      # "kdeglobals".text =
-      # ''
-      #   [$Version]
-      #   update_info=fonts_global.upd:Fonts_Global,fonts_global_toolbar.upd:Fonts_Global_Toolbar
-
-      #   [General]
-      #   fixed=Monospace,10,-1,5,50,0,0,0,0,0
-      #   font=Sans Serif,10,-1,5,50,0,0,0,0,0
-      #   menuFont=Sans Serif,10,-1,5,50,0,0,0,0,0
-      #   smallestReadableFont=Sans Serif,8,-1,5,50,0,0,0,0,0
-      #   toolBarFont=Sans Serif,10,-1,5,50,0,0,0,0,0
-
-      #   [KScreen]
-      #   ScaleFactor=2
-      #   ScreenScaleFactors=eDP1=2;HDMI1=2;VIRTUAL1=2;
-
-      #   [WM]
-      #   activeFont=Cousine,11,-1,5,50,0,0,0,0,0,Regular
-      # '';
     };
   };
 }
