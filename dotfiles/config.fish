@@ -1,31 +1,30 @@
 #set -x PATH ~/.local/bin $PATH
 #set -x PATH ~/.local/bin ~/.node/bin ~/.gem/bin $PATH
 
-set -e EDITOR
-set -e BROWSER
-set -Ux EDITOR vim
-set -Ux BROWSER qutebrowser
-
 # Emacs ansi-term support
 if test -n "$EMACS"
   set -x TERM eterm-color
-  function fish_right_prompt
-    true
-  end
+  # Disable right prompt in emacs
+  function fish_right_prompt; true; end
+  #This function may be required for Emacs support.
+  function fish_title; true; end
 end
 
-set acceptable_terms eterm-color xterm-256color screen-256color
 
-if contains "$TERM" acceptable_terms
-  # Don't use vi keybindings in unknown terminals,
-  # since weird things can happen.
-  fish_vi_key_bindings
-end 
-
-# This function may be required for Emacs support. 
-function fish_title
+function fish_default_mode_prompt --description "Display the default mode for the prompt"
   true
 end
 
-# chips
-if [ -e ~/.config/chips/build.fish ] ; . ~/.config/chips/build.fish ; end
+if status --is-interactive
+  # Chips: fish plugin manager
+  if [ -e ~/.config/chips/build.fish ] ; . ~/.config/chips/build.fish ; end
+
+  # Don't use vi keybindings in unknown terminals,
+  # since weird things can happen.
+  set acceptable_terms xterm-256color screen-256color
+  if contains "$TERM" acceptable_terms
+    fish_vi_key_bindings
+    # Load pywal colors
+    cat ~/.cache/wal/sequences
+  end
+end
