@@ -8,7 +8,7 @@ super + Return
 
 # program launcher
 super + @space
-	rofi -show drun
+	env LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive rofi -show drun
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -128,11 +128,6 @@ super + shift + {Down, Up}
 super + w
 	wal -gi ~/Pictures/Wallpapers
 
-#
-# laptop stuff
-#
-
-# adjust brightness
 XF86MonBrightness{Up,Down}
 	exec xbacklight {-inc,-dec} 10
 
@@ -140,10 +135,7 @@ F{7,8}
 	exec xbacklight {-dec,-inc} 10
 
 XF86Audio{Raise,Lower}Volume
-	exec pactl set-sink-volume 1 {+,-}5%
+	exec pactl set-sink-volume 0 {+,-}5%
 
 XF86AudioMute
-	exec pactl set-sink-mute 1 toggle
-
-super + k
-	setxkbmap -layout us -variant colemak -option caps:escape
+	exec pactl set-sink-mute 0 toggle

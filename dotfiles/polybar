@@ -1,13 +1,5 @@
-;-------------------------------------------------
-;                                                ;
-;           Polybar config for my themes         ;
-; 		                      		                 ;
-;                                                ;
-;-------------------------------------------------
-
-
 [colors]
-;My colors are set from .Xresources to match everything else
+;Colors are set from .Xresources to match everything else
 my_background 	= ${xrdb:background}
 my_foreground 	= ${xrdb:foreground}
 my_color0	= ${xrdb:color0}
@@ -28,164 +20,67 @@ my_color14	= ${xrdb:color14}
 my_color15	= ${xrdb:color15}
 
 [bar/main_bar]
-;monitor = ${env:MONITOR:HDMI-1}
 monitor = ${env:MONITOR:eDP-1}
 bottom = false
 height = 50
 fixed-center = true
-
-;; A bit more stylized
-;width = 96%
-;radius = 5
-;offset-x = 2%
-;offset-y = 1%
-
 background = ${colors.my_background}
 foreground =  ${colors.my_foreground}
-
 line-size = 6
 line-color = ${colors.my_color4}
-
-border-size = 0
-border-color = ${colors.my_color2}
-
-padding-left = 0%
 padding-right = 1%
-
 module-margin-left = 1
 module-margin-right = 1
-
-font-3 = FontAwesome:fontformat=truetype:size=19;1
-font-2 = Terminus:fontformat=truetype:size=19;1
-font-1 = Linux Biolinum:fontformat=truetype:size=19;1
+font-2 = FontAwesome:fontformat=truetype:size=19;1
+font-1 = NotoEmoji:fontformat=truetype:size=19;1
 font-0 = Hack:fontformat=truetype:size=19;1
-
+wm-restack = bspwm
 modules-left = bspwm xwindow
 modules-center = date 
-modules-right = org-clock volume backlight filesystem memory battery network
-
-;tray-position = right
-;tray-transparent = false
-;tray-padding = 9
-;tray-offset-y = 0%
-;tray-offset-x = 0%
-;tray-maxsize = 18
-;tray-detached = false
-;tray-background = ${colors.my_background}
-
-wm-restack = bspwm
-
-;override-redirect = true
-
-[module/i3]
-type = internal/i3
-
-label-unfocused-background = ${colors.my_background}
-label-unfocused-foreground = ${colors.my_foreground}
-
-label-mode = %mode%
-label-mode-padding = 2
-label-mode-background = ${colors.my_color4}
-
-label-focused = %index%
-label-focused-foreground = ${colors.my_foreground}
-label-focused-background = ${colors.my_background}
-label-focused-underline = ${colors.my_color4}
-label-focused-padding = 2
-
-label-unfocused = %index%
-label-unfocused-padding = 2
-
-label-visible = %index%
-label-visible-underline = ${colors.my_foreground}
-label-visible-padding = 4
-
-label-urgent = %index%
-label-urgent-foreground = ${colors.my_foreground}
-label-urgent-background = ${colors.my_background}
-label-urgent-underline = ${colors.my_color8}
-label-urgent-padding = 2
+modules-right = org-clock volume backlight filesystem memory cpu battery network
 
 [module/bspwm]
 type = internal/bspwm
 format = <label-state> <label-mode>
-
 label-monocle = M
-label-fullscreen = F
-label-tiled =
 label-floating = S
-; Use fuzzy (partial) matching on labels when assigning 
-; icons to workspaces
-; Example: code;♚ will apply the icon to all workspaces 
-; containing 'code' in the label
-; Default: false
 fuzzy-match = true
-
 ws-icon-0 = 1;
 ws-icon-1 = 2;
 ws-icon-2 = 3;
 ws-icon-3 = 4;
 ws-icon-4 = 5;♞
 ws-icon-default = 
-
 label-mode-padding = 2
 label-mode-background = ${colors.my_color4}
-
 label-focused = %icon%
-label-focused-foreground = ${colors.my_foreground}
-label-focused-background = ${colors.my_background}
 label-focused-underline = ${colors.my_color4}
 label-focused-padding = 2
-
 label-empty =
-
 label-occupied = %icon%
 label-occupied-padding = 2
-
 label-urgent = %icon%
-label-urgent-foreground = ${colors.my_foreground}
-label-urgent-background = ${colors.my_background}
 label-urgent-underline = ${colors.my_color8}
 label-urgent-padding = 2
 
 [module/date]
 type = internal/date
 interval = 5
-
-date =
+date = "%m-%d %a"
 date-alt = "%d/%m/%Y"
-
-time = "%a %b %d, %I:%M %p "
-
+time = "%H:%M"
 time-alt = %H:%M
-
 format-prefix-foreground = ${colors.my_foreground}
-
-
 label = %date% %time%
-
 
 [module/battery]
 type = internal/battery
 battery = BAT1
 adapter = ADP1
-full-at = 99
-
-format-full-background = ${colors.my_background}
-format-charging-background = ${colors.my_background}
-format-charging = " <label-charging> <ramp-capacity>"
-;format-charging-underline = ${colors.my_color2}
-
-format-discharging-background = ${colors.my_background}
+full-at = 96
+format-charging = " <label-charging>"
 format-discharging = <ramp-capacity> <label-discharging>
-;format-discharging-underline = ${self.format-charging-underline}
-
-format-full-prefix-foreground = ${colors.my_background}
-;format-full-underline = ${self.format-charging-underline}
 format-full =  
-
-format-charing-background = ${colors.my_background}
-
 ramp-capacity-0 = 
 ramp-capacity-1 = 
 ramp-capacity-2 = 
@@ -195,15 +90,6 @@ ramp-capacity-foreground = ${colors.my_foreground}
 
 [settings]
 screenchange-reload = true
-;compositing-background = xor
-;compositing-background = screen
-;compositing-foreground = source
-;compositing-border = over
-
-
-[global/wm]
-margin-top = 0
-margin-bottom = 0
 
 [module/xwindow]
 type = internal/xwindow
@@ -215,51 +101,38 @@ label-foreground = ${colors.my_color4}
 type = internal/network
 interface = wlp1s0 
 interval = 3.0
-udspeed-minwidth = 5
-accumulate-stats = true
 format-connected = <label-connected>
-format-disconnected = <label-disconnected>
-format-packetloss = <animation-packetloss> <label-connected>
 label-connected = " %essid%"
 
-ramp-signal-0 = 😱
-ramp-signal-1 = 😠
-ramp-signal-2 = 😒
-ramp-signal-3 = 😊
-ramp-signal-4 = 😃
-ramp-signal-5 = 😈
-
-animation-packetloss-0 = ⚠
-animation-packetloss-0-foreground = ${colors.foreground}
-animation-packetloss-1 = 📶
-animation-packetloss-1-foreground = ${colors.foreground}
-animation-packetloss-framerate = 500
+[module/cpu]
+type = internal/cpu
+label = " %percentage:2%%"
 
 [module/memory]
 type = internal/memory
 label = " %percentage_used%%"
-;format-mounted-underline = ${colors.my_color4}
 
 [module/filesystem]
 type = internal/fs
-mount-0 = /home
+mount-0 = /
+mount-1 = /home
 label-mounted = " %percentage_free%%"
-;format-mounted-underline = ${colors.my_color4}
 
 [module/org-clock]
 type = custom/script
 interval = 10
 exec = /home/jon/Dotfiles/scripts/org-clock.sh
+click-left = emacsclient --eval '(org-clock-out)' && echo " Stopped!"
 
 [module/volume]
-type = internal/volume
+type = internal/alsa
 label-volume = " %percentage%" 
 label-muted = ""
+click-left = pactl set-sink-mute 0 toggle
 
 [module/backlight]
 type = internal/backlight 
 format = <ramp>
-enable-scroll = false
 card = intel_backlight
 ramp-0 = 🌕
 ramp-1 = 🌔

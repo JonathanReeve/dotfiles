@@ -35,6 +35,7 @@
     consoleFont = "latarcyrheb-sun32";
     consoleKeyMap = "us";
     defaultLocale = "en_US.UTF-8";
+    supportedLocales = [ "en_US.UTF-8/UTF-8" ];
   };
 
   # Fonts!
@@ -60,7 +61,7 @@
      # CLI
      fish                   # Shell
      vim emacs              # Text editor
-     pass                   # Passwords
+     pass encfs             # Passwords and encryption
      aspell aspellDicts.en  # Spell checker
      xorg.xbacklight        # Brightness control
      networkmanager
@@ -85,27 +86,32 @@
      (python3.withPackages(ps: with ps; [
        pandas
        jupyter
+       python-fontconfig
      ]))
      # Minimal computing
-     ranger         # File manager
-     scrot          # Screenshots
-     rofi           # Launcher
-     zathura        # PDF Viewer
-     polybar        # System monitor, etc.
-     compton        # Compositor
-     mpv            # Video player
-     termite        # Terminal
-     pywal          # Wallpapers
-     bspwm sxhkd    # Window manager
+     ranger highlight       # File manager
+     scrot                  # Screenshots
+     # rofi                   # Launcher
+     zathura                # PDF Viewer
+     polybar                # System monitor, etc.
+     compton                # Compositor
+     mpv                    # Minimalist video player
+     termite                # Vim-like modal terminal
+     pywal                  # Wallpapers
+     bspwm sxhkd            # Window manager
+     dunst libnotify        # Notifications
+     weechat                # IRC
+     fzf                    # Fuzzy file finder
+     ag                     # Fast grep replacement
      # KDE
-     konversation # IRC
-     gwenview     # Image viewer
-     okular       # PDF viewer
-     dolphin      # File manager
-     kate         # Text editor
-     ark          # Archive management
-     spectacle    # Screenshots
-     #dragon       # Video player
+     konversation           # IRC
+     gwenview               # Image viewer
+     okular                 # PDF viewer
+     dolphin                # File manager
+     kate                   # Text editor
+     ark                    # Archive management
+     spectacle              # Screenshots
+     #dragon                 # Video player
    ];
 
   environment.variables = {
@@ -135,8 +141,10 @@
     # Enable touchpad support.
     libinput.enable = true;
     # Keyboard settings
-    layout = "us";
+    layout = "us,us";
     xkbVariant = "altgr-intl,colemak";
+    # Change layouts with Alt+Space
+    xkbOptions = "grp:alt_space_toggle";
     # Enable the KDE Desktop Environment.
     displayManager.sddm.enable = true;
     desktopManager.plasma5.enable = true;
