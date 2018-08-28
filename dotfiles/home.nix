@@ -4,6 +4,9 @@ let
   dots = "/home/jon/Dotfiles/dotfiles";
   scripts = "/home/jon/Dotfiles/scripts";
   font = "Hack";
+  backgroundColor = "#243442"; # Blue steel
+  foregroundColor = "#deedf9"; # Light blue
+  warningColor = "#e23131"; # Reddish
 in
 {
   programs = {
@@ -109,19 +112,19 @@ in
     };
   };
 
-  # xsession = {
-  #   enable = true;
-  #   pointerCursor = {
-  #       package = pkgs.vanilla-dmz;
-  #       name = "Vanilla-DMZ";
-  #       size = 64;
-  #   };
-  #   windowManager.command = "bspwm";
-  #   profileExtra =
-  #   ''
-  #     xrdb -merge ~/.extend.Xresources
-  #   '';
-  # };
+  xsession = {
+    enable = false;
+    pointerCursor = {
+        package = pkgs.vanilla-dmz;
+        name = "Vanilla-DMZ";
+        size = 64;
+    };
+    windowManager.command = "bspwm";
+    profileExtra =
+    ''
+      xrdb -merge ~/.extend.Xresources
+    '';
+  };
 
   xresources.properties = {
     "Xft.antialias" = 1;
@@ -155,35 +158,19 @@ in
 
   services = {
     dunst = {
-      enable = true;
+      # Can't get this to work yet.
+      enable = false;
       settings = {
         global = {
-          monitor = 0;
-          follow = "mouse";
-          geometry = "250x50-30+58";
-          indicate_hidden = "yes";
-          shrink = "no";
-          separator_height = 0;
-          padding = 16;
-          horizontal_padding = 24;
-          frame_width = 2;
-          sort = "no";
-          idle_threshold = 120;
+          geometry = "850x80-30+70";
+          padding = 32;
+          horizontal_padding = 30;
+          frame_width = 10;
           font = "${font} 10";
           line_height = 4;
           markup = "full";
-          format = "<b>%s</b>\n%b";
           alignment = "left";
-          show_age_threshold = 60;
-          word_wrap = "yes";
-          ignore_newline = "no";
-          stack_duplicates = "false";
-          hide_duplicate_count = "yes";
-          show_indicators = "no";
-          icon_position = "off";
-          sticky_history = "yes";
-          history_length = "20";
-          always_run_script = "true";
+          word_wrap = "true";
           };
         shortcuts = {
           close = "ctrl+space";
@@ -193,13 +180,19 @@ in
         };
         urgency_low = {
           timeout = 4;
+          foreground = "${foregroundColor}";
+          background = "${backgroundColor}";
         };
         urgency_normal = {
           timeout = 8;
+          foreground = "${foregroundColor}";
+          background = "${backgroundColor}";
         };
         urgency_critical = {
           timeout = 0;
-        };
+          foreground = "${foregroundColor}";
+          background = "${warningColor}";
+          };
       };
     };
     compton = {
@@ -360,12 +353,65 @@ in
     };
     configFile = {
       # "fish/config.fish".source = "${dots}/config.fish";
-      "qutebrowser/config.py".source = "${dots}/qutebrowser.py";
 
       # BSPWM stuff
       "sxhkd/sxhkdrc".source = "${dots}/sxhkdrc";
       "polybar/config".source = "${dots}/polybar";
       "bspwm/bspwmrc".source = "${dots}/bspwmrc";
+      "qutebrowser/config.py".text =
+      ''
+        c.colors.completion.category.bg = "#333333"
+        c.colors.tabs.even.bg = '#222222'
+        c.colors.tabs.odd.bg = '#222222'
+        c.colors.tabs.selected.even.bg = '#285577'
+        c.colors.tabs.selected.odd.bg = '#285577'
+        c.fonts.completion.category = '10pt monospace'
+        c.fonts.completion.entry = '10pt monospace'
+        c.fonts.debug_console = '10pt monospace'
+        c.fonts.downloads = '10pt monospace'
+        c.fonts.hints = 'bold 10pt monospace'
+        c.fonts.keyhint = '10pt monospace'
+        c.fonts.messages.error = '10pt monospace'
+        c.fonts.messages.info = '10pt monospace'
+        c.fonts.messages.warning = '10pt monospace'
+        c.fonts.monospace = '${font}, Terminus, Monospace, monospace, Fixed'
+        c.fonts.prompts = '10pt sans-serif'
+        c.fonts.statusbar = '10pt monospace'
+        c.fonts.tabs = '10pt monospace'
+        c.hints.chars = 'arstdhneio'
+        c.statusbar.padding = {'top': 10, 'bottom': 10, 'left': 5, 'right': 5}
+        c.tabs.padding = {'top': 4, 'bottom': 4, 'left': 4, 'right': 4}
+        c.url.searchengines = {
+                'DEFAULT': 'https://duckduckgo.com/?q={}',
+                'g': 'https://www.google.com/search?q={}',
+                'l': 'https://www.google.com/search?hl=en&q={}&btnI=I',
+                'w': 'https://en.wikipedia.org/w/index.php?search={}',
+                'gs': 'https://scholar.google.com/scholar?q={}',
+                'b': 'https://www.google.com/search?tbm=bks&q={}',
+                'aw': 'https://wiki.archlinux.org/?search={}',
+                'o': 'https://nixos.org/nixos/options.html#{}',
+                'p': 'https://nixos.org/nixos/packages.html#{}',
+                'd': 'https://en.wiktionary.org/wiki/{}',
+                's': 'http://stackoverflow.com/search?q={}',
+                'm': 'https://maps.google.com/maps?q={}',
+                'c': 'https://clio.columbia.edu/quicksearch?q={}',
+                'gh': 'https://github.com/search?q={}&type=Repositories',
+                'h': 'https://hackage.haskell.org/packages/search?terms={}'
+                }
+        config.bind('N', 'tab-next')
+        config.bind('E', 'tab-prev')
+        config.bind('K', 'search-prev')
+        config.bind('l', 'enter-mode insert')
+        config.bind('n', 'scroll down')
+        config.bind('e', 'scroll up')
+        config.bind('i', 'scroll right')
+        config.bind('j', 'search-next')
+        config.bind('gL', 'spawn --userscript org-link')
+        config.bind('pf', 'spawn --userscript password_fill')
+        config.bind('t', 'set-cmd-text -s :open -t')
+        config.bind('Y', 'yank selection')
+        config.bind('O', 'set-cmd-text :open {url:pretty}')
+      '';
     };
   };
 }
