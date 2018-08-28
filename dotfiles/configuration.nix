@@ -88,6 +88,9 @@
        jupyter
        python-fontconfig
      ]))
+     # Elm
+     elmPackages.elm
+     elmPackages.elm-reactor
      # Minimal computing
      ranger highlight       # File manager
      scrot                  # Screenshots
@@ -119,8 +122,11 @@
     PLASMA_USE_QT_SCALING = "1";
     QT_AUTO_SCREEN_SCALE_FACTOR = "0";
     QT_QPA_PLATFORM = "xcb";
+    QT_QPA_PLATFORMTHEME = "qt5ct";
     QT_QUICK_CONTROLS_STYLE = "org.kde.desktop";
     QT_SCREEN_SCALE_FACTORS = "eDP1=2;HDMI1=2;VIRTUAL1=2;";
+    XCURSOR_THEME = "breeze_cursors";
+    XCURSOR_SIZE = "48";
 
     # Preferred applications
     EDITOR = "emacsclient -c";
@@ -131,24 +137,29 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  # Enable emacs daemon, and set EDITOR to emacsclient
-  services.emacs.enable = true;
+  services = {
+    # Enable emacs daemon, and set EDITOR to emacsclient
+    emacs.enable = true;
 
-  # X
-  services.xserver = {
-    enable = true;
-    dpi = 180;
-    # Enable touchpad support.
-    libinput.enable = true;
-    # Keyboard settings
-    layout = "us,us";
-    xkbVariant = "altgr-intl,colemak";
-    # Change layouts with Alt+Space
-    xkbOptions = "grp:alt_space_toggle";
-    # Enable the KDE Desktop Environment.
-    displayManager.sddm.enable = true;
-    desktopManager.plasma5.enable = true;
-    windowManager.bspwm.enable = true;
+    # Power button invokes suspend, not shutdown.
+    logind.extraConfig = "HandlePowerKey=suspend";
+
+    # X
+    xserver = {
+      enable = true;
+      dpi = 180;
+      # Enable touchpad support.
+      libinput.enable = true;
+      # Keyboard settings
+      layout = "us,us";
+      xkbVariant = "altgr-intl,colemak";
+      # Change layouts with Alt+Space
+      xkbOptions = "grp:alt_space_toggle,grp:alt_space_toggle";
+      # Enable the KDE Desktop Environment.
+      displayManager.sddm.enable = true;
+      desktopManager.plasma5.enable = true;
+      windowManager.bspwm.enable = true;
+    };
   };
 
   # Shell
