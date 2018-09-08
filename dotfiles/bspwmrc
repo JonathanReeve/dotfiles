@@ -27,7 +27,7 @@ xrdb -merge ~/.extend.Xresources
 #compton -r 25 -o .85 -f --backend glx
 # Set pointer, so that it's not an X
 xsetroot -cursor_name left_ptr
-polybar main_bar
-"${HOME}/Dotfiles/scripts/notifications.sh"
-sxhkd
+#polybar main_bar &
+sxhkd &
 wal -R
+"${HOME}/Dotfiles/scripts/notifications.sh"
