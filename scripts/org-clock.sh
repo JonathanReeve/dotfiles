@@ -1,18 +1,18 @@
-#!/run/current-system/sw/bin/fish
+#!/run/current-system/sw/bin/bash
 
-set CLOCKSTRING (emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)' 2>&1 )
+export CLOCKSTRING=$(/run/current-system/sw/bin/emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)' 2>&1 )
 
-switch "$CLOCKSTRING"
-case "*can\'t find socket*"
-    echo " Emacs off!"
-case "-1"
-    echo " Emacs off!"
-case "*server-start*"
-    echo " Emacs off!"
-case "*ERROR*"
-    echo " Off-clock!"
-case "*function definition*"
-    echo " Off-clock!"
-case "*"
-    echo (echo $CLOCKSTRING | cut -d\" -f2 | head -c35)
-end
+case "$CLOCKSTRING" in
+    *"can\'t find socket"*)
+        echo " Emacs off!" ;;
+    "-1")
+        echo " Emacs off!" ;;
+    *"server-start"*)
+        echo " Emacs off!" ;;
+    *"ERROR"*)
+        echo " Off-clock!" ;;
+    *"function definition"*)
+        echo " Off-clock!" ;;
+    *)
+        echo ${CLOCKSTRING:3:30} ;
+esac
