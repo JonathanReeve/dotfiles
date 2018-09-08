@@ -57,6 +57,7 @@
      nix-index              # Indexing files for nix-locate
      nix-prefetch-git nix-prefetch-scripts # Help writing .nix files
      cabal2nix              # Haskell packages to .nix expressions
+     pypi2nix 
      home-manager           # Dotfiles management
      # CLI
      fish                   # Shell
@@ -81,16 +82,17 @@
      # Haskell
      stack
      ghc
+     haskellPackages.turtle
      libxml2
      # Python
      (python3.withPackages(ps: with ps; [
        pandas
        jupyter
-       python-fontconfig
+       xonsh
+       virtualenvwrapper
      ]))
      # Elm
      elmPackages.elm
-     elmPackages.elm-reactor
      # Minimal computing
      ranger highlight       # File manager
      scrot                  # Screenshots
@@ -154,7 +156,7 @@
       layout = "us,us";
       xkbVariant = "altgr-intl,colemak";
       # Change layouts with Alt+Space
-      xkbOptions = "grp:alt_space_toggle,grp:alt_space_toggle";
+      xkbOptions = "grp:alt_space_toggle";
       # Enable the KDE Desktop Environment.
       displayManager.sddm.enable = true;
       desktopManager.plasma5.enable = true;
@@ -174,7 +176,7 @@
         home = "/home/jon";
         shell = pkgs.fish;
         description = "Jonathan Reeve";
-        extraGroups = [ "wheel" "networkmanager" ];
+        extraGroups = [ "wheel" "networkmanager" "tty" "dialout"];
       };
     systemrestore =
       { isNormalUser = true;
