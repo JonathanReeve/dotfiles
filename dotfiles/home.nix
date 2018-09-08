@@ -1,8 +1,15 @@
 {pkgs, ...}:
 
 let
+  # Personal Info
+  name = "Jonathan Reeve";
+  email = "jon.reeve@gmail.com";
+  githubUsername = "JonathanReeve";
+  # Paths
   dots = "/home/jon/Dotfiles/dotfiles";
   scripts = "/home/jon/Dotfiles/scripts";
+  maildir = "/home/jon/Mail";
+  # Preferences
   font = "Hack";
   backgroundColor = "#243442"; # Blue steel
   foregroundColor = "#deedf9"; # Light blue
@@ -17,8 +24,8 @@ in
     };
     git = {
       enable = true;
-      userName = "Jonathan Reeve";
-      userEmail = "jon.reeve@gmail.com";
+      userName = "${name}";
+      userEmail = "${email}";
     };
     vim = {
       enable = true;
@@ -113,16 +120,17 @@ in
   };
 
   xsession = {
-    enable = false;
+    enable = true;
     pointerCursor = {
         package = pkgs.vanilla-dmz;
         name = "Vanilla-DMZ";
-        size = 64;
+        size = 48;
     };
-    windowManager.command = "bspwm";
+    windowManager.command = "${pkgs.bspwm}/bin/bspwm";
     profileExtra =
     ''
       xrdb -merge ~/.extend.Xresources
+      bass source ~/.nix-profile/etc/profile.d/hm-session-vars.sh
     '';
   };
 
@@ -152,7 +160,7 @@ in
   };
 
   qt = {
-    enable = true;
+    enable = false;
     useGtkTheme = true;
   };
 
@@ -201,8 +209,8 @@ in
       blur = true;
     };
     polybar = {
-      enable = false;
-      script = "xrdb -merge ~/.extend.Xresources && polybar main_bar";
+      enable = true;
+      script = "polybar main_bar &";
       config = {
         "bar/main_bar" = {
            monitor = "eDP1";
@@ -293,7 +301,7 @@ in
           type = "custom/script";
           interval = 10;
           exec = "${scripts}/org-clock.sh";
-          click-left = "emacsclient --eval '(org-clock-out)' && echo ' Stopped!'";
+          click-left = "${pkgs.emacs}/bin/emacsclient --eval '(org-clock-out)' && echo ' Stopped!'";
         };
         "module/memory" = {
           type = "internal/memory";
@@ -325,6 +333,76 @@ in
     };
   };
 
+  # Adapted from https://github.com/yrashk/nix-home/blob/master/home.nix#L194
+  systemd.user = {
+    services = {
+      dropbox = {
+        Unit = {
+          Description = "Dropbox";
+          After = [ "graphical-session-pre.target" ];
+          PartOf = [ "graphical-session.target" ];
+        };
+        Service = {
+          Restart = "on-failure";
+          RestartSec = 1;
+          ExecStart = "${pkgs.dropbox}/bin/dropbox";
+          Environment = "QT_PLUGIN_PATH=/run/current-system/sw/${pkgs.qt5.qtbase.qtPluginPrefix}";
+        };
+        Install = {
+          WantedBy = [ "graphical-session.target" ];
+        };
+      };
+      syncmail = {
+        Unit = {
+          Description = "Sync email and index with mu";
+        };
+        Service = {
+          Type = "oneshot";
+          ExecStart = "${pkgs.isync}/bin/mbsync -a";
+          ExecStartPost = "${pkgs.mu}/bin/mu index -m ${maildir}";
+          SuccessExitStatus = "0 1";
+        };
+      };
+      cleanmail = {
+        Unit = {
+          Description = "Sync email and index with mu";
+        };
+        Service = {
+          Type = "oneshot";
+          ExecStart = "${pkgs.isync}/bin/mbsync -dXa";
+          ExecStartPost = "${pkgs.mu}/bin/mu index -m ${maildir}";
+          SuccessExitStatus = "0 1";
+        };
+      };
+    };
+    timers = {
+      syncmail = {
+        Unit = {
+          Description = "Schedule syncing email and indexing with mu";
+        };
+        Timer = {
+          Unit = "syncmail.service";
+          OnCalendar = "*:0/15";
+        };
+        Install = {
+          WantedBy = [ "timers.target" ];
+        };
+      };
+      cleanmail = {
+        Unit = {
+          Description = "Schedule expunging email and indexing with mu";
+        };
+        Timer = {
+          Unit = "cleanmail.service";
+          OnCalendar = "daily";
+        };
+        Install = {
+          WantedBy = [ "timers.target" ];
+        };
+      };
+    };
+  };
+
   # Dotfiles for the home root, ~/
   home = {
       file = {
@@ -335,6 +413,17 @@ in
         ''
           set editing-mode vi
           set keymap vi-command
+        '';
+        ".stack/config.yaml".text =
+        ''
+          templates:
+            params:
+              author-name: ${name}
+              author-email: ${email}
+              copyright: ${name}
+              github-username: ${githubUsername}
+          nix:
+            enable: true
         '';
       };
       # packages = [
@@ -352,11 +441,8 @@ in
       };
     };
     configFile = {
-      # "fish/config.fish".source = "${dots}/config.fish";
-
       # BSPWM stuff
       "sxhkd/sxhkdrc".source = "${dots}/sxhkdrc";
-      "polybar/config".source = "${dots}/polybar";
       "bspwm/bspwmrc".source = "${dots}/bspwmrc";
       "qutebrowser/config.py".text =
       ''
@@ -366,18 +452,8 @@ in
         c.colors.tabs.selected.even.bg = '#285577'
         c.colors.tabs.selected.odd.bg = '#285577'
         c.fonts.completion.category = '10pt monospace'
-        c.fonts.completion.entry = '10pt monospace'
-        c.fonts.debug_console = '10pt monospace'
-        c.fonts.downloads = '10pt monospace'
-        c.fonts.hints = 'bold 10pt monospace'
-        c.fonts.keyhint = '10pt monospace'
-        c.fonts.messages.error = '10pt monospace'
-        c.fonts.messages.info = '10pt monospace'
-        c.fonts.messages.warning = '10pt monospace'
         c.fonts.monospace = '${font}, Terminus, Monospace, monospace, Fixed'
-        c.fonts.prompts = '10pt sans-serif'
-        c.fonts.statusbar = '10pt monospace'
-        c.fonts.tabs = '10pt monospace'
+        c.fonts.prompts = '10pt monospace'
         c.hints.chars = 'arstdhneio'
         c.statusbar.padding = {'top': 10, 'bottom': 10, 'left': 5, 'right': 5}
         c.tabs.padding = {'top': 4, 'bottom': 4, 'left': 4, 'right': 4}
@@ -411,6 +487,17 @@ in
         config.bind('t', 'set-cmd-text -s :open -t')
         config.bind('Y', 'yank selection')
         config.bind('O', 'set-cmd-text :open {url:pretty}')
+        # Hack for repeating a search, but with a different search engine.
+        c.aliases['repeat-search'] = ';;'.join([
+            'set-cmd-text :',        # enter command mode
+            'command-history-prev',  # this command
+            'command-history-prev',  # search command
+            'rl-beginning-of-line',  # :|open engine term1 term2
+            'rl-forward-word',       # :open |engine term1 term2
+            'rl-forward-word',       # :open engine |term1 term2
+            'rl-backward-char',      # :open engine| term1 term2
+            'rl-backward-kill-word'  # :open | term1 term2
+        ])
       '';
     };
   };
