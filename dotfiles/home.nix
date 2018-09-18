@@ -89,7 +89,8 @@ in
          "gd" = "git diff";
          "gp" = "git push";
          "gdc" = "git diff --cached";
-         "glg" = "git lg";
+         "glg" = "git log --color --graph --pretty --oneline";
+         "glgb" = "git log --all --graph --decorate --oneline --simplify-by-decoration";
          "gst" = "git status";
          # Other abbreviations
          "em" = "emacsclient -c";
