@@ -33,21 +33,19 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(csv
+   '(;auto-completion
+     csv
      elm
      shell-scripts
      ;javascript
-     yaml
+     ;yaml
      html
      helm
      nixos
      (haskell :variables haskell-font-lock-symbols t)
      (keyboard-layout :variables kl-layout 'colemak-hnei)
-     (auto-completion :variables
-                      spacemacs-default-company-backends
-                      '(company-files company-capf ein:company-backend))
      emacs-lisp
-     google-calendar
+     ;;google-calendar
      bibtex
      ;ipython-notebook
      (mu4e :variables mu4e-account-alist t)
@@ -70,8 +68,9 @@ This function should only modify configuration layer settings."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(
                                       ;(ereader :location (recipe :fetcher github :repo "bddean/emacs-ereader"))
-                                      (nord-theme)
+                                      ;; (nord-theme)
                                       (base16-theme)
+                                      ;; (direnv)
                                       )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -244,7 +243,7 @@ It should only modify the values of Spacemacs settings."
    ;; to create your own spaceline theme. Value can be a symbol or list with\
    ;; additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
+   dotspacemacs-mode-line-theme '(spacemacs :separator arrow-fade :separator-scale 1.5)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -253,7 +252,7 @@ It should only modify the values of Spacemacs settings."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Hack"
-                               :size 32
+                               :size 30
                                :weight normal
                                :width normal
                                :powerline-scale 1.2)
@@ -298,12 +297,12 @@ It should only modify the values of Spacemacs settings."
    ;; Size (in MB) above which spacemacs will prompt to open the large file
    ;; literally to avoid performance issues. Opening a file literally means that
    ;; no major mode or minor modes are active. (default is 1)
-   dotspacemacs-large-file-size 2
+   dotspacemacs-large-file-size 5
    ;; Location where to auto-save files. Possible values are `original' to
    ;; auto-save the file in-place, `cache' to auto-save the file to another
    ;; file stored in the cache directory and `nil' to disable auto-saving.
    ;; (default 'cache)
-   dotspacemacs-auto-save-file-location 'cache
+   dotspacemacs-auto-save-file-location 'original
    ;; Maximum number of rollback slots to keep in the cache. (default 5)
    dotspacemacs-max-rollback-slots 5
    ;; If non-nil, `helm' will try to minimize the space it uses. (default nil)
@@ -487,6 +486,10 @@ you should place your code here."
   ;; General
   (setq vc-follow-symlinks t) ;; Always follow symlinks. 
 
+  ;; Use Tectonic as LaTeX compiler
+  ;;(setq org-latex-compiler "tectonic")
+  (setq org-latex-pdf-process (list "tectonic %f"))
+
   ;; New function for displaying ANSI color codes
   (require 'ansi-color)
   (defun display-ansi-colors ()
@@ -613,8 +616,8 @@ A custom journal helper function."
   (setq holiday-hebrew-holidays nil)
 
   ;; Bibliography
-  (setq reftex-default-bibliography '("~/Dropbox/Papers/library.bib"))
-  (setq org-ref-default-bibliography '("~/Dropbox/Papers/library.bib")
+  (setq reftex-default-bibliography '("~/Dropbox/Papers/library.bib")
+        org-ref-default-bibliography '("~/Dropbox/Papers/library.bib")
         org-ref-pdf-directory "~/Dropbox/Papers" ;; keep the final slash off
         org-ref-bibliography-notes "~/Dropbox/Org/Projects/books.org"
         bibtex-completion-pdf-field "file"
@@ -629,9 +632,9 @@ A custom journal helper function."
   :YEAR: %y
  :END:
 ")
-  (setq org-ref-open-pdf-function
-        (lambda (fpath)
-          (start-process "okular" "*helm-bibtex-okular*" "/usr/bin/okular" fpath)))
+  ;; (setq org-ref-open-pdf-function
+  ;;       (lambda (fpath)
+  ;;         (start-process "okular" "*helm-bibtex-okular*" "/usr/bin/okular" fpath)))
 
   (defun org-ref-get-zotero-pdf-filename (key)
     "Return the pdf filename indicated by zotero file field.
@@ -652,7 +655,7 @@ Argument KEY is the bibtex key."
             (message "PDF filename not found.")
             )))))
 
-  ;; Override this function. 
+  ;; Override this function.
   (defun org-ref-open-bibtex-pdf ()
     "Open pdf for a bibtex entry, if it exists.
 assumes point is in
@@ -666,21 +669,22 @@ the entry of interest in the bibfile.  but does not check that."
              (pdf (org-ref-get-zotero-pdf-filename key)))
         (message "%s" pdf)
         (if (file-exists-p pdf)
-            (org-open-link-from-string (format "[[file:%s]]" pdf))
+            ;; (org-open-link-from-string (format "[[file:%s]]" pdf))
+            (shell-command (format "zathura %s" pdf))
           (ding)))))
 
   (setq neo-theme 'nerd)
 
   ;; Jupyter
-  (setq ein:use-auto-complete t)
-  ;; Or, to enable "superpack" (a little bit hacky improvements):
-  (setq ein:use-auto-complete-superpack t)
+  ;(setq ein:use-auto-complete t)
+  ; Or, to enable "superpack" (a little bit hacky improvements):
+  ;(setq ein:use-auto-complete-superpack t)
   ;; More autocomplete for jupyter 
-  ;;(add-to-list 'company-backends #'user-company-ein-backend)
+  ;(add-to-list 'company-backends #'user-company-ein-backend)
 
-  (spacemacs|add-company-backends
-   :backends ein:company-backend
-   :modes ein:notebook-mode)
+  ;(spacemacs|add-company-backends
+  ; :backends ein:company-backend
+  ; :modes ein:notebook-mode)
 
   ;; Markdown 
   (add-hook 'markdown-mode 'visual-line-mode)
@@ -695,9 +699,6 @@ the entry of interest in the bibfile.  but does not check that."
 
   (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
   (setq mu4e-html2text-command "w3m -T text/html")
-  ;;(setq mu4e-html2text-command "pandoc --wrap=none -f html -t org")
-  ;;(setq mu4e-html2text-command "html2text -b 0") ;; python-html2text
-  ;;(setq mu4e-html2text-command "html2text -utf8 -nobs -width 72") ;; CLI html2text
 
   ;; configure orgmode support in mu4e
   ;; (require 'org-mu4e)
@@ -794,6 +795,12 @@ the entry of interest in the bibfile.  but does not check that."
   (global-set-key (kbd "<f2>") 'org-agenda-list)
   (global-set-key (kbd "<f3>") 'org-todo-list)
   (global-set-key (kbd "<f4>") 'mu4e)
+  (with-eval-after-load 'evil-maps
+    (define-key evil-normal-state-map (kbd "C-h") nil)
+    (define-key evil-normal-state-map (kbd "C-n") nil)
+    (define-key evil-motion-state-map (kbd "C-e") nil)
+    (define-key evil-normal-state-map (kbd "C-i") nil)
+  )
   (global-unset-key (kbd "C-h"))
   (global-unset-key (kbd "C-n"))
   (global-unset-key (kbd "C-e"))
@@ -802,7 +809,6 @@ the entry of interest in the bibfile.  but does not check that."
   (global-set-key (kbd "C-n") 'evil-window-down)
   (global-set-key (kbd "C-e") 'evil-window-up)
   (global-set-key (kbd "C-i") 'evil-window-right)
-
   )
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.

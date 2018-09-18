@@ -14,8 +14,39 @@ let
   backgroundColor = "#243442"; # Blue steel
   foregroundColor = "#deedf9"; # Light blue
   warningColor = "#e23131"; # Reddish
+  lockCmd = "${pkgs.i3lock-fancy}/bin/i3lock-fancy -p -t ''";
 in
 {
+  accounts.email = {
+    maildirBasePath = "${maildir}";
+    accounts = {
+      gmail = {
+        address = "${email}";
+        userName = "${email}";
+        flavor = "gmail.com";
+        passwordCommand = "${pkgs.pass}/bin/pass gmail";
+        primary = true;
+        mbsync = {
+          enable = true;
+          expunge = "both";
+          patterns = [ "*" "![Gmail]*" "[Gmail]/Sent Mail" ];
+        };
+        realName = "Jonathan Reeve";
+      };
+      columbia = {
+        address = "jonathan.reeve@columbia.edu";
+        userName = "jpr2152@columbia.edu";
+        flavor = "gmail.com";
+        passwordCommand = "${pkgs.pass}/bin/pass lionmail";
+        mbsync = {
+          enable = true;
+          expunge = "both";
+          patterns = [ "*" "![Gmail]*" "[Gmail]/Sent Mail" ];
+        };
+        realName = "Jonathan Reeve";
+      };
+    };
+  };
   programs = {
     # Have home-manager manage itself.
     home-manager = {
@@ -26,6 +57,9 @@ in
       enable = true;
       userName = "${name}";
       userEmail = "${email}";
+    };
+    mbsync = {
+      enable = true;
     };
     vim = {
       enable = true;
@@ -60,6 +94,7 @@ in
          # Other abbreviations
          "em" = "emacsclient -c";
          "pw" = "vim ~/Dropbox/Personal/.p10.txt";
+         "lock" = "${lockCmd}";
        };
 
        interactiveShellInit =
@@ -74,7 +109,7 @@ in
             end
 
             set -U vaultmount ~/Documents/Settings/.private-mount
-            set -U vaultloc ~/Dropbox/Personal/.Vault_encfs 
+            set -U vaultloc ~/Dropbox/Personal/.Vault_encfs
 
             alias vault="encfs $vaultloc $vaultmount"
             alias unvault="fusermount -u $vaultmount"
@@ -86,8 +121,20 @@ in
               and emacsclient -c $vaultmount/Journal/jnl.org
               and unvault
             end
-
             funcsave jnl
+
+            function upgrade
+              sudo -i nixos-rebuild switch --upgrade
+              and nix-env -u
+              and home-manager switch --upgrade
+            end
+            funcsave upgrade
+
+            function clean
+              nix-store --gc --print-roots
+              and sudo nix-collect-garbage --delete-older-than 5d
+            end
+            funcsave clean
          '';
        promptInit =
          ''
@@ -116,6 +163,7 @@ in
     termite = {
       enable = true;
       font = "${font} 11";
+      backgroundColor = "rgba(32, 39, 51, 0.3)";
     };
   };
 
@@ -155,7 +203,7 @@ in
       package = pkgs.paper-icon-theme;
       name = "Paper";
     };
-    # Give Termite some internal spacing. 
+    # Give Termite some internal spacing.
     gtk3.extraCss = ".termite {padding: 20px;}";
   };
 
@@ -166,14 +214,13 @@ in
 
   services = {
     dunst = {
-      # Can't get this to work yet.
-      enable = false;
+      enable = true;
       settings = {
         global = {
-          geometry = "850x80-30+70";
+          geometry = "950x80-30+70";
           padding = 32;
           horizontal_padding = 30;
-          frame_width = 10;
+          # frame_width = 10;
           font = "${font} 10";
           line_height = 4;
           markup = "full";
@@ -204,9 +251,9 @@ in
       };
     };
     compton = {
-      # Disable this for now
-      enable = false;
+      enable = true;
       blur = true;
+      shadow = true;
     };
     polybar = {
       enable = true;
@@ -330,6 +377,14 @@ in
           ramp-4 = "🌑";
         };
       };
+    };
+    screen-locker = {
+      enable = true;
+      lockCmd = "${lockCmd}";
+    };
+    mpd = {
+      enable = true;
+      musicDirectory = ~/Music;
     };
   };
 

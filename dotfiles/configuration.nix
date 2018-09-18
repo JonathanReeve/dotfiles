@@ -61,7 +61,7 @@
      nix-index              # Indexing files for nix-locate
      nix-prefetch-git nix-prefetch-scripts # Help writing .nix files
      cabal2nix              # Haskell packages to .nix expressions
-     pypi2nix 
+     pypi2nix
      home-manager           # Dotfiles management
      # CLI
      fish                   # Shell
@@ -70,25 +70,24 @@
      aspell aspellDicts.en  # Spell checker
      xorg.xbacklight        # Brightness control
      networkmanager
-     lsb-release
      gcc gnumake
      gnupg
      wget
      isync mu w3m           # Mail
      pandoc                 # Document manipulation
+     haskellPackages.pandoc-citeproc
+     #haskellPackages.pandoc-crossref
+     tectonic               # Latex
+     texlive.combined.scheme-full
      git                    # Version control
      dropbox-cli
-     # GUI
-     qutebrowser            # Web browser
-     chromium               # Another web browser
-     zotero
-     numix-cursor-theme
-     # Haskell
+     # Haskell Development
      stack
      ghc
      haskellPackages.turtle
      libxml2
-     # Python
+     sqlite sqlite-interactive # Sqlite
+     # Python Development
      (python3.withPackages(ps: with ps; [
        pandas
        jupyter
@@ -96,7 +95,7 @@
        virtualenvwrapper
      ]))
      # Elm
-     elmPackages.elm
+     # elmPackages.elm
      # Minimal computing
      ranger highlight       # File manager
      scrot                  # Screenshots
@@ -107,11 +106,21 @@
      mpv                    # Minimalist video player
      termite                # Vim-like modal terminal
      pywal                  # Wallpapers
+     feh                    # Display imaes
      bspwm sxhkd            # Window manager
      dunst libnotify        # Notifications
      weechat                # IRC
      fzf                    # Fuzzy file finder
      ag                     # Fast grep replacement
+     bat                    # Cat replacement
+     fd                     # Find replacement
+     i3lock-fancy           # Screen locker
+     ncdu                   # Fancy disk usage analyzer
+     # GUI
+     qutebrowser            # Web browser
+     chromium               # Another web browser
+     zotero
+     numix-cursor-theme
      # KDE
      konversation           # IRC
      gwenview               # Image viewer
@@ -145,7 +154,10 @@
 
   services = {
     # Enable emacs daemon, and set EDITOR to emacsclient
-    emacs.enable = true;
+    emacs = {
+      enable = true;
+      defaultEditor = true;
+    };
 
     # Power button invokes suspend, not shutdown.
     logind.extraConfig = "HandlePowerKey=suspend";
@@ -164,7 +176,7 @@
       # Enable the KDE Desktop Environment.
       displayManager.sddm.enable = true;
       desktopManager.plasma5.enable = true;
-      windowManager.bspwm.enable = true;
+      #windowManager.bspwm.enable = true;
     };
   };
 

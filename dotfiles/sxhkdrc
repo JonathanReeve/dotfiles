@@ -43,7 +43,7 @@ super + g
 #
 
 # set the window state
-super + {t,shift + t,s,f}
+super + {q,w,f,p}
 	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
 
 # set the node flags
@@ -59,7 +59,7 @@ super + {_,shift + }{h,n,e,i}
 	bspc node -{f,s} {west,south,north,east}
 
 # focus the node for the given path jump
-super + {p,b,comma,period}
+super + {l,u,y,;}
 	bspc node -f @{parent,brother,first,second}
 
 # focus the next/previous node in the current desktop
@@ -75,13 +75,13 @@ super + {grave,Tab}
 	bspc {node,desktop} -f last
 
 # focus the older or newer node in the focus history
-super + {o,i}
-	bspc wm -h off; \
-	bspc node {older,newer} -f; \
-	bspc wm -h on
+# super + {o,i}
+# 	bspc wm -h off; \
+# 	bspc node {older,newer} -f; \
+# 	bspc wm -h on
 
 # focus or send to the given desktop
-super + {_,shift + }{1-9,0}
+super + {_,shift + }{a,r,s,t,d,6-9,0}
 	bspc {desktop -f,node -d} '^{1-9,10}'
 
 #
@@ -125,7 +125,7 @@ super + shift + {Down, Up}
 	bspc node -l {below, above}
 
 # set desktop background
-super + w
+super + b
 	wal -gi ~/Pictures/Wallpapers
 
 XF86MonBrightness{Up,Down}
