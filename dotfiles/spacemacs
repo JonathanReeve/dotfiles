@@ -70,6 +70,7 @@ This function should only modify configuration layer settings."
                                       ;(ereader :location (recipe :fetcher github :repo "bddean/emacs-ereader"))
                                       ;; (nord-theme)
                                       (base16-theme)
+                                      (password-store)
                                       ;; (direnv)
                                       )
    ;; A list of packages that cannot be updated.
@@ -576,18 +577,22 @@ A custom journal helper function."
                                    "* %^{Description}\n%^{LOCATION}p\n%(cfw:org-capture-day)\n%?"))
 
   ;; Load from .authinfo. Adapted from https://github.com/myuhe/org-gcal.el/issues/47
-  (require 'netrc)
-  (defun get-authinfo (host port)
-    (let* ((netrc (netrc-parse (expand-file-name "~/.authinfo")))
-           (hostentry (netrc-machine netrc host port port)))
-      (when hostentry (netrc-get hostentry "password"))))
+  ;; (require 'netrc)
+  ;; (defun get-authinfo (host port)
+  ;;   (let* ((netrc (netrc-parse (expand-file-name "~/.authinfo")))
+  ;;          (hostentry (netrc-machine netrc host port port)))
+  ;;     (when hostentry (netrc-get hostentry "password"))))
 
-  (setq org-gcal-client-secret (get-authinfo "gcal.api" "9999"))
+  ;;(setq org-gcal-client-secret (get-authinfo "gcal.api" "9999"))
 
-  (setq org-modules '(org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-protocol))
+  ;;(setq org-gcal-client-id (password-store-get "org-gcal-client-id")
+  ;;      org-gcal-client-secret (password-store-get "org-gcal-client-secret"))
+
+  (setq org-modules '(org-bbdb org-bibtex org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-protocol))
 
   ;; My Autolinks mode. 
-  ;;(load-file "~/.emacs.d/private/org-autolinks/autolinks-mode.el")
+  (setq org-directory "~/Dropbox/Org")
+  (load-file "~/.emacs.d/private/org-autolinks/org-autolinks-mode.el")
 
   ;; Org Agenda
   (setq org-agenda-files (list "~/Dropbox/Org/Projects/"))
@@ -688,6 +693,9 @@ the entry of interest in the bibfile.  but does not check that."
 
   ;; Markdown 
   (add-hook 'markdown-mode 'visual-line-mode)
+
+  (require 'auth-source-pass)
+  (auth-source-pass-enable)
 
   ;; Mail 
   ;; Send email via Gmail:
@@ -822,7 +830,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flyspell-correct-helm flyspell-correct evil-mc dante yasnippet haskell-mode magit yapfify xterm-color ws-butler winum which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox overseer orgit org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file nix-mode neotree nameless multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum live-py-mode link-hint lcr intero insert-shebang indent-guide importmagic impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-nixos-options helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-commit ghub gh-md font-lock+ flycheck-pos-tip flycheck-haskell flycheck-elm flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elm-test-runner elm-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline diminish define-word cython-mode csv-mode counsel-projectile company-ghci company-ghc column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode base16-theme auto-highlight-symbol auto-dictionary auto-compile anaconda-mode aggressive-indent ace-window ace-link ace-jump-helm-line))))
+    (org-ref evil-matchit elm-test-runner doom-modeline base16-theme yapfify xterm-color ws-butler winum which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pdf-tools pcre2el password-store password-generator paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file nix-mode neotree nameless multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum live-py-mode link-hint key-chord intero insert-shebang indent-guide importmagic impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-nixos-options helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-bibtex helm-ag haskell-snippets google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-elm flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elm-mode elisp-slime-nav eldoc-eval editorconfig dumb-jump dotenv-mode diminish define-word dante cython-mode csv-mode counsel-projectile company-ghci company-ghc column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-dictionary auto-compile anaconda-mode aggressive-indent ace-window ace-link ace-jump-helm-line))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
