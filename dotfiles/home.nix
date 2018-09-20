@@ -176,6 +176,7 @@ in
         size = 48;
     };
     windowManager.command = "${pkgs.bspwm}/bin/bspwm";
+    scriptPath = ".xsession-hm";
     profileExtra =
     ''
       xrdb -merge ~/.extend.Xresources
@@ -197,12 +198,12 @@ in
   gtk = {
     enable = true;
     theme = {
-      package = pkgs.arc-theme;
-      name = "Arc-Dark";
+      package = pkgs.breeze-gtk;
+      name = "Breeze-Dark";
     };
     iconTheme = {
-      package = pkgs.paper-icon-theme;
-      name = "Paper";
+      package = pkgs.breeze-icons;
+      name = "breeze-dark";
     };
     # Give Termite some internal spacing.
     gtk3.extraCss = ".termite {padding: 20px;}";
@@ -212,6 +213,7 @@ in
     enable = false;
     useGtkTheme = true;
   };
+
 
   services = {
     dunst = {
@@ -408,61 +410,61 @@ in
           WantedBy = [ "graphical-session.target" ];
         };
       };
-      syncmail = {
-        Unit = {
-          Description = "Sync email and index with mu";
-        };
-        Service = {
-          Type = "oneshot";
-          ExecStart = "${pkgs.isync}/bin/mbsync -a";
-          ExecStartPost = "${pkgs.mu}/bin/mu index -m ${maildir}";
-          SuccessExitStatus = "0 1";
-        };
-      };
-      cleanmail = {
-        Unit = {
-          Description = "Sync email and index with mu";
-        };
-        Service = {
-          Type = "oneshot";
-          ExecStart = "${pkgs.isync}/bin/mbsync -dXa";
-          ExecStartPost = "${pkgs.mu}/bin/mu index -m ${maildir}";
-          SuccessExitStatus = "0 1";
-        };
-      };
+      # syncmail = {
+      #   Unit = {
+      #     Description = "Sync email and index with mu";
+      #   };
+      #   Service = {
+      #     Type = "oneshot";
+      #     ExecStart = "${pkgs.isync}/bin/mbsync -a";
+      #     ExecStartPost = "${pkgs.mu}/bin/mu index -m ${maildir}";
+      #     SuccessExitStatus = "0 1";
+      #   };
+      # };
+      # cleanmail = {
+      #   Unit = {
+      #     Description = "Sync email and index with mu";
+      #   };
+      #   Service = {
+      #     Type = "oneshot";
+      #     ExecStart = "${pkgs.isync}/bin/mbsync -dXa";
+      #     ExecStartPost = "${pkgs.mu}/bin/mu index -m ${maildir}";
+      #     SuccessExitStatus = "0 1";
+      #   };
+      # };
     };
-    timers = {
-      syncmail = {
-        Unit = {
-          Description = "Schedule syncing email and indexing with mu";
-        };
-        Timer = {
-          Unit = "syncmail.service";
-          OnCalendar = "*:0/15";
-        };
-        Install = {
-          WantedBy = [ "timers.target" ];
-        };
-      };
-      cleanmail = {
-        Unit = {
-          Description = "Schedule expunging email and indexing with mu";
-        };
-        Timer = {
-          Unit = "cleanmail.service";
-          OnCalendar = "daily";
-        };
-        Install = {
-          WantedBy = [ "timers.target" ];
-        };
-      };
-    };
+    # timers = {
+    #   syncmail = {
+    #     Unit = {
+    #       Description = "Schedule syncing email and indexing with mu";
+    #     };
+    #     Timer = {
+    #       Unit = "syncmail.service";
+    #       OnCalendar = "*:0/15";
+    #     };
+    #     Install = {
+    #       WantedBy = [ "timers.target" ];
+    #     };
+    #   };
+    #   cleanmail = {
+    #     Unit = {
+    #       Description = "Schedule expunging email and indexing with mu";
+    #     };
+    #     Timer = {
+    #       Unit = "cleanmail.service";
+    #       OnCalendar = "daily";
+    #     };
+    #     Install = {
+    #       WantedBy = [ "timers.target" ];
+    #     };
+    #   };
+    # };
   };
 
   # Dotfiles for the home root, ~/
   home = {
       file = {
-        ".spacemacs".source = "${dots}/spacemacs";
+        ".spacemacs".source = ./spacemacs;
 
         # Vim all the things!
         ".inputrc".text =
@@ -498,8 +500,8 @@ in
     };
     configFile = {
       # BSPWM stuff
-      "sxhkd/sxhkdrc".source = "${dots}/sxhkdrc";
-      "bspwm/bspwmrc".source = "${dots}/bspwmrc";
+      "sxhkd/sxhkdrc".source = ./sxhkdrc;
+      "bspwm/bspwmrc".source = ./bspwmrc;
       "qutebrowser/config.py".text =
       ''
         c.colors.completion.category.bg = "#333333"
