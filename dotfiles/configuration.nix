@@ -77,8 +77,13 @@
      pandoc                 # Document manipulation
      haskellPackages.pandoc-citeproc
      #haskellPackages.pandoc-crossref
+     # This might be the way to disable tests for pandoc-crossref, but I can't get it to work yet.
+     # Suggested here: https://github.com/lierdakil/pandoc-crossref/issues/199#issuecomment-422594460
+     # pandoc-crossref = pkgs.haskell.lib.overrideCabal pkgs.haskellPackages.pandoc-crossref (oldAttrs: {
+     #   doCheck = false;
+     # });
      tectonic               # Latex
-     texlive.combined.scheme-full
+     texlive.combined.scheme-context
      git                    # Version control
      dropbox-cli
      # Haskell Development
@@ -177,6 +182,13 @@
       displayManager.sddm.enable = true;
       desktopManager.plasma5.enable = true;
       #windowManager.bspwm.enable = true;
+      desktopManager.session = [{
+        name = "home-manager";
+        start = ''
+          ${pkgs.stdenv.shell} $HOME/.xsession-hm &
+          waitPID=$!
+        '';
+      }];
     };
   };
 
@@ -202,6 +214,9 @@
         extraGroups = [ "wheel" "networkmanager" ];
       };
   };
+
+  # Don't ask for my password *quite* as often.
+  security.sudo.extraConfig = "Defaults timestamp_timeout=60";
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
