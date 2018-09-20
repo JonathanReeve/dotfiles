@@ -126,7 +126,7 @@ super + shift + {Down, Up}
 
 # set desktop background
 super + b
-	wal -gi ~/Pictures/Wallpapers
+	wal -gi ~/Pictures/Wallpapers -o ~/Dotfiles/scripts/pywal-reload-everything.sh
 
 XF86MonBrightness{Up,Down}
 	exec xbacklight {-inc,-dec} 10
