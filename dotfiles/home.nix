@@ -31,7 +31,7 @@ in
           expunge = "both";
           patterns = [ "*" "![Gmail]*" "[Gmail]/Sent Mail" ];
         };
-        realName = "Jonathan Reeve";
+        realName = "${name}";
       };
       columbia = {
         address = "jonathan.reeve@columbia.edu";
@@ -43,7 +43,7 @@ in
           expunge = "both";
           patterns = [ "*" "![Gmail]*" "[Gmail]/Sent Mail" ];
         };
-        realName = "Jonathan Reeve";
+        realName = "${name}";
       };
     };
   };
@@ -74,7 +74,7 @@ in
         nnoremap l i
       '';
      };
-     fish = {
+    fish = {
        enable = true;
        shellAbbrs = {
          # Git abbreviations
@@ -96,9 +96,12 @@ in
          "em" = "emacsclient -c";
          "pw" = "vim ~/Dropbox/Personal/.p10.txt";
          "lock" = "${lockCmd}";
+         "new-session" = "dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.DisplayManager $XDG_SEAT_PATH org.freedesktop.DisplayManager.Seat.SwitchToGreeter";
        };
 
-       interactiveShellInit =
+
+
+interactiveShellInit =
          ''
             # Don't use vi keybindings in unknown terminals,
             # since weird things can happen.
@@ -166,6 +169,15 @@ in
       font = "${font} 11";
       backgroundColor = "rgba(32, 39, 51, 0.3)";
     };
+    zathura = {
+      enable = false;
+      options = {
+        font = "${font} 11";
+        page-padding = 0;
+        selection-clipboard = "clipboard";
+        statusbar-h-padding = 20;
+      };
+    };
   };
 
   xsession = {
@@ -175,7 +187,38 @@ in
         name = "Vanilla-DMZ";
         size = 48;
     };
-    windowManager.command = "${pkgs.bspwm}/bin/bspwm";
+    # windowManager.command = "${pkgs.bspwm}/bin/bspwm";
+    windowManager.bspwm = {
+      enable = true;
+      config = {
+        # "normal_border_color" = "$color1";
+        # "active_border_color" = "$color2";
+        # "focused_border_color" = "$color15";
+        # "presel_feedback_color" = "$color1";
+        "border_width" = 15;
+        "window_gap" = 25;
+        "split_ratio" = 0.52;
+        "gapless_monocle" = true;
+        "focus_follows_pointer" = true;
+      };
+      extraConfig = ''
+        bspc monitor -d 1 2 3 4 5 6 7 8 9 10
+        bspc rule -a emacs desktop='^1'
+        bspc rule -a qutebrowser desktop='^2'
+        bspc rule -a Gimp desktop='^8' state=floating follow=on
+      '';
+      monitors = [{
+        name = "eDP0";
+        desktops = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
+      }];
+      startupPrograms = [
+        "xrdb -merge ~/.extend.Xresources"
+        "xsetroot -cursor_name left_ptr"
+        "sxhkd"
+        "wal -R -o ${scripts}/pyal-reload-everything.sh"
+        "${scripts}/notifications.sh"
+        ];
+    };
     scriptPath = ".xsession-hm";
     profileExtra =
     ''
@@ -464,7 +507,7 @@ in
   # Dotfiles for the home root, ~/
   home = {
       file = {
-        ".spacemacs".source = ./spacemacs;
+        ".spacemacs".source = "${dots}/spacemacs";
 
         # Vim all the things!
         ".inputrc".text =
@@ -501,7 +544,7 @@ in
     configFile = {
       # BSPWM stuff
       "sxhkd/sxhkdrc".source = ./sxhkdrc;
-      "bspwm/bspwmrc".source = ./bspwmrc;
+      # "bspwm/bspwmrc".source = ./bspwmrc;
       "qutebrowser/config.py".text =
       ''
         c.colors.completion.category.bg = "#333333"

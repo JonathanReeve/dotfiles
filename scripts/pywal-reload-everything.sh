@@ -20,4 +20,7 @@ c.colors.tabs.selected.even.bg = \"$color2\"
 c.colors.tabs.selected.odd.bg = \"$color2\"
 " > config.py
 
-qutebrowser ":config-source $PWD/config.py"
+running=`ps cax | grep qutebrowser | wc -l`
+if [ $running -gt 0 ]; then
+    qutebrowser ":config-source $PWD/config.py"
+fi
