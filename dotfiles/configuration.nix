@@ -64,7 +64,7 @@
      pypi2nix
      home-manager           # Dotfiles management
      # CLI
-     fish                   # Shell
+     fish xonsh             # Shell
      vim emacs              # Text editor
      pass encfs             # Passwords and encryption
      aspell aspellDicts.en  # Spell checker
@@ -76,16 +76,12 @@
      isync mu w3m           # Mail
      pandoc                 # Document manipulation
      haskellPackages.pandoc-citeproc
-     #haskellPackages.pandoc-crossref
-     # This might be the way to disable tests for pandoc-crossref, but I can't get it to work yet.
-     # Suggested here: https://github.com/lierdakil/pandoc-crossref/issues/199#issuecomment-422594460
-     # pandoc-crossref = pkgs.haskell.lib.overrideCabal pkgs.haskellPackages.pandoc-crossref (oldAttrs: {
-     #   doCheck = false;
-     # });
+     haskellPackages.pandoc-crossref
      tectonic               # Latex
      texlive.combined.scheme-context
      git                    # Version control
      dropbox-cli
+     unzip                  # Archives
      # Haskell Development
      stack
      ghc
@@ -95,8 +91,13 @@
      # Python Development
      (python3.withPackages(ps: with ps; [
        pandas
+       matplotlib
        jupyter
-       xonsh
+       nltk
+       pillow
+       # numpy
+       # scikitlearn
+       # textblob
        virtualenvwrapper
      ]))
      # Elm
@@ -104,6 +105,9 @@
      # Minimal computing
      ranger highlight       # File manager
      scrot                  # Screenshots
+     tree                   # Show file hierarchies
+     lftp                   # Fast file transfers
+     autojump               # Jump around! With `j`
      # rofi                   # Launcher
      zathura                # PDF Viewer
      polybar                # System monitor, etc.
@@ -119,8 +123,10 @@
      ag                     # Fast grep replacement
      bat                    # Cat replacement
      fd                     # Find replacement
+     gotop                  # Top replacement (system monitor)
      i3lock-fancy           # Screen locker
      ncdu                   # Fancy disk usage analyzer
+     neofetch               # Fancy system information
      # GUI
      qutebrowser            # Web browser
      chromium               # Another web browser
@@ -166,6 +172,8 @@
 
     # Power button invokes suspend, not shutdown.
     logind.extraConfig = "HandlePowerKey=suspend";
+
+    printing.enable = true;
 
     # X
     xserver = {
