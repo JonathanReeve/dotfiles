@@ -12,6 +12,7 @@
 
   # Use the systemd-boot EFI boot loader.
   boot = {
+    cleanTmpDir = true;
     plymouth.enable = true;
     loader = {
       systemd-boot.enable = true;
@@ -37,7 +38,7 @@
   i18n = {
     # HiDPI Font
     consoleFont = "latarcyrheb-sun32";
-    consoleKeyMap = "us";
+    consoleUseXkbConfig = true;
     defaultLocale = "en_US.UTF-8";
     supportedLocales = [ "en_US.UTF-8/UTF-8" ];
   };
@@ -60,8 +61,8 @@
      # Nix stuff
      nix-index              # Indexing files for nix-locate
      nix-prefetch-git nix-prefetch-scripts # Help writing .nix files
-     cabal2nix              # Haskell packages to .nix expressions
-     pypi2nix
+     cabal2nix pypi2nix
+     nodePackages.node2nix 
      home-manager           # Dotfiles management
      # CLI
      fish xonsh             # Shell
@@ -74,16 +75,21 @@
      gnupg
      wget
      isync mu w3m           # Mail
-     pandoc                 # Document manipulation
+     haskellPackages.pandoc # Document manipulation
      haskellPackages.pandoc-citeproc
-     haskellPackages.pandoc-crossref
+     haskellPackages.hlint
+     haskellPackages.apply-refact
+     haskellPackages.stylish-haskell
+     haskellPackages.hasktags
+     haskellPackages.hoogle
+     #haskellPackages.pandoc-crossref
      tectonic               # Latex
-     texlive.combined.scheme-context
+     #texlive.combined.scheme-context
      git                    # Version control
      dropbox-cli
      unzip                  # Archives
      # Haskell Development
-     stack
+     # stack
      ghc
      haskellPackages.turtle
      libxml2
@@ -94,7 +100,6 @@
        matplotlib
        jupyter
        nltk
-       pillow
        # numpy
        # scikitlearn
        # textblob
@@ -183,9 +188,7 @@
       libinput.enable = true;
       # Keyboard settings
       layout = "us,us";
-      xkbVariant = "altgr-intl,colemak";
-      # Change layouts with Alt+Space
-      xkbOptions = "grp:alt_space_toggle";
+      xkbVariant = "colemak";
       # Enable the KDE Desktop Environment.
       displayManager.sddm.enable = true;
       desktopManager.plasma5.enable = true;

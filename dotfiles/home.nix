@@ -98,10 +98,7 @@ in
          "lock" = "${lockCmd}";
          "new-session" = "dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.DisplayManager $XDG_SEAT_PATH org.freedesktop.DisplayManager.Seat.SwitchToGreeter";
        };
-
-
-
-interactiveShellInit =
+       interactiveShellInit =
          ''
             # Don't use vi keybindings in unknown terminals,
             # since weird things can happen.
@@ -207,10 +204,10 @@ interactiveShellInit =
         bspc rule -a qutebrowser desktop='^2'
         bspc rule -a Gimp desktop='^8' state=floating follow=on
       '';
-      monitors = [{
-        name = "eDP0";
-        desktops = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
-      }];
+      # monitors = [{
+      #   name = "eDP0";
+      #   desktops = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
+      # }];
       startupPrograms = [
         "xrdb -merge ~/.extend.Xresources"
         "xsetroot -cursor_name left_ptr"
@@ -256,7 +253,6 @@ interactiveShellInit =
     enable = false;
     useGtkTheme = true;
   };
-
 
   services = {
     dunst = {

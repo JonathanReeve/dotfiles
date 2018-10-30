@@ -17,14 +17,14 @@
       fsType = "ext4";
     };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/BC54-44A3";
-      fsType = "vfat";
-    };
-
   fileSystems."/home" =
     { device = "/dev/disk/by-uuid/e5f04b37-7cf9-4824-8f0c-075e285cc3cb";
       fsType = "ext4";
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/BC54-44A3";
+      fsType = "vfat";
     };
 
   swapDevices =
