@@ -211,7 +211,7 @@ in
       startupPrograms = [
         "xrdb -merge ~/.extend.Xresources"
         "xsetroot -cursor_name left_ptr"
-        "sxhkd"
+        "sxhkd -m 1" # The flag for non-qwerty
         "wal -R -o ${scripts}/pyal-reload-everything.sh"
         "${scripts}/notifications.sh"
         ];
@@ -296,6 +296,12 @@ in
       enable = true;
       blur = true;
       shadow = true;
+    };
+    gpg-agent = {
+      enable = true;
+      # Don't ask for password all the time.
+      defaultCacheTtl = 31536000; # 365 days
+      maxCacheTtl = 31536000;
     };
     polybar = {
       enable = true;

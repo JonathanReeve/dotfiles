@@ -187,7 +187,7 @@
       # Enable touchpad support.
       libinput.enable = true;
       # Keyboard settings
-      layout = "us,us";
+      layout = "us";
       xkbVariant = "colemak";
       # Enable the KDE Desktop Environment.
       displayManager.sddm.enable = true;

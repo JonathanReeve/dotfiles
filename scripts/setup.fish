@@ -9,8 +9,6 @@ mkdir -p "$HOME/.config/nixpkgs"
 ln -s "$dots/home.nix" "$HOME/.config/nixpkgs/home.nix"
 sudo ln -s "$dots/configuration.nix" "$dots/hardware-configuration.nix" "/etc/nixos"
 
-
-
 set -U vaultmount ~/Documents/Settings/.private-mount
 set -U vaultloc ~/Dropbox/Personal/.Vault_encfs 
 
