@@ -51,7 +51,7 @@ in
     # Have home-manager manage itself.
     home-manager = {
       enable = true;
-      path = "/home/jon/Code/home-manager";
+      path = "https://github.com/rycee/home-manager/archive/master.tar.gz";
     };
     git = {
       enable = true;
@@ -112,6 +112,7 @@ in
             set -U vaultmount ~/Documents/Settings/.private-mount
             set -U vaultloc ~/Dropbox/Personal/.Vault_encfs
 
+            set -U 
             alias vault="encfs $vaultloc $vaultmount"
             alias unvault="fusermount -u $vaultmount"
             funcsave vault
@@ -182,40 +183,8 @@ in
     pointerCursor = {
         package = pkgs.vanilla-dmz;
         name = "Vanilla-DMZ";
-        size = 48;
     };
-    # windowManager.command = "${pkgs.bspwm}/bin/bspwm";
-    windowManager.bspwm = {
-      enable = true;
-      config = {
-        # "normal_border_color" = "$color1";
-        # "active_border_color" = "$color2";
-        # "focused_border_color" = "$color15";
-        # "presel_feedback_color" = "$color1";
-        "border_width" = 15;
-        "window_gap" = 25;
-        "split_ratio" = 0.52;
-        "gapless_monocle" = true;
-        "focus_follows_pointer" = true;
-      };
-      extraConfig = ''
-        bspc monitor -d 1 2 3 4 5 6 7 8 9 10
-        bspc rule -a emacs desktop='^1'
-        bspc rule -a qutebrowser desktop='^2'
-        bspc rule -a Gimp desktop='^8' state=floating follow=on
-      '';
-      # monitors = [{
-      #   name = "eDP0";
-      #   desktops = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
-      # }];
-      startupPrograms = [
-        "xrdb -merge ~/.extend.Xresources"
-        "xsetroot -cursor_name left_ptr"
-        "sxhkd -m 1" # The flag for non-qwerty
-        "wal -R -o ${scripts}/pyal-reload-everything.sh"
-        "${scripts}/notifications.sh"
-        ];
-    };
+    windowManager.command = "${pkgs.bspwm}/bin/bspwm";
     scriptPath = ".xsession-hm";
     profileExtra =
     ''
@@ -227,12 +196,10 @@ in
   xresources.properties = {
     "Xft.antialias" = 1;
     "Xft.autohint" = 0;
-    "Xft.dpi" = 192;
     "Xft.hinting" = 1;
     "Xft.hintstyle" = "hintfull";
     "Xft.lcdfilter" = "lcddefault";
     "Xcursor.theme" = "breeze_cursors";
-    "Xcursor.size" = 48;
   };
 
   gtk = {
@@ -430,10 +397,6 @@ in
       enable = true;
       lockCmd = "${lockCmd}";
     };
-    mpd = {
-      enable = true;
-      musicDirectory = ~/Music;
-    };
   };
 
   # Adapted from https://github.com/yrashk/nix-home/blob/master/home.nix#L194
@@ -546,7 +509,7 @@ in
     configFile = {
       # BSPWM stuff
       "sxhkd/sxhkdrc".source = ./sxhkdrc;
-      # "bspwm/bspwmrc".source = ./bspwmrc;
+      "bspwm/bspwmrc".source = ./bspwmrc;
       "qutebrowser/config.py".text =
       ''
         c.colors.completion.category.bg = "#333333"
@@ -554,12 +517,12 @@ in
         c.colors.tabs.odd.bg = '#222222'
         c.colors.tabs.selected.even.bg = '#285577'
         c.colors.tabs.selected.odd.bg = '#285577'
-        c.fonts.completion.category = '10pt monospace'
+        c.fonts.completion.category = '5pt monospace'
         c.fonts.monospace = '${font}, Terminus, Monospace, monospace, Fixed'
         c.fonts.prompts = '10pt monospace'
         c.hints.chars = 'arstdhneio'
-        c.statusbar.padding = {'top': 10, 'bottom': 10, 'left': 5, 'right': 5}
-        c.tabs.padding = {'top': 4, 'bottom': 4, 'left': 4, 'right': 4}
+        c.statusbar.padding = {'top': 5, 'bottom': 5, 'left': 3, 'right': 3}
+        c.tabs.padding = {'top': 2, 'bottom': 2, 'left': 2, 'right': 2}
         c.url.searchengines = {
                 'DEFAULT': 'https://duckduckgo.com/?q={}',
                 'g': 'https://www.google.com/search?q={}',

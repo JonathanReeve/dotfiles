@@ -12,6 +12,7 @@
 
   # Use the systemd-boot EFI boot loader.
   boot = {
+    blacklistedKernelModules = [ "ideapad_laptop" ]; 
     cleanTmpDir = true;
     plymouth.enable = true;
     loader = {
@@ -27,17 +28,10 @@
 
   nixpkgs.config = {
     allowUnfree = true;
-    chromium = {
-      enablePepperFlash = true;
-      enablePepperPDF = true;
-      #enableWideVine = true;
-    };
   };
 
   # Select internationalisation properties.
   i18n = {
-    # HiDPI Font
-    consoleFont = "latarcyrheb-sun32";
     consoleUseXkbConfig = true;
     defaultLocale = "en_US.UTF-8";
     supportedLocales = [ "en_US.UTF-8/UTF-8" ];
@@ -83,8 +77,8 @@
      haskellPackages.hasktags
      haskellPackages.hoogle
      #haskellPackages.pandoc-crossref
-     tectonic               # Latex
-     #texlive.combined.scheme-context
+     #tectonic               # Latex
+     #texlive.combined.scheme-full
      git                    # Version control
      dropbox-cli
      unzip                  # Archives
@@ -126,9 +120,9 @@
      weechat                # IRC
      fzf                    # Fuzzy file finder
      ag                     # Fast grep replacement
-     bat                    # Cat replacement
+     #bat                    # Cat replacement
      fd                     # Find replacement
-     gotop                  # Top replacement (system monitor)
+     #gotop                  # Top replacement (system monitor)
      i3lock-fancy           # Screen locker
      ncdu                   # Fancy disk usage analyzer
      neofetch               # Fancy system information
@@ -149,15 +143,10 @@
    ];
 
   environment.variables = {
-    # HiDPI Settings
-    PLASMA_USE_QT_SCALING = "1";
-    QT_AUTO_SCREEN_SCALE_FACTOR = "0";
     QT_QPA_PLATFORM = "xcb";
     QT_QPA_PLATFORMTHEME = "qt5ct";
     QT_QUICK_CONTROLS_STYLE = "org.kde.desktop";
-    QT_SCREEN_SCALE_FACTORS = "eDP1=2;HDMI1=2;VIRTUAL1=2;";
     XCURSOR_THEME = "breeze_cursors";
-    XCURSOR_SIZE = "48";
 
     # Preferred applications
     EDITOR = "emacsclient -c";
@@ -183,7 +172,6 @@
     # X
     xserver = {
       enable = true;
-      dpi = 180;
       # Enable touchpad support.
       libinput.enable = true;
       # Keyboard settings
