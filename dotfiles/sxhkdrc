@@ -8,7 +8,7 @@ super + Return
 
 # program launcher
 super + @space
-	env LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive rofi -show drun
+        rofi -show drun
 
 # make sxhkd reload its configuration files:
 super + Escape

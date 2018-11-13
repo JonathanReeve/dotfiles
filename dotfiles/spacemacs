@@ -247,7 +247,7 @@ It should only modify the values of Spacemacs settings."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Hack"
-                               :size 30
+                               :size 18
                                :weight normal
                                :width normal
                                :powerline-scale 1.2)
@@ -493,27 +493,6 @@ you should place your code here."
 
   ;; Don't prompt when opening journal or other large files
   ;(setq large-file-warning-threshold 20000000) 
-
-  ;; HiDPI. Make both fringes 18 pixels wide
-  (fringe-mode 18)
-  (define-fringe-bitmap 'right-arrow
-    (vector #b000000000000000000
-            #b000000000000000000
-            #b000000000001110000
-            #b000000000000111000
-            #b000000000000011100
-            #b000000000000001110
-            #b111111111111111111
-            #b111111111111111111
-            #b111111111111111111
-            #b000000000000001110
-            #b000000000000011100
-            #b000000000000111000
-            #b000000000001110000
-            #b000000000000000000
-            #b000000000000000000
-            #b000000000000000000
-            #b000000000000000000))
 
   ;; Org Mode
   (setq org-startup-indented t)

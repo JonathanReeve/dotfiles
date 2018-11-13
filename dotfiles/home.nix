@@ -112,7 +112,6 @@ in
             set -U vaultmount ~/Documents/Settings/.private-mount
             set -U vaultloc ~/Dropbox/Personal/.Vault_encfs
 
-            set -U 
             alias vault="encfs $vaultloc $vaultmount"
             alias unvault="fusermount -u $vaultmount"
             funcsave vault
@@ -509,7 +508,10 @@ in
     configFile = {
       # BSPWM stuff
       "sxhkd/sxhkdrc".source = ./sxhkdrc;
-      "bspwm/bspwmrc".source = ./bspwmrc;
+      "bspwm/bspwmrc" = {
+        source = ./bspwmrc;
+        executable = true;
+      };
       "qutebrowser/config.py".text =
       ''
         c.colors.completion.category.bg = "#333333"
