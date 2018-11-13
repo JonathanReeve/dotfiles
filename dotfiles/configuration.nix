@@ -51,6 +51,7 @@
     fira-code
     fira-code-symbols
     font-awesome-ttf
+    hack-font
   ];
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -83,8 +84,8 @@
      haskellPackages.hasktags
      haskellPackages.hoogle
      #haskellPackages.pandoc-crossref
-     tectonic               # Latex
-     #texlive.combined.scheme-context
+     # tectonic               # Latex
+     texlive.combined.scheme-full
      git                    # Version control
      dropbox-cli
      unzip                  # Archives
@@ -100,6 +101,7 @@
        matplotlib
        jupyter
        nltk
+       pandocfilters
        # numpy
        # scikitlearn
        # textblob
