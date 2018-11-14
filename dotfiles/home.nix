@@ -158,13 +158,13 @@ in
     };
     rofi = {
       enable = true;
-      font = "${font} 20";
+      font = "${font} 10";
       theme = "~/.cache/wal/colors-rofi-dark.rasi";
     };
     termite = {
       enable = true;
       font = "${font} 11";
-      backgroundColor = "rgba(32, 39, 51, 0.3)";
+      backgroundColor = "rgba(32, 39, 51, 0.7)";
     };
     zathura = {
       enable = false;
@@ -212,7 +212,7 @@ in
       name = "breeze-dark";
     };
     # Give Termite some internal spacing.
-    gtk3.extraCss = ".termite {padding: 20px;}";
+    gtk3.extraCss = ".termite {padding: 10px;}";
   };
 
   qt = {
@@ -276,18 +276,18 @@ in
         "bar/main_bar" = {
            monitor = "eDP1";
            bottom = "false";
-           height = 50;
+           height = 25;
            fixed-center = "true";
            background = "\${xrdb:background}";
            foreground = "\${xrdb:foreground}";
-           line-size = 6;
+           line-size = 3;
            line-color = "\${xrdb:color4}";
            padding-right = "1%";
            module-margin-left = 1;
            module-margin-right = 1;
-           font-2 = "FontAwesome:fontformat=truetype:size=19;1";
-           font-1 = "NotoEmoji:fontformat=truetype:size=19;1";
-           font-0 = "${font}:fontformat=truetype:size=19;1";
+           font-2 = "FontAwesome:fontformat=truetype:size=10;1";
+           font-1 = "NotoEmoji:fontformat=truetype:size=10;1";
+           font-0 = "${font}:fontformat=truetype:size=10;1";
            wm-restack = "bspwm";
            modules-left = "bspwm xwindow";
            modules-center = "date";
@@ -349,7 +349,7 @@ in
         };
         "module/network" = {
           type = "internal/network";
-          interface = "wlp1s0";
+          interface = "wlp107s0";
           interval = "3.0";
           format-connected = "<label-connected>";
           label-connected = " %essid%";
@@ -519,7 +519,7 @@ in
         c.colors.tabs.odd.bg = '#222222'
         c.colors.tabs.selected.even.bg = '#285577'
         c.colors.tabs.selected.odd.bg = '#285577'
-        c.fonts.completion.category = '5pt monospace'
+        c.fonts.completion.category = '10pt monospace'
         c.fonts.monospace = '${font}, Terminus, Monospace, monospace, Fixed'
         c.fonts.prompts = '10pt monospace'
         c.hints.chars = 'arstdhneio'

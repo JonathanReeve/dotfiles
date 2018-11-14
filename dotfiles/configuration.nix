@@ -56,7 +56,7 @@
      nix-index              # Indexing files for nix-locate
      nix-prefetch-git nix-prefetch-scripts # Help writing .nix files
      cabal2nix pypi2nix
-     nodePackages.node2nix 
+     # nodePackages.node2nix 
      home-manager           # Dotfiles management
      # CLI
      fish xonsh             # Shell
@@ -108,7 +108,7 @@
      lftp                   # Fast file transfers
      autojump               # Jump around! With `j`
      # rofi                   # Launcher
-     zathura                # PDF Viewer
+     # zathura                # PDF Viewer
      polybar                # System monitor, etc.
      compton                # Compositor
      mpv                    # Minimalist video player
@@ -221,5 +221,5 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "18.03"; # Did you read the comment?
+  system.stateVersion = "18.09"; # Did you read the comment?
 }
