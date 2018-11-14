@@ -131,15 +131,6 @@
      chromium               # Another web browser
      zotero
      numix-cursor-theme
-     # KDE
-     konversation           # IRC
-     gwenview               # Image viewer
-     okular                 # PDF viewer
-     dolphin                # File manager
-     kate                   # Text editor
-     ark                    # Archive management
-     spectacle              # Screenshots
-     #dragon                 # Video player
    ];
 
   environment.variables = {
@@ -167,8 +158,6 @@
     # Power button invokes suspend, not shutdown.
     logind.extraConfig = "HandlePowerKey=suspend";
 
-    printing.enable = true;
-
     # X
     xserver = {
       enable = true;
@@ -177,10 +166,8 @@
       # Keyboard settings
       layout = "us";
       xkbVariant = "colemak";
-      # Enable the KDE Desktop Environment.
-      displayManager.sddm.enable = true;
-      desktopManager.plasma5.enable = true;
-      #windowManager.bspwm.enable = true;
+      displayManager.gdm.enable = true;
+      desktopManager.gnome3.enable = true;
       desktopManager.session = [{
         name = "home-manager";
         start = ''
