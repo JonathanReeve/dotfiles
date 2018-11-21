@@ -172,7 +172,7 @@ in
   };
 
   qt = {
-    enable = true;
+    enable = false;
     useGtkTheme = true;
   };
 
