@@ -76,6 +76,8 @@
      haskellPackages.stylish-haskell
      haskellPackages.hasktags
      haskellPackages.hoogle
+     libfprint fprintd      # Fingerprint login
+     iio-sensor-proxy       # Accelerometer, gyroscope, etc.
      #haskellPackages.pandoc-crossref
      #tectonic               # Latex
      #texlive.combined.scheme-full
@@ -102,42 +104,42 @@
      # Elm
      # elmPackages.elm
      # Minimal computing
-     ranger highlight       # File manager
-     scrot                  # Screenshots
+     # ranger highlight       # File manager
+     # scrot                  # Screenshots
      tree                   # Show file hierarchies
      lftp                   # Fast file transfers
      autojump               # Jump around! With `j`
      # rofi                   # Launcher
      # zathura                # PDF Viewer
-     polybar                # System monitor, etc.
-     compton                # Compositor
-     mpv                    # Minimalist video player
-     termite                # Vim-like modal terminal
-     pywal                  # Wallpapers
-     feh                    # Display imaes
-     bspwm sxhkd            # Window manager
-     dunst libnotify        # Notifications
+     # polybar                # System monitor, etc.
+     # compton                # Compositor
+     # mpv                    # Minimalist video player
+     # termite                # Vim-like modal terminal
+     # pywal                  # Wallpapers
+     # feh                    # Display imaes
+     # bspwm sxhkd            # Window manager
+     # dunst libnotify        # Notifications
      weechat                # IRC
      fzf                    # Fuzzy file finder
      ag                     # Fast grep replacement
      #bat                    # Cat replacement
      fd                     # Find replacement
      #gotop                  # Top replacement (system monitor)
-     i3lock-fancy           # Screen locker
-     ncdu                   # Fancy disk usage analyzer
+     # i3lock-fancy           # Screen locker
+     # ncdu                   # Fancy disk usage analyzer
      neofetch               # Fancy system information
      # GUI
      qutebrowser            # Web browser
      chromium               # Another web browser
-     zotero
-     numix-cursor-theme
+     # zotero
+     # numix-cursor-theme
    ];
 
   environment.variables = {
-    QT_QPA_PLATFORM = "xcb";
-    QT_QPA_PLATFORMTHEME = "qt5ct";
-    QT_QUICK_CONTROLS_STYLE = "org.kde.desktop";
-    XCURSOR_THEME = "breeze_cursors";
+    # QT_QPA_PLATFORM = "xcb";
+    # QT_QPA_PLATFORMTHEME = "qt5ct";
+    # QT_QUICK_CONTROLS_STYLE = "org.kde.desktop";
+    # XCURSOR_THEME = "breeze_cursors";
 
     # Preferred applications
     EDITOR = "emacsclient -c";
@@ -146,7 +148,29 @@
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  hardware = {
+    pulseaudio = {
+      enable = true;
+      package = pkgs.pulseaudioFull;
+      extraModules = [ pkgs.pulseaudio-modules-bt ];
+      # configFile = pkgs.writeText "default.pa" ''
+      #   load-module module-bluetooth-policy
+      #   load-module module-bluetooth-discover
+      #   ## module fails to load with
+      #   ##   module-bluez5-device.c: Failed to get device path from module arguments
+      #   ##   module.c: Failed to load module "module-bluez5-device" (argument: ""): initialization failed.
+      #   # load-module module-bluez5-device
+      #   # load-module module-bluez5-discover
+      # '';
+    };
+    bluetooth = {
+      enable = true;
+      extraConfig = "
+        [General]
+        Enable=Source,Sink,Media,Socket
+      ";
+    };
+  };
 
   services = {
     # Enable emacs daemon, and set EDITOR to emacsclient
@@ -154,6 +178,8 @@
       enable = true;
       defaultEditor = true;
     };
+
+    fprintd.enable = true;
 
     # Power button invokes suspend, not shutdown.
     logind.extraConfig = "HandlePowerKey=suspend";
@@ -167,6 +193,7 @@
       layout = "us";
       xkbVariant = "colemak";
       displayManager.gdm.enable = true;
+      displayManager.gdm.wayland = true;
       desktopManager.gnome3.enable = true;
       desktopManager.session = [{
         name = "home-manager";
