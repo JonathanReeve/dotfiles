@@ -134,6 +134,11 @@ in
               and sudo nix-collect-garbage --delete-older-than 5d
             end
             funcsave clean
+
+            function rename-pdf
+              mv (ls -t /tmp/*.pdf | head -n 1) ~/Dropbox/Papers/$argv.pdf
+            end
+            funcsace rename-pdf
          '';
        promptInit =
          ''

@@ -71,6 +71,7 @@
      isync mu w3m           # Mail
      haskellPackages.pandoc # Document manipulation
      haskellPackages.pandoc-citeproc
+     #haskellPackages.pandoc-crossref
      haskellPackages.hlint
      haskellPackages.apply-refact
      haskellPackages.stylish-haskell
@@ -78,7 +79,6 @@
      haskellPackages.hoogle
      libfprint fprintd      # Fingerprint login
      iio-sensor-proxy       # Accelerometer, gyroscope, etc.
-     #haskellPackages.pandoc-crossref
      #tectonic               # Latex
      #texlive.combined.scheme-full
      git                    # Version control
@@ -133,6 +133,13 @@
      chromium               # Another web browser
      # zotero
      # numix-cursor-theme
+
+     # Sound
+     alsaTools
+     alsaPlugins
+     alsaUtils
+     alsa-firmware
+     pavucontrol
    ];
 
   environment.variables = {
