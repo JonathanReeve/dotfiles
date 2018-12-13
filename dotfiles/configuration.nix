@@ -80,7 +80,7 @@
      libfprint fprintd      # Fingerprint login
      iio-sensor-proxy       # Accelerometer, gyroscope, etc.
      #tectonic               # Latex
-     #texlive.combined.scheme-full
+     texlive.combined.scheme-full
      git                    # Version control
      dropbox-cli
      unzip                  # Archives
@@ -224,7 +224,7 @@
         home = "/home/jon";
         shell = pkgs.fish;
         description = "Jonathan Reeve";
-        extraGroups = [ "wheel" "networkmanager" "tty" "dialout"];
+        extraGroups = [ "wheel" "networkmanager" "tty" "dialout" "input" ];
       };
     systemrestore =
       { isNormalUser = true;

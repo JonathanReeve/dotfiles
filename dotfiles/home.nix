@@ -68,6 +68,7 @@ in
       extraConfig =
       ''
         set mouse=a
+        " Colemak some things
         nnoremap n j
         nnoremap e k
         nnoremap i l
@@ -135,10 +136,11 @@ in
             end
             funcsave clean
 
+            # A function for renaming the most recent PDF, and putting it in my Papers dir.
             function rename-pdf
               mv (ls -t /tmp/*.pdf | head -n 1) ~/Dropbox/Papers/$argv.pdf
             end
-            funcsace rename-pdf
+            funcsave rename-pdf
          '';
        promptInit =
          ''
