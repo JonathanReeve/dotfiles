@@ -26,6 +26,9 @@
     networkmanager.enable = true;
   };
 
+  # nix.binaryCaches = ["https://hie-nix.cachix.org/"];
+  # nix.binaryCachePublicKeys = ["hie-nix.cachix.org-1:EjBSHzF6VmDnzqlldGXbi0RM3HdjfTU3yDRi9Pd0jTY="];
+
   nixpkgs.config = {
     allowUnfree = true;
   };
@@ -59,7 +62,7 @@
      # nodePackages.node2nix 
      home-manager           # Dotfiles management
      # CLI
-     fish xonsh             # Shell
+     fish # xonsh             # Shell
      vim emacs              # Text editor
      pass encfs             # Passwords and encryption
      aspell aspellDicts.en  # Spell checker
@@ -69,14 +72,16 @@
      gnupg
      wget
      isync mu w3m           # Mail
-     haskellPackages.pandoc # Document manipulation
+     pandoc
+     # haskellPackages.pandoc # Document manipulation
      haskellPackages.pandoc-citeproc
-     #haskellPackages.pandoc-crossref
+     # haskellPackages.pandoc-crossref
      haskellPackages.hlint
      haskellPackages.apply-refact
-     haskellPackages.stylish-haskell
+     # haskellPackages.stylish-haskell
      haskellPackages.hasktags
      haskellPackages.hoogle
+     # haskellPackages.hakyll
      libfprint fprintd      # Fingerprint login
      iio-sensor-proxy       # Accelerometer, gyroscope, etc.
      #tectonic               # Latex
@@ -182,7 +187,7 @@
   services = {
     # Enable emacs daemon, and set EDITOR to emacsclient
     emacs = {
-      enable = true;
+      enable = false;
       defaultEditor = true;
     };
 
