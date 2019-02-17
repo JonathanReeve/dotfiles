@@ -97,14 +97,16 @@
      sqlite sqlite-interactive # Sqlite
      # Python Development
      (python3.withPackages(ps: with ps; [
-       pandas
+       # pandas
        matplotlib
        jupyter
+       virtualenvwrapper
        nltk
        # numpy
        # scikitlearn
        # textblob
-       virtualenvwrapper
+       # word2vec
+       # spacy
      ]))
      # Elm
      # elmPackages.elm
@@ -229,7 +231,7 @@
         home = "/home/jon";
         shell = pkgs.fish;
         description = "Jonathan Reeve";
-        extraGroups = [ "wheel" "networkmanager" "tty" "dialout" "input" ];
+        extraGroups = [ "wheel" "networkmanager" "tty" "dialout" "input" "docker"];
       };
     systemrestore =
       { isNormalUser = true;
@@ -248,4 +250,7 @@
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "18.09"; # Did you read the comment?
+
+  # virtualization.docker.enable = true;
+
 }
