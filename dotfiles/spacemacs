@@ -46,7 +46,7 @@ This function should only modify configuration layer settings."
      ;; hie-nix
      (keyboard-layout :variables kl-layout 'colemak-hnei)
      emacs-lisp
-     ;;google-calendar
+     ;; google-calendar
      bibtex
      ;ipython-notebook
      (mu4e :variables mu4e-account-alist t)
@@ -73,7 +73,9 @@ This function should only modify configuration layer settings."
                                       (base16-theme)
                                       (password-store)
                                       (direnv)
-                                      (vue-mode :location (recipe :fetcher github :repo "codefalling/vue-mode"))
+                                      ;;(vue-mode :location (recipe :fetcher github :repo "codefalling/vue-mode"))
+                                      (org-gcal)
+                                      ;; (org-caldav)
                                       )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -528,6 +530,9 @@ A custom journal helper function."
   (define-key evil-visual-state-map "n" 'evil-next-visual-line)
   (define-key evil-visual-state-map "e" 'evil-previous-visual-line)
 
+  ;; Python in Org Mode
+  (setq python-shell-completion-native-disabled-interpreters "python")
+
   ;; Org Code Execution
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -547,7 +552,7 @@ A custom journal helper function."
   ;; Google Calendar
   (setq org-gcal-up-days 0)
   (setq org-gcal-file-alist '(("jon.reeve@gmail.com" . "/home/jon/Dropbox/Org/Projects/schedule.org"))
-        cfw:org-capture-template '("s" "Scedule an event" entry
+        cfw:org-capture-template '("s" "Schedule an event" entry
                                    (file "/home/jon/Dropbox/Org/Projects/schedule.org")
                                    "* %^{Description}\n%^{LOCATION}p\n%(cfw:org-capture-day)\n%?"))
 
@@ -561,7 +566,13 @@ A custom journal helper function."
   (setq org-gcal-client-id (password-store-get "org-gcal-client-id")
         org-gcal-client-secret (password-store-get "org-gcal-client-secret"))
 
-  (setq org-modules '(org-bbdb org-bibtex org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-protocol))
+  (setq org-modules '(org-bibtex org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-protocol))
+
+  (setq org-caldav-oauth2-client-id (password-store-get "org-gcal-client-id")
+        org-caldav-oauth2-client-secret (password-store-get "org-gcal-client-secret")
+        org-caldav-url 'google
+        org-caldav-inbox "~/Dropbox/Org/Projects/inbox.org"
+        org-caldav-files (list "~/Dropbox/Org/schedule2.org"))
 
   ;; My Autolinks mode.
   ;; (setq org-directory "~/Dropbox/Org")
@@ -569,6 +580,14 @@ A custom journal helper function."
 
   ;; Org Agenda
   (setq org-agenda-files (list "~/Dropbox/Org/Projects/"))
+
+  (with-eval-after-load 'org-agenda
+    (require 'org-projectile)
+    (mapcar '(lambda (file)
+               (when (file-exists-p file)
+                 (push file org-agenda-files)))
+            (org-projectile-todo-files)))
+
   (setq org-refile-targets '((nil :maxlevel . 9)
                              (org-agenda-files :maxlevel . 9)))
   (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
@@ -587,11 +606,11 @@ A custom journal helper function."
           ))
 
   ;; Disable holidays. Is there an easier way of doing this? 
-  (setq holiday-christian-holidays nil)
-  (setq holiday-islamic-holidays nil)
-  (setq holiday-bahai-holidays nil)
-  (setq holiday-oriental-holidays nil)
-  (setq holiday-hebrew-holidays nil)
+  (setq holiday-christian-holidays nil
+        holiday-islamic-holidays nil
+        holiday-bahai-holidays nil
+        holiday-oriental-holidays nil
+        holiday-hebrew-holidays nil)
 
   ;; Bibliography
   (setq reftex-default-bibliography '("~/Dropbox/Columbia/Prospectus/revised/references.bib"
