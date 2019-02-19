@@ -84,9 +84,9 @@
      # haskellPackages.hakyll
      libfprint fprintd      # Fingerprint login
      iio-sensor-proxy       # Accelerometer, gyroscope, etc.
-     #tectonic               # Latex
+     #tectonic              # Latex
      texlive.combined.scheme-full
-     git                    # Version control
+     git git-lfs            # Version control
      dropbox-cli
      unzip                  # Archives
      # Haskell Development
