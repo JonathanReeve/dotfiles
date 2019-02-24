@@ -83,7 +83,7 @@
      haskellPackages.hoogle
      # haskellPackages.hakyll
      libfprint fprintd      # Fingerprint login
-     iio-sensor-proxy       # Accelerometer, gyroscope, etc.
+     # iio-sensor-proxy       # Accelerometer, gyroscope, etc.
      #tectonic              # Latex
      texlive.combined.scheme-full
      git git-lfs            # Version control
@@ -97,7 +97,7 @@
      sqlite sqlite-interactive # Sqlite
      # Python Development
      (python3.withPackages(ps: with ps; [
-       # pandas
+       pandas
        matplotlib
        jupyter
        virtualenvwrapper
@@ -111,29 +111,29 @@
      # Elm
      # elmPackages.elm
      # Minimal computing
-     # ranger highlight       # File manager
+     ranger highlight       # File manager
      # scrot                  # Screenshots
      tree                   # Show file hierarchies
      lftp                   # Fast file transfers
      autojump               # Jump around! With `j`
-     # rofi                   # Launcher
+     rofi                   # Launcher
      # zathura                # PDF Viewer
-     # polybar                # System monitor, etc.
-     # compton                # Compositor
-     # mpv                    # Minimalist video player
-     # termite                # Vim-like modal terminal
-     # pywal                  # Wallpapers
-     # feh                    # Display imaes
-     # bspwm sxhkd            # Window manager
-     # dunst libnotify        # Notifications
+     polybar                # System monitor, etc.
+     compton                # Compositor
+     mpv                    # Minimalist video player
+     termite                # Vim-like modal terminal
+     pywal                  # Wallpapers
+     feh                    # Display imaes
+     bspwm sxhkd            # Window manager
+     dunst libnotify        # Notifications
      weechat                # IRC
      fzf                    # Fuzzy file finder
      ag                     # Fast grep replacement
-     #bat                    # Cat replacement
+     bat                    # Cat replacement
      fd                     # Find replacement
-     #gotop                  # Top replacement (system monitor)
-     # i3lock-fancy           # Screen locker
-     # ncdu                   # Fancy disk usage analyzer
+     gotop                  # Top replacement (system monitor)
+     i3lock-fancy           # Screen locker
+     ncdu                   # Fancy disk usage analyzer
      neofetch               # Fancy system information
      # GUI
      qutebrowser            # Web browser
@@ -177,6 +177,7 @@
       #   # load-module module-bluez5-discover
       # '';
     };
+    sensor.iio.enable = true;
     bluetooth = {
       enable = true;
       extraConfig = "
@@ -186,6 +187,11 @@
     };
   };
 
+  powerManagement = {
+    enable = true;
+    powertop.enable = true;
+  };
+
   services = {
     # Enable emacs daemon, and set EDITOR to emacsclient
     emacs = {
@@ -193,10 +199,14 @@
       defaultEditor = true;
     };
 
+    # Fingerprint reader
     fprintd.enable = true;
 
     # Power button invokes suspend, not shutdown.
     logind.extraConfig = "HandlePowerKey=suspend";
+
+    # Power management
+    upower.enable = true;
 
     # X
     xserver = {
