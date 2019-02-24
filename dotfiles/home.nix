@@ -327,7 +327,8 @@ in
                 'c': 'https://clio.columbia.edu/quicksearch?q={}',
                 'gh': 'https://github.com/search?q={}&type=Repositories',
                 'h': 'https://hackage.haskell.org/packages/search?terms={}',
-                'libgen': 'https://libgen.pw/search?q={}',
+                'libgen': 'https://ambry.pw/search?q={}',
+                'viki': 'https://eo.wikipedia.org/w/index.php?search={}',
                 'viki': 'https://eo.wikipedia.org/w/index.php?search={}',
                 }
         config.bind('N', 'tab-next')

@@ -613,10 +613,10 @@ A custom journal helper function."
         holiday-hebrew-holidays nil)
 
   ;; Bibliography
-  (setq reftex-default-bibliography '("~/Dropbox/Columbia/Prospectus/revised/references.bib"
+  (setq reftex-default-bibliography '("~/Dropbox/Columbia/Dissertation/references.bib"
                                       "~/Dropbox/Papers/library.bib")
         org-ref-default-bibliography '("~/Dropbox/Papers/library.bib"
-          "~/Dropbox/Columbia/Prospectus/revised/references.bib")
+          "~/Dropbox/Columbia/Dissertation/references.bib")
         org-ref-pdf-directory "~/Dropbox/Papers" ;; keep the final slash off
         org-ref-bibliography-notes "~/Dropbox/Org/Projects/books.org"
         bibtex-completion-pdf-field "file"
