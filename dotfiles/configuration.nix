@@ -12,7 +12,9 @@
 
   # Use the systemd-boot EFI boot loader.
   boot = {
-    blacklistedKernelModules = [ "ideapad_laptop" ]; 
+    blacklistedKernelModules = [ "ideapad_laptop" ]; #TODO: break out into C930 module
+    # The below doesn't work, and causes this computer not to wake up from suspend
+    # kernelParams = [ "mem_sleep_default=deep" ]; #TODO: break out into C930 module
     cleanTmpDir = true;
     plymouth.enable = true;
     loader = {
@@ -83,7 +85,7 @@
      haskellPackages.hoogle
      # haskellPackages.hakyll
      libfprint fprintd      # Fingerprint login
-     # iio-sensor-proxy       # Accelerometer, gyroscope, etc.
+     # iio-sensor-proxy       # Accelerometer, gyroscope, etc.  #TODO: break out into C930 module
      #tectonic              # Latex
      texlive.combined.scheme-full
      git git-lfs            # Version control
@@ -120,7 +122,7 @@
      # zathura                # PDF Viewer
      polybar                # System monitor, etc.
      compton                # Compositor
-     mpv                    # Minimalist video player
+     # mpv                    # Minimalist video player
      termite                # Vim-like modal terminal
      pywal                  # Wallpapers
      feh                    # Display imaes

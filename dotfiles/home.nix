@@ -70,7 +70,9 @@ in
         set mouse=a
         " Colemak some things
         nnoremap n j
+        nnoremap j n
         nnoremap e k
+        nnoremap k e
         nnoremap i l
         nnoremap l i
       '';
@@ -141,6 +143,13 @@ in
               mv (ls -t /tmp/*.pdf | head -n 1) ~/Dropbox/Papers/$argv.pdf
             end
             funcsave rename-pdf
+
+            function find-book
+              for engine in b c libgen
+                qutebrowser ":open -t $engine $argv"
+              end
+            end
+            funcsave find-book
          '';
        promptInit =
          ''

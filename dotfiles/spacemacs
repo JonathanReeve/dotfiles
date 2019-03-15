@@ -69,12 +69,11 @@ This function should only modify configuration layer settings."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(
                                       ;(ereader :location (recipe :fetcher github :repo "bddean/emacs-ereader"))
-                                      ;; (nord-theme)
-                                      (base16-theme)
-                                      (password-store)
-                                      (direnv)
-                                      ;;(vue-mode :location (recipe :fetcher github :repo "codefalling/vue-mode"))
-                                      (org-gcal)
+                                      base16-theme
+                                      password-store
+                                      direnv
+                                      org-gcal
+                                      gotham-theme
                                       ;; (org-caldav)
                                       )
    ;; A list of packages that cannot be updated.
@@ -603,6 +602,8 @@ A custom journal helper function."
            "* %a\n %?\n %i")
           ("l" "Link" entry (file+olp "/home/jon/Dropbox/Org/notes.org" "Web Links")
            "* %a\n %?\n %i")
+          ("s" "Schedule" entry (file "/home/jon/Dropbox/Org/Projects/schedule.org")
+           "* %?\n :PROPERTIES:\n :LOCATION:\n :END:\n %a\n %i")
           ))
 
   ;; Disable holidays. Is there an easier way of doing this? 
@@ -623,11 +624,12 @@ A custom journal helper function."
         org-ref-get-pdf-filename-function 'org-ref-get-zotero-pdf-filename)
 
   (setq org-ref-note-title-format
-    "** TODO %y - %t
+    "** TODO %y - %9a - %t
  :PROPERTIES:
   :Custom_ID: %k
   :AUTHOR: %9a
   :JOURNAL: %j
+  :AVAILABILITY:
   :YEAR: %y
  :END:
 ")
