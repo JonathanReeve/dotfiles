@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./minimal.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -221,13 +222,6 @@
       displayManager.gdm.enable = true;
       displayManager.gdm.wayland = true;
       desktopManager.gnome3.enable = true;
-      desktopManager.session = [{
-        name = "home-manager";
-        start = ''
-          ${pkgs.stdenv.shell} $HOME/.xsession-hm &
-          waitPID=$!
-        '';
-      }];
     };
   };
 
