@@ -537,6 +537,7 @@ A custom journal helper function."
    'org-babel-load-languages
    '((python . t)
      (haskell . t)
+     (dot . t)
      (emacs-lisp . t)))
 
   ;; Org Calendar and Diary

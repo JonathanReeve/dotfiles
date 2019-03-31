@@ -16,6 +16,7 @@
     # The below doesn't work, and causes this computer not to wake up from suspend
     # kernelParams = [ "mem_sleep_default=deep" ]; #TODO: break out into C930 module
     cleanTmpDir = true;
+    kernelPackages = pkgs.linuxPackages_latest;
     plymouth.enable = true;
     loader = {
       systemd-boot.enable = true;
@@ -76,6 +77,7 @@
      isync mu w3m           # Mail
      pandoc
      # haskellPackages.pandoc # Document manipulation
+     
      haskellPackages.pandoc-citeproc
      # haskellPackages.pandoc-crossref
      haskellPackages.hlint
