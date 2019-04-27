@@ -1,4 +1,4 @@
-{pkgs, ...}:
+{pkgs, lib, ...}:
 
 let
   # Personal Info
@@ -59,6 +59,9 @@ in
       userEmail = "${email}";
     };
     mbsync = {
+      enable = true;
+    };
+    termite = {
       enable = true;
     };
     vim = {
@@ -189,190 +192,18 @@ in
 
   qt = {
     enable = false;
-    useGtkTheme = true;
-  };
-
-  services = {
-    dunst = {
-      enable = true;
-      settings = {
-        global = {
-          geometry = "950x80-30+70";
-          padding = 32;
-          horizontal_padding = 30;
-          # frame_width = 10;
-          font = "${font} 10";
-          line_height = 4;
-          markup = "full";
-          alignment = "left";
-          word_wrap = "true";
-          };
-        shortcuts = {
-          close = "ctrl+space";
-          close_all = "ctrl+shift+space";
-          history = "ctrl+grave";
-          context = "ctrl+shift+period";
-        };
-        urgency_low = {
-          timeout = 4;
-          foreground = "${foregroundColor}";
-          background = "${backgroundColor}";
-        };
-        urgency_normal = {
-          timeout = 8;
-          foreground = "${foregroundColor}";
-          background = "${backgroundColor}";
-        };
-        urgency_critical = {
-          timeout = 0;
-          foreground = "${foregroundColor}";
-          background = "${warningColor}";
-          };
-      };
-    };
-    compton = {
-      enable = true;
-      blur = true;
-      shadow = true;
-    };
-    polybar = {
-      enable = true;
-      script = "polybar main_bar &";
-      config = {
-        "bar/main_bar" = {
-           monitor = "eDP-1";
-           bottom = "false";
-           height = 50;
-           fixed-center = "true";
-           background = "\${xrdb:background}";
-           foreground = "\${xrdb:foreground}";
-           line-size = 6;
-           line-color = "\${xrdb:color4}";
-           padding-right = "1%";
-           module-margin-left = 1;
-           module-margin-right = 1;
-           font-2 = "FontAwesome:fontformat=truetype:size=19;1";
-           font-1 = "NotoEmoji:fontformat=truetype:size=19;1";
-           font-0 = "${font}:fontformat=truetype:size=19;1";
-           wm-restack = "bspwm";
-           modules-left = "bspwm xwindow";
-           modules-center = "date";
-           modules-right = "org-clock volume backlight filesystem memory cpu battery network";
-        };
-        "module/bspwm" = {
-          type = "internal/bspwm";
-          format = "<label-state> <label-mode>";
-          label-monocle = "M";
-          label-floating = "S";
-          fuzzy-match = "true";
-          ws-icon-0 = "1;";
-          ws-icon-1 = "2;";
-          ws-icon-2 = "3;";
-          ws-icon-3 = "4;";
-          ws-icon-4 = "5;♞";
-          ws-icon-default = "";
-          label-mode-padding = "2";
-          label-mode-background = "\${xrdb:color4}";
-          label-focused = "%icon%";
-          label-focused-underline = "\${xrdb:color4}";
-          label-focused-padding = 2;
-          label-empty = '''';
-          label-occupied = "%icon%";
-          label-occupied-padding = 2;
-          label-urgent = "%icon%";
-          label-urgent-underline = "\${xrdb:color8}";
-          label-urgent-padding = 2;
-        };
-        "module/date" = {
-          type = "internal/date";
-          interval = 5;
-          date = "%m-%d %a";
-          time = "%H:%M";
-          format-prefix-foreground = "\${xrdb:foreground}";
-          label = "%date% %time%";
-        };
-        "module/battery" = {
-           type = "internal/battery";
-           battery = "BAT1";
-           adapter = "ADP1";
-           full-at = 96;
-           format-charging = " <label-charging>";
-           format-discharging = "<ramp-capacity> <label-discharging>";
-           format-full = " ";
-           ramp-capacity-0 = "";
-           ramp-capacity-1 = "";
-           ramp-capacity-2 = "";
-           ramp-capacity-3 = "";
-           ramp-capacity-4 = "";
-           ramp-capacity-foreground = "\${xrdb:foreground}";
-        };
-        "settings" = {screenchange-reload = "true";};
-        "module/xwindow" = {
-          type = "internal/xwindow";
-          label = "%title:0:30:...%";
-          label-padding = 10;
-          label-foreground = "\${xrdb:color4}";
-        };
-        "module/network" = {
-          type = "internal/network";
-          interface = "wlp1s0";
-          interval = "3.0";
-          format-connected = "<label-connected>";
-          label-connected = " %essid%";
-        };
-        "module/cpu" = {
-          type = "internal/cpu";
-          label = " %percentage:2%%";
-        };
-        "module/org-clock" = {
-          type = "custom/script";
-          interval = 10;
-          exec = "${scripts}/org-clock.sh";
-          click-left = "${pkgs.emacs}/bin/emacsclient --eval '(org-clock-out)' && echo ' Stopped!'";
-        };
-        "module/memory" = {
-          type = "internal/memory";
-          label = " %percentage_used%%";
-        };
-        "module/filesystem" = {
-          type = "internal/fs";
-          mount-0 = "/";
-          mount-1 = "/home";
-          label-mounted = " %percentage_used%%";
-        };
-        "module/volume" = {
-          type = "internal/alsa";
-          label-volume = " %percentage%";
-          label-muted = "";
-          click-left = "pactl set-sink-mute 0 toggle";
-        };
-        "module/backlight" = {
-          type = "internal/backlight";
-          format = "<ramp>";
-          card = "intel_backlight";
-          ramp-0 = "🌕";
-          ramp-1 = "🌔";
-          ramp-2 = "🌓";
-          ramp-3 = "🌒";
-          ramp-4 = "🌑";
-        };
-      };
-    };
-    screen-locker = {
-      enable = true;
-      lockCmd = "${lockCmd}";
-    };
-    gpg-agent = {
-      enable = true;
-      # Don't ask for password all the time.
-      defaultCacheTtl = 31536000; # 365 days
-      maxCacheTtl = 31536000;
-    };
+    # useGtkTheme = true;
   };
 
   # Adapted from https://github.com/yrashk/nix-home/blob/master/home.nix#L194
   systemd.user = {
     services = {
+      # gpg-agent = {
+      #   enable = true;
+        # Don't ask for password all the time.
+        # defaultCacheTtl = 31536000; # 365 days
+        # maxCacheTtl = 31536000;
+      # };
       dropbox = {
         Unit = {
           Description = "Dropbox";
@@ -440,18 +271,13 @@ in
     # };
   };
 
-  xsession = {
-    enable = true;
-    scriptPath = ".xsession-hm";
-    pointerCursor = {
-      package = pkgs.vanilla-dmz;
-      name = "Vanilla-DMZ";
-    };
-    windowManager.command = "bspwm";
-  };
 
   # Dotfiles for the home root, ~/
   home = {
+      keyboard = {
+        options = [ "grp:caps_escape" ];
+        variant = "colemak";
+      };
       file = {
         ".spacemacs".source = "${dots}/spacemacs";
 
@@ -475,6 +301,160 @@ in
       };
   };
 
+  services = {
+    dunst = {
+      enable = true;
+      settings = {
+        global = {
+          geometry = "950x80-30+70";
+          padding = 32;
+          horizontal_padding = 30;
+          # frame_width = 10;
+          font = "${font} 10";
+          line_height = 4;
+          markup = "full";
+          alignment = "left";
+          word_wrap = "true";
+          };
+        shortcuts = {
+          close = "ctrl+space";
+          close_all = "ctrl+shift+space";
+          history = "ctrl+grave";
+          context = "ctrl+shift+period";
+        };
+        urgency_low = {
+          timeout = 4;
+          foreground = "${foregroundColor}";
+          background = "${backgroundColor}";
+        };
+        urgency_normal = {
+          timeout = 8;
+          foreground = "${foregroundColor}";
+          background = "${backgroundColor}";
+        };
+        urgency_critical = {
+          timeout = 0;
+          foreground = "${foregroundColor}";
+          background = "${warningColor}";
+          };
+      };
+    };
+    compton = {
+      enable = true;
+      blur = true;
+      shadow = true;
+    };
+    polybar = {
+      enable = true;
+      package = pkgs.polybar.override {
+        i3GapsSupport = true;
+        alsaSupport = true;
+        githubSupport = true;
+      };
+      script = "polybar main_bar &";
+      config = {
+        "bar/main_bar" = {
+           monitor = "eDP-1";
+           bottom = "false";
+           height = 30;
+           fixed-center = "true";
+           background = "\${xrdb:background}";
+           foreground = "\${xrdb:foreground}";
+           line-size = 7;
+           line-color = "\${xrdb:color4}";
+           padding-right = "1%";
+           module-margin-left = 1;
+           module-margin-right = 1;
+           font-0 = "${font}:size=11";
+           font-1 = "Font Awesome 5 Free:size=11";
+           font-2 = "Noto Emoji:size=11";
+           modules-left = "i3 xwindow";
+           modules-center = "date";
+           modules-right = "org-clock volume backlight filesystem memory cpu battery network";
+           tray-position = "right";
+        };
+        "module/i3" = {
+          type = "internal/i3";
+        };
+        "module/date" = {
+          type = "internal/date";
+          interval = 5;
+          date = "%m-%d %a";
+          time = "%H:%M";
+          format-prefix-foreground = "\${xrdb:foreground}";
+          label = "%date% %time%";
+        };
+        "module/battery" = {
+           type = "internal/battery";
+           battery = "BAT1";
+           adapter = "ADP1";
+           full-at = 96;
+           format-charging = " <label-charging>";
+           format-discharging = "<ramp-capacity> <label-discharging>";
+           format-full = "";
+           ramp-capacity-0 = "";
+           ramp-capacity-1 = "";
+           ramp-capacity-2 = "";
+           ramp-capacity-3 = "";
+           ramp-capacity-4 = "";
+           ramp-capacity-foreground = "\${xrdb:foreground}";
+        };
+        "settings" = {screenchange-reload = "true";};
+        "module/xwindow" = {
+          type = "internal/xwindow";
+          label = "%title:0:30:...%";
+          label-padding = 10;
+          label-foreground = "\${xrdb:color4}";
+        };
+        "module/network" = {
+          type = "internal/network";
+          interface = "wlp1s0";
+          interval = "3.0";
+          format-connected = "<label-connected>";
+          label-connected = " %essid%";
+        };
+        "module/cpu" = {
+          type = "internal/cpu";
+          label = " %percentage:2%%";
+        };
+        "module/org-clock" = {
+          type = "custom/script";
+          interval = 10;
+          exec = "${scripts}/org-clock.sh";
+          click-left = "${pkgs.emacs}/bin/emacsclient --eval '(org-clock-out)' && echo ' Stopped!'";
+        };
+        "module/memory" = {
+          type = "internal/memory";
+          label = " %percentage_used%%";
+        };
+        "module/filesystem" = {
+          type = "internal/fs";
+          mount-0 = "/";
+          mount-1 = "/home";
+          label-mounted = " %percentage_used%%";
+        };
+        "module/volume" = {
+          type = "internal/alsa";
+          label-volume = " %percentage%";
+          label-muted = "";
+          click-left = "pactl set-sink-mute 0 toggle";
+        };
+        "module/backlight" = {
+          type = "internal/xbacklight";
+          format = "<ramp>";
+          #ramp-0 = "🌕";
+          #ramp-1 = "🌔";
+          #ramp-2 = "🌓";
+          #ramp-3 = "🌒";
+          #ramp-4 = "🌑";
+        };
+      };
+    };
+    screen-locker = {
+      enable = true;
+      lockCmd = "${lockCmd}";
+    };
+  };
   # Dotfiles for ~/.config, ~/.local/share, etc. 
   xdg = {
     enable = true;
@@ -546,6 +526,32 @@ in
             'rl-backward-kill-word'  # :open | term1 term2
         ])
       '';
+    };
+  };
+  xsession = {
+    enable = true;
+    scriptPath = ".xsession-hm";
+    # windowManager.command = "bspwm";
+    windowManager.i3 = {
+      enable = true;
+      config = {
+        bars = [];
+        fonts = [ "Font Awesome" "${font} 11" ];
+        gaps.outer = 10;
+        modifier = "Mod4";
+        keybindings =
+          lib.mkOptionDefault {
+            "Mod4+Return" = "exec termite";
+            "Mod4+Shift+c" = "kill";
+            "Mod4+space" = "exec rofi -show drun";
+          };
+        startup = [
+          { command = "systemctl --user restart polybar"; always = true; notification = false; }
+          { command = "dropbox start"; notification = false; }
+          { command = "wal -R"; notification = false; }
+          { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
+        ];
+      };
     };
   };
 }

@@ -8,7 +8,6 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./minimal.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -67,7 +66,7 @@
      home-manager           # Dotfiles management
      # CLI
      fish # xonsh             # Shell
-     vim emacs              # Text editor
+     vim emacs              # Text editors 
      pass encfs             # Passwords and encryption
      aspell aspellDicts.en  # Spell checker
      xorg.xbacklight        # Brightness control
@@ -78,7 +77,7 @@
      isync mu w3m           # Mail
      pandoc
      # haskellPackages.pandoc # Document manipulation
-     
+
      haskellPackages.pandoc-citeproc
      # haskellPackages.pandoc-crossref
      haskellPackages.hlint
@@ -117,7 +116,7 @@
      # elmPackages.elm
      # Minimal computing
      ranger highlight       # File manager
-     # scrot                  # Screenshots
+     scrot                  # Screenshots
      tree                   # Show file hierarchies
      lftp                   # Fast file transfers
      autojump               # Jump around! With `j`
@@ -125,7 +124,7 @@
      # zathura                # PDF Viewer
      polybar                # System monitor, etc.
      compton                # Compositor
-     # mpv                    # Minimalist video player
+     mpv                    # Minimalist video player
      termite                # Vim-like modal terminal
      pywal                  # Wallpapers
      feh                    # Display imaes
@@ -224,6 +223,13 @@
       displayManager.gdm.enable = true;
       displayManager.gdm.wayland = true;
       desktopManager.gnome3.enable = true;
+      desktopManager.session = [{
+        name = "home-manager";
+        start = ''
+          ${pkgs.stdenv.shell} $HOME/.xsession-hm &
+          waitPID=$!
+        '';
+      }];
     };
   };
 

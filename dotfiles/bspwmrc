@@ -30,3 +30,4 @@ sxhkd -m 1 &
 wal -R
 polybar main_bar &
 "${HOME}/Dotfiles/scripts/notifications.sh"
+setxkbmap -layout us -variant colemak
