@@ -64,6 +64,11 @@ in
     termite = {
       enable = true;
     };
+    rofi = {
+      enable = true;
+      theme = "~/.cache/wal/colors-rofi-dark.rasi";
+      font = "${font} 11";
+    };
     vim = {
       enable = true;
       plugins = [ "vim-airline" ];
@@ -365,9 +370,9 @@ in
            padding-right = "1%";
            module-margin-left = 1;
            module-margin-right = 1;
-           font-0 = "${font}:size=11";
-           font-1 = "Font Awesome 5 Free:size=11";
-           font-2 = "Noto Emoji:size=11";
+           font-0 = "${font}:size=11;1";
+           font-1 = "Font Awesome 5 Free:size=11:style=Solid;1";
+           font-2 = "NotoEmoji:size=11;1";
            modules-left = "i3 xwindow";
            modules-center = "date";
            modules-right = "org-clock volume backlight filesystem memory cpu battery network";
@@ -466,8 +471,6 @@ in
     };
     configFile = {
       # BSPWM stuff
-      "sxhkd/sxhkdrc".source = "${dots}/sxhkdrc";
-      "bspwm/bspwmrc".source = "${dots}/bspwmrc";
       "qutebrowser/config.py".text =
       ''
         c.colors.completion.category.bg = "#333333"
@@ -537,20 +540,43 @@ in
       config = {
         bars = [];
         fonts = [ "Font Awesome" "${font} 11" ];
-        gaps.outer = 10;
+        gaps = {
+          outer = 10;
+          inner = 10;
+        };
         modifier = "Mod4";
         keybindings =
           lib.mkOptionDefault {
             "Mod4+Return" = "exec termite";
             "Mod4+Shift+c" = "kill";
             "Mod4+space" = "exec rofi -show drun";
+            "Mod4+h" = "focus left";
+            "Mod4+n" = "focus down";
+            "Mod4+e" = "focus up";
+            "Mod4+i" = "focus right";
+            "Mod4+Shift+h" = "move left";
+            "Mod4+Shift+n" = "move down";
+            "Mod4+Shift+e" = "move up";
+            "Mod4+Shift+i" = "move right";
+            "Mod4+t" = "floating toggle";
+            "Mod4+x" = "layout toggle all";
           };
+        modes = {
+          resize = {
+            h = "resize shrink width 10 px or 10 ppt";
+            n = "resize grow height 10 px or 10 ppt";
+            e = "resize shrink height 10 px or 10 ppt";
+            i = "resize grow width 10 px or 10 ppt";
+            Escape = "mode default";
+          };
+        };
         startup = [
           { command = "systemctl --user restart polybar"; always = true; notification = false; }
           { command = "dropbox start"; notification = false; }
           { command = "wal -R"; notification = false; }
           { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
         ];
+        window.border = 10;
       };
     };
   };
