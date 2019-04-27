@@ -284,7 +284,7 @@ in
         variant = "colemak";
       };
       file = {
-        ".spacemacs".source = "${dots}/spacemacs";
+        ".spacemacs".source = ./spacemacs;
 
         # Vim all the things!
         ".inputrc".text =
