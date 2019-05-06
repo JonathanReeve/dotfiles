@@ -63,6 +63,11 @@ in
     };
     termite = {
       enable = true;
+      clickableUrl = true;
+      # backgroundColor = "\${xrdb:background}";
+      backgroundColor = "rgba(32, 45, 56, 0.8)";
+      foregroundColor = "\${xrdb:foreground}";
+      font = "${font} 11";
     };
     rofi = {
       enable = true;
@@ -280,7 +285,7 @@ in
   # Dotfiles for the home root, ~/
   home = {
       keyboard = {
-        options = [ "grp:caps_escape" ];
+        options = [ "caps:escape" ];
         variant = "colemak";
       };
       file = {
@@ -376,10 +381,14 @@ in
            modules-left = "i3 xwindow";
            modules-center = "date";
            modules-right = "org-clock volume backlight filesystem memory cpu battery network";
-           tray-position = "right";
         };
         "module/i3" = {
           type = "internal/i3";
+          label-focused-underline = "\${xrdb:color4}";
+          label-focused = "%index%";
+          label-unfocused = "%index%";
+          label-focused-padding = 1;
+          label-unfocused-padding = 1;
         };
         "module/date" = {
           type = "internal/date";
@@ -535,8 +544,18 @@ in
     enable = true;
     scriptPath = ".xsession-hm";
     # windowManager.command = "bspwm";
+    pointerCursor = {
+      name = "Vanilla-DMZ";
+      package = pkgs.vanilla-dmz;
+    };
     windowManager.i3 = {
       enable = true;
+      extraConfig = ''
+        set_from_resource $bg i3wm.background
+        set_from_resource $fg i3wm.foreground
+        set_from_resource $c1 i3wm.color1
+        set_from_resource $c2 i3wm.color2
+      '';
       config = {
         bars = [];
         fonts = [ "Font Awesome" "${font} 11" ];
@@ -544,20 +563,45 @@ in
           outer = 10;
           inner = 10;
         };
+        colors = {
+          focused = {
+            background = "$c2";
+            border = "$c2";
+            text = "$fg";
+            indicator = "$c2";
+            childBorder = "$c2";
+          };
+          focusedInactive = {
+            background = "$c1";
+            text = "$fg";
+            border = "$c1";
+            indicator = "$c1";
+            childBorder = "$c1";
+          };
+          unfocused = {
+            background = "$c1";
+            border = "$c2";
+            text = "$fg";
+            indicator = "$c1";
+            childBorder = "$c1";
+          };
+        };
         modifier = "Mod4";
         keybindings =
           lib.mkOptionDefault {
             "Mod4+Return" = "exec termite";
             "Mod4+Shift+c" = "kill";
             "Mod4+space" = "exec rofi -show drun";
-            "Mod4+h" = "focus left";
-            "Mod4+n" = "focus down";
-            "Mod4+e" = "focus up";
-            "Mod4+i" = "focus right";
-            "Mod4+Shift+h" = "move left";
-            "Mod4+Shift+n" = "move down";
-            "Mod4+Shift+e" = "move up";
-            "Mod4+Shift+i" = "move right";
+            "Mod4+n" = "workspace next";
+            "Mod4+e" = "workspace prev";
+            "Mod1+h" = "focus left";
+            "Mod1+n" = "focus down";
+            "Mod1+e" = "focus up";
+            "Mod1+i" = "focus right";
+            "Mod1+Shift+h" = "move left";
+            "Mod1+Shift+n" = "move down";
+            "Mod1+Shift+e" = "move up";
+            "Mod1+Shift+i" = "move right";
             "Mod4+t" = "floating toggle";
             "Mod4+x" = "layout toggle all";
           };
@@ -572,7 +616,7 @@ in
         };
         startup = [
           { command = "systemctl --user restart polybar"; always = true; notification = false; }
-          { command = "dropbox start"; notification = false; }
+          # { command = "dropbox start"; notification = false; }
           { command = "wal -R"; notification = false; }
           { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
         ];

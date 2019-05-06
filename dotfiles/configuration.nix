@@ -169,7 +169,8 @@
   hardware = {
     pulseaudio = {
       enable = true;
-      package = pkgs.pulseaudioFull;
+      package = pkgs.pulseaudio;
+      # package = pkgs.pulseaudioFull;
       extraModules = [ pkgs.pulseaudio-modules-bt ];
       # configFile = pkgs.writeText "default.pa" ''
       #   load-module module-bluetooth-policy
@@ -207,7 +208,10 @@
     fprintd.enable = true;
 
     # Power button invokes suspend, not shutdown.
-    logind.extraConfig = "HandlePowerKey=suspend";
+    logind = {
+      extraConfig = "HandlePowerKey=suspend";
+      lidSwitch = "suspend-then-hibernate";
+    };
 
     # Power management
     upower.enable = true;
@@ -216,7 +220,10 @@
     xserver = {
       enable = true;
       # Enable touchpad support.
-      libinput.enable = true;
+      libinput = {
+        enable = true;
+        clickMethod = "clickfinger";
+      };
       # Keyboard settings
       layout = "us";
       xkbVariant = "colemak";
