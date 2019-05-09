@@ -196,7 +196,8 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(base16-apathy
+   dotspacemacs-themes '(spacemacs-dark
+                         base16-apathy
                          base16-default-dark
                          base16-eighties
                          base16-atelier-cave
@@ -232,7 +233,6 @@ It should only modify the values of Spacemacs settings."
                          ;; spacegray
                          ;; subatomic
                          ;; gruvbox
-                         spacemacs-dark
                          )
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `vim-powerline' and `vanilla'. The first three
@@ -471,6 +471,19 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+
+  ;; Theme stuff
+  (load-file "~/.emacs.d/private/ewal/ewal.el")
+  (setq spacemacs-evil-cursors (ewal-get-spacemacs-evil-cursors-colors)
+        spacemacs-theme-custom-colors (ewal-get-spacemacs-theme-colors)
+        ;; personal taste
+        spacemacs-theme-org-highlight t
+        theming-modifications
+        `((spacemacs-dark (page-break-lines :background ,(ewal-get-color 'background -2))
+                          (line-number :background ,(ewal-get-color 'background 0)))))
+  ;; reload theme
+  (load-theme 'spacemacs-dark t t)
+
   )
 
 (defun dotspacemacs/user-config ()
