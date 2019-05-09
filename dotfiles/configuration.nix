@@ -18,6 +18,7 @@
     cleanTmpDir = true;
     kernelPackages = pkgs.linuxPackages_latest;
     plymouth.enable = true;
+    resumeDevice = "/dev/nvme0n1p7";
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -210,7 +211,7 @@
     # Power button invokes suspend, not shutdown.
     logind = {
       extraConfig = "HandlePowerKey=suspend";
-      lidSwitch = "suspend-then-hibernate";
+      lidSwitch = "suspend";
     };
 
     # Power management
