@@ -21,10 +21,10 @@ $endif$
    span.underline{text-decoration: underline;}
    div.column{display: inline-block; vertical-align: top; width: 50%;}
    #table-of-contents{display: none;}
-   body{background-color: slategray; color: navajowhite; line-height: 1.8em;
+   body{background-color: $bg$; color: $fg$; line-height: 1.8em;
         font-family: 'Fira Mono', monospace; }
    main{display: flex; justify-content: space-evenly;}
-   a{text-decoration: none; color: navajowhite;}
+   a{text-decoration: none; color: $fg$;}
    div.outline-2{padding: 1em;}
    h1#greeting{text-align: center; font-size: 3em; margin: 3em;}
 $if(quotes)$
@@ -86,9 +86,9 @@ $endfor$
  var time = new Date().getHours();
  var name = "Jonathan";
  var greeting = "Hello";
- if ( time < 12 ) { greeting = "Good morning"}
- else if ( time > 18 ) { greeting = "Good evening"}
- else { greeting = "Good afternoon" };
+ if ( time < 12 ) { greeting = "Bonan matenon"}
+ else if ( time > 18 ) { greeting = "Bonan vesperon"}
+ else { greeting = "Bonan tagon" };
  greeting = greeting + ", " + name + "!"
  document.getElementById("greeting").innerHTML = greeting;
 </script>
