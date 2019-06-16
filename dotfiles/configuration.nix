@@ -12,11 +12,11 @@
 
   # Use the systemd-boot EFI boot loader.
   boot = {
-    blacklistedKernelModules = [ "ideapad_laptop" ]; #TODO: break out into C930 module
+    # blacklistedKernelModules = [ "ideapad_laptop" ]; #TODO: break out into C930 module
     # The below doesn't work, and causes this computer not to wake up from suspend
     # kernelParams = [ "mem_sleep_default=deep" ]; #TODO: break out into C930 module
-    cleanTmpDir = true;
     kernelPackages = pkgs.linuxPackages_latest;
+    cleanTmpDir = true;
     plymouth.enable = true;
     resumeDevice = "/dev/nvme0n1p7";
     loader = {
@@ -70,7 +70,8 @@
      vim emacs              # Text editors 
      pass encfs             # Passwords and encryption
      aspell aspellDicts.en  # Spell checker
-     xorg.xbacklight        # Brightness control
+     #xorg.xbacklight        # Brightness control
+     light                  # Brightness control
      networkmanager
      gcc gnumake
      gnupg
@@ -104,9 +105,13 @@
      (python3.withPackages(ps: with ps; [
        pandas
        matplotlib
+       altair
+       vega
        jupyter
+       jupyterlab
        virtualenvwrapper
        nltk
+       pip
        # numpy
        # scikitlearn
        # textblob
@@ -205,6 +210,8 @@
       defaultEditor = true;
     };
 
+    flatpak.enable = true;
+
     # Fingerprint reader
     fprintd.enable = true;
 
@@ -244,6 +251,8 @@
   # Shell
   programs = {
     fish.enable = true;
+    xonsh.enable = true;
+    light.enable = true;
     gnupg.agent = { enable = true; enableSSHSupport = true; };
   };
 
@@ -253,7 +262,7 @@
         home = "/home/jon";
         shell = pkgs.fish;
         description = "Jonathan Reeve";
-        extraGroups = [ "wheel" "networkmanager" "tty" "dialout" "input" "docker"];
+        extraGroups = [ "audio" "wheel" "networkmanager" "tty" "dialout" "input" "docker"];
       };
     systemrestore =
       { isNormalUser = true;
@@ -264,6 +273,8 @@
       };
   };
 
+  # virtualisation.anbox.enable = true;
+
   # Don't ask for my password *quite* as often.
   security.sudo.extraConfig = "Defaults timestamp_timeout=60";
 
@@ -271,7 +282,7 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "18.09"; # Did you read the comment?
+  system.stateVersion = "19.03"; # Did you read the comment?
 
   # virtualization.docker.enable = true;
 

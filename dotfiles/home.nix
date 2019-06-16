@@ -123,7 +123,13 @@ in
               fish_vi_key_bindings
             end
 
-            set -U vaultmount ~/Documents/Settings/.private-mount
+            if not functions -q fisher
+                set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
+                curl https://git.io/fisher --create-dirs -sLo $XDG_CONFIG_HOME/fish/functions/fisher.fish
+                fish -c fisher
+            end
+
+            set -U vaultmount ~/.private-mount
             set -U vaultloc ~/Dropbox/Personal/.Vault_encfs
 
             alias vault="encfs $vaultloc $vaultmount"
@@ -163,24 +169,24 @@ in
               end
             end
             funcsave find-book
+
          '';
        promptInit =
          ''
-            # Emacs ansi-term support
-            if test -n "$EMACS"
-                set -x TERM eterm-color
-                # Disable right prompt in emacs
-                function fish_right_prompt; true; end
-                #This function may be required for Emacs support.
-                function fish_title; true; end
-            end
-
             # Disable the vim-mode indicator [I] and [N].
             # Let the theme handle it instead.
             function fish_default_mode_prompt; true; end
 
-            # chips
-            if [ -e ~/.config/chips/build.fish ] ; . ~/.config/chips/build.fish ; end
+            # This doesn't seem to work below for some reason.
+            function fish_title; true; end
+
+            # Emacs ansi-term support
+            if test -n "$EMACS"
+              set -x TERM eterm-color
+              # Disable right prompt in emacs
+              # function fish_right_prompt; true; end
+              function fish_title; true; end
+            end
          '';
     };
   };
@@ -513,6 +519,7 @@ in
                 'viki': 'https://eo.wikipedia.org/w/index.php?search={}',
                 'viki': 'https://eo.wikipedia.org/w/index.php?search={}',
                 }
+        c.url.default_page = "${scripts}/homepage/homepage.html";
         config.bind('N', 'tab-next')
         config.bind('E', 'tab-prev')
         config.bind('K', 'search-prev')
@@ -523,6 +530,7 @@ in
         config.bind('j', 'search-next')
         config.bind('gL', 'spawn --userscript org-link')
         config.bind('pf', 'spawn --userscript password_fill')
+        config.bind('gz', "jseval var d=document,s=d.createElement('script');s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement).appendChild(s);void(0);")
         config.bind('t', 'set-cmd-text -s :open -t')
         config.bind('Y', 'yank selection')
         config.bind('O', 'set-cmd-text :open {url:pretty}')

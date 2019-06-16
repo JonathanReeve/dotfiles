@@ -70,10 +70,11 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(
                                       ;(ereader :location (recipe :fetcher github :repo "bddean/emacs-ereader"))
                                       base16-theme
-                                      password-store
+                                      ;;password-store
                                       direnv
-                                      org-gcal
+                                      ;;org-gcal
                                       gotham-theme
+                                      org-brain
                                       ;; (org-caldav)
                                       )
    ;; A list of packages that cannot be updated.
@@ -196,7 +197,8 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
+   dotspacemacs-themes '(gotham
+                         spacemacs-dark
                          base16-apathy
                          base16-default-dark
                          base16-eighties
@@ -473,16 +475,16 @@ before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
 
   ;; Theme stuff
-  (load-file "~/.emacs.d/private/ewal/ewal.el")
-  (setq spacemacs-evil-cursors (ewal-get-spacemacs-evil-cursors-colors)
-        spacemacs-theme-custom-colors (ewal-get-spacemacs-theme-colors)
+  ;; (load-file "~/.emacs.d/private/ewal/ewal.el")
+  ;; (setq spacemacs-evil-cursors (ewal-get-spacemacs-evil-cursors-colors)
+  ;;      spacemacs-theme-custom-colors (ewal-get-spacemacs-theme-colors)
         ;; personal taste
-        spacemacs-theme-org-highlight t
-        theming-modifications
-        `((spacemacs-dark (page-break-lines :background ,(ewal-get-color 'background -2))
-                          (line-number :background ,(ewal-get-color 'background 0)))))
+  ;;      spacemacs-theme-org-highlight t
+  ;;      theming-modifications
+  ;;      `((spacemacs-dark (page-break-lines :background ,(ewal-get-color 'background -2))
+  ;;                        (line-number :background ,(ewal-get-color 'background 0)))))
   ;; reload theme
-  (load-theme 'spacemacs-dark t t)
+  ;; (load-theme 'spacemacs-dark t t)
 
   )
 
@@ -497,15 +499,8 @@ you should place your code here."
   ;; General
   (setq vc-follow-symlinks t) ;; Always follow symlinks. 
 
-  ;; Use Tectonic as LaTeX compiler
-  ;;(setq org-latex-compiler "tectonic")
-  (setq org-latex-pdf-process (list "tectonic %f"))
-
-  ;; New function for displaying ANSI color codes
-  (require 'ansi-color)
-  (defun display-ansi-colors ()
-    (interactive)
-    (ansi-color-apply-on-region (point-min) (point-max)))
+  ;; Terminal stuff
+  (add-hook 'term-mode-hook 'spacemacs/toggle-truncate-lines-on)
 
   ;; Don't prompt when opening journal or other large files
   ;(setq large-file-warning-threshold 20000000) 
@@ -576,16 +571,16 @@ A custom journal helper function."
   ;;          (hostentry (netrc-machine netrc host port port)))
   ;;     (when hostentry (netrc-get hostentry "password"))))
 
-  (setq org-gcal-client-id (password-store-get "org-gcal-client-id")
-        org-gcal-client-secret (password-store-get "org-gcal-client-secret"))
+  ;;(setq org-gcal-client-id (password-store-get "org-gcal-client-id")
+  ;;      org-gcal-client-secret (password-store-get "org-gcal-client-secret"))
 
   (setq org-modules '(org-bibtex org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-protocol))
 
-  (setq org-caldav-oauth2-client-id (password-store-get "org-gcal-client-id")
-        org-caldav-oauth2-client-secret (password-store-get "org-gcal-client-secret")
-        org-caldav-url 'google
-        org-caldav-inbox "~/Dropbox/Org/Projects/inbox.org"
-        org-caldav-files (list "~/Dropbox/Org/schedule2.org"))
+  ;;(setq org-caldav-oauth2-client-id (password-store-get "org-gcal-client-id")
+  ;;      org-caldav-oauth2-client-secret (password-store-get "org-gcal-client-secret")
+  ;;      org-caldav-url 'google
+  ;;      org-caldav-inbox "~/Dropbox/Org/Projects/inbox.org"
+  ;;      org-caldav-files (list "~/Dropbox/Org/schedule2.org"))
 
   ;; My Autolinks mode.
   ;; (setq org-directory "~/Dropbox/Org")
@@ -702,21 +697,6 @@ the entry of interest in the bibfile.  but does not check that."
   ; :modes ein:notebook-mode)
 
   ;; Org-brain
-  (use-package org-brain :ensure t
-    :init
-    (setq org-brain-path "~/Dropbox/Org/Brain")
-    ;; For Evil users
-    (with-eval-after-load 'evil
-      (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
-    :config
-    (setq org-id-track-globally t)
-    (setq org-id-locations-file "~/.emacs.d/.org-id-locations")
-    (push '("b" "Brain" plain (function org-brain-goto-end)
-            "* %i%?" :empty-lines 1)
-          org-capture-templates)
-    (setq org-brain-visualize-default-choices 'files)
-    (setq org-brain-file-entries-use-title nil)
-    (setq org-brain-title-max-length 12))
 
   ;; Markdown 
   (add-hook 'markdown-mode 'visual-line-mode)
@@ -846,25 +826,3 @@ the entry of interest in the bibfile.  but does not check that."
   (global-set-key (kbd "C-e") 'evil-window-up)
   (global-set-key (kbd "C-i") 'evil-window-right)
 )
-(defun dotspacemacs/emacs-custom-settings ()
-  "Emacs custom settings.
-This is an auto-generated function, do not modify its content directly, use
-Emacs customize menu instead.
-This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (org-ref org-download org-brain nix-mode hlint-refactor helm-bibtex eyebrowse evil-nerd-commenter evil-magit eval-sexp-fu elm-test-runner elm-mode reformatter editorconfig doom-modeline eldoc-eval cython-mode anaconda-mode aggressive-indent smartparens flycheck window-purpose helm helm-core avy magit f simple-httpd powerline evil goto-chg yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree toc-org tern tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode restart-emacs ranger rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pdf-tools pcre2el password-store password-generator parsebib paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-gcal org-bullets open-junk-file neotree nameless multi-term mu4e-maildirs-extension mu4e-alert move-text markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode link-hint key-chord json-navigator json-mode js2-refactor js-doc insert-shebang indent-guide importmagic impatient-mode imenu-list hungry-delete hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation highlight helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-ag haskell-snippets google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-commit gh-md font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-haskell flycheck-elm flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dumb-jump dotenv-mode direnv diminish define-word csv-mode counsel-projectile column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode biblio base16-theme auto-highlight-symbol auto-dictionary auto-compile ace-window ace-link ace-jump-helm-line))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-)
-
-
