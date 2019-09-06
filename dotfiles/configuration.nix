@@ -157,6 +157,14 @@
      alsaUtils
      alsa-firmware
      pavucontrol
+     # GNOME
+     gthumb
+     # gnomeExtensions.dash-to-dock
+     # gnomeExtensions.no-title-bar
+     # gnomeExtensions.system-monitor
+
+     # Android
+     # anbox
    ];
 
   environment.variables = {
@@ -235,9 +243,11 @@
       # Keyboard settings
       layout = "us";
       xkbVariant = "colemak";
-      displayManager.gdm.enable = true;
-      displayManager.gdm.wayland = true;
-      desktopManager.gnome3.enable = true;
+      #displayManager.gdm.enable = true;
+      #displayManager.gdm.wayland = true;
+      displayManager.sddm.enable = true;
+      # desktopManager.gnome3.enable = true;
+      desktopManager.plasma5.enable
       desktopManager.session = [{
         name = "home-manager";
         start = ''
