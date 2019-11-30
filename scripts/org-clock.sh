@@ -1,18 +1,26 @@
-#!/run/current-system/sw/bin/bash
+#!/usr/bin/bash
 
-export CLOCKSTRING=$(/run/current-system/sw/bin/emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)' 2>&1 )
+export CLOCKSTRING=$(emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)' 2>&1 )
+
+off=" Emacs off!"
+#noclock='<span color="#f00"> Off-clock!</span>'
+noclock=' Off-clock!'
 
 case "$CLOCKSTRING" in
     *"can\'t find socket"*)
-        echo " Emacs off!" ;;
+        echo $off ;;
     "-1")
-        echo " Emacs off!" ;;
+        echo $off ;;
     *"server-start"*)
-        echo " Emacs off!" ;;
+        echo $off ;;
     *"ERROR"*)
-        echo " Off-clock!" ;;
+        echo $noclock ;;
     *"function definition"*)
-        echo " Off-clock!" ;;
+        echo $noclock ;;
     *)
         echo ${CLOCKSTRING:3:30} ;
 esac
+
+# echo "---"
+# echo "Clock in last | bash='emacsclient --eval (org-clock-in-last)'"
+# echo "Stop clock | bash='emacsclient --eval (org-clock-out)'"

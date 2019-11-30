@@ -1,2 +1,2 @@
-#!/run/current-system/sw/bin/bash
+#!/usr/bin/bash
 emacsclient "org-protocol://capture?template=l&url=$QUTE_URL&title=$QUTE_TITLE&body=$QUTE_SELECTED_TEXT"

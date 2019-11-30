@@ -19,9 +19,20 @@ let
   foregroundColor = "#deedf9"; # Light blue
   warningColor = "#e23131"; # Reddish
   lockCmd = "${pkgs.i3lock-fancy}/bin/i3lock-fancy -p -t ''";
+  brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
 in
 {
+  home = {
+    packages = with pkgs; [ 
+      #i3 
+      pywal 
+      ];
+    sessionVariables.LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
+  };
   programs = {
+    emacs = {
+      enable = true;
+      };
     termite = {
       enable = true;
       clickableUrl = true;
@@ -42,13 +53,13 @@ in
         map e scroll up
         map h scroll left
         map i scroll right
+        set statusbar-v-padding 10
       '';
       options = {
         font = "${font} 11";
       };
     };
     };
-
   services = {
     dunst = {
       enable = true;
@@ -88,7 +99,8 @@ in
       };
     };
     compton = {
-      enable = true;
+      # Disabling, since this doesn't seem to work
+      enable = false;
       blur = true;
       shadow = true;
     };
@@ -115,7 +127,7 @@ in
            module-margin-right = 1;
            font-0 = "${font}:size=11;1";
            font-1 = "Font Awesome 5 Free:size=11:style=Solid;1";
-           font-2 = "NotoEmoji:size=11;1";
+           font-2 = "Noto Sans Symbols:size=11;1";
            modules-left = "i3 xwindow";
            modules-center = "date";
            modules-right = "org-clock volume backlight filesystem memory cpu battery network";
@@ -187,18 +199,20 @@ in
         };
         "module/volume" = {
           type = "internal/alsa";
+          master-soundcard = "hw:0";
           label-volume = " %percentage%";
           label-muted = "";
           click-left = "pactl set-sink-mute 0 toggle";
         };
         "module/backlight" = {
-          type = "internal/xbacklight";
+          type = "internal/backlight";
+          card = "intel_backlight";
           format = "<ramp>";
-          #ramp-0 = "🌕";
-          #ramp-1 = "🌔";
-          #ramp-2 = "🌓";
-          #ramp-3 = "🌒";
-          #ramp-4 = "🌑";
+          ramp-0 = "";
+          ramp-1 = "";
+          ramp-2 = "";
+          ramp-3 = "";
+          ramp-4 = "";
         };
       };
     };
@@ -206,6 +220,9 @@ in
       enable = true;
       lockCmd = "${lockCmd}";
     };
+    emacs = {
+      enable = true;
+      };
   };
   xsession = {
     enable = true;
@@ -255,23 +272,34 @@ in
         modifier = "Mod4";
         keybindings =
           lib.mkOptionDefault {
-            "Mod4+Return" = "exec termite";
+            "Mod4+Return" = "exec ${pkgs.termite}/bin/termite";
             "Mod4+Shift+c" = "kill";
-            "Mod4+space" = "exec rofi -show drun";
+            "Mod4+space" = "exec env LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive rofi -show drun";
             "Mod4+n" = "workspace next";
             "Mod4+e" = "workspace prev";
+            "Mod4+Shift+e" = "exec shutdown-dialog";
             "Mod1+h" = "focus left";
             "Mod1+n" = "focus down";
             "Mod1+e" = "focus up";
             "Mod1+i" = "focus right";
+            "Mod4+r" = "mode resize";
             "Mod1+Shift+h" = "move left";
             "Mod1+Shift+n" = "move down";
             "Mod1+Shift+e" = "move up";
             "Mod1+Shift+i" = "move right";
             "Mod4+t" = "floating toggle";
             "Mod4+x" = "layout toggle all";
-            "XF86KbdBrightnessUp" = "exec light -A 10";
-            "XF86KbdBrightnessDown" = "exec light -U 10";
+            "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '+10%'";
+            "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '10%-'";
+            "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up";
+            "XF86AudioLowerVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl down";
+            "XF86AudioMute" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute";
+            # Open agenda with Super + A
+            "Mod4+a" = "exec emacsclient -c -e '(org-agenda-list)(delete-other-windows)(org-agenda-day-view)'";
+            # lock screen with Super + L
+            "Mod4+l" = "${lockCmd}";
+            # Change wallpaper
+            "Mod4+w" = "exec ${pkgs.pywal}/bin/wal -i ${/home/jon/Bildoj/Ekranfonoj} -o ${../scripts/pywal-reload.sh}";
           };
         modes = {
           resize = {
@@ -283,10 +311,12 @@ in
           };
         };
         startup = [
-          { command = "systemctl --user restart polybar"; always = true; notification = false; }
-          # { command = "dropbox start"; notification = false; }
-          { command = "wal -R"; notification = false; }
+          # { command = "exec systemctl --user restart polybar"; always = true; notification = false; }
+          { command = "${pkgs.pywal}/bin/wal -R"; notification = false; }
+          { command = "megasync"; notification = false; }
           { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
+          { command = "setxkbmap -layout us -variant colemak -option caps:escape -option esperanto:colemak"; }
+          { command = "compton"; }
         ];
         window.border = 10;
       };

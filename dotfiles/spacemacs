@@ -33,8 +33,10 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(elm
-     ;auto-completion
+   '(exwm
+     ruby
+     elm
+     (auto-completion :variables auto-completion-enable-snippets-in-popup t)
      csv
      yaml
      shell-scripts
@@ -42,25 +44,31 @@ This function should only modify configuration layer settings."
      html
      helm
      nixos
-     (haskell :variables haskell-font-lock-symbols t)
+     (haskell :variables haskell-font-lock-symbols t
+              haskell-completion-backend 'dante
+              dante-command-line '("nix-shell" "--run" "ghci"))
      ;; hie-nix
      (keyboard-layout :variables kl-layout 'colemak-hnei)
      emacs-lisp
-     ;; google-calendar
+     google-calendar
      bibtex
      ;ipython-notebook
      (mu4e :variables mu4e-account-alist t)
-     ;(elfeed :variables rmh-elfeed-org-files (list "~/Dropbox/Org/RSS.org"))
+     (elfeed :variables rmh-elfeed-org-files (list "~/Dropbox/Org/RSS.org"))
      git
      markdown
      python
      org
      ranger
+     ;; pdf
      (shell :variables
-             shell-default-height 30
-             shell-default-position 'bottom)
+             ;; shell-default-height 30
+             shell-default-shell 'ansi-term
+             ;; shell-default-position 'bottom
+             )
      (spell-checking :variables spell-checking-enable-by-default nil)
      syntax-checking
+     themes-megapack
      )
 
    ;; List of additional packages that will be installed without being
@@ -70,12 +78,16 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(
                                       ;(ereader :location (recipe :fetcher github :repo "bddean/emacs-ereader"))
                                       base16-theme
-                                      ;;password-store
+                                      password-store
                                       direnv
-                                      ;;org-gcal
+                                      ;; org-gcal
                                       gotham-theme
                                       org-brain
-                                      ;; (org-caldav)
+                                      org-gnome
+                                      ewal
+                                      ewal-spacemacs-themes
+                                      ewal-evil-cursors
+                                      flycheck-vale
                                       )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -197,44 +209,14 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(gotham
+   dotspacemacs-themes '(;;ewal-spacemacs-modern
+                         doom-spacegrey
                          spacemacs-dark
+                         gotham
                          base16-apathy
-                         base16-default-dark
                          base16-eighties
                          base16-atelier-cave
                          base16-atelier-lakeside
-                         base16-atelier-plateau
-                         base16-atelier-savanna
-                         base16-darktooth
-                         base16-default-dark
-                         base16-dracula
-                         base16-flat
-                         base16-gruvbox-dark-pale
-                         base16-harmonic-dark
-                         base16-materia
-                         base16-monokai
-                         base16-nord
-                         base16-oceanicnext
-                         base16-ocean
-                         base16-onedark
-                         base16-railscasts
-                         base16-solarflare
-                         base16-tomorrow-night
-                         base16-woodland
-                         ;; brin
-                         ;; bubbleberry
-                         ;; jazz
-                         ;; jbeans
-                         ;; junio
-                         ;; mustang
-                         ;; noctilux
-                         ;; planet
-                         ;; purple-haze
-                         ;; sanityinc-tomorrow-night
-                         ;; spacegray
-                         ;; subatomic
-                         ;; gruvbox
                          )
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `vim-powerline' and `vanilla'. The first three
@@ -251,7 +233,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("Fira Code"
+   dotspacemacs-default-font '("Hack"
                                :size 14
                                :weight normal
                                :width normal
@@ -417,7 +399,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
-   dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
+   dotspacemacs-search-tools '("grep")
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
@@ -474,18 +456,10 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
 
-  ;; Theme stuff
-  ;; (load-file "~/.emacs.d/private/ewal/ewal.el")
-  ;; (setq spacemacs-evil-cursors (ewal-get-spacemacs-evil-cursors-colors)
-  ;;      spacemacs-theme-custom-colors (ewal-get-spacemacs-theme-colors)
-        ;; personal taste
-  ;;      spacemacs-theme-org-highlight t
-  ;;      theming-modifications
-  ;;      `((spacemacs-dark (page-break-lines :background ,(ewal-get-color 'background -2))
-  ;;                        (line-number :background ,(ewal-get-color 'background 0)))))
-  ;; reload theme
-  ;; (load-theme 'spacemacs-dark t t)
-
+  ;; (add-to-list 'load-path "~/Dotfiles/scripts/ewal")
+  ;; (add-to-list 'load-path "~/Dotfiles/scripts/ewal/spacemacs-themes")
+  ;; (require 'ewal-spacemacs-theme)
+  ;; (load-theme 'ewal-spacemacs-modern t)
   )
 
 (defun dotspacemacs/user-config ()
@@ -497,13 +471,16 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
   ;; General
-  (setq vc-follow-symlinks t) ;; Always follow symlinks. 
+  (setq vc-follow-symlinks t) ;; Always follow symlinks.
+
+  ;; Get system notifications through libnotify
+  (setq alert-default-style 'libnotify)
 
   ;; Terminal stuff
   (add-hook 'term-mode-hook 'spacemacs/toggle-truncate-lines-on)
 
   ;; Don't prompt when opening journal or other large files
-  ;(setq large-file-warning-threshold 20000000) 
+  ;(setq large-file-warning-threshold 20000000)
 
   ;; Org Mode
   (setq org-startup-indented t)
@@ -512,14 +489,11 @@ you should place your code here."
   (setq evil-org-key-theme '(textobjects navigation additional insert todo))
   (setq org-default-priority ?C)
   (setq org-lowest-priority ?G)
-  ;; Show clock tables in hours, not days. 
+  ;; Show clock tables in hours, not days.
   (setq org-duration-format 'h:mm)
 
-  ;; Fancy custom syntax highlighting of quoted strings!
-  ;; (add-hook 'org-mode-hook
-  ;;           (lambda ()
-  ;;             (font-lock-add-keywords nil '(("\".*?\"" 1 font-lock-constant-face t)
-  ;;                                           ("'.*?'" 1 font-lock-doc-face t)))))
+  ;; Clock break time in pomodoro
+  (setq org-pomodoro-clock-break t)
 
   (defun org-journal-new-entry ()
     "Inserts header with inactive timestamp, hours and minutes. 
@@ -546,7 +520,8 @@ A custom journal helper function."
    '((python . t)
      (haskell . t)
      (dot . t)
-     (emacs-lisp . t)))
+     (emacs-lisp . t)
+     (shell . t)))
 
   ;; Org Calendar and Diary
   (setq diary-file "~/Dropbox/Org/diary")
@@ -557,9 +532,32 @@ A custom journal helper function."
               (calendar-set-date-style 'iso)))
   (add-hook 'diary-mode-hook 'diary-fancy-display-mode)
 
+  ;; Prose linting
+  (require 'flycheck-vale)
+  (flycheck-vale-setup)
+
+  ;; Attempt to make custom links
+  ;; (add-hook 'org-mode-hook
+  ;;           (lambda ()
+  ;;             (font-lock-add-keywords nil '(("\\[\\(\\@.*?\\)\\]" 1 font-lock-constant-face prepend)))))
+
+  ;; (add-hook 'org-mode-hook
+  ;;           (lambda ()
+  ;;             (font-lock-add-keywords nil '(("w\\(hi\\)ch" 1 font-lock-constant-face prepend)))))
+
+
+  ;; (add-hook 'org-mode-hook
+  ;;           (lambda ()
+  ;;             (font-lock-add-keywords nil
+  ;;                                     '(("\\<\\(FIXME\\):" 1 'font-lock-warning-face prepend)
+  ;;                                       ("\\<\\(and\\|or\\|not\\)\\>" .
+  ;;                                        'font-lock-keyword-face)))))
+
   ;; Google Calendar
-  (setq org-gcal-up-days 0)
-  (setq org-gcal-file-alist '(("jon.reeve@gmail.com" . "/home/jon/Dropbox/Org/Projects/schedule.org"))
+  (setq org-gcal-up-days 60
+        org-gcal-file-alist '(("jon.reeve@gmail.com" . "/home/jon/Dropbox/Org/Projects/schedule.org"))
+        org-gcal-client-id (password-store-get "org-gcal-client-id")
+        org-gcal-client-secret (password-store-get "org-gcal-client-secret")
         cfw:org-capture-template '("s" "Schedule an event" entry
                                    (file "/home/jon/Dropbox/Org/Projects/schedule.org")
                                    "* %^{Description}\n%^{LOCATION}p\n%(cfw:org-capture-day)\n%?"))
@@ -571,8 +569,6 @@ A custom journal helper function."
   ;;          (hostentry (netrc-machine netrc host port port)))
   ;;     (when hostentry (netrc-get hostentry "password"))))
 
-  ;;(setq org-gcal-client-id (password-store-get "org-gcal-client-id")
-  ;;      org-gcal-client-secret (password-store-get "org-gcal-client-secret"))
 
   (setq org-modules '(org-bibtex org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-protocol))
 
@@ -587,7 +583,8 @@ A custom journal helper function."
   ;; (load-file "~/.emacs.d/private/org-autolinks/org-autolinks-mode.el")
 
   ;; Org Agenda
-  (setq org-agenda-files (list "~/Dropbox/Org/Projects/"))
+  (setq org-agenda-files (list "~/Dropbox/Org/Projects/")
+        org-projectile-file "~/Dropbox/Org/Projects/todo.org")
 
   ;; (with-eval-after-load 'org-agenda
   ;;   (require 'org-projectile)
@@ -596,10 +593,20 @@ A custom journal helper function."
   ;;                (push file org-agenda-files)))
   ;;           (org-projectile-todo-files)))
 
+  ;; (with-eval-after-load 'org-agenda
+  ;;   (require 'org-projectile)
+  ;;   (push (org-projectile:todo-files) org-agenda-files))
+
+
   (setq org-refile-targets '((nil :maxlevel . 9)
                              (org-agenda-files :maxlevel . 9)))
   (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
   (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
+
+  ;; This doesn't seem to work? 
+  ;; (require 'org-gnome)
+  ;; (setq org-gnome-integrate-with-calendar t)
+  ;; (org-gnome-turn-on)
 
   ;; Adapted from http://stackoverflow.com/a/12751732/584121
   (require 'org-protocol)
@@ -624,7 +631,7 @@ A custom journal helper function."
 
   ;; Bibliography
   (setq reftex-default-bibliography '("~/Dropbox/Columbia/Dissertation/references.bib"
-                                      "~/Dropbox/Papers/library.bib")
+                                      "~/Dropbox/Papers/library.bib" "~/Dropbox/Papers/zotero.bib")
         org-ref-default-bibliography '("~/Dropbox/Papers/library.bib"
           "~/Dropbox/Columbia/Dissertation/references.bib")
         org-ref-pdf-directory "~/Dropbox/Papers" ;; keep the final slash off
@@ -642,9 +649,9 @@ A custom journal helper function."
   :YEAR: %y
  :END:
 ")
-  ;; (setq org-ref-open-pdf-function
-  ;;       (lambda (fpath)
-  ;;         (start-process "okular" "*helm-bibtex-okular*" "/usr/bin/okular" fpath)))
+  (setq org-ref-open-pdf-function
+        (lambda (fpath)
+          (start-process "zathura" "*helm-bibtex-zathura*" "/usr/bin/zathura" fpath)))
 
   (defun org-ref-get-zotero-pdf-filename (key)
     "Return the pdf filename indicated by zotero file field.
@@ -683,6 +690,10 @@ the entry of interest in the bibfile.  but does not check that."
             (shell-command (format "zathura %s" pdf))
           (ding)))))
 
+  ;; Open PDFs with system viewer
+  (delete '("\\.pdf\\'" . default) org-file-apps)
+  (add-to-list 'org-file-apps '("\\.pdf\\'" . system))
+
   (setq neo-theme 'nerd)
 
   ;; Jupyter
@@ -697,6 +708,7 @@ the entry of interest in the bibfile.  but does not check that."
   ; :modes ein:notebook-mode)
 
   ;; Org-brain
+  (setq org-brain-path "~/Dropbox/Org/Brain")
 
   ;; Markdown 
   (add-hook 'markdown-mode 'visual-line-mode)
@@ -706,7 +718,6 @@ the entry of interest in the bibfile.  but does not check that."
 
   ;; Mail 
   ;; Send email via Gmail:
-  ;;        smtpmail-smtp-service 25)
   (setq smtpmail-smtp-server "smtp.gmail.com"
         smtpmail-smtp-service 587
         message-send-mail-function 'smtpmail-send-it
@@ -825,4 +836,70 @@ the entry of interest in the bibfile.  but does not check that."
   (global-set-key (kbd "C-n") 'evil-window-down)
   (global-set-key (kbd "C-e") 'evil-window-up)
   (global-set-key (kbd "C-i") 'evil-window-right)
+
+  ;; (enable-theme 'ewal-spacemacs-modern)
+
+  ;; Not working. Attempt at toggl integration. 
+  ;;(setq org-toggl-inherit-toggl-properties t)
+  ;;(load-file "~/.emacs.d/private/org-toggl.el")
+  ;;(require 'org-toggl)
+  ;;(toggl-get-projects)
+  ;;(org-toggl-integration-mode)
+  ;;(setq toggl-auth-token (password-store-get "toggl-api"))
+
 )
+
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
+ '(dante-methods (quote (nix-ghci)))
+ '(evil-want-Y-yank-to-eol nil)
+ '(flycheck-checker-error-threshold 800)
+ '(hl-todo-keyword-faces
+   (quote
+    (("TODO" . "#dc752f")
+     ("NEXT" . "#dc752f")
+     ("THEM" . "#2d9574")
+     ("PROG" . "#4f97d7")
+     ("OKAY" . "#4f97d7")
+     ("DONT" . "#f2241f")
+     ("FAIL" . "#f2241f")
+     ("DONE" . "#86dc2f")
+     ("NOTE" . "#b1951d")
+     ("KLUDGE" . "#b1951d")
+     ("HACK" . "#b1951d")
+     ("TEMP" . "#b1951d")
+     ("FIXME" . "#dc752f")
+     ("XXX" . "#dc752f")
+     ("XXXX" . "#dc752f"))))
+ '(package-selected-packages
+   (quote
+    (flycheck-vale org-gcal seeing-is-believing rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe rbenv rake minitest helm-gtags ggtags enh-ruby-mode counsel-gtags counsel swiper chruby bundler inf-ruby org-gnome gnome-calendar password-store ewal-spacemacs-themes ewal-spacemacs-theme ewal zenburn-theme zen-and-art-theme yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum white-sand-theme which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme treemacs-projectile treemacs-evil toxi-theme toc-org tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit symon symbol-overlay sunny-day-theme sublime-themes subatomic256-theme subatomic-theme string-inflection spaceline-all-the-icons spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smeargle slim-mode shell-pop seti-theme scss-mode sass-mode reverse-theme restart-emacs rebecca-theme ranger rainbow-delimiters railscasts-theme pytest pyenv-mode py-isort purple-haze-theme pug-mode professional-theme prettier-js popwin planet-theme pippel pipenv pip-requirements phoenix-dark-pink-theme phoenix-dark-mono-theme persp-mode pcre2el password-generator paradox overseer orgit organic-green-theme org-ref org-projectile org-present org-pomodoro org-mime org-download org-cliplink org-bullets org-brain open-junk-file omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme nodejs-repl noctilux-theme nix-mode naquadah-theme nameless mustang-theme multi-term mu4e-maildirs-extension mu4e-alert move-text monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minimal-theme material-theme markdown-toc majapahit-theme magit-svn magit-gitflow madhat2r-theme macrostep lush-theme lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint light-soap-theme kaolin-themes json-navigator json-mode js2-refactor js-doc jbeans-theme jazz-theme ir-black-theme intero insert-shebang inkpot-theme indent-guide importmagic impatient-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation heroku-theme hemisu-theme helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mu helm-mode-manager helm-make helm-hoogle helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag hc-zenburn-theme haskell-snippets gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md gandalf-theme fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-package flycheck-haskell flycheck-elm flycheck-bashate flx-ido flatui-theme flatland-theme fish-mode fill-column-indicator farmhouse-theme fancy-battery eziam-theme eyebrowse expand-region exotica-theme evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu espresso-theme eshell-z eshell-prompt-extras esh-help emmet-mode elm-test-runner elm-mode elisp-slime-nav editorconfig dumb-jump dracula-theme dotenv-mode doom-themes doom-modeline django-theme direnv diminish devdocs define-word darktooth-theme darkokai-theme darkmine-theme darkburn-theme dante dakrone-theme cython-mode cyberpunk-theme csv-mode counsel-projectile company-web company-tern company-statistics company-shell company-nixos-options company-ghci company-ghc company-cabal company-anaconda column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized cmm-mode clues-theme clean-aindent-mode cherry-blossom-theme centered-cursor-mode busybee-theme bubbleberry-theme blacken birds-of-paradise-plus-theme base16-theme badwolf-theme auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme ace-link ace-jump-helm-line ac-ispell)))
+ '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e")))
+ '(safe-local-variable-values
+   (quote
+    ((dante-command-line "nix-shell" "--run" "ghci")
+     (dante-methods
+      (quote new-impure-nix))
+     (dante-repl-command-line "nix-shell" "--run" "ghci")
+     (dante-command-line quote
+                         ("nix-shell" "--run" "cabal v2-repl"))
+     (javascript-backend . tern)
+     (javascript-backend . lsp)))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:background nil)))))
+)
+

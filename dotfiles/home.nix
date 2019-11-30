@@ -14,11 +14,18 @@ let
   backgroundColor = "#243442"; # Blue steel
   foregroundColor = "#deedf9"; # Light blue
   warningColor = "#e23131"; # Reddish
+  # myNurExpressions = import <nur-jomik> { inherit pkgs; };
   lockCmd = "${pkgs.i3lock-fancy}/bin/i3lock-fancy -p -t ''";
 in
 {
 
   imports = [  ./minimal.nix ];
+
+  # nixpkgs.overlays = [
+  #   (self: super: {
+  #     nur.repos.jomik = myNurExpressions.pkgs;
+  #   })
+  # ];
 
   accounts.email = {
     maildirBasePath = "${maildir}";
@@ -31,8 +38,13 @@ in
         primary = true;
         mbsync = {
           enable = true;
+          create = "maildir";
           expunge = "both";
-          patterns = [ "*" "![Gmail]*" "[Gmail]/Sent Mail" ];
+          patterns = [ "*" "![Gmail]/*" "\"[Gmail]/Sent Mail\"" "[Gmail]/Lists"];
+          extraConfig.channel = {
+            MaxMessages = 2000;
+            ExpireUnread = "yes";
+          };
         };
         realName = "${name}";
       };
@@ -43,8 +55,13 @@ in
         passwordCommand = "${pkgs.pass}/bin/pass lionmail";
         mbsync = {
           enable = true;
+          create = "maildir";
           expunge = "both";
-          patterns = [ "*" "![Gmail]*" "[Gmail]/Sent Mail" ];
+          patterns = [ "*" "!\"[Gmail]/All Mail\"" "[Gmail]/Sent Mail" ];
+          extraConfig.channel = {
+            MaxMessages = 2000;
+            ExpireUnread = "yes"; 
+          };
         };
         realName = "${name}";
       };
@@ -64,9 +81,12 @@ in
     mbsync = {
       enable = true;
     };
+    # notmuch = {
+    #   enable = true;
+    # };
     neovim = {
       enable = true;
-      plugins = [ pkgs.vimPlugins.vim-airline ];
+      # plugins = [ pkgs.vimPlugins.vim-airline ];
       vimAlias = true;
       extraConfig =
       ''
@@ -114,19 +134,13 @@ in
             if contains $TERM $acceptable_terms
               fish_vi_key_bindings
               # Load pywal colors
-              # cat ~/.cache/wal/sequences
-            end
-
-            if not functions -q fisher
-                set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
-                curl https://git.io/fisher --create-dirs -sLo $XDG_CONFIG_HOME/fish/functions/fisher.fish
-                fish -c fisher
+              cat ~/.cache/wal/sequences
             end
 
             set -U vaultmount ~/.private-mount
             set -U vaultloc ~/Dropbox/Personal/.Vault_encfs
 
-            alias vault="${pkgs.encfs} $vaultloc $vaultmount"
+            alias vault="encfs $vaultloc $vaultmount"
             alias unvault="fusermount -u $vaultmount"
             funcsave vault
             funcsave unvault
@@ -164,6 +178,15 @@ in
             end
             funcsave find-book
 
+            function search --description "Search several search engines at once"
+              for engine in $argv[1..-2]
+                qutebrowser ":open -t $engine $argv[-1]"
+              end
+            end
+
+            # Use vim as pager
+            set -U PAGER vim -R -c 'set ft=man'
+
          '';
        promptInit =
          ''
@@ -182,6 +205,13 @@ in
               function fish_title; true; end
             end
          '';
+       # plugins = with pkgs.nur.repos.jomik.fishPlugins; [
+       #   oh-my-fish/plugin-bang-bang
+       #   edc/bass
+       #   fisherman/fzf
+       #   excitedleigh/virtualfish
+       #   fisherman/z
+       # ];
     };
   };
 
@@ -277,6 +307,8 @@ in
         bat fd fzf
         # Spacemacs email
         w3m mu
+        # Encryption
+        encfs
       ];
       file = {
         # ".spacemacs".source = ./spacemacs;
@@ -311,13 +343,6 @@ in
       };
     };
     configFile = {
-      "fish/fishfile".text = ''
-        oh-my-fish/plugin-bang-bang
-        edc/bass
-        fisherman/fzf
-        excitedleigh/virtualfish
-        fisherman/z
-      '';
       "qutebrowser/config.py".text =
       ''
         c.colors.completion.category.bg = "#333333"
@@ -347,9 +372,10 @@ in
                 'c': 'https://clio.columbia.edu/quicksearch?q={}',
                 'gh': 'https://github.com/search?q={}&type=Repositories',
                 'h': 'https://hackage.haskell.org/packages/search?terms={}',
-                'libgen': 'https://libgen.is/search?q={}',
+                'libgen': 'https://libgen.is/search.php?req={}',
                 'viki': 'https://eo.wikipedia.org/w/index.php?search={}',
-                'viki': 'https://eo.wikipedia.org/w/index.php?search={}',
+                'ia': 'https://archive.org/details/texts?and%5B%5D={}&sin=',
+                'mm': 'https://muse-jhu-edu.ezproxy.cul.columbia.edu/search?action=search&query=content:{}:and&limit=journal_id:131&min=1&max=10&t=search_journal_header'
                 }
         c.url.default_page = "${scripts}/homepage/homepage.html";
         config.bind('N', 'tab-next')
@@ -361,11 +387,13 @@ in
         config.bind('i', 'scroll right')
         config.bind('j', 'search-next')
         config.bind('gL', 'spawn --userscript org-link')
-        config.bind('pf', 'spawn --userscript password_fill')
+        config.bind('pf', 'spawn --userscript qute-lastpass')
         config.bind('gz', "jseval var d=document,s=d.createElement('script');s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement).appendChild(s);void(0);")
         config.bind('t', 'set-cmd-text -s :open -t')
         config.bind('Y', 'yank selection')
         config.bind('O', 'set-cmd-text :open {url:pretty}')
+        config.bind('<Alt-Left>', 'back')
+        config.bind('<Alt-Right>', 'forward')
         # Hack for repeating a search, but with a different search engine.
         c.aliases['repeat-search'] = ';;'.join([
             'set-cmd-text :',        # enter command mode

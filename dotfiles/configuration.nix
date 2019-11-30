@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, options, ... }:
 
 {
   imports =
@@ -36,12 +36,13 @@
   nixpkgs.config = {
     allowUnfree = true;
   };
+  nixpkgs.overlays = [(import /home/jon/.config/nixpkgs/overlays/jupyterlab.nix)];
 
   # Select internationalisation properties.
   i18n = {
     consoleUseXkbConfig = true;
-    defaultLocale = "en_US.UTF-8";
-    supportedLocales = [ "en_US.UTF-8/UTF-8" ];
+    defaultLocale = "eo.UTF-8";
+    #supportedLocales = [ "en_US.UTF-8/UTF-8" ];
   };
 
   # Fonts!
@@ -70,7 +71,6 @@
      vim emacs              # Text editors 
      pass encfs             # Passwords and encryption
      aspell aspellDicts.en  # Spell checker
-     #xorg.xbacklight        # Brightness control
      light                  # Brightness control
      networkmanager
      gcc gnumake
@@ -78,7 +78,6 @@
      wget
      isync mu w3m           # Mail
      pandoc
-     # haskellPackages.pandoc # Document manipulation
 
      haskellPackages.pandoc-citeproc
      # haskellPackages.pandoc-crossref
@@ -93,7 +92,7 @@
      #tectonic              # Latex
      texlive.combined.scheme-full
      git git-lfs            # Version control
-     dropbox-cli
+     # dropbox-cli
      unzip                  # Archives
      # Haskell Development
      # stack
@@ -105,8 +104,9 @@
      (python3.withPackages(ps: with ps; [
        pandas
        matplotlib
-       altair
-       vega
+       #scikitlearn
+       #altair
+       #vega
        jupyter
        jupyterlab
        virtualenvwrapper
@@ -148,20 +148,24 @@
      # GUI
      qutebrowser            # Web browser
      chromium               # Another web browser
+     deja-dup
      # zotero
      # numix-cursor-theme
 
      # Sound
-     alsaTools
-     alsaPlugins
-     alsaUtils
+     #alsaTools
+     #alsaPlugins
+     #alsaUtils
      alsa-firmware
      pavucontrol
-     # GNOME
-     gthumb
-     # gnomeExtensions.dash-to-dock
-     # gnomeExtensions.no-title-bar
-     # gnomeExtensions.system-monitor
+
+     # KDE
+     #okular
+     #dragon
+     # kontact
+     # akonadi
+     # kdeApplications.kmail-account-wizard
+     # kdeApplications.kmail
 
      # Android
      # anbox
@@ -218,10 +222,20 @@
       defaultEditor = true;
     };
 
+    gnome3 = {
+      gnome-keyring.enable = true;
+      gnome-online-accounts.enable = true;
+      gnome-online-miners.enable = true;
+      tracker.enable = true;
+      tracker-miners.enable = true;
+    };
+
     flatpak.enable = true;
 
     # Fingerprint reader
     fprintd.enable = true;
+
+    localtime.enable = true;
 
     # Power button invokes suspend, not shutdown.
     logind = {
@@ -243,11 +257,11 @@
       # Keyboard settings
       layout = "us";
       xkbVariant = "colemak";
-      #displayManager.gdm.enable = true;
-      #displayManager.gdm.wayland = true;
-      displayManager.sddm.enable = true;
-      # desktopManager.gnome3.enable = true;
-      desktopManager.plasma5.enable
+      displayManager.gdm.enable = true;
+      displayManager.gdm.wayland = true;
+      desktopManager.gnome3.enable = true;
+      #displayManager.sddm.enable = true;
+      #desktopManager.plasma5.enable = true;
       desktopManager.session = [{
         name = "home-manager";
         start = ''
@@ -261,6 +275,7 @@
   # Shell
   programs = {
     fish.enable = true;
+    gnome-documents.enable = true;
     xonsh.enable = true;
     light.enable = true;
     gnupg.agent = { enable = true; enableSSHSupport = true; };
@@ -272,7 +287,7 @@
         home = "/home/jon";
         shell = pkgs.fish;
         description = "Jonathan Reeve";
-        extraGroups = [ "audio" "wheel" "networkmanager" "tty" "dialout" "input" "docker"];
+        extraGroups = [ "audio" "wheel" "networkmanager" "tty" "dialout" "input" "docker" "video"];
       };
     systemrestore =
       { isNormalUser = true;
@@ -294,6 +309,6 @@
   # should.
   system.stateVersion = "19.03"; # Did you read the comment?
 
-  # virtualization.docker.enable = true;
+  virtualisation.docker.enable = true;
 
 }

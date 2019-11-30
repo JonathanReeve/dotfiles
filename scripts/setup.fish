@@ -8,6 +8,7 @@ set dots "/home/jon/Dotfiles/dotfiles"
 mkdir -p "$HOME/.config/nixpkgs"
 ln -s "$dots/home.nix" "$HOME/.config/nixpkgs/home.nix"
 sudo ln -s "$dots/configuration.nix" "$dots/hardware-configuration.nix" "/etc/nixos"
+ln -s "/home/jon/Dotfiles/scripts/org-clock.sh" "$XDG_CONFIG_HOME/argos/clock.30s.sh"
 
 set -U vaultmount ~/Documents/Settings/.private-mount
 set -U vaultloc ~/Dropbox/Personal/.Vault_encfs 

@@ -1,4 +1,4 @@
-#!/run/current-system/sw/bin/bash
+#!/usr/bin/bash
 
 # Source the colors.
 . "${HOME}/.cache/wal/colors.sh"
@@ -16,3 +16,6 @@ running=`ps cax | grep qutebrowser | wc -l`
 if [ $running -gt 0 ]; then
     qutebrowser ":config-source $PWD/config.py"
 fi
+
+# Trigger homepage reload
+./homepage/homepage.sh
