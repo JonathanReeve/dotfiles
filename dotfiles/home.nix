@@ -231,75 +231,14 @@ in
   };
 
   qt = {
-    enable = false;
+    enable = true;
     # useGtkTheme = true;
   };
-
-  # Adapted from https://github.com/yrashk/nix-home/blob/master/home.nix#L194
-  systemd.user = {
-    services = {
-      # gpg-agent = {
-        # enable = true;
-        # Don't ask for password all the time.
-        # defaultCacheTtl = 31536000; # 365 days
-        # maxCacheTtl = 31536000;
-      # };
-      syncmail = {
-        Unit = {
-          Description = "Sync email and index with mu";
-        };
-        Service = {
-          Type = "oneshot";
-          ExecStart = "${pkgs.isync}/bin/mbsync -a";
-          ExecStartPost = "${pkgs.mu}/bin/mu index -m ${maildir}";
-          SuccessExitStatus = "0 1";
-        };
-      };
-      cleanmail = {
-        Unit = {
-          Description = "Sync email and index with mu";
-        };
-        Service = {
-          Type = "oneshot";
-          ExecStart = "${pkgs.isync}/bin/mbsync -dXa";
-          ExecStartPost = "${pkgs.mu}/bin/mu index -m ${maildir}";
-          SuccessExitStatus = "0 1";
-        };
-      };
-    };
-    timers = {
-       syncmail = {
-         Unit = {
-           Description = "Schedule syncing email and indexing with mu";
-         };
-         Timer = {
-           Unit = "syncmail.service";
-           OnCalendar = "*:0/15";
-         };
-         Install = {
-           WantedBy = [ "timers.target" ];
-         };
-       };
-       cleanmail = {
-         Unit = {
-           Description = "Schedule expunging email and indexing with mu";
-         };
-         Timer = {
-           Unit = "cleanmail.service";
-           OnCalendar = "daily";
-         };
-         Install = {
-           WantedBy = [ "timers.target" ];
-         };
-       };
-    };
-  };
-
 
   # Dotfiles for the home root, ~/
   home = {
       keyboard = {
-        options = [ "caps:escape" ];
+        options = [ "caps:escape" "esperanto:colemak" ];
         variant = "colemak";
       };
       packages = with pkgs; [
@@ -309,6 +248,8 @@ in
         w3m mu
         # Encryption
         encfs
+        # File sync and backup
+        megasync megatools
       ];
       file = {
         # ".spacemacs".source = ./spacemacs;

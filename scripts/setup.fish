@@ -6,22 +6,7 @@
 
 set dots "/home/jon/Dotfiles/dotfiles"
 mkdir -p "$HOME/.config/nixpkgs"
-ln -s "$dots/home.nix" "$HOME/.config/nixpkgs/home.nix"
-sudo ln -s "$dots/configuration.nix" "$dots/hardware-configuration.nix" "/etc/nixos"
-ln -s "/home/jon/Dotfiles/scripts/org-clock.sh" "$XDG_CONFIG_HOME/argos/clock.30s.sh"
-
-set -U vaultmount ~/Documents/Settings/.private-mount
-set -U vaultloc ~/Dropbox/Personal/.Vault_encfs 
-
-alias vault="encfs $vaultloc $vaultmount"
-alias unvault="fusermount -u $vaultmount"
-funcsave vault
-funcsave unvault
-
-function jnl
-	vault
-	and emacsclient -c $vaultmount/Journal/jnl.org
-	and unvault
-end
-
-funcsave jnl
+ln -sf "$dots/home.nix" "$XDG_CONFIG_HOME/nixpkgs/home.nix"
+sudo ln -sf "$dots/configuration.nix" "/etc/nixos"
+sudo ln -sf "$dots/hardware-configuration.nix" "/etc/nixos"
+ln -sf "/home/jon/Dotfiles/scripts/org-clock.sh" "$XDG_CONFIG_HOME/argos/clock.30s.sh"

@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/run/current-system/sw/bin/bash
 
 # Source the colors.
 . "${HOME}/.cache/wal/colors.sh"

@@ -8,12 +8,13 @@
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" ];
+  boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/9bfc9415-ab74-47e3-bc8b-68a7be28432d";
+    { device = "/dev/disk/by-uuid/bcbe4f96-78e1-407c-9b59-ff01701d7872";
       fsType = "ext4";
     };
 
@@ -23,7 +24,7 @@
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/6672-1865";
+    { device = "/dev/disk/by-uuid/0AFA-38E5";
       fsType = "vfat";
     };
 

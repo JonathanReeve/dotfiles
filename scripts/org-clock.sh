@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/run/current-system/sw/bin/bash
 
 export CLOCKSTRING=$(emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)' 2>&1 )
 

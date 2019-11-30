@@ -28,15 +28,13 @@
   networking = {
     hostName = "jon-laptop"; # Define your hostname.
     networkmanager.enable = true;
+    useDHCP = false;
+    interfaces.wlp107s0.useDHCP = true;
   };
-
-  # nix.binaryCaches = ["https://hie-nix.cachix.org/"];
-  # nix.binaryCachePublicKeys = ["hie-nix.cachix.org-1:EjBSHzF6VmDnzqlldGXbi0RM3HdjfTU3yDRi9Pd0jTY="];
 
   nixpkgs.config = {
     allowUnfree = true;
   };
-  nixpkgs.overlays = [(import /home/jon/.config/nixpkgs/overlays/jupyterlab.nix)];
 
   # Select internationalisation properties.
   i18n = {
@@ -80,12 +78,13 @@
      pandoc
 
      haskellPackages.pandoc-citeproc
-     # haskellPackages.pandoc-crossref
      haskellPackages.hlint
      haskellPackages.apply-refact
-     # haskellPackages.stylish-haskell
      haskellPackages.hasktags
      haskellPackages.hoogle
+     haskellPackages.turtle
+     # haskellPackages.pandoc-crossref
+     # haskellPackages.stylish-haskell
      # haskellPackages.hakyll
      libfprint fprintd      # Fingerprint login
      # iio-sensor-proxy       # Accelerometer, gyroscope, etc.  #TODO: break out into C930 module
@@ -97,7 +96,6 @@
      # Haskell Development
      # stack
      ghc
-     haskellPackages.turtle
      libxml2
      sqlite sqlite-interactive # Sqlite
      # Python Development
@@ -124,17 +122,17 @@
      ranger highlight       # File manager
      scrot                  # Screenshots
      tree                   # Show file hierarchies
-     lftp                   # Fast file transfers
+     # lftp                   # Fast file transfers
      autojump               # Jump around! With `j`
-     rofi                   # Launcher
+     # rofi                   # Launcher
      # zathura                # PDF Viewer
-     polybar                # System monitor, etc.
-     compton                # Compositor
+     # polybar                # System monitor, etc.
+     # compton                # Compositor
      mpv                    # Minimalist video player
      termite                # Vim-like modal terminal
      pywal                  # Wallpapers
      feh                    # Display imaes
-     bspwm sxhkd            # Window manager
+     # bspwm sxhkd            # Window manager
      dunst libnotify        # Notifications
      weechat                # IRC
      fzf                    # Fuzzy file finder
@@ -148,6 +146,7 @@
      # GUI
      qutebrowser            # Web browser
      chromium               # Another web browser
+     firefox                # Yes, a third
      deja-dup
      # zotero
      # numix-cursor-theme
@@ -201,13 +200,7 @@
       # '';
     };
     sensor.iio.enable = true;
-    bluetooth = {
-      enable = true;
-      extraConfig = "
-        [General]
-        Enable=Source,Sink,Media,Socket
-      ";
-    };
+    bluetooth.enable = true;
   };
 
   powerManagement = {
@@ -233,7 +226,7 @@
     flatpak.enable = true;
 
     # Fingerprint reader
-    fprintd.enable = true;
+    # fprintd.enable = true;
 
     localtime.enable = true;
 
@@ -307,7 +300,7 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "19.03"; # Did you read the comment?
+  system.stateVersion = "19.09"; # Did you read the comment?
 
   virtualisation.docker.enable = true;
 
