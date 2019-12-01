@@ -12,7 +12,6 @@
 
   # Use the systemd-boot EFI boot loader.
   boot = {
-    # blacklistedKernelModules = [ "ideapad_laptop" ]; #TODO: break out into C930 module
     # The below doesn't work, and causes this computer not to wake up from suspend
     # kernelParams = [ "mem_sleep_default=deep" ]; #TODO: break out into C930 module
     kernelPackages = pkgs.linuxPackages_latest;
@@ -77,33 +76,32 @@
      isync mu w3m           # Mail
      pandoc
 
-     haskellPackages.pandoc-citeproc
-     haskellPackages.hlint
-     haskellPackages.apply-refact
-     haskellPackages.hasktags
-     haskellPackages.hoogle
-     haskellPackages.turtle
+     (haskellPackages.ghcWithPackages (ps: with ps; [
+       pandoc-citeproc
+       shake
+       hlint
+       apply-refact
+       hasktags
+       hoogle
+       turtle
+     ]))
      # haskellPackages.pandoc-crossref
      # haskellPackages.stylish-haskell
      # haskellPackages.hakyll
      libfprint fprintd      # Fingerprint login
      # iio-sensor-proxy       # Accelerometer, gyroscope, etc.  #TODO: break out into C930 module
-     #tectonic              # Latex
      texlive.combined.scheme-full
      git git-lfs            # Version control
-     # dropbox-cli
      unzip                  # Archives
-     # Haskell Development
-     # stack
-     ghc
      libxml2
      sqlite sqlite-interactive # Sqlite
      # Python Development
+     pipenv
      (python3.withPackages(ps: with ps; [
        pandas
        matplotlib
        #scikitlearn
-       #altair
+       altair
        #vega
        jupyter
        jupyterlab
@@ -123,11 +121,8 @@
      scrot                  # Screenshots
      tree                   # Show file hierarchies
      # lftp                   # Fast file transfers
+     compton 
      autojump               # Jump around! With `j`
-     # rofi                   # Launcher
-     # zathura                # PDF Viewer
-     # polybar                # System monitor, etc.
-     # compton                # Compositor
      mpv                    # Minimalist video player
      termite                # Vim-like modal terminal
      pywal                  # Wallpapers
@@ -158,24 +153,11 @@
      alsa-firmware
      pavucontrol
 
-     # KDE
-     #okular
-     #dragon
-     # kontact
-     # akonadi
-     # kdeApplications.kmail-account-wizard
-     # kdeApplications.kmail
-
      # Android
      # anbox
    ];
 
   environment.variables = {
-    # QT_QPA_PLATFORM = "xcb";
-    # QT_QPA_PLATFORMTHEME = "qt5ct";
-    # QT_QUICK_CONTROLS_STYLE = "org.kde.desktop";
-    # XCURSOR_THEME = "breeze_cursors";
-
     # Preferred applications
     EDITOR = "emacsclient -c";
     BROWSER = "qutebrowser";
@@ -189,15 +171,6 @@
       package = pkgs.pulseaudio;
       # package = pkgs.pulseaudioFull;
       extraModules = [ pkgs.pulseaudio-modules-bt ];
-      # configFile = pkgs.writeText "default.pa" ''
-      #   load-module module-bluetooth-policy
-      #   load-module module-bluetooth-discover
-      #   ## module fails to load with
-      #   ##   module-bluez5-device.c: Failed to get device path from module arguments
-      #   ##   module.c: Failed to load module "module-bluez5-device" (argument: ""): initialization failed.
-      #   # load-module module-bluez5-device
-      #   # load-module module-bluez5-discover
-      # '';
     };
     sensor.iio.enable = true;
     bluetooth.enable = true;
@@ -211,7 +184,7 @@
   services = {
     # Enable emacs daemon, and set EDITOR to emacsclient
     emacs = {
-      enable = false;
+      enable = true;
       defaultEditor = true;
     };
 
@@ -253,8 +226,6 @@
       displayManager.gdm.enable = true;
       displayManager.gdm.wayland = true;
       desktopManager.gnome3.enable = true;
-      #displayManager.sddm.enable = true;
-      #desktopManager.plasma5.enable = true;
       desktopManager.session = [{
         name = "home-manager";
         start = ''

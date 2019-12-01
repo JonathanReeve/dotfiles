@@ -30,9 +30,6 @@ in
     sessionVariables.LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
   };
   programs = {
-    emacs = {
-      enable = true;
-      };
     termite = {
       enable = true;
       clickableUrl = true;
@@ -100,7 +97,7 @@ in
     };
     compton = {
       # Disabling, since this doesn't seem to work
-      enable = false;
+      enable = true;
       blur = true;
       shadow = true;
     };
@@ -185,7 +182,7 @@ in
           type = "custom/script";
           interval = 10;
           exec = "${scripts}/org-clock.sh";
-          click-left = "${pkgs.emacs}/bin/emacsclient --eval '(org-clock-out)' && echo ' Stopped!'";
+          click-left = "emacsclient --eval '(org-clock-out)' && echo ' Stopped!'";
         };
         "module/memory" = {
           type = "internal/memory";
@@ -220,9 +217,6 @@ in
       enable = true;
       lockCmd = "${lockCmd}";
     };
-    emacs = {
-      enable = true;
-      };
   };
   xsession = {
     enable = true;
@@ -316,7 +310,7 @@ in
           { command = "megasync"; notification = false; }
           { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
           { command = "setxkbmap -layout us -variant colemak -option caps:escape -option esperanto:colemak"; }
-          { command = "compton"; }
+          { command = "${pkgs.compton}/bin/compton"; }
         ];
         window.border = 10;
       };
