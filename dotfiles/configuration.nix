@@ -12,9 +12,10 @@
 
   # Use the systemd-boot EFI boot loader.
   boot = {
+    kernelParams = [ "pci=nomsi" ];
     # The below doesn't work, and causes this computer not to wake up from suspend
     # kernelParams = [ "mem_sleep_default=deep" ]; #TODO: break out into C930 module
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_5_3;
     cleanTmpDir = true;
     plymouth.enable = true;
     resumeDevice = "/dev/nvme0n1p7";
@@ -50,6 +51,7 @@
     fira-code
     fira-code-symbols
     font-awesome-ttf
+    libertine
   ];
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -84,11 +86,11 @@
        hasktags
        hoogle
        turtle
+       regex-compat
      ]))
      # haskellPackages.pandoc-crossref
      # haskellPackages.stylish-haskell
      # haskellPackages.hakyll
-     libfprint fprintd      # Fingerprint login
      # iio-sensor-proxy       # Accelerometer, gyroscope, etc.  #TODO: break out into C930 module
      texlive.combined.scheme-full
      git git-lfs            # Version control
@@ -121,13 +123,12 @@
      scrot                  # Screenshots
      tree                   # Show file hierarchies
      # lftp                   # Fast file transfers
-     compton 
+     compton
      autojump               # Jump around! With `j`
      mpv                    # Minimalist video player
      termite                # Vim-like modal terminal
      pywal                  # Wallpapers
      feh                    # Display imaes
-     # bspwm sxhkd            # Window manager
      dunst libnotify        # Notifications
      weechat                # IRC
      fzf                    # Fuzzy file finder
@@ -142,9 +143,11 @@
      qutebrowser            # Web browser
      chromium               # Another web browser
      firefox                # Yes, a third
-     deja-dup
-     # zotero
-     # numix-cursor-theme
+
+     # Gnome
+     deja-dup               # Backups 
+
+     ntfs3g ntfsprogs       # Windows drives compatibility
 
      # Sound
      #alsaTools
@@ -197,9 +200,6 @@
     };
 
     flatpak.enable = true;
-
-    # Fingerprint reader
-    # fprintd.enable = true;
 
     localtime.enable = true;
 
