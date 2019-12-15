@@ -19,7 +19,7 @@ let
 in
 {
 
-  imports = [  ./minimal.nix ];
+  # imports = [  ./minimal.nix ];
 
   # nixpkgs.overlays = [
   #   (self: super: {
@@ -252,6 +252,7 @@ in
         megasync megatools
       ];
       file = {
+	# "../scripts/org-clock.sh".source = ../scripts/org-clock.sh;
         # ".spacemacs".source = ./spacemacs;
 
         # Vim all the things!

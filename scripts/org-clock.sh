@@ -18,7 +18,7 @@ case "$CLOCKSTRING" in
     *"function definition"*)
         echo $noclock ;;
     *)
-        echo ${CLOCKSTRING:3:30} ;
+        echo ${CLOCKSTRING} > /tmp/errors ;
 esac
 
 # echo "---"

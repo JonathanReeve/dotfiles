@@ -52,6 +52,7 @@
     fira-code-symbols
     font-awesome-ttf
     libertine
+    victor-mono
   ];
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -63,13 +64,14 @@
      nix-index              # Indexing files for nix-locate
      nix-prefetch-git nix-prefetch-scripts # Help writing .nix files
      cabal2nix pypi2nix
-     # nodePackages.node2nix 
+     # nodePackages.node2nix
      home-manager           # Dotfiles management
      # CLI
      fish # xonsh             # Shell
-     vim emacs              # Text editors 
-     pass encfs             # Passwords and encryption
+     vim emacs              # Text editors
+     vale                   # Prose linting
      aspell aspellDicts.en  # Spell checker
+     pass encfs             # Passwords and encryption
      light                  # Brightness control
      networkmanager
      gcc gnumake
@@ -145,7 +147,7 @@
      firefox                # Yes, a third
 
      # Gnome
-     deja-dup               # Backups 
+     # deja-dup               # Backups 
 
      ntfs3g ntfsprogs       # Windows drives compatibility
 
@@ -158,6 +160,17 @@
 
      # Android
      # anbox
+
+     # KDE
+     okular
+     dolphin
+     kate
+     dragon
+     kdeApplications.kmail
+     kdeApplications.kmail-account-wizard
+     kdeApplications.kmailtransport
+     kmail
+     accounts-qt
    ];
 
   environment.variables = {
@@ -186,18 +199,18 @@
 
   services = {
     # Enable emacs daemon, and set EDITOR to emacsclient
-    emacs = {
-      enable = true;
-      defaultEditor = true;
-    };
+    #emacs = {
+    #  enable = true;
+    #  defaultEditor = true;
+    #};
 
-    gnome3 = {
-      gnome-keyring.enable = true;
-      gnome-online-accounts.enable = true;
-      gnome-online-miners.enable = true;
-      tracker.enable = true;
-      tracker-miners.enable = true;
-    };
+    # gnome3 = {
+    #   gnome-keyring.enable = true;
+    #   gnome-online-accounts.enable = true;
+    #   gnome-online-miners.enable = true;
+    #   tracker.enable = true;
+    #   tracker-miners.enable = true;
+    # };
 
     flatpak.enable = true;
 
@@ -223,16 +236,15 @@
       # Keyboard settings
       layout = "us";
       xkbVariant = "colemak";
-      displayManager.gdm.enable = true;
-      displayManager.gdm.wayland = true;
-      desktopManager.gnome3.enable = true;
-      desktopManager.session = [{
-        name = "home-manager";
-        start = ''
-          ${pkgs.stdenv.shell} $HOME/.xsession-hm &
-          waitPID=$!
-        '';
-      }];
+      displayManager.sddm.enable = true;
+      desktopManager.plasma5.enable = true;
+      # desktopManager.session = [{
+      #   name = "home-manager";
+      #   start = ''
+      #     ${pkgs.stdenv.shell} $HOME/.xsession-hm &
+      #     waitPID=$!
+      #   '';
+      # }];
     };
   };
 
