@@ -53,6 +53,7 @@
     font-awesome-ttf
     libertine
     victor-mono
+    emacs-all-the-icons-fonts
   ];
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -129,16 +130,17 @@
      autojump               # Jump around! With `j`
      mpv                    # Minimalist video player
      termite                # Vim-like modal terminal
-     pywal                  # Wallpapers
+     # pywal                  # Wallpapers
      feh                    # Display imaes
      dunst libnotify        # Notifications
      weechat                # IRC
      fzf                    # Fuzzy file finder
      ag                     # Fast grep replacement
+     ripgrep                # Another fast grep replacement
      bat                    # Cat replacement
      fd                     # Find replacement
      gotop                  # Top replacement (system monitor)
-     i3lock-fancy           # Screen locker
+     # i3lock-fancy           # Screen locker
      ncdu                   # Fancy disk usage analyzer
      neofetch               # Fancy system information
      # GUI
@@ -238,13 +240,13 @@
       xkbVariant = "colemak";
       displayManager.sddm.enable = true;
       desktopManager.plasma5.enable = true;
-      # desktopManager.session = [{
-      #   name = "home-manager";
-      #   start = ''
-      #     ${pkgs.stdenv.shell} $HOME/.xsession-hm &
-      #     waitPID=$!
-      #   '';
-      # }];
+      desktopManager.session = [{
+        name = "home-manager";
+        start = ''
+          ${pkgs.stdenv.shell} $HOME/.xsession-hm &
+          waitPID=$!
+        '';
+      }];
     };
   };
 

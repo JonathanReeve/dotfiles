@@ -6,7 +6,7 @@
 
 let
   # TODO: make these into options so I don't have to repeat myself? 
-  # Personal Info
+  # Personal Inf
   name = "Jonathan Reeve";
   email = "jon.reeve@gmail.com";
   githubUsername = "JonathanReeve";
@@ -23,9 +23,9 @@ let
 in
 {
   home = {
-    packages = with pkgs; [ 
-      #i3 
-      pywal 
+    packages = with pkgs; [
+      #i3
+      pywal
       ];
     sessionVariables.LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
   };

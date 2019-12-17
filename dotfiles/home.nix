@@ -19,7 +19,7 @@ let
 in
 {
 
-  # imports = [  ./minimal.nix ];
+  imports = [  ./minimal.nix ];
 
   # nixpkgs.overlays = [
   #   (self: super: {
@@ -252,8 +252,13 @@ in
         megasync megatools
       ];
       file = {
-	# "../scripts/org-clock.sh".source = ../scripts/org-clock.sh;
-        # ".spacemacs".source = ./spacemacs;
+        # Handle multiple emacs installs
+        ".emacs-profiles.el".source = ./emacs/emacs-profiles.el;
+        ".spacemacs".source = ./emacs/spacemacs;
+        ".doom.d/" = {
+          source = ./emacs/doom.d;
+          recursive = true;
+        };
 
         # Vim all the things!
         ".inputrc".text =
