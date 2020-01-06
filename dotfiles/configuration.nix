@@ -36,9 +36,12 @@
     allowUnfree = true;
   };
 
+  console = {
+    useXkbConfig = true;
+  };
+
   # Select internationalisation properties.
   i18n = {
-    consoleUseXkbConfig = true;
     defaultLocale = "eo.UTF-8";
     #supportedLocales = [ "en_US.UTF-8/UTF-8" ];
   };
@@ -83,11 +86,12 @@
 
      (haskellPackages.ghcWithPackages (ps: with ps; [
        pandoc-citeproc
-       shake
-       hlint
-       apply-refact
-       hasktags
-       hoogle
+       shake         # Build tool
+       hlint         # Required for spacemacs haskell-mode
+       apply-refact  # Required for spacemacs haskell-mode
+       hasktags      # Required for spacemacs haskell-mode
+       hoogle        # Required for spacemacs haskell-mode
+       stylish-haskell # Required for spacemacs haskell-mode
        turtle
        regex-compat
      ]))
@@ -98,6 +102,8 @@
      texlive.combined.scheme-full
      git git-lfs            # Version control
      unzip                  # Archives
+     file                   # File properties
+     imagemagick            # Image manipulation
      libxml2
      sqlite sqlite-interactive # Sqlite
      # Python Development
@@ -160,19 +166,21 @@
      alsa-firmware
      pavucontrol
 
-     # Android
-     # anbox
-
      # KDE
      okular
      dolphin
      kate
      dragon
-     kdeApplications.kmail
-     kdeApplications.kmail-account-wizard
-     kdeApplications.kmailtransport
-     kmail
-     accounts-qt
+     # kdeApplications.kmail
+     # kdeApplications.kmail-account-wizard
+     # kdeApplications.kmailtransport
+     # kmail
+     # accounts-qt
+     # kontact
+     gwenview
+     ark
+     thunderbird
+
    ];
 
   environment.variables = {

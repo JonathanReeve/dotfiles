@@ -2,6 +2,8 @@
 
 ;; Place your private configuration here
 
+(setq doom-font (font-spec :family "Fira Code" :size 14))
+
 (setq vc-follow-symlinks t) ;; Always follow symlinks.
 
 ;; Get system notifications through libnotify
@@ -57,7 +59,7 @@ A custom journal helper function."
 ;; (require 'flycheck-vale)
 ;; (flycheck-vale-setup)
 
-(setq org-modules '(org-bibtex org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-protocol))
+(setq org-modules '(org-bibtex org-gnus org-habit org-info org-irc org-mhe org-rmail org-protocol))
 
 ;; Org Agenda
 (setq org-agenda-files (list "~/Dropbox/Org/Projects/")

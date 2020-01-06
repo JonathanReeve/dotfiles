@@ -19,7 +19,7 @@ let
 in
 {
 
-  imports = [  ./minimal.nix ];
+  # imports = [  ./minimal.nix ];
 
   # nixpkgs.overlays = [
   #   (self: super: {

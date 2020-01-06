@@ -96,8 +96,7 @@ in
       };
     };
     compton = {
-      # Disabling, since this doesn't seem to work
-      enable = true;
+      enable = false;
       blur = true;
       shadow = true;
     };
@@ -218,6 +217,15 @@ in
       lockCmd = "${lockCmd}";
     };
   };
+  xdg.configFile = {
+   # "plasma-workspace/env/wm.sh" = {
+   #   text = ''
+   #     # Disable KWin and use i3gaps as WM
+   #     export KDEWM=${pkgs.i3-gaps}/bin/i3
+   #   '';
+   #   executable = true;
+   # };
+  };
   xsession = {
     enable = true;
     scriptPath = ".xsession-hm";
@@ -232,6 +240,21 @@ in
         set_from_resource $fg i3wm.foreground
         set_from_resource $c1 i3wm.color1
         set_from_resource $c2 i3wm.color2
+
+        # Plasma integration!
+        # Try to kill the wallpaper set by Plasma (it takes up the entire workspace and hides everything)
+        exec --no-startup-id ${pkgs.wmctrl}/bin/wmctrl -c Plasma
+        for_window [title="Desktop — Plasma"] kill; floating enable; border none
+
+        # Don't tile certain KDE things
+        for_window [class="plasmashell"] floating enable;
+        for_window [class="kruler"] floating enable; border none
+        for_window [class="Plasma"] floating enable; border none
+        for_window [class="Klipper"] floating enable; border none
+        for_window [class="krunner"] floating enable; border none
+        for_window [class="Plasmoidviewer"] floating enable; border none
+        for_window [title="plasma-desktop"] floating enable; border none
+
       '';
       config = {
         bars = [];
@@ -310,10 +333,12 @@ in
           { command = "megasync"; notification = false; }
           { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
           { command = "setxkbmap -layout us -variant colemak -option caps:escape -option esperanto:colemak"; }
-          { command = "${pkgs.compton}/bin/compton"; }
+          { command = "pkill plasma"; }
+          # { command = "${pkgs.compton}/bin/compton"; }
         ];
         window.border = 10;
       };
     };
     };
 }
+

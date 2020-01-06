@@ -1,6 +1,6 @@
 #!/run/current-system/sw/bin/bash
 
-export CLOCKSTRING=$(emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)' 2>&1 )
+export CLOCKSTRING=$(/run/current-system/sw/bin/emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)' 2>&1 )
 
 off=" Emacs off!"
 #noclock='<span color="#f00"> Off-clock!</span>'
