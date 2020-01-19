@@ -1,28 +1,22 @@
-#!/usr/bin/runhaskell
+#!/run/current-system/sw/bin/runhaskell
 {-# LANGUAGE OverloadedStrings #-}
 
 import Turtle
-import qualified Control.Foldl as Fold
-import Data.List.Split (splitOn)
 import qualified Data.Text as T
-
-translate :: Maybe Line -> Text
-translate response = case lineToText <$> response of
- Nothing -> "Got nothin"
- Just "-1" -> "Got error nothin"
- Just clock -> ((T.splitOn "\"" clock) !! 1)
+import qualified Data.Text.IO as TIO
 
 getClock :: Text
-getClock = "emacsclient --eval '(org-clock-get-clock-string)'"
+getClock = "emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)'"
 
 out :: Shell Line
 out = inshell getClock empty
 
-runcmd cmd = fold (inshell cmd empty) Fold.head
-
 main = do
-  outCode <- shell getClock empty
-  emacsOut <- runcmd getClock
-  case outCode of
-    ExitSuccess -> return $ translate emacsOut
-    ExitFailure e -> return $ "Failed with code: " <> repr e
+  out <- shellStrict getClock empty
+  case out of
+    -- Emacs is on, but returns "-1", which means that org-clock is not running.
+    (ExitSuccess, "-1\n") -> TIO.putStrLn $ "Not clocked in."
+    -- Emacs is on and clocking. Print the clock value.
+    (ExitSuccess, out) -> TIO.putStrLn $ T.drop 1 $ head $ T.splitOn "\"" out
+    -- Emacs is not on.
+    (ExitFailure err, _) -> TIO.putStrLn $ "Emacs off: " <> repr err
