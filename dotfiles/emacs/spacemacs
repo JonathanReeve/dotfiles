@@ -57,6 +57,7 @@ This function should only modify configuration layer settings."
      git
      markdown
      python
+     ipython-notebook
      org
      ranger
      ;; pdf
@@ -82,10 +83,10 @@ This function should only modify configuration layer settings."
                                       ;; org-gcal
                                       gotham-theme
                                       org-brain
-                                      org-gnome
-                                      ewal
-                                      ewal-spacemacs-themes
-                                      ewal-evil-cursors
+                                      ;; org-gnome
+                                      ;; ewal
+                                      ;; ewal-spacemacs-themes
+                                      ;; ewal-evil-cursors
                                       flycheck-vale
                                       )
    ;; A list of packages that cannot be updated.
@@ -467,7 +468,8 @@ you should place your code here."
   ;(setq large-file-warning-threshold 20000000)
 
   ;; Org Mode
-  (setq org-startup-indented t)
+  (setq org-startup-indented t
+        org-adapt-indentation nil)
   (setq org-todo-keywords
         '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED")))
   (setq evil-org-key-theme '(textobjects navigation additional insert todo))
@@ -497,6 +499,7 @@ A custom journal helper function."
 
   ;; Python in Org Mode
   (setq python-shell-completion-native-disabled-interpreters "python")
+  ;; (setq org-babel-python-command "nix-shell --run python")
 
   ;; Org Code Execution
   (org-babel-do-load-languages
@@ -506,6 +509,9 @@ A custom journal helper function."
      (dot . t)
      (emacs-lisp . t)
      (shell . t)))
+
+  ;; Put state changes into the LOGBOOK drawer, to clean up a bit
+  (setq org-log-into-drawer t)
 
   ;; Org Calendar and Diary
   (setq diary-file "~/Dropbox/Org/diary")

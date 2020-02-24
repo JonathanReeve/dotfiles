@@ -36,12 +36,12 @@ A custom journal helper function."
 ;; Enable visual-line-mode by default in Org Mode.
 (add-hook 'org-mode-hook 'visual-line-mode)
 
-;; Make evil-mode up/down operate in screen lines instead of logical lines
-(define-key evil-normal-state-map "n" 'evil-next-visual-line)
-(define-key evil-normal-state-map "e" 'evil-previous-visual-line)
-;; Also in visual mode
-(define-key evil-visual-state-map "n" 'evil-next-visual-line)
-(define-key evil-visual-state-map "e" 'evil-previous-visual-line)
+;; ;; Make evil-mode up/down operate in screen lines instead of logical lines
+;; (define-key evil-normal-state-map "n" 'evil-next-visual-line)
+;; (define-key evil-normal-state-map "e" 'evil-previous-visual-line)
+;; ;; Also in visual mode
+;; (define-key evil-visual-state-map "n" 'evil-next-visual-line)
+;; (define-key evil-visual-state-map "e" 'evil-previous-visual-line)
 
 ;; Python in Org Mode
 (setq python-shell-completion-native-disabled-interpreters "python")
@@ -59,7 +59,7 @@ A custom journal helper function."
 ;; (require 'flycheck-vale)
 ;; (flycheck-vale-setup)
 
-(setq org-modules '(org-bibtex org-gnus org-habit org-info org-irc org-mhe org-rmail org-protocol))
+(setq org-modules '(org-bibtex org-gnus org-habit org-info org-irc org-mhe org-protocol))
 
 ;; Org Agenda
 (setq org-agenda-files (list "~/Dropbox/Org/Projects/")

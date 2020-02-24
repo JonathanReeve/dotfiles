@@ -180,7 +180,7 @@ in
         "module/org-clock" = {
           type = "custom/script";
           interval = 10;
-          exec = "${scripts}/org-clock.sh";
+          exec = "runhaskell ${scripts}/org-clock.hs";
           click-left = "emacsclient --eval '(org-clock-out)' && echo ' Stopped!'";
         };
         "module/memory" = {
@@ -216,15 +216,6 @@ in
       enable = true;
       lockCmd = "${lockCmd}";
     };
-  };
-  xdg.configFile = {
-   # "plasma-workspace/env/wm.sh" = {
-   #   text = ''
-   #     # Disable KWin and use i3gaps as WM
-   #     export KDEWM=${pkgs.i3-gaps}/bin/i3
-   #   '';
-   #   executable = true;
-   # };
   };
   xsession = {
     enable = true;
@@ -333,7 +324,7 @@ in
           { command = "megasync"; notification = false; }
           { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
           { command = "setxkbmap -layout us -variant colemak -option caps:escape -option esperanto:colemak"; }
-          { command = "pkill plasma"; }
+          # { command = "pkill plasma"; }
           # { command = "${pkgs.compton}/bin/compton"; }
         ];
         window.border = 10;

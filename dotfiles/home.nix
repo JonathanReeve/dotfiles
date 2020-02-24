@@ -16,10 +16,19 @@ let
   warningColor = "#e23131"; # Reddish
   # myNurExpressions = import <nur-jomik> { inherit pkgs; };
   lockCmd = "${pkgs.i3lock-fancy}/bin/i3lock-fancy -p -t ''";
+
+  # Doom setup following https://github.com/vlaci/nix-doom-emacs
+  # doom-emacs = pkgs.callPackage (builtins.fetchTarball {
+  #  url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
+  # }) {
+  #  doomPrivateDir = ./emacs/doom.d;  # Directory containing your config.el init.el
+  #                                    # and packages.el files
+  #};
+
 in
 {
 
-  # imports = [  ./minimal.nix ];
+  imports = [  ./minimal.nix ];
 
   # nixpkgs.overlays = [
   #   (self: super: {
@@ -125,6 +134,29 @@ in
          "pw" = "vim ~/Dropbox/Personal/.p10.txt";
          "lock" = "${lockCmd}";
          "new-session" = "dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.DisplayManager $XDG_SEAT_PATH org.freedesktop.DisplayManager.Seat.SwitchToGreeter";
+         "portrait-monitor" = "xrandr --output DP-1 --rotate left --auto --right-of eDP-1";
+         # Use vim as pager for manfiles, since it's prettier
+       };
+       shellAliases = {
+         "man" = "env PAGER=\"vim -R -c 'set ft=man'\" man";
+         };
+       functions = {
+         vault="encfs $vaultloc $vaultmount";
+         unvault="fusermount -u $vaultmount";
+         jnl="vault; and emacsclient -c $vaultmount/Journal/jnl.org; and unvault";
+         upgrade=''
+            sudo -i nixos-rebuild switch --upgrade; and nix-env -u;
+            and home-manager switch --upgrade;
+            '';
+         clean = "nix-store --gc --print-roots; and sudo nix-collect-garbage --delete-older-than 5d";
+         # A function for renaming the most recent PDF, and putting it in my Papers dir.
+         rename-pdf="mv (ls -t /tmp/*.pdf | head -n 1) ~/Dropbox/Papers/$argv.pdf";
+         find-book="for engine in b c libgen; qutebrowser \":open -t $engine $argv\"; end";
+         # Search several search engines at once. `search b g l "search query"`
+         search="for engine in $argv[1..-2]; qutebrowser \":open -t $engine $argv[-1]\"; end";
+         # Proverbs for greeting
+         fish_greeting = "shuf -n 1 ${scripts}/proverboj.txt | ${pkgs.cowsay}/bin/cowsay";
+
        };
        interactiveShellInit =
          ''
@@ -139,54 +171,6 @@ in
 
             set -U vaultmount ~/.private-mount
             set -U vaultloc ~/Dropbox/Personal/.Vault_encfs
-
-            alias vault="encfs $vaultloc $vaultmount"
-            alias unvault="fusermount -u $vaultmount"
-            funcsave vault
-            funcsave unvault
-
-            function jnl
-              vault
-              and emacsclient -c $vaultmount/Journal/jnl.org
-              and unvault
-            end
-            funcsave jnl
-
-            function upgrade
-              sudo -i nixos-rebuild switch --upgrade
-              and nix-env -u
-              and home-manager switch --upgrade
-            end
-            funcsave upgrade
-
-            function clean
-              nix-store --gc --print-roots
-              and sudo nix-collect-garbage --delete-older-than 5d
-            end
-            funcsave clean
-
-            # A function for renaming the most recent PDF, and putting it in my Papers dir.
-            function rename-pdf
-              mv (ls -t /tmp/*.pdf | head -n 1) ~/Dropbox/Papers/$argv.pdf
-            end
-            funcsave rename-pdf
-
-            function find-book
-              for engine in b c libgen
-                qutebrowser ":open -t $engine $argv"
-              end
-            end
-            funcsave find-book
-
-            function search --description "Search several search engines at once"
-              for engine in $argv[1..-2]
-                qutebrowser ":open -t $engine $argv[-1]"
-              end
-            end
-
-            # Use vim as pager
-            set -U PAGER vim -R -c 'set ft=man'
-
          '';
        promptInit =
          ''
@@ -205,13 +189,6 @@ in
               function fish_title; true; end
             end
          '';
-       # plugins = with pkgs.nur.repos.jomik.fishPlugins; [
-       #   oh-my-fish/plugin-bang-bang
-       #   edc/bass
-       #   fisherman/fzf
-       #   excitedleigh/virtualfish
-       #   fisherman/z
-       # ];
     };
   };
 
@@ -250,6 +227,7 @@ in
         encfs
         # File sync and backup
         megasync megatools
+        # doom-emacs
       ];
       file = {
         # Handle multiple emacs installs
@@ -259,6 +237,9 @@ in
           source = ./emacs/doom.d;
           recursive = true;
         };
+        #".emacs.d/init.el".text = ''
+        #  (load "default.el")
+        #'';
 
         # Vim all the things!
         ".inputrc".text =
@@ -298,7 +279,7 @@ in
         c.colors.tabs.selected.even.bg = '#285577'
         c.colors.tabs.selected.odd.bg = '#285577'
         c.fonts.completion.category = '11pt monospace'
-        c.fonts.monospace = '${font}, Terminus, Monospace, monospace, Fixed'
+        c.fonts.default_family = '${font}, Terminus, Monospace, monospace, Fixed'
         c.fonts.prompts = '11pt monospace'
         c.hints.chars = 'arstdhneio'
         c.statusbar.padding = {'top': 5, 'bottom': 5, 'left': 3, 'right': 3}
@@ -333,6 +314,7 @@ in
         config.bind('e', 'scroll up')
         config.bind('i', 'scroll right')
         config.bind('j', 'search-next')
+        config.bind('b', 'set-cmd-text -s :buffer')
         config.bind('gL', 'spawn --userscript org-link')
         config.bind('pf', 'spawn --userscript qute-lastpass')
         config.bind('gz', "jseval var d=document,s=d.createElement('script');s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement).appendChild(s);void(0);")

@@ -12,10 +12,8 @@
 
   # Use the systemd-boot EFI boot loader.
   boot = {
-    kernelParams = [ "pci=nomsi" ];
-    # The below doesn't work, and causes this computer not to wake up from suspend
-    # kernelParams = [ "mem_sleep_default=deep" ]; #TODO: break out into C930 module
-    kernelPackages = pkgs.linuxPackages_5_3;
+    kernelParams = [ "pci=nomsi" "snd_hda_intel.dmic_detect=0" ];
+    kernelPackages = pkgs.linuxPackages_5_4;
     cleanTmpDir = true;
     plymouth.enable = true;
     resumeDevice = "/dev/nvme0n1p7";
@@ -68,10 +66,14 @@
      nix-index              # Indexing files for nix-locate
      nix-prefetch-git nix-prefetch-scripts # Help writing .nix files
      cabal2nix pypi2nix
+     # Security
+     yubico-pam yubioath-desktop yubikey-personalization
+     yubikey-manager # Provides ykman
+     yubikey-personalization-gui
      # nodePackages.node2nix
      home-manager           # Dotfiles management
      # CLI
-     fish # xonsh             # Shell
+     fish                   # Shell
      vim emacs              # Text editors
      vale                   # Prose linting
      aspell aspellDicts.en  # Spell checker
@@ -91,14 +93,18 @@
        apply-refact  # Required for spacemacs haskell-mode
        hasktags      # Required for spacemacs haskell-mode
        hoogle        # Required for spacemacs haskell-mode
-       stylish-haskell # Required for spacemacs haskell-mode
+       # stylish-haskell # Required for spacemacs haskell-mode
+       # ^ marked as broken
        turtle
        regex-compat
+       PyF
      ]))
-     # haskellPackages.pandoc-crossref
-     # haskellPackages.stylish-haskell
-     # haskellPackages.hakyll
-     # iio-sensor-proxy       # Accelerometer, gyroscope, etc.  #TODO: break out into C930 module
+
+     cabal-install stack
+
+     #TODO: break out into C930 module
+     iio-sensor-proxy       # Accelerometer, gyroscope, etc.
+
      texlive.combined.scheme-full
      git git-lfs            # Version control
      unzip                  # Archives
@@ -112,14 +118,14 @@
        pandas
        matplotlib
        #scikitlearn
-       altair
+       # atair
        #vega
        jupyter
        jupyterlab
        virtualenvwrapper
        nltk
        pip
-       # numpy
+       numpy
        # scikitlearn
        # textblob
        # word2vec
@@ -131,14 +137,11 @@
      ranger highlight       # File manager
      scrot                  # Screenshots
      tree                   # Show file hierarchies
-     # lftp                   # Fast file transfers
-     compton
      autojump               # Jump around! With `j`
      mpv                    # Minimalist video player
      termite                # Vim-like modal terminal
-     # pywal                  # Wallpapers
      feh                    # Display imaes
-     dunst libnotify        # Notifications
+     libnotify              # Notifications
      weechat                # IRC
      fzf                    # Fuzzy file finder
      ag                     # Fast grep replacement
@@ -155,31 +158,17 @@
      firefox                # Yes, a third
 
      # Gnome
-     # deja-dup               # Backups 
+     deja-dup               # Backups 
+     gthumb                 # Photos
 
      ntfs3g ntfsprogs       # Windows drives compatibility
 
      # Sound
-     #alsaTools
+     alsaTools
      #alsaPlugins
-     #alsaUtils
+     alsaUtils
      alsa-firmware
      pavucontrol
-
-     # KDE
-     okular
-     dolphin
-     kate
-     dragon
-     # kdeApplications.kmail
-     # kdeApplications.kmail-account-wizard
-     # kdeApplications.kmailtransport
-     # kmail
-     # accounts-qt
-     # kontact
-     gwenview
-     ark
-     thunderbird
 
    ];
 
@@ -214,13 +203,13 @@
     #  defaultEditor = true;
     #};
 
-    # gnome3 = {
-    #   gnome-keyring.enable = true;
-    #   gnome-online-accounts.enable = true;
-    #   gnome-online-miners.enable = true;
-    #   tracker.enable = true;
-    #   tracker-miners.enable = true;
-    # };
+    gnome3 = {
+      gnome-keyring.enable = true;
+      gnome-online-accounts.enable = true;
+      gnome-online-miners.enable = true;
+      tracker.enable = true;
+      tracker-miners.enable = true;
+    };
 
     flatpak.enable = true;
 
@@ -235,6 +224,10 @@
     # Power management
     upower.enable = true;
 
+    # Security
+    udev.packages = [ pkgs.yubikey-personalization pkgs.libu2f-host ]; 
+    pcscd.enable = true;
+
     # X
     xserver = {
       enable = true;
@@ -246,8 +239,8 @@
       # Keyboard settings
       layout = "us";
       xkbVariant = "colemak";
-      displayManager.sddm.enable = true;
-      desktopManager.plasma5.enable = true;
+      displayManager.gdm.enable = true;
+      desktopManager.gnome3.enable = true;
       desktopManager.session = [{
         name = "home-manager";
         start = ''
@@ -262,7 +255,7 @@
   programs = {
     fish.enable = true;
     gnome-documents.enable = true;
-    xonsh.enable = true;
+    # xonsh.enable = true;
     light.enable = true;
     gnupg.agent = { enable = true; enableSSHSupport = true; };
   };
@@ -287,7 +280,10 @@
   # virtualisation.anbox.enable = true;
 
   # Don't ask for my password *quite* as often.
-  security.sudo.extraConfig = "Defaults timestamp_timeout=60";
+  security = {
+    sudo.extraConfig = "Defaults timestamp_timeout=60";
+    # pam.u2f.enable = true;
+    };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database

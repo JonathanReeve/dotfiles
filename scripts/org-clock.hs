@@ -17,6 +17,7 @@ main = do
     -- Emacs is on, but returns "-1", which means that org-clock is not running.
     (ExitSuccess, "-1\n") -> TIO.putStrLn $ "Not clocked in."
     -- Emacs is on and clocking. Print the clock value.
-    (ExitSuccess, out) -> TIO.putStrLn $ T.drop 1 $ head $ T.splitOn "\"" out
+    (ExitSuccess, out) -> TIO.putStrLn $ T.drop 1 $ head $
+      drop 1 $ T.splitOn "\"" out
     -- Emacs is not on.
-    (ExitFailure err, _) -> TIO.putStrLn $ "Emacs off: " <> repr err
+    (ExitFailure err, _) -> TIO.putStrLn $ "Emacs off! " -- <> repr err
