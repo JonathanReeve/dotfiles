@@ -23,7 +23,7 @@ let
   # }) {
   #  doomPrivateDir = ./emacs/doom.d;  # Directory containing your config.el init.el
   #                                    # and packages.el files
-  #};
+  # };
 
 in
 {
@@ -56,6 +56,7 @@ in
           };
         };
         realName = "${name}";
+        neomutt.enable = true;
       };
       columbia = {
         address = "jonathan.reeve@columbia.edu";
@@ -69,10 +70,11 @@ in
           patterns = [ "*" "!\"[Gmail]/All Mail\"" "[Gmail]/Sent Mail" ];
           extraConfig.channel = {
             MaxMessages = 2000;
-            ExpireUnread = "yes"; 
+            ExpireUnread = "yes";
           };
         };
         realName = "${name}";
+        neomutt.enable = true;
       };
     };
   };
@@ -93,6 +95,10 @@ in
     # notmuch = {
     #   enable = true;
     # };
+    neomutt = {
+      enable = true;
+      vimKeys = true;
+    };
     neovim = {
       enable = true;
       # plugins = [ pkgs.vimPlugins.vim-airline ];
@@ -226,7 +232,7 @@ in
         # Encryption
         encfs
         # File sync and backup
-        megasync megatools
+        # megasync megatools
         # doom-emacs
       ];
       file = {

@@ -158,10 +158,19 @@
      firefox                # Yes, a third
 
      # Gnome
-     deja-dup               # Backups 
-     gthumb                 # Photos
+     # deja-dup               # Backups 
+     # gthumb                 # Photos
+
+     # KDE
+     gwenview
+     ark
+     dragon
+     plasma-browser-integration
+     # kdeApplications.kmail
+     # kdeApplications.kmail-account-wizard
 
      ntfs3g ntfsprogs       # Windows drives compatibility
+     plasma-browser-integration
 
      # Sound
      alsaTools
@@ -203,13 +212,13 @@
     #  defaultEditor = true;
     #};
 
-    gnome3 = {
-      gnome-keyring.enable = true;
-      gnome-online-accounts.enable = true;
-      gnome-online-miners.enable = true;
-      tracker.enable = true;
-      tracker-miners.enable = true;
-    };
+    # gnome3 = {
+    #   gnome-keyring.enable = true;
+    #   gnome-online-accounts.enable = true;
+    #   gnome-online-miners.enable = true;
+    #   tracker.enable = true;
+    #   tracker-miners.enable = true;
+    # };
 
     flatpak.enable = true;
 
@@ -225,7 +234,7 @@
     upower.enable = true;
 
     # Security
-    udev.packages = [ pkgs.yubikey-personalization pkgs.libu2f-host ]; 
+    udev.packages = [ pkgs.yubikey-personalization pkgs.libu2f-host ];
     pcscd.enable = true;
 
     # X
@@ -239,8 +248,8 @@
       # Keyboard settings
       layout = "us";
       xkbVariant = "colemak";
-      displayManager.gdm.enable = true;
-      desktopManager.gnome3.enable = true;
+      displayManager.sddm.enable = true;
+      desktopManager.plasma5.enable = true;
       desktopManager.session = [{
         name = "home-manager";
         start = ''

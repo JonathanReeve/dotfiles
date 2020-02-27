@@ -71,7 +71,7 @@ A custom journal helper function."
 (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
 
 ;; Adapted from http://stackoverflow.com/a/12751732/584121
-(require 'org-protocol)
+;; (require 'org-protocol)
 (setq org-protocol-default-template-key "l")
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "/home/jon/Dropbox/Org/notes.org" "Tasks")
@@ -111,6 +111,7 @@ A custom journal helper function."
 :YEAR: %y
 :END:
 ")
+
 (setq org-ref-open-pdf-function
       (lambda (fpath)
         (start-process "zathura" "*helm-bibtex-zathura*" "/usr/bin/zathura" fpath)))
@@ -153,8 +154,8 @@ the entry of interest in the bibfile.  but does not check that."
         (ding)))))
 
 ;; Open PDFs with system viewer
-(delete '("\\.pdf\\'" . default) org-file-apps)
-(add-to-list 'org-file-apps '("\\.pdf\\'" . system))
+;; (delete '("\\.pdf\\'" . default) org-file-apps)
+;; (add-to-list 'org-file-apps '("\\.pdf\\'" . system))
 
 ;; Org-brain
 (setq org-brain-path "~/Dropbox/Org/Brain")
@@ -174,6 +175,7 @@ the entry of interest in the bibfile.  but does not check that."
 
 (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
 (setq mu4e-html2text-command "w3m -T text/html")
+(setq mu4e-view-use-gnus t) ;; Open .eml attachments
 
 ;; configure orgmode support in mu4e
 ;; (require 'org-mu4e)
@@ -285,3 +287,8 @@ the entry of interest in the bibfile.  but does not check that."
 (global-set-key (kbd "C-n") 'evil-window-down)
 (global-set-key (kbd "C-e") 'evil-window-up)
 (global-set-key (kbd "C-i") 'evil-window-right)
+
+(use-package! evil-colemak-basics
+              :after evil)
+
+(after! evil (global-evil-colemak-basics-mode))
