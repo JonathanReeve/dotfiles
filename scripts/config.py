@@ -1,6 +1,6 @@
 
-c.colors.tabs.even.bg = "#6A3D62"
-c.colors.tabs.odd.bg = "#6A3D62"
-c.colors.tabs.selected.even.bg = "#75455B"
-c.colors.tabs.selected.odd.bg = "#75455B"
+c.colors.tabs.even.bg = "#CAB36E"
+c.colors.tabs.odd.bg = "#CAB36E"
+c.colors.tabs.selected.even.bg = "#F0A46D"
+c.colors.tabs.selected.odd.bg = "#F0A46D"
 

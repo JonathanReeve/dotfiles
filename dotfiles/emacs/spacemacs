@@ -79,7 +79,7 @@ This function should only modify configuration layer settings."
                                       ;(ereader :location (recipe :fetcher github :repo "bddean/emacs-ereader"))
                                       base16-theme
                                       password-store
-                                      direnv
+                                      ;; direnv
                                       ;; org-gcal
                                       gotham-theme
                                       org-brain
@@ -510,6 +510,10 @@ A custom journal helper function."
      (emacs-lisp . t)
      (shell . t)))
 
+  ;; Make it so org has correct indentation inside code blocks, see
+  ;; https://github.com/syl20bnr/spacemacs/issues/13255#issuecomment-585796146
+  (setq org-edit-src-content-indentation 0)
+
   ;; Put state changes into the LOGBOOK drawer, to clean up a bit
   (setq org-log-into-drawer t)
 
@@ -706,7 +710,7 @@ the entry of interest in the bibfile.  but does not check that."
   (require 'auth-source-pass)
   (auth-source-pass-enable)
 
-  ;; Mail 
+  ;; Mail
   ;; Send email via Gmail:
   (setq smtpmail-smtp-server "smtp.gmail.com"
         smtpmail-smtp-service 587
@@ -724,8 +728,10 @@ the entry of interest in the bibfile.  but does not check that."
   (setq org-mu4e-convert-to-html t)
 
   ;; Better looking HTML mail
-  ;;(setq shr-color-visible-luminance-min 80)
-  ;;(setq shr-use-colors nil)
+  (setq shr-color-visible-luminance-min 80
+        shr-max-image-proportion 0.6
+        shr-use-colors nil
+        shr-use-fonts nil)
 
   (require 'mu4e)
   (setq mu4e-contexts
@@ -741,7 +747,7 @@ the entry of interest in the bibfile.  but does not check that."
                        ( user-full-name     . "Jonathan Reeve" )
                        ( mu4e-sent-folder   . "/gmail/[Gmail]/.Sent Mail" )
                        ( mu4e-drafts-folder . "/gmail/[Gmail]/.Drafts" )
-                       ( smtpmail-smtp-user . "jon.reeve" )
+                       ( smtpmail-smtp-user . "jon.reeve@gmail.com" )
 
                        ;; ( mu4e-compose-signature .
                        ;;                          (concat

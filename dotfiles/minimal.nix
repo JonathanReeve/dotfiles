@@ -96,7 +96,7 @@ in
       };
     };
     compton = {
-      enable = false;
+      enable = true;
       blur = true;
       shadow = true;
     };
@@ -179,8 +179,8 @@ in
         };
         "module/org-clock" = {
           type = "custom/script";
-          interval = 10;
-          exec = "runhaskell ${scripts}/org-clock.hs";
+          interval =20;
+          exec = "${scripts}/org-clock.hs 2> /dev/null";
           click-left = "emacsclient --eval '(org-clock-out)' && echo ' Stopped!'";
         };
         "module/memory" = {
@@ -231,21 +231,6 @@ in
         set_from_resource $fg i3wm.foreground
         set_from_resource $c1 i3wm.color1
         set_from_resource $c2 i3wm.color2
-
-        # Plasma integration!
-        # Try to kill the wallpaper set by Plasma (it takes up the entire workspace and hides everything)
-        exec --no-startup-id ${pkgs.wmctrl}/bin/wmctrl -c Plasma
-        for_window [title="Desktop — Plasma"] kill; floating enable; border none
-
-        # Don't tile certain KDE things
-        for_window [class="plasmashell"] floating enable;
-        for_window [class="kruler"] floating enable; border none
-        for_window [class="Plasma"] floating enable; border none
-        for_window [class="Klipper"] floating enable; border none
-        for_window [class="krunner"] floating enable; border none
-        for_window [class="Plasmoidviewer"] floating enable; border none
-        for_window [title="plasma-desktop"] floating enable; border none
-
       '';
       config = {
         bars = [];
@@ -280,12 +265,12 @@ in
         modifier = "Mod4";
         keybindings =
           lib.mkOptionDefault {
-            "Mod4+Return" = "exec ${pkgs.termite}/bin/termite";
+            "Mod4+Return" = "exec termite";
             "Mod4+Shift+c" = "kill";
             "Mod4+space" = "exec env LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive rofi -show drun";
             "Mod4+n" = "workspace next";
             "Mod4+e" = "workspace prev";
-            "Mod4+Shift+e" = "exec shutdown-dialog";
+            "Mod4+Shift+e" = "i3-msg-exit";
             "Mod1+h" = "focus left";
             "Mod1+n" = "focus down";
             "Mod1+e" = "focus up";
@@ -324,8 +309,7 @@ in
           { command = "megasync"; notification = false; }
           { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
           { command = "setxkbmap -layout us -variant colemak -option caps:escape -option esperanto:colemak"; }
-          # { command = "pkill plasma"; }
-          # { command = "${pkgs.compton}/bin/compton"; }
+          { command = "${pkgs.compton}/bin/compton"; }
         ];
         window.border = 10;
       };

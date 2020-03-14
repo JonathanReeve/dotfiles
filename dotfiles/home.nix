@@ -28,7 +28,7 @@ let
 in
 {
 
-  imports = [  ./minimal.nix ];
+  # imports = [  ./minimal.nix ];
 
   # nixpkgs.overlays = [
   #   (self: super: {
@@ -194,6 +194,8 @@ in
               # function fish_right_prompt; true; end
               function fish_title; true; end
             end
+
+            # eval (direnv hook fish)
          '';
     };
   };

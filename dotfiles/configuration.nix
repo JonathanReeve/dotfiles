@@ -13,7 +13,7 @@
   # Use the systemd-boot EFI boot loader.
   boot = {
     kernelParams = [ "pci=nomsi" "snd_hda_intel.dmic_detect=0" ];
-    kernelPackages = pkgs.linuxPackages_5_4;
+    kernelPackages = pkgs.linuxPackages_5_5;
     cleanTmpDir = true;
     plymouth.enable = true;
     resumeDevice = "/dev/nvme0n1p7";
@@ -71,7 +71,10 @@
      yubikey-manager # Provides ykman
      yubikey-personalization-gui
      # nodePackages.node2nix
-     home-manager           # Dotfiles management
+     # home-manager           # Dotfiles management
+
+     # megasync             # Backups
+
      # CLI
      fish                   # Shell
      vim emacs              # Text editors
@@ -100,7 +103,9 @@
        PyF
      ]))
 
-     cabal-install stack
+     cabal-install
+     # stack
+     # direnv
 
      #TODO: break out into C930 module
      iio-sensor-proxy       # Accelerometer, gyroscope, etc.
@@ -158,14 +163,14 @@
      firefox                # Yes, a third
 
      # Gnome
-     # deja-dup               # Backups 
-     # gthumb                 # Photos
+     deja-dup               # Backups 
+     gthumb                 # Photos
 
      # KDE
-     gwenview
-     ark
-     dragon
-     plasma-browser-integration
+     # gwenview
+     # ark
+     # dragon
+     # plasma-browser-integration
      # kdeApplications.kmail
      # kdeApplications.kmail-account-wizard
 
@@ -224,6 +229,8 @@
 
     localtime.enable = true;
 
+    # lorri.enable = true;
+
     # Power button invokes suspend, not shutdown.
     logind = {
       extraConfig = "HandlePowerKey=suspend";
@@ -248,8 +255,8 @@
       # Keyboard settings
       layout = "us";
       xkbVariant = "colemak";
-      displayManager.sddm.enable = true;
-      desktopManager.plasma5.enable = true;
+      displayManager.gdm.enable = true;
+      desktopManager.gnome3.enable = true;
       desktopManager.session = [{
         name = "home-manager";
         start = ''
@@ -291,14 +298,19 @@
   # Don't ask for my password *quite* as often.
   security = {
     sudo.extraConfig = "Defaults timestamp_timeout=60";
-    # pam.u2f.enable = true;
+    pam.u2f = {
+      enable = true;
+      # control = "required";
+      # cue = true;
+      # interactive = true;
+    };
     };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "19.09"; # Did you read the comment?
+  system.stateVersion = "20.03"; # Did you read the comment?
 
   virtualisation.docker.enable = true;
 

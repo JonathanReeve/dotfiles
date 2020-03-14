@@ -175,7 +175,6 @@ the entry of interest in the bibfile.  but does not check that."
 
 (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
 (setq mu4e-html2text-command "w3m -T text/html")
-(setq mu4e-view-use-gnus t) ;; Open .eml attachments
 
 ;; configure orgmode support in mu4e
 ;; (require 'org-mu4e)
@@ -292,3 +291,4 @@ the entry of interest in the bibfile.  but does not check that."
               :after evil)
 
 (after! evil (global-evil-colemak-basics-mode))
+
