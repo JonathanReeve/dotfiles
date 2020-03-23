@@ -13,7 +13,7 @@
   # Use the systemd-boot EFI boot loader.
   boot = {
     kernelParams = [ "pci=nomsi" "snd_hda_intel.dmic_detect=0" ];
-    kernelPackages = pkgs.linuxPackages_5_5;
+    # kernelPackages = pkgs.linuxPackages_5_5;
     cleanTmpDir = true;
     plymouth.enable = true;
     resumeDevice = "/dev/nvme0n1p7";
@@ -163,8 +163,9 @@
      firefox                # Yes, a third
 
      # Gnome
-     deja-dup               # Backups 
+     # deja-dup               # Backups 
      gthumb                 # Photos
+     gnome3.gnome-tweak-tool
 
      # KDE
      # gwenview
@@ -270,6 +271,9 @@
   # Shell
   programs = {
     fish.enable = true;
+    chromium = {
+      enable = true;
+      };
     gnome-documents.enable = true;
     # xonsh.enable = true;
     light.enable = true;
@@ -310,7 +314,7 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "20.03"; # Did you read the comment?
+  system.stateVersion = "19.09"; # Did you read the comment?
 
   virtualisation.docker.enable = true;
 
