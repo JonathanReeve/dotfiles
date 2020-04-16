@@ -20,4 +20,4 @@ main = do
     (ExitSuccess, out) -> TIO.putStrLn $ T.drop 1 $ head $
       drop 1 $ T.splitOn "\"" out
     -- Emacs is not on.
-    (ExitFailure err, _) -> TIO.putStrLn $ "Emacs off! " -- <> repr err
+    (ExitFailure err, _) -> TIO.putStrLn $ "Ensalutu " -- <> repr err

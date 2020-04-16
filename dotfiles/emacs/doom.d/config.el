@@ -13,12 +13,12 @@
 ;(setq large-file-warning-threshold 20000000)
 
 ;; Org Mode
-(setq org-startup-indented t)
-(setq org-todo-keywords
-      '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED")))
-(setq evil-org-key-theme '(textobjects navigation additional insert todo))
-(setq org-default-priority ?C)
-(setq org-lowest-priority ?G)
+(require 'org)
+
+(setq org-startup-indented t
+      evil-org-key-theme '(textobjects navigation additional insert todo)
+      org-default-priority ?C
+      org-lowest-priority ?G)
 
 ;; Show clock tables in hours, not days.
 (setq org-duration-format 'h:mm)
@@ -49,21 +49,28 @@ A custom journal helper function."
 ;; Org Calendar and Diary
 (setq diary-file "~/Dropbox/Org/diary")
 (setq org-agenda-include-diary t)
+
 ;;(setq org-agenda-window-setup 'only-window)
 (add-hook 'org-agenda-mode-hook
           (lambda ()
             (calendar-set-date-style 'iso)))
+
 (add-hook 'diary-mode-hook 'diary-fancy-display-mode)
 
 ;; Prose linting
 ;; (require 'flycheck-vale)
 ;; (flycheck-vale-setup)
 
-(setq org-modules '(org-bibtex org-gnus org-habit org-info org-irc org-mhe org-protocol))
+(setq org-modules '(org-bibtex org-habit org-info org-mhe org-protocol))
 
 ;; Org Agenda
 (setq org-agenda-files (list "~/Dropbox/Org/Projects/")
-      org-projectile-file "~/Dropbox/Org/Projects/todo.org")
+      org-projectile-file "~/Dropbox/Org/Projects/todo.org"
+      org-agenda-skip-scheduled-if-done t
+      org-agenda-skip-deadline-if-done t
+      org-todo-keywords '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
+      org-todo-keywords-for-agenda '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
+      )
 
 (setq org-refile-targets '((nil :maxlevel . 9)
                             (org-agenda-files :maxlevel . 9)))

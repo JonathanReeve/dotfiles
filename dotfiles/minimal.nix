@@ -2,10 +2,10 @@
 
 # This module describes an i3 config with a lot of other little programs
 # that are typically used with it: rofi, termite, zathura, dunst, compton, etc.
-# I will only sometimes use this config, mostly just using GNOME instead. 
+# I will only sometimes use this config, mostly just using GNOME instead.
 
 let
-  # TODO: make these into options so I don't have to repeat myself? 
+  # TODO: make these into options so I don't have to repeat myself?
   # Personal Inf
   name = "Jonathan Reeve";
   email = "jon.reeve@gmail.com";
@@ -95,7 +95,7 @@ in
           };
       };
     };
-    compton = {
+    picom = {
       enable = true;
       blur = true;
       shadow = true;
@@ -110,7 +110,7 @@ in
       script = "polybar main_bar &";
       config = {
         "bar/main_bar" = {
-           monitor = "eDP-1";
+           monitor = "eDP1";
            bottom = "false";
            height = 30;
            fixed-center = "true";
@@ -137,12 +137,11 @@ in
           label-unfocused-padding = 1;
         };
         "module/date" = {
-          type = "internal/date";
+          type = "custom/script";
+          # type = "internal/date";
           interval = 5;
-          date = "%m-%d %a";
-          time = "%H:%M";
+          exec = "/run/current-system/sw/bin/date '+%a %d %b W%V-%u %R'";
           format-prefix-foreground = "\${xrdb:foreground}";
-          label = "%date% %time%";
         };
         "module/battery" = {
            type = "internal/battery";
@@ -270,7 +269,7 @@ in
             "Mod4+space" = "exec env LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive rofi -show drun";
             "Mod4+n" = "workspace next";
             "Mod4+e" = "workspace prev";
-            "Mod4+Shift+e" = "i3-msg-exit";
+            "Mod4+Shift+e" = "exec i3-msg exit";
             "Mod1+h" = "focus left";
             "Mod1+n" = "focus down";
             "Mod1+e" = "focus up";
@@ -309,7 +308,8 @@ in
           { command = "megasync"; notification = false; }
           { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
           { command = "setxkbmap -layout us -variant colemak -option caps:escape -option esperanto:colemak"; }
-          { command = "${pkgs.compton}/bin/compton"; }
+          { command = "${pkgs.picom}/bin/picom"; }
+          { command = "${pkgs.gnome3.gnome_settings_daemon}/libexec/gsd-xsettings"; }
         ];
         window.border = 10;
       };

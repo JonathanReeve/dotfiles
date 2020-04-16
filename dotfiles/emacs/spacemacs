@@ -69,6 +69,8 @@ This function should only modify configuration layer settings."
      (spell-checking :variables spell-checking-enable-by-default nil)
      syntax-checking
      themes-megapack
+     ;; Private layers
+     hie-nix
      )
 
    ;; List of additional packages that will be installed without being
@@ -225,7 +227,8 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator arrow-fade :separator-scale 1.5)
+   ;; dotspacemacs-mode-line-theme '(spacemacs :separator arrow-fade :separator-scale 1.5)
+   dotspacemacs-mode-line-theme 'doom
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -591,13 +594,12 @@ A custom journal helper function."
   ;;   (require 'org-projectile)
   ;;   (push (org-projectile:todo-files) org-agenda-files))
 
-
   (setq org-refile-targets '((nil :maxlevel . 9)
                              (org-agenda-files :maxlevel . 9)))
   (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
   (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
 
-  ;; This doesn't seem to work? 
+  ;; This doesn't seem to work?
   ;; (require 'org-gnome)
   ;; (setq org-gnome-integrate-with-calendar t)
   ;; (org-gnome-turn-on)

@@ -15,7 +15,7 @@ let
   foregroundColor = "#deedf9"; # Light blue
   warningColor = "#e23131"; # Reddish
   # myNurExpressions = import <nur-jomik> { inherit pkgs; };
-  lockCmd = "${pkgs.i3lock-fancy}/bin/i3lock-fancy -p -t ''";
+  # lockCmd = "${pkgs.i3lock-fancy}/bin/i3lock-fancy -p -t ''";
 
   # Doom setup following https://github.com/vlaci/nix-doom-emacs
   # doom-emacs = pkgs.callPackage (builtins.fetchTarball {
@@ -28,7 +28,7 @@ let
 in
 {
 
-  # imports = [  ./minimal.nix ];
+  imports = [  ./minimal.nix ];
 
   # nixpkgs.overlays = [
   #   (self: super: {
@@ -138,7 +138,7 @@ in
          # Other abbreviations
          "em" = "emacsclient -c";
          "pw" = "vim ~/Dropbox/Personal/.p10.txt";
-         "lock" = "${lockCmd}";
+         # "lock" = "${lockCmd}";
          "new-session" = "dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.DisplayManager $XDG_SEAT_PATH org.freedesktop.DisplayManager.Seat.SwitchToGreeter";
          "portrait-monitor" = "xrandr --output DP-1 --rotate left --auto --right-of eDP-1";
          # Use vim as pager for manfiles, since it's prettier

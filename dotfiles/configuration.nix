@@ -8,12 +8,13 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      /etc/nixos/cachix.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
   boot = {
     kernelParams = [ "pci=nomsi" "snd_hda_intel.dmic_detect=0" ];
-    # kernelPackages = pkgs.linuxPackages_5_5;
+    kernelPackages = pkgs.linuxPackages_latest;
     cleanTmpDir = true;
     plymouth.enable = true;
     resumeDevice = "/dev/nvme0n1p7";
@@ -30,13 +31,17 @@
     interfaces.wlp107s0.useDHCP = true;
   };
 
+  # Reflex stuff
+  # nix.binaryCaches = [ "https://nixcache.reflex-frp.org" ];
+  # nix.binaryCachePublicKeys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
+
   nixpkgs.config = {
     allowUnfree = true;
   };
 
   console = {
-    useXkbConfig = true;
-  };
+   useXkbConfig = true;
+ };
 
   # Select internationalisation properties.
   i18n = {
@@ -122,6 +127,8 @@
      (python3.withPackages(ps: with ps; [
        pandas
        matplotlib
+       python-language-server # Spacemacs integration
+       flake8 # Syntax checking for emacs
        #scikitlearn
        # atair
        #vega
@@ -163,7 +170,7 @@
      firefox                # Yes, a third
 
      # Gnome
-     # deja-dup               # Backups 
+     deja-dup               # Backups 
      gthumb                 # Photos
      gnome3.gnome-tweak-tool
 
@@ -248,6 +255,11 @@
     # X
     xserver = {
       enable = true;
+      videoDrivers = [ "intel" "modesetting" ];
+      deviceSection = ''
+        Option "DRI" "2"
+        Option "TearFree" "true"
+      '';
       # Enable touchpad support.
       libinput = {
         enable = true;
@@ -274,7 +286,7 @@
     chromium = {
       enable = true;
       };
-    gnome-documents.enable = true;
+    # gnome-documents.enable = true;
     # xonsh.enable = true;
     light.enable = true;
     gnupg.agent = { enable = true; enableSSHSupport = true; };
@@ -302,12 +314,12 @@
   # Don't ask for my password *quite* as often.
   security = {
     sudo.extraConfig = "Defaults timestamp_timeout=60";
-    pam.u2f = {
-      enable = true;
-      # control = "required";
-      # cue = true;
-      # interactive = true;
-    };
+    # pam.u2f = {
+    #   enable = true;
+    #   # control = "required";
+    #   # cue = true;
+    #   # interactive = true;
+    # };
     };
 
   # This value determines the NixOS release with which your system is to be
