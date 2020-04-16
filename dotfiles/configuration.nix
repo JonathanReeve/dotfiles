@@ -60,6 +60,7 @@
     libertine
     victor-mono
     emacs-all-the-icons-fonts
+    hack-font
   ];
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -109,6 +110,12 @@
      ]))
 
      cabal-install
+     # tectonic               # Latex
+     texlive.combined.scheme-full
+     git                    # Version control
+     dropbox-cli
+     unzip                  # Archives
+     # Haskell Development
      # stack
      # direnv
 
@@ -138,10 +145,6 @@
        nltk
        pip
        numpy
-       # scikitlearn
-       # textblob
-       # word2vec
-       # spacy
      ]))
      # Elm
      # elmPackages.elm
@@ -161,7 +164,6 @@
      bat                    # Cat replacement
      fd                     # Find replacement
      gotop                  # Top replacement (system monitor)
-     # i3lock-fancy           # Screen locker
      ncdu                   # Fancy disk usage analyzer
      neofetch               # Fancy system information
      # GUI
