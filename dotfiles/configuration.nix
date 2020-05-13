@@ -13,7 +13,9 @@
 
   # Use the systemd-boot EFI boot loader.
   boot = {
-    kernelParams = [ "pci=nomsi" "snd_hda_intel.dmic_detect=0" ];
+    kernelParams = [ "pci=nomsi" "snd_hda_intel.dmic_detect=0"
+                     "intel_idle.max_cstate=1" "i915.enable_dc=0"
+                   ];
     kernelPackages = pkgs.linuxPackages_latest;
     cleanTmpDir = true;
     plymouth.enable = true;
@@ -37,6 +39,9 @@
 
   nixpkgs.config = {
     allowUnfree = true;
+    packageOverrides = pkgs: {
+      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+    };
   };
 
   console = {
@@ -175,6 +180,7 @@
      deja-dup               # Backups 
      gthumb                 # Photos
      gnome3.gnome-tweak-tool
+     gnome3.gnome-boxes
 
      # KDE
      # gwenview
@@ -331,5 +337,6 @@
   system.stateVersion = "19.09"; # Did you read the comment?
 
   virtualisation.docker.enable = true;
+  virtualisation.libvirtd.enable = true;
 
 }

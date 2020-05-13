@@ -26,6 +26,7 @@ in
     packages = with pkgs; [
       #i3
       pywal
+      font-awesome_5 fira-code
       ];
     sessionVariables.LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
   };
@@ -110,7 +111,7 @@ in
       script = "polybar main_bar &";
       config = {
         "bar/main_bar" = {
-           monitor = "eDP1";
+           monitor = "eDP-1";
            bottom = "false";
            height = 30;
            fixed-center = "true";
@@ -122,7 +123,7 @@ in
            module-margin-left = 1;
            module-margin-right = 1;
            font-0 = "${font}:size=11;1";
-           font-1 = "Font Awesome 5 Free:size=11:style=Solid;1";
+           font-1 = "FontAwesome:size=11:style=Solid;1";
            font-2 = "Noto Sans Symbols:size=11;1";
            modules-left = "i3 xwindow";
            modules-center = "date";
@@ -140,7 +141,7 @@ in
           type = "custom/script";
           # type = "internal/date";
           interval = 5;
-          exec = "/run/current-system/sw/bin/date '+%a %d %b W%V-%u %R'";
+          exec = "/usr/bin/date '+%a %d %b W%V-%u %R'";
           format-prefix-foreground = "\${xrdb:foreground}";
         };
         "module/battery" = {
@@ -266,7 +267,7 @@ in
           lib.mkOptionDefault {
             "Mod4+Return" = "exec termite";
             "Mod4+Shift+c" = "kill";
-            "Mod4+space" = "exec env LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive rofi -show drun";
+            "Mod4+space" = "exec env LOCALE_ARCHIVE=/usr/lib/locale/locale-archive rofi -show drun";
             "Mod4+n" = "workspace next";
             "Mod4+e" = "workspace prev";
             "Mod4+Shift+e" = "exec i3-msg exit";

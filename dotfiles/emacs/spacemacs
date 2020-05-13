@@ -33,8 +33,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(ruby
-     elm
+   '(;;ruby
+     ;;elm
      (auto-completion :variables auto-completion-enable-snippets-in-popup t)
      csv
      yaml
@@ -43,9 +43,9 @@ This function should only modify configuration layer settings."
      html
      helm
      nixos
-     (haskell :variables haskell-font-lock-symbols t
-              haskell-completion-backend 'dante
-              dante-command-line '("nix-shell" "--run" "ghci"))
+     (haskell :variables haskell-font-lock-symbols t)
+              ;; haskell-completion-backend 'dante
+              ;; dante-command-line '("nix-shell" "--run" "ghci"))
      ;; hie-nix
      (keyboard-layout :variables kl-layout 'colemak-hnei)
      emacs-lisp
@@ -809,6 +809,15 @@ the entry of interest in the bibfile.  but does not check that."
   ;; Set browser
   (setq browse-url-browser-function 'browse-url-generic
         browse-url-generic-program "qutebrowser")
+
+  (define-advice mm-shr (:around (oldfn &rest handle) delete-trailing-whitespace)
+    "Delete leading and trailing whitespace in Gnus article buffer."
+    (if (derived-mode-p 'gnus-article-mode)
+        (save-restriction
+          (narrow-to-region (point) (point))
+          (apply oldfn handle)
+          (delete-trailing-whitespace))
+      (apply oldfn handle)))
 
   ;; RSS
   (eval-after-load 'shr

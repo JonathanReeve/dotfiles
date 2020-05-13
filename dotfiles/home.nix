@@ -24,7 +24,13 @@ let
   #  doomPrivateDir = ./emacs/doom.d;  # Directory containing your config.el init.el
   #                                    # and packages.el files
   # };
-
+  # all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
+  # Pin Nixpkgs so that HIE will work
+  # pkgs = import (builtins.fetchTarball {
+  #   name = "";
+  #   url = "https://github.com/nixos/nixpkgs/archive/0eb0ddc4dbe3cd5415c6b6e657538eb809fc3778.tar.gz";
+  #   sha256 = "09ammqxzqydj97lk5iwrlg4xnj7b2pnhj6qpxa0pbp9z0651yvz6";
+  #   }) {};
 in
 {
 
@@ -57,6 +63,7 @@ in
         };
         realName = "${name}";
         neomutt.enable = true;
+        # notmuch.enable = true;
       };
       columbia = {
         address = "jonathan.reeve@columbia.edu";
@@ -75,6 +82,7 @@ in
         };
         realName = "${name}";
         neomutt.enable = true;
+        # notmuch.enable = true;
       };
     };
   };
@@ -98,6 +106,27 @@ in
     neomutt = {
       enable = true;
       vimKeys = true;
+      extraConfig = ''
+	color normal white default
+	color attachment red default
+	color hdrdefault cyan default
+	color indicator brightyellow default
+	color markers brightred default
+	color quoted cyan default
+	color quoted1 magenta default
+	color quoted2 blue default
+	color signature yellow default
+	color status default default
+	color tilde blue default
+	color tree brightred default
+	color header brightyellow default ^From:
+	color header yellow default ^To:
+	color header brightcyan default ^Date
+	color header yellow default ^Cc:
+	color header brightgreen default ^Subject:
+	color header brightcyan default ^X-TRASH:
+	color status brightgreen default
+      '';
     };
     neovim = {
       enable = true;
@@ -161,7 +190,7 @@ in
          # Search several search engines at once. `search b g l "search query"`
          search="for engine in $argv[1..-2]; qutebrowser \":open -t $engine $argv[-1]\"; end";
          # Proverbs for greeting
-         fish_greeting = "shuf -n 1 ${scripts}/proverboj.txt | ${pkgs.cowsay}/bin/cowsay";
+         fish_greeting = "shuf -n 1 ${scripts}/proverboj.txt | ${pkgs.neo-cowsay}/bin/cowsay";
 
        };
        interactiveShellInit =
@@ -228,14 +257,35 @@ in
       };
       packages = with pkgs; [
         # Command-line enhancements
-        bat fd fzf
+        bat fd fzf gotop ripgrep ag
+        # Minimal computing stuff
+        pass
         # Spacemacs email
         w3m mu
         # Encryption
         encfs
+        # sqlite3
         # File sync and backup
         # megasync megatools
+        pandoc
         # doom-emacs
+        emacs-all-the-icons-fonts
+        # Haskell
+        # cabal2nix
+        (haskellPackages.ghcWithPackages (ps: with ps; [
+          # pandoc-citeproc
+          shake         # Build tool
+          hlint         # Required for spacemacs haskell-mode
+          # apply-refact  # Required for spacemacs haskell-mode
+          # hasktags      # Required for spacemacs haskell-mode
+          # hoogle        # Required for spacemacs haskell-mode
+          turtle
+          regex-compat
+          PyF
+        ]))
+        # (all-hies.selection { selector = p: { inherit (p) ghc882; }; })
+        # (all-hies.selection { selector = p: { inherit (p) ghc882; }; })
+
       ];
       file = {
         # Handle multiple emacs installs
