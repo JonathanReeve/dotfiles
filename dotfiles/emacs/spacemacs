@@ -60,7 +60,7 @@ This function should only modify configuration layer settings."
      ;; ipython-notebook
      org
      ranger
-     ;; pdf
+     pdf
      (shell :variables
              ;; shell-default-height 30
              shell-default-shell 'ansi-term
@@ -85,9 +85,10 @@ This function should only modify configuration layer settings."
                                       ;; org-gcal
                                       gotham-theme
                                       org-brain
+                                      org-noter
                                       ;; org-gnome
-                                      ;; ewal
-                                      ;; ewal-spacemacs-themes
+                                      ewal
+                                      ewal-spacemacs-themes
                                       ;; ewal-evil-cursors
                                       flycheck-vale
                                       )

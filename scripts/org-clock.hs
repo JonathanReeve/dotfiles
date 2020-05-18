@@ -1,4 +1,4 @@
-#!/home/jon/.nix-profile/bin/runhaskell
+#!/run/current-system/sw/bin/runhaskell
 
 {-# LANGUAGE OverloadedStrings #-}
 
@@ -16,9 +16,9 @@ main = do
   out <- shellStrict getClock empty
   case out of
     -- Emacs is on, but returns "-1", which means that org-clock is not running.
-    (ExitSuccess, "-1\n") -> TIO.putStrLn $ "Protocolu!"
+    (ExitSuccess, "-1\n") -> TIO.putStrLn $ "%{F#f00} Protocolu!"
     -- Emacs is on and clocking. Print the clock value.
-    (ExitSuccess, out) -> TIO.putStrLn $ T.drop 1 $ head $
+    (ExitSuccess, out) -> TIO.putStrLn $ T.take 25 $ T.drop 1 $ head $
       drop 1 $ T.splitOn "\"" out
     -- Emacs is not on.
     (ExitFailure err, _) -> TIO.putStrLn $ "%{F#f00} Ensalutu!" -- <> repr err
