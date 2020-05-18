@@ -4,6 +4,7 @@
 # set up once.
 
 set dots "/home/jon/Dotfiles/dotfiles"
+set XDG_CONFIG_HOME /home/jon/.config
 mkdir -p "$HOME/.config/nixpkgs"
 ln -sf "$dots/home.nix" "$XDG_CONFIG_HOME/nixpkgs/home.nix"
 sudo ln -sf "$dots/configuration.nix" "/etc/nixos"

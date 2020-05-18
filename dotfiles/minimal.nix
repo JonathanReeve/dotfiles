@@ -26,6 +26,7 @@ in
     packages = with pkgs; [
       #i3
       pywal
+      ranger
       font-awesome_5 fira-code
       ];
     sessionVariables.LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
@@ -51,6 +52,8 @@ in
         map e scroll up
         map h scroll left
         map i scroll right
+        map j search next
+        map J search previous
         set statusbar-v-padding 10
       '';
       options = {
@@ -98,8 +101,11 @@ in
     };
     picom = {
       enable = true;
+      experimentalBackends = true;
+      fade = true;
       blur = true;
       shadow = true;
+      vSync = true;
     };
     polybar = {
       enable = true;
@@ -132,10 +138,15 @@ in
         "module/i3" = {
           type = "internal/i3";
           label-focused-underline = "\${xrdb:color4}";
+          label-unfocused-underline = "\${xrdb:background}";
           label-focused = "%index%";
           label-unfocused = "%index%";
+          label-urgent = "%index%";
+          label-visible = "%index%";
           label-focused-padding = 1;
           label-unfocused-padding = 1;
+          label-urgent-padding = 1;
+          label-visible-padding = 1;
         };
         "module/date" = {
           type = "custom/script";
@@ -204,7 +215,7 @@ in
           type = "internal/backlight";
           card = "intel_backlight";
           format = "<ramp>";
-          ramp-0 = "";
+          ramp-0 = "";
           ramp-1 = "";
           ramp-2 = "";
           ramp-3 = "";
@@ -233,6 +244,8 @@ in
         set_from_resource $c2 i3wm.color2
       '';
       config = {
+        assigns = { "9" = [{ class = "^MEGAsync$"; }]; };
+        floating.criteria = [{ class = "^MEGAsync$"; }];
         bars = [];
         fonts = [ "Font Awesome" "${font} 11" ];
         gaps = {
@@ -290,7 +303,7 @@ in
             # Open agenda with Super + A
             "Mod4+a" = "exec emacsclient -c -e '(org-agenda-list)(delete-other-windows)(org-agenda-day-view)'";
             # lock screen with Super + L
-            "Mod4+l" = "${lockCmd}";
+            "Mod4+l" = "exec ${lockCmd}";
             # Change wallpaper
             "Mod4+w" = "exec ${pkgs.pywal}/bin/wal -i ${/home/jon/Bildoj/Ekranfonoj} -o ${../scripts/pywal-reload.sh}";
           };
@@ -304,13 +317,14 @@ in
           };
         };
         startup = [
-          # { command = "exec systemctl --user restart polybar"; always = true; notification = false; }
+          { command = "exec systemctl --user restart polybar"; always = true; notification = false; }
           { command = "${pkgs.pywal}/bin/wal -R"; notification = false; }
           { command = "megasync"; notification = false; }
           { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
           { command = "setxkbmap -layout us -variant colemak -option caps:escape -option esperanto:colemak"; }
-          { command = "${pkgs.picom}/bin/picom"; }
-          { command = "${pkgs.gnome3.gnome_settings_daemon}/libexec/gsd-xsettings"; }
+          # { command = "exec compton"; }
+          # { command = "exec compton --backend glx --paint-on-overlay --vsync opengl-swc"; }
+          # { command = "${pkgs.gnome3.gnome_settings_daemon}/libexec/gsd-xsettings"; }
         ];
         window.border = 10;
       };

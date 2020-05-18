@@ -34,7 +34,7 @@ let
 in
 {
 
-  imports = [  ./minimal.nix ];
+  # imports = [  ./minimal.nix ];
 
   # nixpkgs.overlays = [
   #   (self: super: {
@@ -255,38 +255,8 @@ in
         options = [ "caps:escape" "esperanto:colemak" ];
         variant = "colemak";
       };
-      packages = with pkgs; [
-        # Command-line enhancements
-        bat fd fzf gotop ripgrep ag
-        # Minimal computing stuff
-        pass
-        # Spacemacs email
-        w3m mu
-        # Encryption
-        encfs
-        # sqlite3
-        # File sync and backup
-        # megasync megatools
-        pandoc
-        # doom-emacs
-        emacs-all-the-icons-fonts
-        # Haskell
-        # cabal2nix
-        (haskellPackages.ghcWithPackages (ps: with ps; [
-          # pandoc-citeproc
-          shake         # Build tool
-          hlint         # Required for spacemacs haskell-mode
-          # apply-refact  # Required for spacemacs haskell-mode
-          # hasktags      # Required for spacemacs haskell-mode
-          # hoogle        # Required for spacemacs haskell-mode
-          turtle
-          regex-compat
-          PyF
-        ]))
-        # (all-hies.selection { selector = p: { inherit (p) ghc882; }; })
-        # (all-hies.selection { selector = p: { inherit (p) ghc882; }; })
-
-      ];
+      # packages = with pkgs; [
+      # ];
       file = {
         # Handle multiple emacs installs
         ".emacs-profiles.el".source = ./emacs/emacs-profiles.el;

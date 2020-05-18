@@ -8,7 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      /etc/nixos/cachix.nix
+      # /etc/nixos/cachix.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -162,7 +162,7 @@
      termite                # Vim-like modal terminal
      feh                    # Display imaes
      libnotify              # Notifications
-     weechat                # IRC
+     #weechat                # IRC
      fzf                    # Fuzzy file finder
      ag                     # Fast grep replacement
      ripgrep                # Another fast grep replacement
@@ -177,18 +177,18 @@
      firefox                # Yes, a third
 
      # Gnome
-     deja-dup               # Backups 
-     gthumb                 # Photos
-     gnome3.gnome-tweak-tool
-     gnome3.gnome-boxes
+     #deja-dup               # Backups 
+     #gthumb                 # Photos
+     #gnome3.gnome-tweak-tool
+     #gnome3.gnome-boxes
 
      # KDE
-     # gwenview
-     # ark
-     # dragon
-     # plasma-browser-integration
-     # kdeApplications.kmail
-     # kdeApplications.kmail-account-wizard
+     gwenview
+     ark
+     dragon
+     plasma-browser-integration
+     kdeApplications.kmail
+     kdeApplications.kmail-account-wizard
 
      ntfs3g ntfsprogs       # Windows drives compatibility
      plasma-browser-integration
@@ -264,10 +264,10 @@
     xserver = {
       enable = true;
       videoDrivers = [ "intel" "modesetting" ];
-      deviceSection = ''
-        Option "DRI" "2"
-        Option "TearFree" "true"
-      '';
+      #deviceSection = ''
+      #  Option "DRI" "2"
+      #  Option "TearFree" "true"
+      #'';
       # Enable touchpad support.
       libinput = {
         enable = true;
@@ -276,8 +276,8 @@
       # Keyboard settings
       layout = "us";
       xkbVariant = "colemak";
-      displayManager.gdm.enable = true;
-      desktopManager.gnome3.enable = true;
+      displayManager.sddm.enable = true;
+      desktopManager.plasma5.enable = true;
       desktopManager.session = [{
         name = "home-manager";
         start = ''
@@ -334,7 +334,7 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "19.09"; # Did you read the comment?
+  system.stateVersion = "20.03"; # Did you read the comment?
 
   virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;

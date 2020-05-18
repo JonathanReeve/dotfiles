@@ -36,7 +36,7 @@ This function should only modify configuration layer settings."
    '(;;ruby
      ;;elm
      (auto-completion :variables auto-completion-enable-snippets-in-popup t)
-     csv
+     ;; csv
      yaml
      shell-scripts
      javascript
@@ -57,7 +57,7 @@ This function should only modify configuration layer settings."
      git
      markdown
      python
-     ipython-notebook
+     ;; ipython-notebook
      org
      ranger
      ;; pdf
@@ -68,7 +68,7 @@ This function should only modify configuration layer settings."
              )
      (spell-checking :variables spell-checking-enable-by-default nil)
      syntax-checking
-     themes-megapack
+     ;; themes-megapack
      ;; Private layers
      hie-nix
      )
