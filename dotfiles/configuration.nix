@@ -177,21 +177,21 @@
      firefox                # Yes, a third
 
      # Gnome
-     #deja-dup               # Backups 
-     #gthumb                 # Photos
-     #gnome3.gnome-tweak-tool
-     #gnome3.gnome-boxes
+     deja-dup               # Backups 
+     gthumb                 # Photos
+     gnome3.gnome-tweak-tool
+     gnome3.gnome-boxes
 
      # KDE
-     gwenview
-     ark
-     dragon
-     plasma-browser-integration
-     kdeApplications.kmail
-     kdeApplications.kmail-account-wizard
+     #gwenview
+     #ark
+     #dragon
+     #plasma-browser-integration
+     #kdeApplications.kmail
+     #kdeApplications.kmail-account-wizard
 
      ntfs3g ntfsprogs       # Windows drives compatibility
-     plasma-browser-integration
+     #plasma-browser-integration
 
      # Sound
      alsaTools
@@ -276,8 +276,8 @@
       # Keyboard settings
       layout = "us";
       xkbVariant = "colemak";
-      displayManager.sddm.enable = true;
-      desktopManager.plasma5.enable = true;
+      displayManager.gdm.enable = true;
+      desktopManager.gnome3.enable = true;
       desktopManager.session = [{
         name = "home-manager";
         start = ''

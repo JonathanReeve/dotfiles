@@ -130,7 +130,8 @@
        (org              ; organize your plain life in plain text
         +dragndrop       ; drag & drop files/images into org buffers
         +pandoc          ; export-with-pandoc support
-        +pomodoro)        ; be fruitful with the tomato technique
+        +pomodoro        ; be fruitful with the tomato technique
+        +roam)           ; zettelkesten
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more

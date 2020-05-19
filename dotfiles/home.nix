@@ -107,25 +107,25 @@ in
       enable = true;
       vimKeys = true;
       extraConfig = ''
-	color normal white default
-	color attachment red default
-	color hdrdefault cyan default
-	color indicator brightyellow default
-	color markers brightred default
-	color quoted cyan default
-	color quoted1 magenta default
-	color quoted2 blue default
-	color signature yellow default
-	color status default default
-	color tilde blue default
-	color tree brightred default
-	color header brightyellow default ^From:
-	color header yellow default ^To:
-	color header brightcyan default ^Date
-	color header yellow default ^Cc:
-	color header brightgreen default ^Subject:
-	color header brightcyan default ^X-TRASH:
-	color status brightgreen default
+      color normal white default
+      color attachment red default
+      color hdrdefault cyan default
+      color indicator brightyellow default
+      color markers brightred default
+      color quoted cyan default
+      color quoted1 magenta default
+      color quoted2 blue default
+      color signature yellow default
+      color status default default
+      color tilde blue default
+      color tree brightred default
+      color header brightyellow default ^From:
+      color header yellow default ^To:
+      color header brightcyan default ^Date
+      color header yellow default ^Cc:
+      color header brightgreen default ^Subject:
+      color header brightcyan default ^X-TRASH:
+      color status brightgreen default
       '';
     };
     neovim = {
@@ -138,6 +138,8 @@ in
         " Colemak some things
         nnoremap n j
         nnoremap j n
+        nnoremap N J
+        nnoremap J N
         nnoremap e k
         nnoremap k e
         nnoremap i l
@@ -207,6 +209,44 @@ in
             set -U vaultmount ~/.private-mount
             set -U vaultloc ~/Dropbox/Personal/.Vault_encfs
          '';
+       plugins = [
+         {
+           name = "z";
+           src = pkgs.fetchFromGitHub {
+             owner = "jethrokuan";
+             repo = "z";
+             rev = "ddeb28a7b6a1f0ec6dae40c636e5ca4908ad160a";
+             sha256 = "0c5i7sdrsp0q3vbziqzdyqn4fmp235ax4mn4zslrswvn8g3fvdyh";
+           };
+         }
+         {
+           name = "plugin-bang-bang";
+           src = pkgs.fetchFromGitHub {
+             owner = "oh-my-fish";
+             repo = "plugin-bang-bang";
+             rev = "d45ae216969fa5c3eac0b6248119e8a1da56fe89";
+             sha256 = "0jpcs8fpw9a69ai6mwhgikw77j03fhnixcl21yx1b5p65333pddc";
+           };
+         }
+         {
+           name = "sudope";
+           src = pkgs.fetchFromGitHub {
+             owner = "oh-my-fish";
+             repo = "plugin-sudope";
+             rev = "96ba18db8ec91c0a16b5d540d7c69b8ad4f63406";
+             sha256 = "05nq5z9864bk8npy9vjy93hns4n5ipyjlr2dlnw4j5v9xb6ybx3c";
+           };
+         }
+         {
+           name = "foreign-env";
+           src = pkgs.fetchFromGitHub {
+             owner = "oh-my-fish";
+             repo = "plugin-foreign-env";
+             rev = "dddd9213272a0ab848d474d0cbde12ad034e65bc";
+             sha256 = "0c5i7sdrsp0q3vbziqzdyqn4fmp235ax4mn4zslrswvn8g3fvdyh";
+           };
+         }
+       ];
        promptInit =
          ''
             # Disable the vim-mode indicator [I] and [N].
@@ -227,8 +267,86 @@ in
             # eval (direnv hook fish)
          '';
     };
+    fzf = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+    qutebrowser = {
+      enable = true;
+      keyBindings = {
+        normal = {
+        "N" =  "tab-next";
+        "E" =  "tab-prev";
+        "K" =  "search-prev";
+        "l" =  "enter-mode insert";
+        "n" =  "scroll down";
+        "e" =  "scroll up";
+        "i" =  "scroll right";
+        "j" =  "search-next";
+        "b" =  "set-cmd-text -s :buffer";
+        "gL" =  "spawn --userscript org-link";
+        "pf" =  "spawn --userscript qute-pass";
+        "gz" =  "jseval var d=document,s=d.createElement('script';;s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement;.appendChild(s;;void(0;;";
+        "t" =  "set-cmd-text -s :open -t";
+        "Y" =  "yank selection";
+        "O" =  "set-cmd-text :open {url:pretty}";
+        "<Alt-Left>" =  "back";
+        "<Alt-Right>" =  "forward";
+        };
+      };
+      searchEngines = {
+        "DEFAULT" =  "https://duckduckgo.com/?q={}";
+        "g" =  "https://www.google.com/search?q={}";
+        "l" =  "https://www.google.com/search?hl=en&q={}&btnI=I";
+        "w" =  "https://en.wikipedia.org/w/index.php?search={}";
+        "gs" =  "https://scholar.google.com/scholar?q={}";
+        "b" =  "https://www.google.com/search?tbm=bks&q={}";
+        "aw" =  "https://wiki.archlinux.org/?search={}";
+        "o" =  "https://nixos.org/nixos/options.html#{}";
+        "p" =  "https://nixos.org/nixos/packages.html#{}";
+        "d" =  "https://en.wiktionary.org/wiki/{}";
+        "s" =  "http://stackoverflow.com/search?q={}";
+        "m" =  "https://maps.google.com/maps?q={}";
+        "c" =  "https://clio.columbia.edu/quicksearch?q={}";
+        "gh" =  "https://github.com/search?q={}&type=Repositories";
+        "h" =  "https://hackage.haskell.org/packages/search?terms={}";
+        "libgen" =  "https://libgen.is/search.php?req={}";
+        "viki" =  "https://eo.wikipedia.org/w/index.php?search={}";
+        "ia" =  "https://archive.org/details/texts?and%5B%5D={}&sin=";
+        "mm" =  "https://muse-jhu-edu.ezproxy.cul.columbia.edu/search?action=search&query=content:{}:and&limit=journal_id:131&min=1&max=10&t=search_journal_header";
+        };
+      settings = {
+        colors = {
+          completion.category.bg = "#333333";
+          tabs = {
+            even.bg = "#222222";
+            odd.bg = "#222222";
+            selected.even.bg = "#285577";
+            selected.odd.bg = "#285577";
+          };
+        };
+        fonts = {
+          completion.category = "11pt monospace";
+          default_family = "${font}, Terminus, Monospace, monospace, Fixed";
+          prompts = "11pt monospace";
+        };
+        hints.chars = "arstdhneio";
+        statusbar.padding = "{'top': 5, 'bottom': 5, 'left': 3, 'right': 3}";
+        tabs.padding = "{'top': 2, 'bottom': 2, 'left': 2, 'right': 2}";
+        url.default_page = "${scripts}/homepage/homepage.html";
+      };
+    };
+    vscode = {
+      enable = true;
+      extensions = with pkgs.vscode-extensions; [
+        ms-python.python
+        vscodevim.vim
+      ];
+      # haskell = {
+      #   enable = true;
+      # };
+    };
   };
-
 
   gtk = {
     enable = false;
@@ -297,73 +415,6 @@ in
         source = "${scripts}/qutebrowser-userscripts";
         recursive = true;
       };
-    };
-    configFile = {
-      "qutebrowser/config.py".text =
-      ''
-        c.colors.completion.category.bg = "#333333"
-        c.colors.tabs.even.bg = '#222222'
-        c.colors.tabs.odd.bg = '#222222'
-        c.colors.tabs.selected.even.bg = '#285577'
-        c.colors.tabs.selected.odd.bg = '#285577'
-        c.fonts.completion.category = '11pt monospace'
-        c.fonts.default_family = '${font}, Terminus, Monospace, monospace, Fixed'
-        c.fonts.prompts = '11pt monospace'
-        c.hints.chars = 'arstdhneio'
-        c.statusbar.padding = {'top': 5, 'bottom': 5, 'left': 3, 'right': 3}
-        c.tabs.padding = {'top': 2, 'bottom': 2, 'left': 2, 'right': 2}
-        c.url.searchengines = {
-                'DEFAULT': 'https://duckduckgo.com/?q={}',
-                'g': 'https://www.google.com/search?q={}',
-                'l': 'https://www.google.com/search?hl=en&q={}&btnI=I',
-                'w': 'https://en.wikipedia.org/w/index.php?search={}',
-                'gs': 'https://scholar.google.com/scholar?q={}',
-                'b': 'https://www.google.com/search?tbm=bks&q={}',
-                'aw': 'https://wiki.archlinux.org/?search={}',
-                'o': 'https://nixos.org/nixos/options.html#{}',
-                'p': 'https://nixos.org/nixos/packages.html#{}',
-                'd': 'https://en.wiktionary.org/wiki/{}',
-                's': 'http://stackoverflow.com/search?q={}',
-                'm': 'https://maps.google.com/maps?q={}',
-                'c': 'https://clio.columbia.edu/quicksearch?q={}',
-                'gh': 'https://github.com/search?q={}&type=Repositories',
-                'h': 'https://hackage.haskell.org/packages/search?terms={}',
-                'libgen': 'https://libgen.is/search.php?req={}',
-                'viki': 'https://eo.wikipedia.org/w/index.php?search={}',
-                'ia': 'https://archive.org/details/texts?and%5B%5D={}&sin=',
-                'mm': 'https://muse-jhu-edu.ezproxy.cul.columbia.edu/search?action=search&query=content:{}:and&limit=journal_id:131&min=1&max=10&t=search_journal_header'
-                }
-        c.url.default_page = "${scripts}/homepage/homepage.html";
-        config.bind('N', 'tab-next')
-        config.bind('E', 'tab-prev')
-        config.bind('K', 'search-prev')
-        config.bind('l', 'enter-mode insert')
-        config.bind('n', 'scroll down')
-        config.bind('e', 'scroll up')
-        config.bind('i', 'scroll right')
-        config.bind('j', 'search-next')
-        config.bind('b', 'set-cmd-text -s :buffer')
-        config.bind('gL', 'spawn --userscript org-link')
-        config.bind('pf', 'spawn --userscript qute-lastpass')
-        config.bind('gz', "jseval var d=document,s=d.createElement('script');s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement).appendChild(s);void(0);")
-        config.bind('t', 'set-cmd-text -s :open -t')
-        config.bind('Y', 'yank selection')
-        config.bind('O', 'set-cmd-text :open {url:pretty}')
-        config.bind('<Alt-Left>', 'back')
-        config.bind('<Alt-Right>', 'forward')
-        # Hack for repeating a search, but with a different search engine.
-        c.aliases['repeat-search'] = ';;'.join([
-            'set-cmd-text :',        # enter command mode
-            'command-history-prev',  # this command
-            'command-history-prev',  # search command
-            'rl-beginning-of-line',  # :|open engine term1 term2
-            'rl-forward-word',       # :open |engine term1 term2
-            'rl-forward-word',       # :open engine |term1 term2
-            'rl-backward-char',      # :open engine| term1 term2
-            'rl-backward-kill-word'  # :open | term1 term2
-        ])
-        # config.source('qutewal.py')
-      '';
     };
   };
 }
