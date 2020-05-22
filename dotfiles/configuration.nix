@@ -8,7 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      # /etc/nixos/cachix.nix
+      /etc/nixos/cachix.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -84,7 +84,7 @@
      # nodePackages.node2nix
      # home-manager           # Dotfiles management
 
-     # megasync             # Backups
+     megasync             # Backups
 
      # CLI
      fish                   # Shell
@@ -107,6 +107,7 @@
        apply-refact  # Required for spacemacs haskell-mode
        hasktags      # Required for spacemacs haskell-mode
        hoogle        # Required for spacemacs haskell-mode
+       lucid 
        # stylish-haskell # Required for spacemacs haskell-mode
        # ^ marked as broken
        turtle

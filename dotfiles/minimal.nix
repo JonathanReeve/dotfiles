@@ -104,6 +104,7 @@ in
       enable = true;
       experimentalBackends = true;
       fade = true;
+      fadeDelta = 5;
       blur = true;
       shadow = true;
       vSync = true;
@@ -129,7 +130,7 @@ in
            module-margin-left = 1;
            module-margin-right = 1;
            font-0 = "${font}:size=11;1";
-           font-1 = "FontAwesome:size=11:style=Solid;1";
+           font-1 = "Font Awesome 5 Free:size=11:style=Solid;1";
            font-2 = "Noto Sans Symbols:size=11;1";
            modules-left = "bspwm xwindow";
            modules-center = "date";
@@ -137,16 +138,31 @@ in
         };
         "module/bspwm" = {
           type = "internal/bspwm";
+          format = "<label-state> <label-mode>";
           label-focused-underline = "\${xrdb:color4}";
-          label-unfocused-underline = "\${xrdb:background}";
+          label-occupied-underline = "\${xrdb:color3}";
+          label-urgent-underline = "\${xrdb:color1}";
+          label-empty-underline = "\${xrdb:background}";
           label-focused = "%index%";
-          label-unfocused = "%index%";
+          label-occupied = "%index%";
           label-urgent = "%index%";
-          label-visible = "%index%";
+          label-empty = "%index%";
           label-focused-padding = 1;
-          label-unfocused-padding = 1;
+          label-occupied-padding = 1;
           label-urgent-padding = 1;
-          label-visible-padding = 1;
+          label-empty-padding = 1;
+          label-monocle = "";
+          label-tiled = "";
+          label-fullscreen = "";
+          label-floating = "";
+          label-pseudotiled = "P";
+          label-locked = "";
+          label-locked-foreground = "#bd2c40";
+          label-sticky = "";
+          label-sticky-foreground = "#fba922";
+          label-private = "";
+          label-private-foreground = "#bd2c40";
+          label-marked = "M";
         };
         "module/date" = {
           type = "custom/script";
@@ -231,7 +247,7 @@ in
       enable = true;
       keybindings = {
         "super + Return" = "termite";
-        "super + @space" = "env LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive rofi -show drun";
+        "super + @space" = "LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive rofi -show drun";
         # make sxhkd reload its configuration files
         "super + Escape" = "pkill -USR1 -x sxhkd";
         "super + shift + q" = "bspc quit";
@@ -241,23 +257,23 @@ in
         # if the current node is automatic, send it to the last manual, otherwise pull the last leaf
         "super + y" = "bspc query -N -n focused.automatic && bspc node -n last.!automatic || bspc node last.leaf -n focused";
         # swap the current node and the biggest node
-        "super + g" = "bspc node -s biggest";
+        "alt + g" = "bspc node -s biggest";
         # set the window state
         "super + {q,w,f,p}" = "bspc node -t {tiled,pseudo_tiled,floating,fullscreen}";
         # set the node flags
         "super + ctrl + {x,y,z}" = "bspc node -g {locked,sticky,private}";
         # focus the node in the given direction
-        "super + {_,shift + }{h,n,e,i}" = "bspc node -{f,s} {west,south,north,east}";
+        "alt + {_,shift + }{h,n,e,i}" = "bspc node -{f,s} {west,south,north,east}";
         # focus the node for the given path jump
-        "super + {l,u,y,;}" = "bspc node -f @{parent,brother,first,second}";
+        "alt + {l,u,y,;}" = "bspc node -f @{parent,brother,first,second}";
         # focus the next/previous node in the current desktop
         "alt + Tab" = "bspc node -f {next,prev}.local";
         # focus the next/previous desktop in the current monitor
-        "super + bracket{left,right}" = "bspc desktop -f {prev,next}.local";
+        "super + {n,e}" = "bspc desktop -f {prev,next}.local";
         # focus the last node/desktop
         "super + {grave,Tab}" = "bspc {node,desktop} -f last";
         # focus or send to the given desktop
-        "super + {_,shift + }{a,r,s,t,d,6-9,0}" = "bspc {desktop -f,node -d} '^{1-9,10}'";
+        "super + {_,shift + }{a,r,s,t}" = "bspc {desktop -f,node -d} '^{1-4}'";
         # expand a window by moving one of its side outward
         "super + alt + {h,n,e,i}" = "bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}";
         # contract a window by moving one of its side inward
@@ -284,22 +300,24 @@ in
     windowManager.bspwm = {
       enable = true;
       settings = {
-        "border_width" = 2;
-	"window_gap" = 10;
-	"focus_follows_pointer" = true;
-	"normal_border_color" = "$color1";
-	"active_border_color" = "$color2";
-	"focused_border_color" = "$color15";
-	"presel_feedback_color" = "$color1";
+        "border_width" = 10;
+        "window_gap" = 15;
+        "focus_follows_pointer" = true;
       };
       extraConfig = ''
-      '';
+        . /home/jon/.cache/wal/colors.sh
+        bspc config active_border_color $color2
+        bspc config normal_border_color $color1
+        bspc config focused_border_color $color15
+        bspc config presel_feedback_color $color1
+       '';
       startupPrograms = [
-        # Source pywal colors.
-        " . /home/jon/.cache/wal/colors.sh"
         "xrdb -merge ~/.cache/wal/colors.Xresources"
         "${pkgs.pywal}/bin/wal -R"
         "polybar main_bar"
+        # We have to relead sxhkd, otherwise it won't
+        # recognize keyboard layout changes.
+        "systemctl --user stop sxhkd && sxhkd"
       ];
       monitors = { eDP1 = [ "1" "2" "3" ];
                    DP1 = [ "4" "5" "6" ];

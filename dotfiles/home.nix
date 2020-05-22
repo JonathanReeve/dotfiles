@@ -24,7 +24,7 @@ let
   #  doomPrivateDir = ./emacs/doom.d;  # Directory containing your config.el init.el
   #                                    # and packages.el files
   # };
-  # all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
+  all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
   # Pin Nixpkgs so that HIE will work
   # pkgs = import (builtins.fetchTarball {
   #   name = "";
@@ -209,44 +209,6 @@ in
             set -U vaultmount ~/.private-mount
             set -U vaultloc ~/Dropbox/Personal/.Vault_encfs
          '';
-       plugins = [
-         {
-           name = "z";
-           src = pkgs.fetchFromGitHub {
-             owner = "jethrokuan";
-             repo = "z";
-             rev = "ddeb28a7b6a1f0ec6dae40c636e5ca4908ad160a";
-             sha256 = "0c5i7sdrsp0q3vbziqzdyqn4fmp235ax4mn4zslrswvn8g3fvdyh";
-           };
-         }
-         {
-           name = "plugin-bang-bang";
-           src = pkgs.fetchFromGitHub {
-             owner = "oh-my-fish";
-             repo = "plugin-bang-bang";
-             rev = "d45ae216969fa5c3eac0b6248119e8a1da56fe89";
-             sha256 = "0jpcs8fpw9a69ai6mwhgikw77j03fhnixcl21yx1b5p65333pddc";
-           };
-         }
-         {
-           name = "sudope";
-           src = pkgs.fetchFromGitHub {
-             owner = "oh-my-fish";
-             repo = "plugin-sudope";
-             rev = "96ba18db8ec91c0a16b5d540d7c69b8ad4f63406";
-             sha256 = "05nq5z9864bk8npy9vjy93hns4n5ipyjlr2dlnw4j5v9xb6ybx3c";
-           };
-         }
-         {
-           name = "foreign-env";
-           src = pkgs.fetchFromGitHub {
-             owner = "oh-my-fish";
-             repo = "plugin-foreign-env";
-             rev = "dddd9213272a0ab848d474d0cbde12ad034e65bc";
-             sha256 = "0c5i7sdrsp0q3vbziqzdyqn4fmp235ax4mn4zslrswvn8g3fvdyh";
-           };
-         }
-       ];
        promptInit =
          ''
             # Disable the vim-mode indicator [I] and [N].
@@ -273,6 +235,10 @@ in
     };
     qutebrowser = {
       enable = true;
+      extraConfig = ''
+        c.statusbar.padding = {'top': 5, 'bottom': 5, 'left': 3, 'right': 3}
+        c.tabs.padding = {'top': 2, 'bottom': 2, 'left': 2, 'right': 2}
+      '';
       keyBindings = {
         normal = {
         "N" =  "tab-next";
@@ -331,8 +297,6 @@ in
           prompts = "11pt monospace";
         };
         hints.chars = "arstdhneio";
-        statusbar.padding = "{'top': 5, 'bottom': 5, 'left': 3, 'right': 3}";
-        tabs.padding = "{'top': 2, 'bottom': 2, 'left': 2, 'right': 2}";
         url.default_page = "${scripts}/homepage/homepage.html";
       };
     };
@@ -369,12 +333,16 @@ in
 
   # Dotfiles for the home root, ~/
   home = {
+      # This should only be necessary with non-NixOS
       keyboard = {
         options = [ "caps:escape" "esperanto:colemak" ];
         variant = "colemak";
       };
       # packages = with pkgs; [
       # ];
+      packages = [
+        (all-hies.selection { selector = p: { inherit (p) ghc865; }; })
+      ];
       file = {
         # Handle multiple emacs installs
         ".emacs-profiles.el".source = ./emacs/emacs-profiles.el;
