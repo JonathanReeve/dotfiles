@@ -88,6 +88,7 @@
         bibtex-completion-pdf-field "file"
         org-ref-get-pdf-filename-function 'org-ref-get-zotero-pdf-filename)
 
+(after! org-ref
   (setq org-ref-note-title-format
     "** TODO %y - %9a - %t
   :PROPERTIES:
