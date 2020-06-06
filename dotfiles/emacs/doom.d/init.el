@@ -71,6 +71,7 @@
 
        :tools
        ;;ansible
+       biblio
        ;;debugger          ; FIXME stepping through code, to help you add bugs
        ;;direnv
        ;;docker
@@ -86,8 +87,8 @@
        ;;macos             ; MacOS-specific commands
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
-       ;;pass              ; password manager for nerds
-       ;;pdf               ; pdf enhancements
+       pass              ; password manager for nerds
+       pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
        ;;rgb               ; creating color strings
        ;;terraform         ; infrastructure as code
@@ -131,7 +132,8 @@
         +dragndrop       ; drag & drop files/images into org buffers
         +pandoc          ; export-with-pandoc support
         +pomodoro        ; be fruitful with the tomato technique
-        +roam)           ; zettelkesten
+        +brain           ; zettelkesten
+        +noter)
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
@@ -145,7 +147,7 @@
        ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
        ;;scheme            ; a fully conniving family of lisps
-       (sh +fish)          ; she sells {ba,z,fi}sh shells on the C xor
+       (sh +bash +fish)          ; she sells {ba,z,fi}sh shells on the C xor
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
