@@ -24,7 +24,7 @@ let
   #  doomPrivateDir = ./emacs/doom.d;  # Directory containing your config.el init.el
   #                                    # and packages.el files
   # };
-  all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
+  # all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
   # Pin Nixpkgs so that HIE will work
   # pkgs = import (builtins.fetchTarball {
   #   name = "";
@@ -340,9 +340,9 @@ in
       };
       # packages = with pkgs; [
       # ];
-      packages = [
-        (all-hies.selection { selector = p: { inherit (p) ghc865; }; })
-      ];
+      # packages = [
+        # (all-hies.selection { selector = p: { inherit (p) ghc883; }; })
+      # ];
       file = {
         # Handle multiple emacs installs
         ".emacs-profiles.el".source = ./emacs/emacs-profiles.el;

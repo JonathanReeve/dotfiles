@@ -13,15 +13,20 @@
 
   # Use the systemd-boot EFI boot loader.
   boot = {
-    kernelParams = [ "pci=nomsi" "snd_hda_intel.dmic_detect=0"
-                     "intel_idle.max_cstate=1" "i915.enable_dc=0"
-                   ];
+    # kernelParams = [ "pci=nomsi" "snd_hda_intel.dmic_detect=0"
+    #                  "intel_idle.max_cstate=1" "i915.enable_dc=0"
+    #                ];
+    # Enable magic sysrql (Alt+PrtSc) keys for recovery
+    kernel.sysctl = { "kernel.sysrq" = 1; };
     kernelPackages = pkgs.linuxPackages_latest;
     cleanTmpDir = true;
     plymouth.enable = true;
     resumeDevice = "/dev/nvme0n1p7";
     loader = {
-      systemd-boot.enable = true;
+      systemd-boot = {
+        enable = true;
+        memtest86.enable = true;
+      };
       efi.canTouchEfiVariables = true;
     };
   };
@@ -113,6 +118,7 @@
        turtle
        regex-compat
        PyF
+       HandsomeSoup
      ]))
 
      cabal-install
@@ -151,6 +157,7 @@
        nltk
        pip
        numpy
+       tldextract # required by qute-pass
      ]))
      # Elm
      # elmPackages.elm
@@ -212,11 +219,29 @@
   # Enable sound.
   sound.enable = true;
   hardware = {
+    firmware = with pkgs; [ firmwareLinuxNonfree ]; 
+    # Suggested by to fix freeze issues in:
+    # https://discourse.nixos.org/t/my-nixos-laptop-often-freezes/6381/10
+    opengl = {
+      enable = true;
+      extraPackages = with pkgs; [
+        vaapiIntel
+        vaapiVdpau
+        libvdpau-va-gl
+        intel-media-driver
+      ];
+    };
     pulseaudio = {
       enable = true;
       package = pkgs.pulseaudio;
       # package = pkgs.pulseaudioFull;
       extraModules = [ pkgs.pulseaudio-modules-bt ];
+      # Added following this config:
+      # https://github.com/NixOS/nixos-hardware/blob/master/lenovo/thinkpad/x1/7th-gen/audio.nix
+      extraConfig = ''
+        load-module module-alsa-sink device=hw:0,0 channels=4
+        load-module module-alsa-source device=hw:0,6 channels=4
+      '';
     };
     sensor.iio.enable = true;
     bluetooth.enable = true;
