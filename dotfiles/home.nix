@@ -34,7 +34,7 @@ let
 in
 {
 
-  imports = [  ./minimal.nix ];
+  # imports = [  ./minimal.nix ];
 
   # nixpkgs.overlays = [
   #   (self: super: {
@@ -63,7 +63,7 @@ in
         };
         realName = "${name}";
         neomutt.enable = true;
-        # notmuch.enable = true;
+        notmuch.enable = true;
       };
       columbia = {
         address = "jonathan.reeve@columbia.edu";
@@ -82,7 +82,7 @@ in
         };
         realName = "${name}";
         neomutt.enable = true;
-        # notmuch.enable = true;
+        notmuch.enable = true;
       };
     };
   };
@@ -168,7 +168,7 @@ in
          "gst" = "git status";
          # Other abbreviations
          "em" = "emacsclient -c";
-         "pw" = "vim ~/Dropbox/Personal/.p10.txt";
+         # "pw" = "vim ~/Dokumentujo/Personal/.p10.txt";
          # "lock" = "${lockCmd}";
          "new-session" = "dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.DisplayManager $XDG_SEAT_PATH org.freedesktop.DisplayManager.Seat.SwitchToGreeter";
          "portrait-monitor" = "xrandr --output DP-1 --rotate left --auto --right-of eDP-1";
@@ -187,7 +187,7 @@ in
             '';
          clean = "nix-store --gc --print-roots; and sudo nix-collect-garbage --delete-older-than 5d";
          # A function for renaming the most recent PDF, and putting it in my Papers dir.
-         rename-pdf="mv (ls -t /tmp/*.pdf | head -n 1) ~/Dropbox/Papers/$argv.pdf";
+         rename-pdf="mv (ls -t /tmp/*.pdf | head -n 1) ~/Dokumentujo/Papers/$argv.pdf";
          find-book="for engine in b c libgen; qutebrowser \":open -t $engine $argv\"; end";
          # Search several search engines at once. `search b g l "search query"`
          search="for engine in $argv[1..-2]; qutebrowser \":open -t $engine $argv[-1]\"; end";
@@ -207,7 +207,7 @@ in
             end
 
             set -U vaultmount ~/.private-mount
-            set -U vaultloc ~/Dropbox/Personal/.Vault_encfs
+            set -U vaultloc ~/Dokumentujo/Personal/.Vault_encfs
          '';
        promptInit =
          ''
@@ -338,8 +338,34 @@ in
         options = [ "caps:escape" "esperanto:colemak" ];
         variant = "colemak";
       };
-      # packages = with pkgs; [
-      # ];
+      packages = with pkgs; [
+        fira-code
+        ripgrep
+        vale
+        pass
+        encfs
+        fd
+        gotop
+        tree
+        bat
+
+        (haskellPackages.ghcWithPackages (ps: with ps; [
+          pandoc-citeproc
+          shake         # Build tool
+          hlint         # Required for spacemacs haskell-mode
+          apply-refact  # Required for spacemacs haskell-mode
+          hasktags      # Required for spacemacs haskell-mode
+          hoogle        # Required for spacemacs haskell-mode
+          lucid
+          # stylish-haskell # Required for spacemacs haskell-mode
+          # ^ marked as broken
+          turtle
+          regex-compat
+          PyF
+          HandsomeSoup
+        ]))
+        cabal-install
+      ];
       # packages = [
         # (all-hies.selection { selector = p: { inherit (p) ghc883; }; })
       # ];

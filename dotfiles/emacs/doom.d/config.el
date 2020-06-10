@@ -14,9 +14,9 @@
 
 ;; Bibliography
 (setq! org-ref-notes-directory "")
-(setq! +biblio-pdf-library-dir "~/Dropbox/Papers/"
-       +biblio-default-bibliography-files '("~/Dropbox/Papers/library.bib")
-       +biblio-notes-path "~/Dropbox/Org/Projects/books.org")
+(setq! +biblio-pdf-library-dir "~/Dokumentujo/Papers/"
+       +biblio-default-bibliography-files '("~/Dokumentujo/Papers/library.bib")
+       +biblio-notes-path "~/Dokumentujo/Org/Projects/books.org")
 
 (after! org-ref
   (setq org-ref-note-title-format
@@ -36,16 +36,16 @@
 
 ;; Org Mode
 (after! org
-  (setq org-directory "~/Dropbox/Org"
+  (setq org-directory "~/Dokumentujo/Org"
         org-startup-indented t
         evil-org-key-theme '(textobjects navigation additional insert todo)
         org-default-priority ?C
         org-lowest-priority ?G
         org-duration-format 'h:mm
-        diary-file "~/Dropbox/Org/diary"
+        diary-file "~/Dokumentujo/Org/diary"
         org-agenda-include-diary t
-        org-agenda-files (list "~/Dropbox/Org/Projects/")
-        org-projectile-file "~/Dropbox/Org/Projects/todo.org"
+        org-agenda-files (list "~/Dokumentujo/Org/Projects/")
+        org-projectile-file "~/Dokumentujo/Org/Projects/todo.org"
         org-agenda-skip-scheduled-if-done t
         org-agenda-skip-deadline-if-done t
         org-todo-keywords '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
@@ -60,13 +60,13 @@
   ; (require 'org-protocol)
   (setq org-protocol-default-template-key "l")
   (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline "/home/jon/Dropbox/Org/notes.org" "Tasks")
+        '(("t" "Todo" entry (file+headline "/home/jon/Dokumentujo/Org/notes.org" "Tasks")
             "* TODO %?  %i\n  %a")
-          ("m" "Movie" entry (file+headline "/home/jon/Dropbox/Org/movies.org" "To Watch")
+          ("m" "Movie" entry (file+headline "/home/jon/Dokumentujo/Org/movies.org" "To Watch")
             "* %a\n %?\n %i")
-          ("l" "Link" entry (file+olp "/home/jon/Dropbox/Org/notes.org" "Web Links")
+          ("l" "Link" entry (file+olp "/home/jon/Dokumentujo/Org/notes.org" "Web Links")
             "* %a\n %?\n %i")
-          ("s" "Schedule" entry (file "/home/jon/Dropbox/Org/Projects/schedule.org")
+          ("s" "Schedule" entry (file "/home/jon/Dokumentujo/Org/Projects/schedule.org")
             "* %?\n :PROPERTIES:\n :LOCATION:\n :END:\n %a\n %i")
           ))
   (setq org-modules '(org-habit org-protocol))
@@ -92,7 +92,7 @@
 
 
    ;; Org-brain
-   (setq org-brain-path "~/Dropbox/Org/Brain")
+   (setq org-brain-path "~/Dokumentujo/Org/Brain")
    )
 
 ;;(setq org-agenda-window-setup 'only-window)
