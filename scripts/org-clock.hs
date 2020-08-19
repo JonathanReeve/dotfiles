@@ -1,4 +1,4 @@
-#!/run/current-system/sw/bin/runhaskell
+#!/usr/bin/env runhaskell
 
 {-# LANGUAGE OverloadedStrings #-}
 

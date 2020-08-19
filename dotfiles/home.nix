@@ -18,29 +18,16 @@ let
   # lockCmd = "${pkgs.i3lock-fancy}/bin/i3lock-fancy -p -t ''";
 
   # Doom setup following https://github.com/vlaci/nix-doom-emacs
-  # doom-emacs = pkgs.callPackage (builtins.fetchTarball {
+  #doom-emacs = pkgs.callPackage (builtins.fetchTarball {
   #  url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
-  # }) {
+  #}) {
   #  doomPrivateDir = ./emacs/doom.d;  # Directory containing your config.el init.el
   #                                    # and packages.el files
-  # };
-  # all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
-  # Pin Nixpkgs so that HIE will work
-  # pkgs = import (builtins.fetchTarball {
-  #   name = "";
-  #   url = "https://github.com/nixos/nixpkgs/archive/0eb0ddc4dbe3cd5415c6b6e657538eb809fc3778.tar.gz";
-  #   sha256 = "09ammqxzqydj97lk5iwrlg4xnj7b2pnhj6qpxa0pbp9z0651yvz6";
-  #   }) {};
+  #};
 in
 {
 
   # imports = [  ./minimal.nix ];
-
-  # nixpkgs.overlays = [
-  #   (self: super: {
-  #     nur.repos.jomik = myNurExpressions.pkgs;
-  #   })
-  # ];
 
   accounts.email = {
     maildirBasePath = "${maildir}";
@@ -63,7 +50,7 @@ in
         };
         realName = "${name}";
         neomutt.enable = true;
-        notmuch.enable = true;
+        # notmuch.enable = true;
       };
       columbia = {
         address = "jonathan.reeve@columbia.edu";
@@ -82,7 +69,7 @@ in
         };
         realName = "${name}";
         neomutt.enable = true;
-        notmuch.enable = true;
+        # notmuch.enable = true;
       };
     };
   };
@@ -100,9 +87,6 @@ in
     mbsync = {
       enable = true;
     };
-    # notmuch = {
-    #   enable = true;
-    # };
     neomutt = {
       enable = true;
       vimKeys = true;
@@ -197,6 +181,13 @@ in
        };
        interactiveShellInit =
          ''
+            # Use Fisher for plugin management
+            if not functions -q fisher
+                set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
+                curl https://git.io/fisher --create-dirs -sLo $XDG_CONFIG_HOME/fish/functions/fisher.fish
+                fish -c fisher
+            end
+
             # Don't use vi keybindings in unknown terminals,
             # since weird things can happen. Also don't do colors.
             set acceptable_terms xterm-256color screen-256color xterm-termite
@@ -226,7 +217,7 @@ in
               function fish_title; true; end
             end
 
-            # eval (direnv hook fish)
+            eval (direnv hook fish)
          '';
     };
     fzf = {
@@ -251,6 +242,7 @@ in
         "j" =  "search-next";
         "b" =  "set-cmd-text -s :buffer";
         "gL" =  "spawn --userscript org-link";
+        "gM" =  "spawn --userscript org-movie";
         "pf" =  "spawn --userscript qute-pass";
         "gz" =  "jseval var d=document,s=d.createElement('script';;s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement;.appendChild(s;;void(0;;";
         "t" =  "set-cmd-text -s :open -t";
@@ -348,6 +340,12 @@ in
         gotop
         tree
         bat
+        # mu
+        direnv
+        #doom-emacs
+
+        #openjdk # Needed for RDFLint
+
 
         (haskellPackages.ghcWithPackages (ps: with ps; [
           pandoc-citeproc
@@ -366,21 +364,15 @@ in
         ]))
         cabal-install
       ];
-      # packages = [
-        # (all-hies.selection { selector = p: { inherit (p) ghc883; }; })
-      # ];
       file = {
-        # Handle multiple emacs installs
-        ".emacs-profiles.el".source = ./emacs/emacs-profiles.el;
-        ".spacemacs".source = ./emacs/spacemacs;
         ".doom.d/" = {
           source = ./emacs/doom.d;
           recursive = true;
+          onChange = "$HOME/.emacs.d/bin/doom sync";
         };
-        #".emacs.d/init.el".text = ''
-        #  (load "default.el")
-        #'';
-
+        # ".emacs.d/init.el".text = ''
+        #   (load "default.el")
+        # '';
         # Vim all the things!
         ".inputrc".text =
         ''
@@ -398,6 +390,9 @@ in
           nix:
             enable: true
         '';
+      };
+      language = {
+        base = "eo";
       };
   };
 
