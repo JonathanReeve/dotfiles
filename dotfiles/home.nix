@@ -362,7 +362,7 @@ in
           # ^ marked as broken
           turtle
           regex-compat
-          PyF
+          # PyF
           HandsomeSoup
         ]))
         cabal-install
