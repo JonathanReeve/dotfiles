@@ -160,6 +160,7 @@ in
        };
        shellAliases = {
          "man" = "env PAGER=\"vim -R -c 'set ft=man'\" man";
+         "qutebrowser" = "/usr/bin/qutebrowser";
          };
        functions = {
          vault="encfs $vaultloc $vaultmount";
@@ -292,16 +293,18 @@ in
         url.default_page = "${scripts}/homepage/homepage.html";
       };
     };
-    vscode = {
-      enable = true;
-      extensions = with pkgs.vscode-extensions; [
-        ms-python.python
-        vscodevim.vim
-      ];
-      # haskell = {
-      #   enable = true;
-      # };
-    };
+    # waybar = {
+    #   enable = true;
+    # };
+    # vscode = {
+    #   enable = true;
+    #   extensions = with pkgs.vscode-extensions; [
+    #     ms-python.python
+    #     vscodevim.vim
+    #   ];
+    # haskell = {
+    #   enable = true;
+    # };
   };
 
   gtk = {
@@ -396,7 +399,7 @@ in
       };
   };
 
-  # Dotfiles for ~/.config, ~/.local/share, etc. 
+  # Dotfiles for ~/.config, ~/.local/share, etc.
   xdg = {
     enable = true;
     dataFile = {

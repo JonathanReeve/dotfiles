@@ -1,0 +1,2 @@
+#!/bin/bash
+emacsclient "org-protocol://capture?template=m&url=$QUTE_URL&title=$QUTE_TITLE&body=$QUTE_SELECTED_TEXT"

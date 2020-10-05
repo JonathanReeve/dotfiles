@@ -1,2 +1,3 @@
 #!/bin/bash
-emacsclient "org-protocol://capture?template=l&url=$QUTE_URL&title=$QUTE_TITLE&body=$QUTE_SELECTED_TEXT"
+TITLE=`urlencode $QUTE_TITLE`
+emacsclient "org-protocol://capture?template=l&url=$QUTE_URL&title=$TITLE&body=$QUTE_SELECTED_TEXT"

@@ -101,6 +101,8 @@
 
   ;; Org-brain
   (setq org-brain-path "~/Dokumentujo/Org/Brain")
+  ;; Org-roam
+  (setq org-roam-directory "~/Dokumentujo/Org/Roam")
 )
 
 ;;(setq org-agenda-window-setup 'only-window)
