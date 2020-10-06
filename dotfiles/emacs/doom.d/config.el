@@ -14,9 +14,9 @@
 
 ;; Bibliography
 (setq! org-ref-notes-directory "")
-(setq! +biblio-pdf-library-dir "~/Dropbox/Papers/"
-       +biblio-default-bibliography-files '("~/Dropbox/Papers/library.bib")
-       +biblio-notes-path "~/Dropbox/Org/Projects/books.org")
+(setq! +biblio-pdf-library-dir "~/Dokumentujo/Papers/"
+       +biblio-default-bibliography-files '("~/Dokumentujo/Papers/library.bib")
+       +biblio-notes-path "~/Dokumentujo/Org/Projects/books.org")
 
 (after! org-ref
   (setq org-ref-note-title-format
@@ -31,25 +31,34 @@
   ")
   )
 
+;; Use password-store as authentication source
 (require 'auth-source-pass)
 (auth-source-pass-enable)
+(setq auth-sources '(password-store))
+
+
+;; Get system notifications through libnotify
+(setq alert-default-style 'libnotify)
 
 ;; Org Mode
 (after! org
-  (setq org-directory "~/Dropbox/Org"
+  (setq org-directory "~/Dokumentujo/Org"
         org-startup-indented t
+        org-startup-folded t
         evil-org-key-theme '(textobjects navigation additional insert todo)
         org-default-priority ?C
         org-lowest-priority ?G
         org-duration-format 'h:mm
-        diary-file "~/Dropbox/Org/diary"
+        diary-file "~/Dokumentujo/Org/diary"
         org-agenda-include-diary t
-        org-agenda-files (list "~/Dropbox/Org/Projects/")
-        org-projectile-file "~/Dropbox/Org/Projects/todo.org"
+        org-agenda-files (list "~/Dokumentujo/Org/Projects/")
+        org-projectile-file "~/Dokumentujo/Org/Projects/todo.org"
         org-agenda-skip-scheduled-if-done t
         org-agenda-skip-deadline-if-done t
         org-todo-keywords '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
         org-todo-keywords-for-agenda '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
+        ;; Put state changes into the LOGBOOK drawer, to clean up a bit
+        org-log-into-drawer t
         )
   (setq org-refile-targets '((nil :maxlevel . 9)
                               (org-agenda-files :maxlevel . 9)))
@@ -60,13 +69,13 @@
   ; (require 'org-protocol)
   (setq org-protocol-default-template-key "l")
   (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline "/home/jon/Dropbox/Org/notes.org" "Tasks")
+        '(("t" "Todo" entry (file+headline "/home/jon/Dokumentujo/Org/notes.org" "Tasks")
             "* TODO %?  %i\n  %a")
-          ("m" "Movie" entry (file+headline "/home/jon/Dropbox/Org/movies.org" "To Watch")
+          ("m" "Movie" entry (file+headline "/home/jon/Dokumentujo/Org/Brain/movies.org" "To Watch")
             "* %a\n %?\n %i")
-          ("l" "Link" entry (file+olp "/home/jon/Dropbox/Org/notes.org" "Web Links")
+          ("l" "Link" entry (file+olp "/home/jon/Dokumentujo/Org/notes.org" "Web Links")
             "* %a\n %?\n %i")
-          ("s" "Schedule" entry (file "/home/jon/Dropbox/Org/Projects/schedule.org")
+          ("s" "Schedule" entry (file "/home/jon/Dokumentujo/Org/Projects/schedule.org")
             "* %?\n :PROPERTIES:\n :LOCATION:\n :END:\n %a\n %i")
           ))
   (setq org-modules '(org-habit org-protocol))
@@ -90,10 +99,11 @@
   (setq org-pomodoro-clock-break t)
   (add-hook 'org-mode-hook 'visual-line-mode)
 
-
-   ;; Org-brain
-   (setq org-brain-path "~/Dropbox/Org/Brain")
-   )
+  ;; Org-brain
+  (setq org-brain-path "~/Dokumentujo/Org/Brain")
+  ;; Org-roam
+  (setq org-roam-directory "~/Dokumentujo/Org/Roam")
+)
 
 ;;(setq org-agenda-window-setup 'only-window)
 ;; Prose linting
@@ -111,8 +121,8 @@
 
 
 ;; Mail
-;; Send email via Gmail:
 (after! mu4e
+  (require 'org-mu4e)
   (set-email-account! "Gmail"
                       '((mu4e-sent-folder   . "/gmail/[Gmail]/.Sent Mail")
                         (mu4e-drafts-folder . "/gmail/[Gmail]/.Drafts")
@@ -135,6 +145,7 @@
         mu4e-trash-folder "/Trash"
         mu4e-refile-folder "/Archive"
         mu4e-view-show-addresses t
+        mu4e-attachment-dir "~/Elŝutujo"
         mu4e-compose-dont-reply-to-self t
         mu4e-user-mail-address-list '("jon.reeve@gmail.com" "jonathan.reeve@columbia.edu" "jpr2152@columbia.edu"))
   (setq mu4e-bookmarks
@@ -145,17 +156,16 @@
           ("maildir:/gmail/Inbox NOT flag:trashed AND NOT flag:replied" "Gmail" ?g)
           ("maildir:/gmail/Lists NOT flag:trashed AND NOT flag:replied" "Lists" ?l)))
 
-  )
+)
   ;; (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
   ;; (setq mu4e-html2text-command "w3m -T text/html")
 
-;; Better looking HTML mail
 
 ;; Set browser
 (setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "qutebrowser")
+      browse-url-generic-program "/usr/bin/qutebrowser")
 
-;; RSS
+;; Better looking HTML mail
 (after! shr
   (setq shr-color-visible-luminance-min 80)
   (setq shr-use-colors nil)
@@ -198,6 +208,7 @@
 
 (after! evil
   (global-evil-colemak-basics-mode)
+  (setq evil-colemak-basics-rotate-t-f-j nil)
   (define-key evil-normal-state-map (kbd "n") 'evil-next-visual-line)
   (define-key evil-normal-state-map (kbd "e") 'evil-previous-visual-line)
   )

@@ -138,7 +138,7 @@ in
          "gst" = "git status";
          # Other abbreviations
          "em" = "emacsclient -c";
-         "pw" = "vim ~/Dropbox/Personal/.p10.txt";
+         # "pw" = "vim ~/Dokumentujo/Personal/.p10.txt";
          # "lock" = "${lockCmd}";
          "new-session" = "dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.DisplayManager $XDG_SEAT_PATH org.freedesktop.DisplayManager.Seat.SwitchToGreeter";
          "portrait-monitor" = "xrandr --output DP-1 --rotate left --auto --right-of eDP-1";
@@ -146,6 +146,7 @@ in
        };
        shellAliases = {
          "man" = "env PAGER=\"vim -R -c 'set ft=man'\" man";
+         "qutebrowser" = "/usr/bin/qutebrowser";
          };
        functions = {
          vault="encfs $vaultloc $vaultmount";
@@ -157,7 +158,7 @@ in
             '';
          clean = "nix-store --gc --print-roots; and sudo nix-collect-garbage --delete-older-than 5d";
          # A function for renaming the most recent PDF, and putting it in my Papers dir.
-         rename-pdf="mv (ls -t /tmp/*.pdf | head -n 1) ~/Dropbox/Papers/$argv.pdf";
+         rename-pdf="mv (ls -t /tmp/*.pdf | head -n 1) ~/Dokumentujo/Papers/$argv.pdf";
          find-book="for engine in b c libgen; qutebrowser \":open -t $engine $argv\"; end";
          # Search several search engines at once. `search b g l "search query"`
          search="for engine in $argv[1..-2]; qutebrowser \":open -t $engine $argv[-1]\"; end";
@@ -167,6 +168,13 @@ in
        };
        interactiveShellInit =
          ''
+            # Use Fisher for plugin management
+            if not functions -q fisher
+                set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
+                curl https://git.io/fisher --create-dirs -sLo $XDG_CONFIG_HOME/fish/functions/fisher.fish
+                fish -c fisher
+            end
+
             # Don't use vi keybindings in unknown terminals,
             # since weird things can happen. Also don't do colors.
             set acceptable_terms xterm-256color screen-256color xterm-termite
@@ -177,7 +185,7 @@ in
             end
 
             set -U vaultmount ~/.private-mount
-            set -U vaultloc ~/Dropbox/Personal/.Vault_encfs
+            set -U vaultloc ~/Dokumentujo/Personal/.Vault_encfs
          '';
        promptInit =
          ''
@@ -196,7 +204,7 @@ in
               function fish_title; true; end
             end
 
-            # eval (direnv hook fish)
+            eval (direnv hook fish)
          '';
     };
     fzf = {
@@ -221,6 +229,7 @@ in
         "j" =  "search-next";
         "b" =  "set-cmd-text -s :buffer";
         "gL" =  "spawn --userscript org-link";
+        "gM" =  "spawn --userscript org-movie";
         "pf" =  "spawn --userscript qute-pass";
         "gz" =  "jseval var d=document,s=d.createElement('script';;s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement;.appendChild(s;;void(0;;";
         "t" =  "set-cmd-text -s :open -t";
@@ -270,16 +279,18 @@ in
         url.default_page = "${scripts}/homepage/homepage.html";
       };
     };
-    vscode = {
-      enable = true;
-      extensions = with pkgs.vscode-extensions; [
-        ms-python.python
-        vscodevim.vim
-      ];
-      # haskell = {
-      #   enable = true;
-      # };
-    };
+    # waybar = {
+    #   enable = true;
+    # };
+    # vscode = {
+    #   enable = true;
+    #   extensions = with pkgs.vscode-extensions; [
+    #     ms-python.python
+    #     vscodevim.vim
+    #   ];
+    # haskell = {
+    #   enable = true;
+    # };
   };
 
   gtk = {
@@ -308,13 +319,41 @@ in
         options = [ "caps:escape" "esperanto:colemak" ];
         variant = "colemak";
       };
+      packages = with pkgs; [
+        fira-code
+        ripgrep
+        vale
+        pass
+        encfs
+        fd
+        gotop
+        tree
+        bat
+        # mu
+        direnv
+
+        (haskellPackages.ghcWithPackages (ps: with ps; [
+          pandoc-citeproc
+          shake         # Build tool
+          hlint         # Required for spacemacs haskell-mode
+          apply-refact  # Required for spacemacs haskell-mode
+          hasktags      # Required for spacemacs haskell-mode
+          hoogle        # Required for spacemacs haskell-mode
+          lucid
+          # stylish-haskell # Required for spacemacs haskell-mode
+          # ^ marked as broken
+          turtle
+          regex-compat
+          # PyF
+          HandsomeSoup
+        ]))
+        cabal-install
+      ];
       file = {
-        # Handle multiple emacs installs
-        ".emacs-profiles.el".source = ./emacs/emacs-profiles.el;
-        ".spacemacs".source = ./emacs/spacemacs;
         ".doom.d/" = {
           source = ./emacs/doom.d;
           recursive = true;
+          onChange = "$HOME/.emacs.d/bin/doom sync";
         };
 
         # Vim all the things!
@@ -335,9 +374,12 @@ in
             enable: true
         '';
       };
+      language = {
+        base = "eo";
+      };
   };
 
-  # Dotfiles for ~/.config, ~/.local/share, etc. 
+  # Dotfiles for ~/.config, ~/.local/share, etc.
   xdg = {
     enable = true;
     dataFile = {

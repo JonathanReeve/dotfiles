@@ -46,6 +46,35 @@ in
       theme = "~/.cache/wal/colors-rofi-dark.rasi";
       font = "${font} 11";
     };
+    waybar = {
+      enable = true;
+      settings = [ {
+        layer = "top";
+        position = "top";
+        height = 30;
+        output = [
+          "eDP-1"
+          "HDMI-A-1"
+        ];
+        modules-left = [ "sway/workspaces" "sway/mode" "wlr/taskbar" ];
+        modules-center = [ "sway/window" "custom/hello-from-waybar" ];
+        modules-right = [ "mpd" "custom/mymodule#with-css-id" "temperature" ];
+        modules = {
+          "sway/workspaces" = {
+            disable-scroll = true;
+            all-outputs = true;
+          };
+          "custom/hello-from-waybar" = {
+            format = "hello {}";
+            max-length = 40;
+            interval = "once";
+            exec = pkgs.writeShellScript "hello-from-waybar" ''
+          echo "from within waybar"
+        '';
+          };
+        };
+      } ];
+    };
     zathura = {
       enable = true;
       extraConfig = ''
@@ -290,39 +319,9 @@ in
         };
     };
   };
-  xsession = {
+  wayland.windowManager.sway = {
     enable = true;
-    scriptPath = ".xsession-hm";
-    pointerCursor = {
-      name = "Vanilla-DMZ";
-      package = pkgs.vanilla-dmz;
-    };
-    windowManager.bspwm = {
-      enable = true;
-      settings = {
-        "border_width" = 10;
-        "window_gap" = 15;
-        "focus_follows_pointer" = true;
-      };
-      extraConfig = ''
-        . /home/jon/.cache/wal/colors.sh
-        bspc config active_border_color $color2
-        bspc config normal_border_color $color1
-        bspc config focused_border_color $color15
-        bspc config presel_feedback_color $color1
-       '';
-      startupPrograms = [
-        "xrdb -merge ~/.cache/wal/colors.Xresources"
-        "${pkgs.pywal}/bin/wal -R"
-        "polybar main_bar"
-        # We have to relead sxhkd, otherwise it won't
-        # recognize keyboard layout changes.
-        "systemctl --user stop sxhkd && sxhkd"
-      ];
-      monitors = { eDP1 = [ "1" "2" "3" ];
-                   DP1 = [ "4" "5" "6" ];
-      };
-    };
   };
+
 }
 

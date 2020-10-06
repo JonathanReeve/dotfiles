@@ -29,7 +29,7 @@
       };
       efi.canTouchEfiVariables = true;
     };
-  };
+  }f
 
   networking = {
     hostName = "jon-laptop"; # Define your hostname.
