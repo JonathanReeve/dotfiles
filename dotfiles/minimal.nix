@@ -319,9 +319,8 @@ in
         };
     };
   };
-  wayland.windowManager.sway = {
+  xsession.windowManager.bspwm = { 
     enable = true;
   };
-
 }
 

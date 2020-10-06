@@ -14,7 +14,7 @@ let
 in
 {
 
-  # imports = [  ./minimal.nix ]; 
+  imports = [  ./minimal.nix ]; 
 
   accounts.email = {
     maildirBasePath = "${maildir}";
@@ -331,6 +331,8 @@ in
         bat
         # mu
         direnv
+        graphviz
+        python3
 
         (haskellPackages.ghcWithPackages (ps: with ps; [
           pandoc-citeproc

@@ -12,11 +12,6 @@
 ;; Don't prompt when opening journal or other large files
 ;(setq large-file-warning-threshold 20000000)
 
-;; Bibliography
-(setq! org-ref-notes-directory "")
-(setq! +biblio-pdf-library-dir "~/Dokumentujo/Papers/"
-       +biblio-default-bibliography-files '("~/Dokumentujo/Papers/library.bib")
-       +biblio-notes-path "~/Dokumentujo/Org/Projects/books.org")
 
 (after! org-ref
   (setq org-ref-note-title-format
@@ -31,14 +26,14 @@
   ")
   )
 
-;; Use password-store as authentication source
-(require 'auth-source-pass)
-(auth-source-pass-enable)
-(setq auth-sources '(password-store))
-
-
 ;; Get system notifications through libnotify
 (setq alert-default-style 'libnotify)
+
+;; Bibliography
+(setq! org-ref-notes-directory "")
+(setq! +biblio-pdf-library-dir "~/Dokumentujo/Papers/"
+       +biblio-default-bibliography-files '("~/Dokumentujo/Papers/library.bib")
+       +biblio-notes-path "~/Dokumentujo/Org/Projects/books.org")
 
 ;; Org Mode
 (after! org
@@ -123,6 +118,10 @@
 ;; Mail
 (after! mu4e
   (require 'org-mu4e)
+  ;; Use password-store as authentication source
+  (require 'auth-source-pass)
+  (auth-source-pass-enable)
+  (setq auth-sources '(password-store))
   (set-email-account! "Gmail"
                       '((mu4e-sent-folder   . "/gmail/[Gmail]/.Sent Mail")
                         (mu4e-drafts-folder . "/gmail/[Gmail]/.Drafts")
