@@ -11,36 +11,10 @@ let
   maildir = "/home/jon/Mail";
   # Preferences
   font = "Fira Code";
-  backgroundColor = "#243442"; # Blue steel
-  foregroundColor = "#deedf9"; # Light blue
-  warningColor = "#e23131"; # Reddish
-  # myNurExpressions = import <nur-jomik> { inherit pkgs; };
-  # lockCmd = "${pkgs.i3lock-fancy}/bin/i3lock-fancy -p -t ''";
-
-  # Doom setup following https://github.com/vlaci/nix-doom-emacs
-  # doom-emacs = pkgs.callPackage (builtins.fetchTarball {
-  #  url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
-  # }) {
-  #  doomPrivateDir = ./emacs/doom.d;  # Directory containing your config.el init.el
-  #                                    # and packages.el files
-  # };
-  # all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
-  # Pin Nixpkgs so that HIE will work
-  # pkgs = import (builtins.fetchTarball {
-  #   name = "";
-  #   url = "https://github.com/nixos/nixpkgs/archive/0eb0ddc4dbe3cd5415c6b6e657538eb809fc3778.tar.gz";
-  #   sha256 = "09ammqxzqydj97lk5iwrlg4xnj7b2pnhj6qpxa0pbp9z0651yvz6";
-  #   }) {};
 in
 {
 
-  imports = [  ./minimal.nix ];
-
-  # nixpkgs.overlays = [
-  #   (self: super: {
-  #     nur.repos.jomik = myNurExpressions.pkgs;
-  #   })
-  # ];
+  # imports = [  ./minimal.nix ]; 
 
   accounts.email = {
     maildirBasePath = "${maildir}";
@@ -82,7 +56,6 @@ in
         };
         realName = "${name}";
         neomutt.enable = true;
-        # notmuch.enable = true;
       };
     };
   };
@@ -100,9 +73,6 @@ in
     mbsync = {
       enable = true;
     };
-    # notmuch = {
-    #   enable = true;
-    # };
     neomutt = {
       enable = true;
       vimKeys = true;
@@ -338,11 +308,6 @@ in
         options = [ "caps:escape" "esperanto:colemak" ];
         variant = "colemak";
       };
-      # packages = with pkgs; [
-      # ];
-      # packages = [
-        # (all-hies.selection { selector = p: { inherit (p) ghc883; }; })
-      # ];
       file = {
         # Handle multiple emacs installs
         ".emacs-profiles.el".source = ./emacs/emacs-profiles.el;
@@ -351,9 +316,6 @@ in
           source = ./emacs/doom.d;
           recursive = true;
         };
-        #".emacs.d/init.el".text = ''
-        #  (load "default.el")
-        #'';
 
         # Vim all the things!
         ".inputrc".text =
