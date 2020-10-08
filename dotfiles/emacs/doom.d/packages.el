@@ -8,6 +8,3 @@
 (package! flycheck-vale)
 
 ;; (package! ox-ipynb :recipe (:host github :repo "jkitchin/ox-ipynb"))
-
-;; Use my fork of this package
-(package! evil-colemak-basics :recipe (:host github :repo "JonathanReeve/evil-colemak-basics"))

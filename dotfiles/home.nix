@@ -11,10 +11,19 @@ let
   maildir = "/home/jon/Mail";
   # Preferences
   font = "Fira Code";
+  doom-emacs = pkgs.callPackage (builtins.fetchTarball {
+    url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
+  }) {
+    doomPrivateDir = ./emacs/doom.d;  # Directory containing your config.el init.el
+    extraPackages = epkgs: [ pkgs.mu ];
+    extraConfig = ''
+      (setq mu4e-mu-binary "${pkgs.mu}/bin/mu")
+    '';
+  };
 in
 {
 
-  imports = [  ./minimal.nix ]; 
+  # imports = [  ./minimal.nix ]; 
 
   accounts.email = {
     maildirBasePath = "${maildir}";
@@ -25,6 +34,7 @@ in
         flavor = "gmail.com";
         passwordCommand = "${pkgs.pass}/bin/pass gmail";
         primary = true;
+        mu.enable = true;
         mbsync = {
           enable = true;
           create = "maildir";
@@ -44,6 +54,7 @@ in
         userName = "jpr2152@columbia.edu";
         flavor = "gmail.com";
         passwordCommand = "${pkgs.pass}/bin/pass lionmail";
+        mu.enable = true;
         mbsync = {
           enable = true;
           create = "maildir";
@@ -71,6 +82,9 @@ in
       userEmail = "${email}";
     };
     mbsync = {
+      enable = true;
+    };
+    mu = {
       enable = true;
     };
     neomutt = {
@@ -279,9 +293,6 @@ in
         url.default_page = "${scripts}/homepage/homepage.html";
       };
     };
-    # waybar = {
-    #   enable = true;
-    # };
     # vscode = {
     #   enable = true;
     #   extensions = with pkgs.vscode-extensions; [
@@ -333,6 +344,7 @@ in
         direnv
         graphviz
         python3
+	doom-emacs
 
         (haskellPackages.ghcWithPackages (ps: with ps; [
           pandoc-citeproc
@@ -357,6 +369,9 @@ in
           recursive = true;
           onChange = "$HOME/.emacs.d/bin/doom sync";
         };
+	".emacs.d/init.el".text = ''
+	     (load "default.el")
+	'';
 
         # Vim all the things!
         ".inputrc".text =

@@ -184,30 +184,33 @@
 
 (add-hook 'elfeed-show-mode-hook 'visual-line-mode)
 
-;; Custom Keybindings
-(global-set-key (kbd "<f2>") 'org-agenda-list)
-(global-set-key (kbd "<f3>") 'org-todo-list)
-(global-set-key (kbd "<f4>") 'mu4e)
-(with-eval-after-load 'evil-maps
-  (define-key evil-normal-state-map (kbd "C-h") nil)
-  (define-key evil-normal-state-map (kbd "C-n") nil)
-  (define-key evil-motion-state-map (kbd "C-e") nil)
-  (define-key evil-normal-state-map (kbd "C-i") nil)
-)
-(global-unset-key (kbd "C-h"))
-(global-unset-key (kbd "C-n"))
-(global-unset-key (kbd "C-e"))
-(global-unset-key (kbd "C-i"))
-(global-set-key (kbd "C-h") 'evil-window-left)
-(global-set-key (kbd "C-n") 'evil-window-down)
-(global-set-key (kbd "C-e") 'evil-window-up)
-(global-set-key (kbd "C-i") 'evil-window-right)
-
-(use-package! evil-colemak-basics :after evil)
-
-(after! evil
-  (global-evil-colemak-basics-mode)
-  (setq evil-colemak-basics-rotate-t-f-j nil)
-  (define-key evil-normal-state-map (kbd "n") 'evil-next-visual-line)
-  (define-key evil-normal-state-map (kbd "e") 'evil-previous-visual-line)
-  )
+(map! :n "l" #'evil-insert
+      :n "n" #'evil-next-visual-line
+      :n "L" #'evil-insert-line
+      :n "gn" #'evil-next-line
+      :n "gN" #'evil-next-visual-line
+      :n "e" #'evil-previous-visual-line
+      :n "ge" #'evil-previous-line
+      :nvm "i" #'evil-forward-char
+      :nvm "j" #'evil-fordard-word-end
+      :nvm "J" #'evil-forward-WORD-end
+      :nvm "gj" #'evil-backward-word-end
+      :nvm "gJ" #'evil-backward-WORD-end
+      :nvm "k" #'evil-ex-search-next
+      :nvm "K" #'evil-ex-search-previous
+      :nvm "f" #'evil-snipe-f
+      :nvm "F" #'evil-snipe-F
+      :nvm "t" #'evil-snipe-t
+      :nvm "T" #'evil-snipe-T
+      :nvm "s" #'evil-snipe-s
+      :nvm "S" #'evil-snipe-S
+      :nv "u" #'undo-tree-undo
+      :nv "N" #'evil-join
+      :nv "gN" #'evil-join-whitespace
+      :g "C-h" #'evil-window-left
+      :g "C-n" #'evil-window-down
+      :g "C-e" #'evil-window-up
+      :g "C-i" #'evil-window-right
+      :g "<f2>" #'org-agenda-list
+      :g "<f3>" #'org-todo-list
+      )

@@ -46,35 +46,6 @@ in
       theme = "~/.cache/wal/colors-rofi-dark.rasi";
       font = "${font} 11";
     };
-    waybar = {
-      enable = true;
-      settings = [ {
-        layer = "top";
-        position = "top";
-        height = 30;
-        output = [
-          "eDP-1"
-          "HDMI-A-1"
-        ];
-        modules-left = [ "sway/workspaces" "sway/mode" "wlr/taskbar" ];
-        modules-center = [ "sway/window" "custom/hello-from-waybar" ];
-        modules-right = [ "mpd" "custom/mymodule#with-css-id" "temperature" ];
-        modules = {
-          "sway/workspaces" = {
-            disable-scroll = true;
-            all-outputs = true;
-          };
-          "custom/hello-from-waybar" = {
-            format = "hello {}";
-            max-length = 40;
-            interval = "once";
-            exec = pkgs.writeShellScript "hello-from-waybar" ''
-          echo "from within waybar"
-        '';
-          };
-        };
-      } ];
-    };
     zathura = {
       enable = true;
       extraConfig = ''
@@ -133,7 +104,6 @@ in
       enable = true;
       experimentalBackends = true;
       fade = true;
-      fadeDelta = 5;
       blur = true;
       shadow = true;
       vSync = true;
@@ -159,7 +129,7 @@ in
            module-margin-left = 1;
            module-margin-right = 1;
            font-0 = "${font}:size=11;1";
-           font-1 = "Font Awesome 5 Free:size=11:style=Solid;1";
+           font-1 = "FontAwesome:size=11:style=Solid;1";
            font-2 = "Noto Sans Symbols:size=11;1";
            modules-left = "bspwm xwindow";
            modules-center = "date";
@@ -167,31 +137,16 @@ in
         };
         "module/bspwm" = {
           type = "internal/bspwm";
-          format = "<label-state> <label-mode>";
           label-focused-underline = "\${xrdb:color4}";
-          label-occupied-underline = "\${xrdb:color3}";
-          label-urgent-underline = "\${xrdb:color1}";
-          label-empty-underline = "\${xrdb:background}";
+          label-unfocused-underline = "\${xrdb:background}";
           label-focused = "%index%";
-          label-occupied = "%index%";
+          label-unfocused = "%index%";
           label-urgent = "%index%";
-          label-empty = "%index%";
+          label-visible = "%index%";
           label-focused-padding = 1;
-          label-occupied-padding = 1;
+          label-unfocused-padding = 1;
           label-urgent-padding = 1;
-          label-empty-padding = 1;
-          label-monocle = "";
-          label-tiled = "";
-          label-fullscreen = "";
-          label-floating = "";
-          label-pseudotiled = "P";
-          label-locked = "";
-          label-locked-foreground = "#bd2c40";
-          label-sticky = "";
-          label-sticky-foreground = "#fba922";
-          label-private = "";
-          label-private-foreground = "#bd2c40";
-          label-marked = "M";
+          label-visible-padding = 1;
         };
         "module/date" = {
           type = "custom/script";
@@ -276,7 +231,7 @@ in
       enable = true;
       keybindings = {
         "super + Return" = "termite";
-        "super + @space" = "LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive rofi -show drun";
+        "super + @space" = "env LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive rofi -show drun";
         # make sxhkd reload its configuration files
         "super + Escape" = "pkill -USR1 -x sxhkd";
         "super + shift + q" = "bspc quit";
@@ -286,23 +241,23 @@ in
         # if the current node is automatic, send it to the last manual, otherwise pull the last leaf
         "super + y" = "bspc query -N -n focused.automatic && bspc node -n last.!automatic || bspc node last.leaf -n focused";
         # swap the current node and the biggest node
-        "alt + g" = "bspc node -s biggest";
+        "super + g" = "bspc node -s biggest";
         # set the window state
         "super + {q,w,f,p}" = "bspc node -t {tiled,pseudo_tiled,floating,fullscreen}";
         # set the node flags
         "super + ctrl + {x,y,z}" = "bspc node -g {locked,sticky,private}";
         # focus the node in the given direction
-        "alt + {_,shift + }{h,n,e,i}" = "bspc node -{f,s} {west,south,north,east}";
+        "super + {_,shift + }{h,n,e,i}" = "bspc node -{f,s} {west,south,north,east}";
         # focus the node for the given path jump
-        "alt + {l,u,y,;}" = "bspc node -f @{parent,brother,first,second}";
+        "super + {l,u,y,;}" = "bspc node -f @{parent,brother,first,second}";
         # focus the next/previous node in the current desktop
         "alt + Tab" = "bspc node -f {next,prev}.local";
         # focus the next/previous desktop in the current monitor
-        "super + {n,e}" = "bspc desktop -f {prev,next}.local";
+        "super + bracket{left,right}" = "bspc desktop -f {prev,next}.local";
         # focus the last node/desktop
         "super + {grave,Tab}" = "bspc {node,desktop} -f last";
         # focus or send to the given desktop
-        "super + {_,shift + }{a,r,s,t}" = "bspc {desktop -f,node -d} '^{1-4}'";
+        "super + {_,shift + }{a,r,s,t,d,6-9,0}" = "bspc {desktop -f,node -d} '^{1-9,10}'";
         # expand a window by moving one of its side outward
         "super + alt + {h,n,e,i}" = "bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}";
         # contract a window by moving one of its side inward
@@ -319,8 +274,37 @@ in
         };
     };
   };
-  xsession.windowManager.bspwm = { 
+  xsession = {
     enable = true;
+    # scriptPath = ".xsession-hm";
+    pointerCursor = {
+      name = "Vanilla-DMZ";
+      package = pkgs.vanilla-dmz;
+    };
+    windowManager.bspwm = {
+      enable = true;
+      settings = {
+        "border_width" = 2;
+	"window_gap" = 10;
+	"focus_follows_pointer" = true;
+	"normal_border_color" = "$color1";
+	"active_border_color" = "$color2";
+	"focused_border_color" = "$color15";
+	"presel_feedback_color" = "$color1";
+      };
+      extraConfig = ''
+      '';
+      startupPrograms = [
+        # Source pywal colors.
+        " . /home/jon/.cache/wal/colors.sh"
+        "xrdb -merge ~/.cache/wal/colors.Xresources"
+        "${pkgs.pywal}/bin/wal -R"
+        "polybar main_bar"
+      ];
+      monitors = { eDP1 = [ "1" "2" "3" ];
+                   DP1 = [ "4" "5" "6" ];
+      };
+    };
   };
 }
 
