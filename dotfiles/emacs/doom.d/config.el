@@ -35,6 +35,7 @@
        +biblio-default-bibliography-files '("~/Dokumentujo/Papers/library.bib")
        +biblio-notes-path "~/Dokumentujo/Org/Projects/books.org")
 
+
 ;; Org Mode
 (after! org
   (setq org-directory "~/Dokumentujo/Org"
@@ -83,7 +84,7 @@
   (add-hook 'org-agenda-mode-hook
             (lambda ()
               (calendar-set-date-style 'iso)))
-  (add-hook 'diary-mode-hook 'diary-fancy-display-mode)
+
   (defun org-journal-new-entry ()
     "Inserts header with inactive timestamp, hours and minutes.
      A custom journal helper function."
@@ -94,8 +95,6 @@
   (setq org-pomodoro-clock-break t)
   (add-hook 'org-mode-hook 'visual-line-mode)
 
-  ;; Org-brain
-  (setq org-brain-path "~/Dokumentujo/Org/Brain")
   ;; Org-roam
   (setq org-roam-directory "~/Dokumentujo/Org/Roam")
 )
