@@ -185,12 +185,12 @@
 (add-hook 'elfeed-show-mode-hook 'visual-line-mode)
 
 (map! :n "l" #'evil-insert
-      :n "n" #'evil-next-visual-line
       :n "L" #'evil-insert-line
-      :n "gn" #'evil-next-line
-      :n "gN" #'evil-next-visual-line
-      :n "e" #'evil-previous-visual-line
-      :n "ge" #'evil-previous-line
+      :nvm "n" #'evil-next-visual-line
+      :nvm "gn" #'evil-next-line
+      :nvm "gN" #'evil-next-visual-line
+      :nvm "e" #'evil-previous-visual-line
+      :nvm "ge" #'evil-previous-line
       :nvm "i" #'evil-forward-char
       :nvm "j" #'evil-fordard-word-end
       :nvm "J" #'evil-forward-WORD-end
@@ -214,3 +214,12 @@
       :g "<f2>" #'org-agenda-list
       :g "<f3>" #'org-todo-list
       )
+
+(map! :map evil-treemacs-state-map "n" 'treemacs-next-line
+                                   "e" 'treemacs-previous-line)
+
+(setq lsp-haskell-server-wrapper-function (lambda (argv)
+                                            (append
+                                             (append (list "nix-shell" "-I" "." "--command" )
+                                                     (list (mapconcat 'identity argv " ")))
+                                             (list (concat (lsp-haskell--get-root) "/shell.nix")))))
