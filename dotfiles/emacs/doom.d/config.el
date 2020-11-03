@@ -125,6 +125,8 @@
                       '((mu4e-sent-folder   . "/gmail/[Gmail]/.Sent Mail")
                         (mu4e-drafts-folder . "/gmail/[Gmail]/.Drafts")
                         (smtpmail-smtp-user . "jon.reeve")
+                        (smtpmail-smtp-server "smtp.gmail.com")
+                        (smtpmail-smtp-service 587)
                         (user-mail-address  . "jon.reeve@gmail.com")
                         (mu4e-compose-signature . "---\nJonathanReeve\njonreeve.com"))
                       t)
@@ -133,12 +135,21 @@
                         (mu4e-drafts-folder . "/columbia/[Gmail]/.Drafts")
                         (smtpmail-smtp-user . "jpr2152@columbia.edu")
                         (user-mail-address  . "jpr2152@columbia.edu")
+                        (smtpmail-smtp-server "smtp.gmail.com")
+                        (smtpmail-smtp-service 587)
                         (mu4e-compose-signature . "---\nJonathan Reeve\nPhD Candidate, Department of English and Comparative Literature\nhttp://jonreeve.com"))
                       t)
-  (setq smtpmail-smtp-server "smtp.gmail.com"
-        smtpmail-smtp-service 587
-        message-send-mail-function 'smtpmail-send-it
-        smtpmail-default-smtp-server "smtp.gmail.com")
+  (set-email-account! "Personal"
+                      '((mu4e-sent-folder   . "/personal/Sent")
+                        (mu4e-drafts-folder . "/personal/Drafts")
+                        (smtpmail-smtp-user . "jonathan@jonreeve.com")
+                        (user-mail-address  . "jonathan@jonreeve.com")
+                        (smtpmail-smtp-server "mail.privateemail.com")
+                        (smtpmail-smtp-service 465)
+                        (smtpmail-stream-type 'ssl)
+                        (mu4e-compose-signature . "---\nJonathan Reeve\nhttp://jonreeve.com"))
+                      t)
+  (setq message-send-mail-function 'smtpmail-send-it)
   (setq mu4e-maildir "~/Mail"
         mu4e-trash-folder "/Trash"
         mu4e-refile-folder "/Archive"
@@ -152,7 +163,9 @@
           ("maildir:/columbia/Inbox NOT flag:trashed AND NOT flag:replied" "Columbia" ?c)
           ("maildir:/columbia/Inbox and maildir:/gmail/Indox NOT flag:trashed" "All" ?a)
           ("maildir:/gmail/Inbox NOT flag:trashed AND NOT flag:replied" "Gmail" ?g)
-          ("maildir:/gmail/Lists NOT flag:trashed AND NOT flag:replied" "Lists" ?l)))
+          ("maildir:/gmail/Lists NOT flag:trashed AND NOT flag:replied" "Lists" ?l)
+          ("maildir:/personal/Inbox NOT flag:trashed AND NOT flag:replied" "Personal" ?p)
+          ))
 
 )
   ;; (add-hook 'mu4e-view-mode-hook 'visual-line-mode)

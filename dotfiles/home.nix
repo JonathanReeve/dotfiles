@@ -11,15 +11,15 @@ let
   maildir = "/home/jon/Mail";
   # Preferences
   font = "Fira Code";
-  doom-emacs = pkgs.callPackage (builtins.fetchTarball {
-    url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
-  }) {
-    doomPrivateDir = ./emacs/doom.d;  # Directory containing your config.el init.el
-    extraPackages = epkgs: [ pkgs.mu ];
-    extraConfig = ''
-      (setq mu4e-mu-binary "${pkgs.mu}/bin/mu")
-    '';
-  };
+  # doom-emacs = pkgs.callPackage (builtins.fetchTarball {
+  #   url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
+  # }) {
+  #   doomPrivateDir = ./emacs/doom.d;  # Directory containing your config.el init.el
+  #   extraPackages = epkgs: [ pkgs.mu ];
+  #   extraConfig = ''
+  #     (setq mu4e-mu-binary "${pkgs.mu}/bin/mu")
+  #   '';
+  # };
 in
 {
 
@@ -371,11 +371,10 @@ in
         gotop
         tree
         bat
-        # mu
+        mu
         direnv
         graphviz
         python3
-	doom-emacs
 
         (haskellPackages.ghcWithPackages (ps: with ps; [
           pandoc-citeproc
@@ -401,9 +400,9 @@ in
           recursive = true;
           onChange = "$HOME/.emacs.d/bin/doom sync";
         };
-	".emacs.d/init.el".text = ''
-	     (load "default.el")
-	'';
+        # ".emacs.d/init.el".text = ''
+        #     (load "default.el")
+        # '';
 
         # Vim all the things!
         ".inputrc".text =
