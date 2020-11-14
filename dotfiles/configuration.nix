@@ -8,50 +8,35 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      /etc/nixos/cachix.nix
+      #/etc/nixos/cachix.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
   boot = {
-    # kernelParams = [ "pci=nomsi" "snd_hda_intel.dmic_detect=0"
-    #                  "intel_idle.max_cstate=1" "i915.enable_dc=0"
-    #                ];
     # Enable magic sysrql (Alt+PrtSc) keys for recovery
     kernel.sysctl = { "kernel.sysrq" = 1; };
     kernelPackages = pkgs.linuxPackages_latest;
     cleanTmpDir = true;
     plymouth.enable = true;
-    resumeDevice = "/dev/nvme0n1p7";
-    loader = {
-      systemd-boot = {
-        enable = true;
-        memtest86.enable = true;
-      };
-      efi.canTouchEfiVariables = true;
-    };
-  }f
+    resumeDevice = "/dev/nvme0n1p4";
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
+  };
 
   networking = {
-    hostName = "jon-laptop"; # Define your hostname.
+    hostName = "jon-laptop"; # Define your hostname .
     networkmanager.enable = true;
     useDHCP = false;
-    interfaces.wlp107s0.useDHCP = true;
+    interfaces.wlp0s20f3.useDHCP = true;
   };
 
   # Reflex stuff
   # nix.binaryCaches = [ "https://nixcache.reflex-frp.org" ];
   # nix.binaryCachePublicKeys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
 
-  nixpkgs.config = {
-    allowUnfree = true;
-    packageOverrides = pkgs: {
-      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-    };
-  };
+  nixpkgs.config.allowUnfree = true;
 
-  console = {
-   useXkbConfig = true;
- };
+  console.useXkbConfig = true;
 
   # Select internationalisation properties.
   i18n = {
@@ -86,14 +71,12 @@
      yubico-pam yubioath-desktop yubikey-personalization
      yubikey-manager # Provides ykman
      yubikey-personalization-gui
-     # nodePackages.node2nix
-     # home-manager           # Dotfiles management
 
-     megasync             # Backups
+     # megasync             # Backups
 
      # CLI
      fish                   # Shell
-     vim emacs              # Text editors
+     vim                    # Text editors
      vale                   # Prose linting
      aspell aspellDicts.en  # Spell checker
      pass encfs             # Passwords and encryption
