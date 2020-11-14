@@ -201,7 +201,6 @@ in
         "module/filesystem" = {
           type = "internal/fs";
           mount-0 = "/";
-          mount-1 = "/home";
           label-mounted = " %percentage_used%%";
         };
         "module/volume" = {
@@ -209,7 +208,7 @@ in
           master-soundcard = "hw:0";
           label-volume = " %percentage%";
           label-muted = "";
-          click-left = "pactl set-sink-mute 0 toggle";
+          click-left = "pactl set-sink-mute 1 toggle";
         };
         "module/backlight" = {
           type = "internal/backlight";
@@ -269,14 +268,14 @@ in
         # set desktop background
         "super + b" = "wal -gi ~/Bildoj/Ekranfonoj -o ~/Dotfiles/scripts/pywal-reload-everything.sh";
         "XF86MonBrightness{Up,Down}" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set {+10%,10%-}";
-        "XF86Audio{Raise,Lower}Volume" = "exec ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl {up,down}";
-        "XF86AudioMute" =  "exec ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute";
+        "XF86Audio{Raise,Lower}Volume" = "exec ${pkgs.pulseaudio-ctl}/bin/pactl set-sink-volume 1 {+10%,-10%}";
+        "XF86AudioMute" =  "exec ${pkgs.pulseaudio-ctl}/bin/pactl set-sink-mute 1 toggle";
         };
     };
   };
   xsession = {
     enable = true;
-    # scriptPath = ".xsession-hm";
+    scriptPath = ".xsession-hm";
     pointerCursor = {
       name = "Vanilla-DMZ";
       package = pkgs.vanilla-dmz;
@@ -284,13 +283,13 @@ in
     windowManager.bspwm = {
       enable = true;
       settings = {
-        "border_width" = 2;
-	"window_gap" = 10;
-	"focus_follows_pointer" = true;
-	"normal_border_color" = "$color1";
-	"active_border_color" = "$color2";
-	"focused_border_color" = "$color15";
-	"presel_feedback_color" = "$color1";
+        "border_width" = 10;
+        "window_gap" = 10;
+        "focus_follows_pointer" = true;
+        "normal_border_color" = "$color1";
+        "active_border_color" = "$color2";
+        "focused_border_color" = "$color15";
+        "presel_feedback_color" = "$color1";
       };
       extraConfig = ''
       '';
@@ -300,6 +299,9 @@ in
         "xrdb -merge ~/.cache/wal/colors.Xresources"
         "${pkgs.pywal}/bin/wal -R"
         "polybar main_bar"
+        "systemctl --user disable sxhkd"
+        "systemctl --user stop sxhkd"
+        "sxhkd -m 1"
       ];
       monitors = { eDP1 = [ "1" "2" "3" ];
                    DP1 = [ "4" "5" "6" ];

@@ -104,6 +104,15 @@
      wget
      isync mu w3m           # Mail
      pandoc
+     direnv
+
+     (emacsWithPackages (epkgs: with emacsPackages; [
+       pdf-tools
+     ]))
+
+     poppler # PDF stuff but also needed for emacs stuff
+     poppler_utils
+
 
      (haskellPackages.ghcWithPackages (ps: with ps; [
        pandoc-citeproc
@@ -115,24 +124,16 @@
        lucid 
        # stylish-haskell # Required for spacemacs haskell-mode
        # ^ marked as broken
-       turtle
+       turtle        # Scripting
        regex-compat
-       PyF
+       #PyF
        HandsomeSoup
      ]))
 
      cabal-install
-     # tectonic               # Latex
      texlive.combined.scheme-full
      git                    # Version control
-     dropbox-cli
      unzip                  # Archives
-     # Haskell Development
-     # stack
-     # direnv
-
-     #TODO: break out into C930 module
-     iio-sensor-proxy       # Accelerometer, gyroscope, etc.
 
      texlive.combined.scheme-full
      git git-lfs            # Version control
@@ -140,7 +141,7 @@
      file                   # File properties
      imagemagick            # Image manipulation
      libxml2
-     sqlite sqlite-interactive # Sqlite
+     #sqlite sqlite-interactive # Sqlite
      # Python Development
      pipenv
      (python3.withPackages(ps: with ps; [
@@ -167,10 +168,9 @@
      tree                   # Show file hierarchies
      autojump               # Jump around! With `j`
      mpv                    # Minimalist video player
-     termite                # Vim-like modal terminal
+     #termite                # Vim-like modal terminal
      feh                    # Display imaes
      libnotify              # Notifications
-     #weechat                # IRC
      fzf                    # Fuzzy file finder
      ag                     # Fast grep replacement
      ripgrep                # Another fast grep replacement
@@ -190,16 +190,7 @@
      gnome3.gnome-tweak-tool
      gnome3.gnome-boxes
 
-     # KDE
-     #gwenview
-     #ark
-     #dragon
-     #plasma-browser-integration
-     #kdeApplications.kmail
-     #kdeApplications.kmail-account-wizard
-
      ntfs3g ntfsprogs       # Windows drives compatibility
-     #plasma-browser-integration
 
      # Sound
      alsaTools
@@ -220,28 +211,9 @@
   sound.enable = true;
   hardware = {
     firmware = with pkgs; [ firmwareLinuxNonfree ]; 
-    # Suggested by to fix freeze issues in:
-    # https://discourse.nixos.org/t/my-nixos-laptop-often-freezes/6381/10
-    opengl = {
-      enable = true;
-      extraPackages = with pkgs; [
-        vaapiIntel
-        vaapiVdpau
-        libvdpau-va-gl
-        intel-media-driver
-      ];
-    };
     pulseaudio = {
       enable = true;
-      package = pkgs.pulseaudio;
-      # package = pkgs.pulseaudioFull;
       extraModules = [ pkgs.pulseaudio-modules-bt ];
-      # Added following this config:
-      # https://github.com/NixOS/nixos-hardware/blob/master/lenovo/thinkpad/x1/7th-gen/audio.nix
-      extraConfig = ''
-        load-module module-alsa-sink device=hw:0,0 channels=4
-        load-module module-alsa-source device=hw:0,6 channels=4
-      '';
     };
     sensor.iio.enable = true;
     bluetooth.enable = true;
@@ -253,11 +225,6 @@
   };
 
   services = {
-    # Enable emacs daemon, and set EDITOR to emacsclient
-    #emacs = {
-    #  enable = true;
-    #  defaultEditor = true;
-    #};
 
     # gnome3 = {
     #   gnome-keyring.enable = true;
@@ -269,9 +236,7 @@
 
     flatpak.enable = true;
 
-    localtime.enable = true;
-
-    # lorri.enable = true;
+    # localtime.enable = true;
 
     # Power button invokes suspend, not shutdown.
     logind = {
@@ -289,11 +254,6 @@
     # X
     xserver = {
       enable = true;
-      videoDrivers = [ "intel" "modesetting" ];
-      #deviceSection = ''
-      #  Option "DRI" "2"
-      #  Option "TearFree" "true"
-      #'';
       # Enable touchpad support.
       libinput = {
         enable = true;
@@ -311,6 +271,10 @@
           waitPID=$!
         '';
       }];
+      # windowManager.exwm = {
+      #   enable = true;
+      #   enableDefaultConfig = true;
+      # };
     };
   };
 
@@ -319,10 +283,10 @@
     fish.enable = true;
     chromium = {
       enable = true;
-      };
+    };
     # gnome-documents.enable = true;
     # xonsh.enable = true;
-    light.enable = true;
+    # light.enable = true;
     gnupg.agent = { enable = true; enableSSHSupport = true; };
   };
 
@@ -343,7 +307,6 @@
       };
   };
 
-  # virtualisation.anbox.enable = true;
 
   # Don't ask for my password *quite* as often.
   security = {
@@ -360,9 +323,10 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "20.03"; # Did you read the comment?
+  system.stateVersion = "21.03"; # Did you read the comment?
 
-  virtualisation.docker.enable = true;
-  virtualisation.libvirtd.enable = true;
+  #virtualisation.anbox.enable = true;
+  #virtualisation.docker.enable = true;
+  #virtualisation.libvirtd.enable = true;
 
 }

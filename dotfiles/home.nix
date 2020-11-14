@@ -11,19 +11,20 @@ let
   maildir = "/home/jon/Mail";
   # Preferences
   font = "Fira Code";
-  doom-emacs = pkgs.callPackage (builtins.fetchTarball {
-    url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
-  }) {
-    doomPrivateDir = ./emacs/doom.d;  # Directory containing your config.el init.el
-    extraPackages = epkgs: [ pkgs.mu ];
-    extraConfig = ''
-      (setq mu4e-mu-binary "${pkgs.mu}/bin/mu")
-    '';
-  };
+  # doom-emacs = pkgs.callPackage (builtins.fetchTarball {
+  #   url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
+  # }) {
+  #   doomPrivateDir = ./emacs/doom.d;  # Directory containing your config.el init.el
+  #   extraPackages = epkgs: [ pkgs.mu pkgs.pass pkgs.gnupg ];
+  #   extraConfig = ''
+  #     (setq mu4e-mu-binary "${pkgs.mu}/bin/mu")
+  #     (setq epg-gpg-program "${pkgs.gnupg}/bin/gpg")
+  #   '';
+  # };
 in
 {
 
-  # imports = [  ./minimal.nix ]; 
+  # imports = [  ./minimal.nix ];
 
   accounts.email = {
     maildirBasePath = "${maildir}";
@@ -68,18 +69,45 @@ in
         realName = "${name}";
         neomutt.enable = true;
       };
+      personal = {
+        address = "jonathan@jonreeve.com";
+        userName = "jonathan@jonreeve.com";
+        passwordCommand = "${pkgs.pass}/bin/pass privateemail.com";
+        imap = {
+          host = "mail.privateemail.com";
+          port = 993;
+        };
+        smtp = {
+          host = "mail.privateemail.com";
+          port = 465;
+        };
+        mu.enable = true;
+        mbsync = {
+          enable = true;
+          create = "maildir";
+          expunge = "both";
+          patterns = [ "*" ];
+          extraConfig.channel = {
+            MaxMessages = 2000;
+            ExpireUnread = "yes";
+          };
+        };
+      };
     };
   };
   programs = {
     # Have home-manager manage itself.
     home-manager = {
       enable = true;
-      path = "https://github.com/rycee/home-manager/archive/master.tar.gz";
+      path = "/home/jon/Code/home-manager";
     };
     git = {
       enable = true;
       userName = "${name}";
       userEmail = "${email}";
+      # extraConfig = {
+      #   url = { "git@github.com:" = { insteadOf = "https://github.com"; }; };
+      # };
     };
     mbsync = {
       enable = true;
@@ -218,7 +246,7 @@ in
               function fish_title; true; end
             end
 
-            eval (direnv hook fish)
+            #eval (direnv hook fish)
          '';
     };
     fzf = {
@@ -326,52 +354,22 @@ in
   # Dotfiles for the home root, ~/
   home = {
       # This should only be necessary with non-NixOS
-      keyboard = {
-        options = [ "caps:escape" "esperanto:colemak" ];
-        variant = "colemak";
-      };
-      packages = with pkgs; [
-        fira-code
-        ripgrep
-        vale
-        pass
-        encfs
-        fd
-        gotop
-        tree
-        bat
-        # mu
-        direnv
-        graphviz
-        python3
-	doom-emacs
-
-        (haskellPackages.ghcWithPackages (ps: with ps; [
-          pandoc-citeproc
-          shake         # Build tool
-          hlint         # Required for spacemacs haskell-mode
-          apply-refact  # Required for spacemacs haskell-mode
-          hasktags      # Required for spacemacs haskell-mode
-          hoogle        # Required for spacemacs haskell-mode
-          lucid
-          # stylish-haskell # Required for spacemacs haskell-mode
-          # ^ marked as broken
-          turtle
-          regex-compat
-          # PyF
-          HandsomeSoup
-        ]))
-        cabal-install
-      ];
+      # keyboard = {
+      #   options = [ "caps:escape" "esperanto:colemak" ];
+      #   variant = "colemak";
+      # };
+      # packages = with pkgs; [
+      #   # doom-emacs
+      # ];
       file = {
         ".doom.d/" = {
           source = ./emacs/doom.d;
           recursive = true;
           onChange = "$HOME/.emacs.d/bin/doom sync";
         };
-	".emacs.d/init.el".text = ''
-	     (load "default.el")
-	'';
+        # ".emacs.d/init.el".text = ''
+        #     (load "default.el")
+        # '';
 
         # Vim all the things!
         ".inputrc".text =
