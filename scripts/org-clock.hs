@@ -15,8 +15,8 @@ out = inshell getClock empty
 main = do
   out <- shellStrict getClock empty
   -- TODO: make it so that this changes automatically depending on the desktop environment
-  -- let red = "%{F#f00}"
-  let red str = "<span color=\"#f00\">" <> str <> "</span>"
+  -- let red str = "<span color=\"#f00\">" <> str <> "</span>"
+  let red str = "%{F#f00}" <> str
   case out of
     -- Emacs is on, but returns "-1", which means that org-clock is not running.
     (ExitSuccess, "-1\n") -> TIO.putStrLn $ red "Protocolu!"

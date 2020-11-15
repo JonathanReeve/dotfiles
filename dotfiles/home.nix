@@ -24,7 +24,7 @@ let
 in
 {
 
-  # imports = [  ./minimal.nix ];
+  imports = [  ./minimal.nix ];
 
   accounts.email = {
     maildirBasePath = "${maildir}";

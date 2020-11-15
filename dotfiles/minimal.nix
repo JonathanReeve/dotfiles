@@ -104,20 +104,18 @@ in
       enable = true;
       experimentalBackends = true;
       fade = true;
+      fadeDelta = 100;
       blur = true;
       shadow = true;
       vSync = true;
     };
     polybar = {
       enable = true;
-      package = pkgs.polybar.override {
-        alsaSupport = true;
-        githubSupport = true;
-      };
+      package = pkgs.polybarFull;
       script = "polybar main_bar &";
       config = {
         "bar/main_bar" = {
-           monitor = "eDP1";
+           monitor = "eDP-1";
            bottom = "false";
            height = 30;
            fixed-center = "true";
@@ -129,14 +127,14 @@ in
            module-margin-left = 1;
            module-margin-right = 1;
            font-0 = "${font}:size=11;1";
-           font-1 = "FontAwesome:size=11:style=Solid;1";
+           font-1 = "Font Awesome 5 Free:size=11:style=Solid;1";
            font-2 = "Noto Sans Symbols:size=11;1";
-           modules-left = "bspwm xwindow";
+           modules-left = "i3 xwindow";
            modules-center = "date";
            modules-right = "org-clock volume backlight filesystem memory cpu battery network";
         };
-        "module/bspwm" = {
-          type = "internal/bspwm";
+        "module/i3" = {
+          type = "internal/i3";
           label-focused-underline = "\${xrdb:color4}";
           label-unfocused-underline = "\${xrdb:background}";
           label-focused = "%index%";
@@ -157,7 +155,7 @@ in
         };
         "module/battery" = {
            type = "internal/battery";
-           battery = "BAT1";
+           battery = "BAT0";
            adapter = "ADP1";
            full-at = 96;
            format-charging = " <label-charging>";
@@ -179,10 +177,10 @@ in
         };
         "module/network" = {
           type = "internal/network";
-          interface = "wlp107s0";
+          interface = "wlp0s20f3";
           interval = "3.0";
           format-connected = "<label-connected>";
-          label-connected = " %essid%";
+          label-connected = "";
         };
         "module/cpu" = {
           type = "internal/cpu";
@@ -226,52 +224,6 @@ in
       enable = true;
       lockCmd = "${lockCmd}";
     };
-    sxhkd = {
-      enable = true;
-      keybindings = {
-        "super + Return" = "termite";
-        "super + @space" = "env LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive rofi -show drun";
-        # make sxhkd reload its configuration files
-        "super + Escape" = "pkill -USR1 -x sxhkd";
-        "super + shift + q" = "bspc quit";
-        "super + {_,shift + }c" = "bspc node -{c,k}";
-        # alternate between the tiled and monocle layout
-        "super + m" = "bspc desktop -l next";
-        # if the current node is automatic, send it to the last manual, otherwise pull the last leaf
-        "super + y" = "bspc query -N -n focused.automatic && bspc node -n last.!automatic || bspc node last.leaf -n focused";
-        # swap the current node and the biggest node
-        "super + g" = "bspc node -s biggest";
-        # set the window state
-        "super + {q,w,f,p}" = "bspc node -t {tiled,pseudo_tiled,floating,fullscreen}";
-        # set the node flags
-        "super + ctrl + {x,y,z}" = "bspc node -g {locked,sticky,private}";
-        # focus the node in the given direction
-        "super + {_,shift + }{h,n,e,i}" = "bspc node -{f,s} {west,south,north,east}";
-        # focus the node for the given path jump
-        "super + {l,u,y,;}" = "bspc node -f @{parent,brother,first,second}";
-        # focus the next/previous node in the current desktop
-        "alt + Tab" = "bspc node -f {next,prev}.local";
-        # focus the next/previous desktop in the current monitor
-        "super + bracket{left,right}" = "bspc desktop -f {prev,next}.local";
-        # focus the last node/desktop
-        "super + {grave,Tab}" = "bspc {node,desktop} -f last";
-        # focus or send to the given desktop
-        "super + {_,shift + }{a,r,s,t,d,6-9,0}" = "bspc {desktop -f,node -d} '^{1-9,10}'";
-        # expand a window by moving one of its side outward
-        "super + alt + {h,n,e,i}" = "bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}";
-        # contract a window by moving one of its side inward
-        "super + alt + shift + {h,n,e,i}" = "bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}";
-          # move a floating window
-        "super + {Left,Down,Up,Right}" = "bspc node -v {-20 0,0 20,0 -20,20 0}";
-        # move a floating window along the z axis
-        "super + shift + {Down, Up}" = "bspc node -l {below, above}";
-        # set desktop background
-        "super + b" = "wal -gi ~/Bildoj/Ekranfonoj -o ~/Dotfiles/scripts/pywal-reload-everything.sh";
-        "XF86MonBrightness{Up,Down}" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set {+10%,10%-}";
-        "XF86Audio{Raise,Lower}Volume" = "exec ${pkgs.pulseaudio-ctl}/bin/pactl set-sink-volume 1 {+10%,-10%}";
-        "XF86AudioMute" =  "exec ${pkgs.pulseaudio-ctl}/bin/pactl set-sink-mute 1 toggle";
-        };
-    };
   };
   xsession = {
     enable = true;
@@ -280,33 +232,99 @@ in
       name = "Vanilla-DMZ";
       package = pkgs.vanilla-dmz;
     };
-    windowManager.bspwm = {
-      enable = true;
-      settings = {
-        "border_width" = 10;
-        "window_gap" = 10;
-        "focus_follows_pointer" = true;
-        "normal_border_color" = "$color1";
-        "active_border_color" = "$color2";
-        "focused_border_color" = "$color15";
-        "presel_feedback_color" = "$color1";
-      };
-      extraConfig = ''
-      '';
-      startupPrograms = [
-        # Source pywal colors.
-        " . /home/jon/.cache/wal/colors.sh"
-        "xrdb -merge ~/.cache/wal/colors.Xresources"
-        "${pkgs.pywal}/bin/wal -R"
-        "polybar main_bar"
-        "systemctl --user disable sxhkd"
-        "systemctl --user stop sxhkd"
-        "sxhkd -m 1"
-      ];
-      monitors = { eDP1 = [ "1" "2" "3" ];
-                   DP1 = [ "4" "5" "6" ];
-      };
+    windowManager.i3 = {
+        enable = true;
+        extraConfig = ''
+          set_from_resource $bg i3wm.background
+          set_from_resource $fg i3wm.foreground
+          set_from_resource $c1 i3wm.color1
+          set_from_resource $c2 i3wm.color2
+        '';
+        config = {
+          assigns = { "9" = [{ class = "^MEGAsync$"; }]; };
+          floating.criteria = [{ class = "^MEGAsync$"; }];
+          bars = [];
+          fonts = [ "Font Awesome" "${font} 11" ];
+          gaps = {
+            outer = 10;
+            inner = 10;
+          };
+          colors = {
+            focused = {
+              background = "$c2";
+              border = "$c2";
+              text = "$fg";
+              indicator = "$c2";
+              childBorder = "$c2";
+            };
+            focusedInactive = {
+              background = "$c1";
+              text = "$fg";
+              border = "$c1";
+              indicator = "$c1";
+              childBorder = "$c1";
+            };
+            unfocused = {
+              background = "$c1";
+              border = "$c2";
+              text = "$fg";
+              indicator = "$c1";
+              childBorder = "$c1";
+            };
+          };
+          modifier = "Mod4";
+          keybindings =
+            lib.mkOptionDefault {
+              "Mod4+Return" = "exec termite";
+              "Mod4+Shift+c" = "kill";
+              "Mod4+space" = "exec rofi -show drun";
+              "Mod4+n" = "workspace next";
+              "Mod4+e" = "workspace prev";
+              "Mod4+Shift+e" = "exec i3-msg exit";
+              "Mod1+h" = "focus left";
+              "Mod1+n" = "focus down";
+              "Mod1+e" = "focus up";
+              "Mod1+i" = "focus right";
+              "Mod4+r" = "mode resize";
+              "Mod1+Shift+h" = "move left";
+              "Mod1+Shift+n" = "move down";
+              "Mod1+Shift+e" = "move up";
+              "Mod1+Shift+i" = "move right";
+              "Mod4+t" = "floating toggle";
+              "Mod4+x" = "layout toggle all";
+              "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '+10%'";
+              "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '10%-'";
+              "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up";
+              "XF86AudioLowerVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl down";
+              "XF86AudioMute" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute";
+              # Open agenda with Super + A
+              "Mod4+a" = "exec emacsclient -c -e '(org-agenda-list)(delete-other-windows)(org-agenda-day-view)'";
+              # lock screen with Super + L
+              "Mod4+l" = "exec ${lockCmd}";
+              # Change wallpaper
+              "Mod4+w" = "exec ${pkgs.pywal}/bin/wal -i ${/home/jon/Bildujo/Ekranfonoj} -o ${../scripts/pywal-reload.sh}";
+            };
+          modes = {
+            resize = {
+              h = "resize shrink width 10 px or 10 ppt";
+              n = "resize grow height 10 px or 10 ppt";
+              e = "resize shrink height 10 px or 10 ppt";
+              i = "resize grow width 10 px or 10 ppt";
+              Escape = "mode default";
+            };
+          };
+          startup = [
+            { command = "exec systemctl --user restart polybar"; always = true; notification = false; }
+            { command = "${pkgs.pywal}/bin/wal -R"; notification = false; }
+            { command = "megasync"; notification = false; }
+            { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
+            { command = "setxkbmap -layout us -variant colemak -option caps:escape -option esperanto:colemak"; }
+            # { command = "exec compton"; }
+            # { command = "exec compton --backend glx --paint-on-overlay --vsync opengl-swc"; }
+            # { command = "${pkgs.gnome3.gnome_settings_daemon}/libexec/gsd-xsettings"; }
+          ];
+          window.border = 10;
+        };
     };
   };
 }
-
