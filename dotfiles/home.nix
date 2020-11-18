@@ -60,7 +60,7 @@ in
           enable = true;
           create = "maildir";
           expunge = "both";
-          patterns = [ "*" "!\"[Gmail]/All Mail\"" "[Gmail]/Sent Mail" ];
+          patterns = [ "*" "!\"[Gmail]/All Mail\"" "[Gmail]/Sent Mail" "[Gmail]/Homework"];
           extraConfig.channel = {
             MaxMessages = 2000;
             ExpireUnread = "yes";
@@ -105,9 +105,9 @@ in
       enable = true;
       userName = "${name}";
       userEmail = "${email}";
-      # extraConfig = {
-      #   url = { "git@github.com:" = { insteadOf = "https://github.com"; }; };
-      # };
+      extraConfig = {
+        url = { "git@github.com:" = { insteadOf = "https://github.com"; }; };
+      };
     };
     mbsync = {
       enable = true;
@@ -188,7 +188,6 @@ in
        };
        shellAliases = {
          "man" = "env PAGER=\"vim -R -c 'set ft=man'\" man";
-         "qutebrowser" = "/usr/bin/qutebrowser";
          };
        functions = {
          vault="encfs $vaultloc $vaultmount";

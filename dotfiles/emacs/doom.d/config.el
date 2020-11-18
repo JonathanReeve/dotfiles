@@ -162,7 +162,7 @@
 
 ;; Set browser
 (setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "/usr/bin/qutebrowser")
+      browse-url-generic-program "qutebrowser")
 
 ;; Better looking HTML mail
 (after! shr
