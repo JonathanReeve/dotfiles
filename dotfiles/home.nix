@@ -68,6 +68,32 @@ in
         };
         realName = "${name}";
         neomutt.enable = true;
+        notmuch.enable = true;
+      };
+      personal = {
+        address = "jonathan@jonreeve.com";
+        userName = "jonathan@jonreeve.com";
+        passwordCommand = "${pkgs.pass}/bin/pass privateemail.com";
+        imap = {
+          host = "mail.privateemail.com";
+          port = 993;
+        };
+        smtp = {
+          host = "mail.privateemail.com";
+          port = 465;
+        };
+        mu.enable = true;
+        notmuch.enable = true;
+        mbsync = {
+          enable = true;
+          create = "maildir";
+          expunge = "both";
+          patterns = [ "*" ];
+          extraConfig.channel = {
+            MaxMessages = 2000;
+            ExpireUnread = "yes";
+          };
+        };
       };
       personal = {
         address = "jonathan@jonreeve.com";
@@ -252,6 +278,9 @@ in
       enable = true;
       enableFishIntegration = true;
     };
+    password-store = {
+      enable = true;
+    };
     qutebrowser = {
       enable = true;
       extraConfig = ''
@@ -330,7 +359,9 @@ in
     #   enable = true;
     # };
   };
-
+  services = {
+    gpg-agent.enable = true;
+  };
   gtk = {
     enable = false;
     theme = {
@@ -353,10 +384,10 @@ in
   # Dotfiles for the home root, ~/
   home = {
       # This should only be necessary with non-NixOS
-      # keyboard = {
-      #   options = [ "caps:escape" "esperanto:colemak" ];
-      #   variant = "colemak";
-      # };
+      keyboard = {
+        options = [ "caps:escape" "esperanto:colemak" ];
+        variant = "colemak";
+      };
       # packages = with pkgs; [
       #   # doom-emacs
       # ];

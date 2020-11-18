@@ -13,7 +13,7 @@
        ;;japanese
 
        :completion
-       ;;company           ; the ultimate code completion backend
+       company           ; the ultimate code completion backend
        helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
@@ -87,7 +87,7 @@
        ;;macos             ; MacOS-specific commands
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
-       pass              ; password manager for nerds
+       (pass +auth)        ; password manager for nerds
        pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
        ;;rgb               ; creating color strings
@@ -154,8 +154,7 @@
        web               ; the tubes
 
        :email
-       (mu4e +gmail)
-       ;; notmuch
+       (mu4e +gmail +org)
        ;;(wanderlust +gmail)
 
        :app
