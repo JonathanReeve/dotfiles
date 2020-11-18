@@ -7,7 +7,7 @@ import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
 
 getClock :: Text
-getClock = "emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)'"
+getClock = "/run/current-system/sw/bin/emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)'"
 
 out :: Shell Line
 out = inshell getClock empty

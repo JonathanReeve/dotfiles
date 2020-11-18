@@ -104,7 +104,7 @@ in
       enable = true;
       experimentalBackends = true;
       fade = true;
-      fadeDelta = 100;
+      fadeDelta = 5;
       blur = true;
       shadow = true;
       vSync = true;
@@ -112,7 +112,7 @@ in
     polybar = {
       enable = true;
       package = pkgs.polybarFull;
-      script = "polybar main_bar &";
+      script = "/usr/bin/env polybar main_bar &";
       config = {
         "bar/main_bar" = {
            monitor = "eDP-1";
@@ -189,7 +189,7 @@ in
         "module/org-clock" = {
           type = "custom/script";
           interval =20;
-          exec = "${scripts}/org-clock.hs 2> /dev/null";
+          exec = "/run/current-system/sw/bin/runhaskell ${scripts}/org-clock.hs 2> /dev/null";
           click-left = "emacsclient --eval '(org-clock-out)' && echo ' Stopped!'";
         };
         "module/memory" = {
@@ -314,13 +314,12 @@ in
             };
           };
           startup = [
-            { command = "exec systemctl --user restart polybar"; always = true; notification = false; }
             { command = "${pkgs.pywal}/bin/wal -R"; notification = false; }
             { command = "megasync"; notification = false; }
             { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
             { command = "setxkbmap -layout us -variant colemak -option caps:escape -option esperanto:colemak"; }
-            # { command = "exec compton"; }
-            # { command = "exec compton --backend glx --paint-on-overlay --vsync opengl-swc"; }
+            # { command = "exec systemctl --user import-environment"; always = true; notification = false; }
+            { command = "exec systemctl --user restart polybar"; always = true; notification = false; }
             # { command = "${pkgs.gnome3.gnome_settings_daemon}/libexec/gsd-xsettings"; }
           ];
           window.border = 10;
