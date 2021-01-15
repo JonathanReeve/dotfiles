@@ -40,7 +40,7 @@ in
           enable = true;
           create = "maildir";
           expunge = "both";
-          patterns = [ "*" "![Gmail]/*" "\"[Gmail]/Sent Mail\"" "[Gmail]/Lists"];
+          patterns = [ "INBOX" "Lists" "[Gmail]/Sent Mail"];
           extraConfig.channel = {
             MaxMessages = 2000;
             ExpireUnread = "yes";
@@ -60,7 +60,7 @@ in
           enable = true;
           create = "maildir";
           expunge = "both";
-          patterns = [ "*" "!\"[Gmail]/All Mail\"" "[Gmail]/Sent Mail" "[Gmail]/Homework"];
+          patterns = [ "INBOX" "Homework" "Lists" "[Gmail]/Sent Mail"];
           extraConfig.channel = {
             MaxMessages = 2000;
             ExpireUnread = "yes";
@@ -95,45 +95,21 @@ in
           };
         };
       };
-      personal = {
-        address = "jonathan@jonreeve.com";
-        userName = "jonathan@jonreeve.com";
-        passwordCommand = "${pkgs.pass}/bin/pass privateemail.com";
-        imap = {
-          host = "mail.privateemail.com";
-          port = 993;
-        };
-        smtp = {
-          host = "mail.privateemail.com";
-          port = 465;
-        };
-        mu.enable = true;
-        mbsync = {
-          enable = true;
-          create = "maildir";
-          expunge = "both";
-          patterns = [ "*" ];
-          extraConfig.channel = {
-            MaxMessages = 2000;
-            ExpireUnread = "yes";
-          };
-        };
-      };
     };
   };
   programs = {
     # Have home-manager manage itself.
     home-manager = {
       enable = true;
-      path = "/home/jon/Code/home-manager";
+      # path = "/home/jon/Code/home-manager";
     };
     git = {
       enable = true;
       userName = "${name}";
       userEmail = "${email}";
-      extraConfig = {
-        url = { "git@github.com:" = { insteadOf = "https://github.com"; }; };
-      };
+      # extraConfig = {
+      #   url = { "git@github.com:" = { insteadOf = "https://github.com"; }; };
+      # };
     };
     mbsync = {
       enable = true;
@@ -273,6 +249,17 @@ in
 
             #eval (direnv hook fish)
          '';
+       # plugins = [
+       #   {
+       #     name = "z";
+       #     src = pkgs.fetchFromGitHub {
+       #       owner = "jethrokuan";
+       #       repo = "z";
+       #       rev = "13a320bee8b815704772d94f5994745b11cd1e03";
+       #       sha256 = "0c5i7sdrsp0q3vbziqzdyqn4fmp235ax4mn4zslrswvn8g3fvdyh";
+       #     };
+       #   }
+       # ];
     };
     fzf = {
       enable = true;
@@ -298,8 +285,9 @@ in
         "i" =  "scroll right";
         "j" =  "search-next";
         "b" =  "set-cmd-text -s :buffer";
-        "gL" =  "spawn --userscript org-link";
+        "gL" =  "spawn --userscript org-link.hs";
         "gM" =  "spawn --userscript org-movie";
+        "gR" = "open javascript:location.href='org-protocol://roam-ref?template=r&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
         "pf" =  "spawn --userscript qute-pass";
         "gz" =  "jseval var d=document,s=d.createElement('script';;s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement;.appendChild(s;;void(0;;";
         "t" =  "set-cmd-text -s :open -t";
@@ -397,6 +385,15 @@ in
           recursive = true;
           onChange = "$HOME/.emacs.d/bin/doom sync";
         };
+        ".local/share/applications/org-protocol.desktop".text = ''
+  [Desktop Entry]
+  Name=Org-Protocol
+  Exec=emacsclient %u
+  Icon=emacs-icon
+  Type=Application
+  Terminal=false
+  MimeType=x-scheme-handler/org-protocol
+        '';
         # ".emacs.d/init.el".text = ''
         #     (load "default.el")
         # '';

@@ -8,3 +8,11 @@
 (package! flycheck-vale)
 
 ;; (package! ox-ipynb :recipe (:host github :repo "jkitchin/ox-ipynb"))
+
+(package! pdf-tools :built-in 'prefer)
+
+;; Read epubs
+(package! nov)
+
+;; Use BibSonomy
+(package! biblio-bibsonomy)

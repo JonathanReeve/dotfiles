@@ -2,6 +2,11 @@
 
 ;; Place your private configuration here
 
+;; Enables Nixos-installed packages to be loaded
+(require 'package)
+(setq package-enable-at-startup nil)
+(package-initialize)
+
 (setq doom-font (font-spec :family "Fira Code" :size 14))
 
 (setq vc-follow-symlinks t) ;; Always follow symlinks.
@@ -12,6 +17,8 @@
 ;; Don't prompt when opening journal or other large files
 ;(setq large-file-warning-threshold 20000000)
 
+;; Default spelling dictionary is English
+(setq ispell-dictionary "en")
 
 (after! org-ref
   (setq org-ref-note-title-format
@@ -35,6 +42,10 @@
        +biblio-default-bibliography-files '("~/Dokumentujo/Papers/library.bib")
        +biblio-notes-path "~/Dokumentujo/Org/Projects/books.org")
 
+(require 'biblio-bibsonomy)
+(setq
+ biblio-bibsonomy-api-key "13411a53797ef6742ea9e14e2de6a587"
+ biblio-bibsonomy-username "JonathanReeve")
 
 ;; Org Mode
 (after! org
@@ -95,8 +106,63 @@
   (setq org-pomodoro-clock-break t)
   (add-hook 'org-mode-hook 'visual-line-mode)
 
+  ;; Dynamically add org-roam files containing TODOs to agenda files list
+  ;; Adapted from here: https://org-roam.discourse.group/t/tips-dynamically-add-org-roam-files-to-your-agenda-file/1122
+  ;;
+  ;; (defvar dynamic-agenda-files nil
+  ;;   "Dynamically generate agenda files list when changing org state.")
+
+  ;; (defun update-dynamic-agenda-hook ()
+  ;;   (let ((done (or (not org-state) ;; nil when no TODO list
+  ;;                   (member org-state org-done-keywords)))
+  ;;         (file (buffer-file-name))
+  ;;         (agenda (funcall (ad-get-orig-definition 'org-agenda-files)) ))
+  ;;     (unless (member file agenda)
+  ;;       (if done
+  ;;           (save-excursion
+  ;;             (goto-char (point-min))
+  ;;             ;; Delete file from dynamic files when all TODO entry changed to DONE
+  ;;             (unless (search-forward-regexp org-not-done-heading-regexp nil t)
+  ;;               (customize-save-variable
+  ;;                'dynamic-agenda-files
+  ;;                (cl-delete-if (lambda (k) (string= k file))
+  ;;                              dynamic-agenda-files))))
+  ;;         ;; Add this file to dynamic agenda files
+  ;;         (unless (member file dynamic-agenda-files)
+  ;;           (customize-save-variable 'dynamic-agenda-files
+  ;;                                    (add-to-list 'dynamic-agenda-files file)))))))
+
+  ;; (defun dynamic-agenda-files-advice (orig-val)
+  ;;   (union orig-val dynamic-agenda-files :test #'equal))
+
+  ;; (advice-add 'org-agenda-files :filter-return #'dynamic-agenda-files-advice)
+  ;; (add-to-list 'org-after-todo-state-change-hook 'update-dynamic-agenda-hook t)
+
+)
+
+(after! org-roam
   ;; Org-roam
   (setq org-roam-directory "~/Dokumentujo/Org/Roam")
+  (setq org-roam-dailies-directory "Daily/")
+  (setq org-roam-dailies-capture-templates
+        '(("d" "default" entry
+           #'org-roam-capture--get-point
+           "* %?"
+           :file-name "Daily/%<%Y-%m-%d>"
+           :head "#+title: %<%Y-%m-%d>\n\n")))
+  (use-package! org-roam-server
+    :config
+    (setq org-roam-server-host "127.0.0.1"
+          org-roam-server-port 8080
+          org-roam-server-authenticate nil
+          org-roam-server-export-inline-images t
+          org-roam-server-serve-files nil
+          org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+          org-roam-server-network-poll t
+          org-roam-server-network-arrows nil
+          org-roam-server-network-label-truncate t
+          org-roam-server-network-label-truncate-length 60
+          org-roam-server-network-label-wrap-length 20))
 )
 
 ;;(setq org-agenda-window-setup 'only-window)
@@ -122,21 +188,23 @@
   (auth-source-pass-enable)
   (setq auth-sources '(password-store))
   (set-email-account! "Gmail"
-                      '((mu4e-sent-folder   . "/gmail/[Gmail]/.Sent Mail")
-                        (mu4e-drafts-folder . "/gmail/[Gmail]/.Drafts")
+                      '((mu4e-sent-folder   . "/gmail/[Gmail]/Sent Mail")
+                        (mu4e-drafts-folder . "/gmail/[Gmail]/Drafts")
                         (smtpmail-smtp-user . "jon.reeve")
-                        (smtpmail-smtp-server "smtp.gmail.com")
-                        (smtpmail-smtp-service 587)
+                        (smtpmail-smtp-server . "smtp.gmail.com")
+                        (smtpmail-smtp-service . 587)
+                        (smtpmail-stream-type . starttls)
                         (user-mail-address  . "jon.reeve@gmail.com")
                         (mu4e-compose-signature . "---\nJonathanReeve\njonreeve.com"))
                       t)
   (set-email-account! "Columbia"
-                      '((mu4e-sent-folder   . "/columbia/[Gmail]/.Sent Mail")
-                        (mu4e-drafts-folder . "/columbia/[Gmail]/.Drafts")
+                      '((mu4e-sent-folder   . "/columbia/[Gmail]/Sent Mail")
+                        (mu4e-drafts-folder . "/columbia/[Gmail]/Drafts")
                         (smtpmail-smtp-user . "jpr2152@columbia.edu")
                         (user-mail-address  . "jpr2152@columbia.edu")
-                        (smtpmail-smtp-server "smtp.gmail.com")
-                        (smtpmail-smtp-service 587)
+                        (smtpmail-smtp-server . "smtp.gmail.com")
+                        (smtpmail-smtp-service . 587)
+                        (smtpmail-stream-type . starttls)
                         (mu4e-compose-signature . "---\nJonathan Reeve\nPhD Candidate, Department of English and Comparative Literature\nhttp://jonreeve.com"))
                       t)
   (set-email-account! "Personal"
@@ -145,11 +213,12 @@
                         (smtpmail-smtp-user . "jonathan@jonreeve.com")
                         (user-mail-address  . "jonathan@jonreeve.com")
                         (smtpmail-smtp-server "mail.privateemail.com")
-                        (smtpmail-smtp-service 465)
-                        (smtpmail-stream-type 'ssl)
+                        (smtpmail-smtp-service . 465)
+                        (smtpmail-stream-type . ssl)
                         (mu4e-compose-signature . "---\nJonathan Reeve\nhttp://jonreeve.com"))
                       t)
-  (setq message-send-mail-function 'smtpmail-send-it)
+  (setq message-send-mail-function 'smtpmail-send-it
+        )
   (setq mu4e-maildir "~/Mail"
         mu4e-trash-folder "/Trash"
         mu4e-refile-folder "/Archive"
@@ -161,10 +230,11 @@
         `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
           ("date:7d..now NOT flag:trashed AND NOT flag:replied" "Last 7 days unreplied" ?w)
           ("maildir:/columbia/Inbox NOT flag:trashed AND NOT flag:replied" "Columbia" ?c)
-          ("maildir:/columbia/Inbox and maildir:/gmail/Indox NOT flag:trashed" "All" ?a)
+          ("maildir:/columbia/Inbox OR maildir:/gmail/Inbox OR maildir:/personal/Inbox NOT flag:trashed" "All" ?a)
           ("maildir:/gmail/Inbox NOT flag:trashed AND NOT flag:replied" "Gmail" ?g)
           ("maildir:/gmail/Lists NOT flag:trashed AND NOT flag:replied" "Lists" ?l)
           ("maildir:/personal/Inbox NOT flag:trashed AND NOT flag:replied" "Personal" ?p)
+          ("maildir:/columbia/Homework NOT flag:trashed" "Homework" ?h)
           ))
 
 )
@@ -235,3 +305,10 @@
                                              (append (list "nix-shell" "-I" "." "--command" )
                                                      (list (mapconcat 'identity argv " ")))
                                              (list (concat (lsp-haskell--get-root) "/shell.nix")))))
+
+;; Epub
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+(defun my-nov-font-setup ()
+  (face-remap-add-relative 'variable-pitch :family "Liberation Serif"
+                                           :height 1.6))
+(add-hook 'nov-mode-hook 'my-nov-font-setup)

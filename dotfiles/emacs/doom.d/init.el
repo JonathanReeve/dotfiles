@@ -62,12 +62,17 @@
        electric          ; smarter, keyword-based electric-indent
        ibuffer           ; interactive buffer management
        vc                ; version-control and Emacs, sitting in a tree
+       (undo +tree)
 
        :term
-       ;;eshell            ; a consistent, cross-platform shell (WIP)
+       eshell            ; a consistent, cross-platform shell (WIP)
        ;;shell             ; a terminal REPL for Emacs
        term              ; terminals in Emacs
-       ;;vterm             ; another terminals in Emacs
+       ;; vterm             ; another terminals in Emacs
+
+       :checkers
+       syntax
+       spell
 
        :tools
        ;;ansible
@@ -76,10 +81,8 @@
        direnv
        ;;docker
        ;;editorconfig      ; let someone else argue about tabs vs spaces
-       ;;ein               ; tame Jupyter notebooks with emacs
+       ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
-       flycheck          ; tasing you for every semicolon you forget
-       flyspell          ; tasing you for misspelling mispelling
        ;;gist              ; interacting with github gists
        (lookup           ; helps you navigate your code and documentation
         +docsets)        ; ...or in Dash docsets locally
@@ -151,6 +154,7 @@
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
+       yaml
        web               ; the tubes
 
        :email
@@ -166,4 +170,4 @@
 
        :config
        ;;literate
-       (default +bindings +smartparens))
+       (default +bindings))

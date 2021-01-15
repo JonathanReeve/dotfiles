@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      # <home-manager/nixos>
       #/etc/nixos/cachix.nix
     ];
 
@@ -31,8 +32,12 @@
   };
 
   # Reflex stuff
-  # nix.binaryCaches = [ "https://nixcache.reflex-frp.org" ];
-  # nix.binaryCachePublicKeys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
+  nix = {
+    package = pkgs.nixUnstable; # For flakes
+    extraOptions = "experimental-features = nix-command flakes";
+    binaryCaches = [ "https://nixcache.reflex-frp.org" ];
+    binaryCachePublicKeys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
+  };
 
   nixpkgs.config.allowUnfree = true;
 
@@ -67,6 +72,7 @@
      nix-index              # Indexing files for nix-locate
      nix-prefetch-git nix-prefetch-scripts # Help writing .nix files
      cabal2nix pypi2nix
+     nixfmt
      # Security
      yubico-pam yubioath-desktop yubikey-personalization
      yubikey-manager # Provides ykman
@@ -88,6 +94,8 @@
      isync mu w3m           # Mail
      pandoc
      direnv
+     graphviz
+     xclip
 
      (emacsWithPackages (epkgs: with emacsPackages; [
        pdf-tools
@@ -141,7 +149,8 @@
        nltk
        pip
        numpy
-       tldextract # required by qute-pass
+       nose
+       #tldextract # required by qute-pass
      ]))
      # Elm
      # elmPackages.elm
@@ -163,7 +172,7 @@
      ncdu                   # Fancy disk usage analyzer
      neofetch               # Fancy system information
      # GUI
-     qutebrowser            # Web browser
+     #qutebrowser            # Web browser
      chromium               # Another web browser
      firefox                # Yes, a third
 
@@ -171,7 +180,7 @@
      deja-dup               # Backups 
      gthumb                 # Photos
      gnome3.gnome-tweak-tool
-     gnome3.gnome-boxes
+     # gnome3.gnome-boxes
 
      ntfs3g ntfsprogs       # Windows drives compatibility
 
@@ -201,7 +210,7 @@
     sensor.iio.enable = true;
     bluetooth.enable = true;
   };
-
+  # home-manager.users.jon = import ./home.nix;
   powerManagement = {
     enable = true;
     powertop.enable = true;
@@ -241,6 +250,7 @@
       libinput = {
         enable = true;
         clickMethod = "clickfinger";
+        disableWhileTyping = true;
       };
       # Keyboard settings
       layout = "us";

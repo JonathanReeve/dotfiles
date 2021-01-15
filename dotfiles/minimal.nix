@@ -47,7 +47,7 @@ in
       font = "${font} 11";
     };
     zathura = {
-      enable = true;
+      enable = false;
       extraConfig = ''
         map n scroll down
         map e scroll up
@@ -225,6 +225,37 @@ in
       lockCmd = "${lockCmd}";
     };
   };
+  systemd.user = {
+    services = {
+      dwall = {
+        Unit = {
+          Description = "Set dynamic wallpaper using Dwall";
+        };
+        Service = {
+          Type = "oneshot";
+          ExecStart = "${scripts}/dynamic-wallpaper/dwall.sh -p -s beach";
+        };
+        Install = {
+          WantedBy = ["multi-user.target"];
+        };
+      };
+    };
+    timers = {
+      dwall = {
+        Unit = {
+          Description = "Set dynamic wallpaper using Dwall.";
+          Requires = "dwall.service";
+        };
+        Timer = {
+          Unit = "dwall.service";
+          OnCalendar="*-*-* *:00:00"; # Every hour
+        };
+        Install = {
+          WantedBy = ["timers.target"];
+        };
+      };
+    };
+  };
   xsession = {
     enable = true;
     scriptPath = ".xsession-hm";
@@ -235,10 +266,10 @@ in
     windowManager.i3 = {
         enable = true;
         extraConfig = ''
-          set_from_resource $bg i3wm.background
-          set_from_resource $fg i3wm.foreground
-          set_from_resource $c1 i3wm.color1
-          set_from_resource $c2 i3wm.color2
+          set_from_resource $bg i3wm.background ${backgroundColor}
+          set_from_resource $fg i3wm.foreground ${foregroundColor}
+          set_from_resource $c1 i3wm.color1 ${backgroundColor}
+          set_from_resource $c2 i3wm.color2 ${foregroundColor}
         '';
         config = {
           assigns = { "9" = [{ class = "^MEGAsync$"; }]; };
@@ -281,6 +312,8 @@ in
               "Mod4+n" = "workspace next";
               "Mod4+e" = "workspace prev";
               "Mod4+Shift+e" = "exec i3-msg exit";
+              "Mod4+p" = "focus parent";
+              "Mod4+Shift+p" = "focus child";
               "Mod1+h" = "focus left";
               "Mod1+n" = "focus down";
               "Mod1+e" = "focus up";
