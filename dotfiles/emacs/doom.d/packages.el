@@ -16,3 +16,9 @@
 
 ;; Use BibSonomy
 (package! biblio-bibsonomy)
+
+;; Change themes with PyWal
+(package! ewal-doom-themes)
+
+;; Query Org files
+(package! org-ql)

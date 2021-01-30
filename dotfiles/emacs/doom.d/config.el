@@ -138,6 +138,66 @@
   ;; (advice-add 'org-agenda-files :filter-return #'dynamic-agenda-files-advice)
   ;; (add-to-list 'org-after-todo-state-change-hook 'update-dynamic-agenda-hook t)
 
+  ;; The above solution is behaving strangely.
+  ;; Now trying a different one from this blog post:
+  ;; https://app.getpocket.com/read/3231443951
+  ;;
+  (defun +org-notes-project-p ()
+    "Return non-nil if current buffer has any todo entry.
+
+  TODO entries marked as done are ignored, meaning the this
+  function returns nil if current buffer contains only completed
+  tasks."
+    (seq-find                                 ; (3)
+     (lambda (type)
+       (eq type 'todo))
+     (org-element-map                         ; (2)
+         (org-element-parse-buffer 'headline) ; (1)
+         'headline
+       (lambda (h)
+         (org-element-property :todo-type h)))))
+
+  (defun +org-notes-project-update-tag ()
+    "Update PROJECT tag in the current buffer."
+    (when (and (not (active-minibuffer-window))
+               (+org-notes-buffer-p))
+      (let* ((file (buffer-file-name (buffer-base-buffer)))
+             (all-tags (org-roam--extract-tags file))
+             (prop-tags (org-roam--extract-tags-prop file))
+             (tags prop-tags))
+        (if (+org-notes-project-p)
+            (setq tags (cons "Project" tags))
+          (setq tags (remove "Project" tags)))
+        (unless (eq prop-tags tags)
+          (org-roam--set-global-prop
+           "ROAM_TAGS"
+           (combine-and-quote-strings (seq-uniq tags)))))))
+
+  (defun +org-notes-buffer-p ()
+    "Return non-nil if the currently visited buffer is a note."
+    (and buffer-file-name
+         (string-prefix-p
+          (expand-file-name (file-name-as-directory org-roam-directory))
+          (file-name-directory buffer-file-name))))
+
+  (defun +org-notes-project-files ()
+    "Return a list of note files containing Project tag."
+    (seq-map
+     #'car
+     (org-roam-db-query
+      [:select file
+       :from tags
+       :where (like tags (quote "%\"Project\"%"))])))
+
+  (defun +agenda-files-update (&rest _)
+    "Update the value of `org-agenda-files'."
+    (setq org-agenda-files (delete-dups (append org-agenda-files (+org-notes-project-files)))))
+
+  (add-hook 'find-file-hook #'+org-notes-project-update-tag)
+  (add-hook 'before-save-hook #'+org-notes-project-update-tag)
+
+  (advice-add 'org-agenda :before #'+agenda-files-update)
+
 )
 
 (after! org-roam
@@ -312,3 +372,16 @@
   (face-remap-add-relative 'variable-pitch :family "Liberation Serif"
                                            :height 1.6))
 (add-hook 'nov-mode-hook 'my-nov-font-setup)
+
+;; Toggle transparency
+ (defun toggle-transparency ()
+   (interactive)
+   (let ((alpha (frame-parameter nil 'alpha)))
+     (set-frame-parameter
+      nil 'alpha
+      (if (eql (cond ((numberp alpha) alpha)
+                     ((numberp (cdr alpha)) (cdr alpha))
+                     ;; Also handle undocumented (<active> <inactive>) form.
+                     ((numberp (cadr alpha)) (cadr alpha)))
+               100)
+          '(85 . 50) '(100 . 100)))))

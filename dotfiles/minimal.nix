@@ -107,6 +107,16 @@ in
       fadeDelta = 5;
       blur = true;
       shadow = true;
+      # TODO replace with https://github.com/ibhagwan/picom
+      # package = pkgs.picom.overrideAttrs (old: rec {
+      #   src = pkgs.fetchFromGitHub {
+      #     owner = "ibhagwan"; repo = "picom";
+      #     rev = "vNext";
+      #     sha256 = "0gjksayz2xpmgglvw17ppsan2imrd1fijs579kbf27xwp503xgfl";
+      #     fetchSubmodules = true;
+      #   };
+      # });
+
       vSync = true;
     };
     polybar = {
@@ -233,7 +243,7 @@ in
         };
         Service = {
           Type = "oneshot";
-          ExecStart = "${scripts}/dynamic-wallpaper/dwall.sh -p -s beach";
+          ExecStart = "${scripts}/dynamic-wallpaper/dwall.sh -p -s room";
         };
         Install = {
           WantedBy = ["multi-user.target"];
@@ -311,7 +321,7 @@ in
               "Mod4+space" = "exec rofi -show drun";
               "Mod4+n" = "workspace next";
               "Mod4+e" = "workspace prev";
-              "Mod4+Shift+e" = "exec i3-msg exit";
+              "Mod4+Shift+q" = "exec i3-msg exit";
               "Mod4+p" = "focus parent";
               "Mod4+Shift+p" = "focus child";
               "Mod1+h" = "focus left";
@@ -325,6 +335,8 @@ in
               "Mod1+Shift+i" = "move right";
               "Mod4+t" = "floating toggle";
               "Mod4+x" = "layout toggle all";
+              "Mod4+v" = "split v";
+              "Mod4+Shift+v" = "split h";
               "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '+10%'";
               "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '10%-'";
               "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up";
@@ -357,6 +369,17 @@ in
           ];
           window.border = 10;
         };
+    };
+    windowManager.xmonad = {
+      enable = false;
+      enableContribAndExtras = true;
+      config = "${dots}/xmonad.hs";
+      extraPackages = haskellPackages: [
+        haskellPackages.xmonad-contrib
+        haskellPackages.monad-logger
+      ];
+
+
     };
   };
 }

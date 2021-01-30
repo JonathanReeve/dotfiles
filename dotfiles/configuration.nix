@@ -9,7 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       # <home-manager/nixos>
-      #/etc/nixos/cachix.nix
+      /etc/nixos/cachix.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -33,7 +33,7 @@
 
   # Reflex stuff
   nix = {
-    package = pkgs.nixUnstable; # For flakes
+    package = pkgs.nixFlakes; # For flakes
     extraOptions = "experimental-features = nix-command flakes";
     binaryCaches = [ "https://nixcache.reflex-frp.org" ];
     binaryCachePublicKeys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];

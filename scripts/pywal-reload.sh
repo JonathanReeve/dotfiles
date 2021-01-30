@@ -10,12 +10,15 @@ c.colors.tabs.even.bg = \"$color1\"
 c.colors.tabs.odd.bg = \"$color1\"
 c.colors.tabs.selected.even.bg = \"$color2\"
 c.colors.tabs.selected.odd.bg = \"$color2\"
-" > config.py
+" > /tmp/config.py
 
 running=`ps cax | grep qutebrowser | wc -l`
 if [ $running -gt 0 ]; then
-    qutebrowser ":config-source $PWD/config.py"
+    qutebrowser ":config-source /tmp/config.py"
 fi
 
 # Trigger homepage reload
-./homepage/homepage.sh
+# ./homepage/homepage.sh
+
+# Trigger emacs reload
+emacsclient --eval "(load-theme 'ewal-doom-one)"
