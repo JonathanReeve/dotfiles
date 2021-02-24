@@ -305,8 +305,8 @@ in
         "gs" =  "https://scholar.google.com/scholar?q={}";
         "b" =  "https://www.google.com/search?tbm=bks&q={}";
         "aw" =  "https://wiki.archlinux.org/?search={}";
-        "o" =  "https://nixos.org/nixos/options.html#{}";
-        "p" =  "https://nixos.org/nixos/packages.html#{}";
+        "o" =  "https://search.nixos.org/options?channel=unstable&from=0&size=50&sort=relevance&query={}";
+        "p" =  "https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&query={}";
         "d" =  "https://en.wiktionary.org/wiki/{}";
         "s" =  "http://stackoverflow.com/search?q={}";
         "m" =  "https://maps.google.com/maps?q={}";

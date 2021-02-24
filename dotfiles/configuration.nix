@@ -29,6 +29,7 @@
     networkmanager.enable = true;
     useDHCP = false;
     interfaces.wlp0s20f3.useDHCP = true;
+    # firewall.allowedTCPPorts = [ 8000 ]; # For local agenda server
   };
 
   # Reflex stuff
@@ -93,9 +94,10 @@
      wget
      isync mu w3m           # Mail
      pandoc
-     direnv
-     graphviz
-     xclip
+     direnv                 # Essential project management thingy
+     graphviz               # Simple charts
+     xclip                  # Clipboard on the command line
+     dict                   # Dictionary
 
      (emacsWithPackages (epkgs: with emacsPackages; [
        pdf-tools
@@ -119,6 +121,8 @@
        regex-compat
        #PyF
        HandsomeSoup
+       tokenize
+       # chatter
      ]))
 
      cabal-install
@@ -132,7 +136,7 @@
      file                   # File properties
      imagemagick            # Image manipulation
      libxml2
-     #sqlite sqlite-interactive # Sqlite
+     sqlite sqlite-interactive # Sqlite
      # Python Development
      pipenv
      (python3.withPackages(ps: with ps; [
@@ -176,6 +180,8 @@
      chromium               # Another web browser
      firefox                # Yes, a third
 
+     # calibre                # Ebooks
+
      # Gnome
      deja-dup               # Backups 
      gthumb                 # Photos
@@ -217,6 +223,34 @@
   };
 
   services = {
+    # Attempt to set up a local fileshare.
+    # Not really working.
+    # samba = {
+    #   enable = true;
+    #   securityType = "user";
+    #   extraConfig = ''
+    #     workgroup = WORKGROUP
+    #     server string = smbnix
+    #     netbios name = smbnix
+    #     security = user
+    #     #use sendfile = yes
+    #     #max protocol = smb2
+    #     hosts allow = 192.168.0  localhost
+    #     hosts deny = 0.0.0.0/0
+    #     guest account = nobody
+    #     map to guest = bad user
+    #   '';
+
+    #   shares = {
+    #     public = {
+    #       path = "/home/jon/Publike";
+    #       "read only" = true;
+    #       browseable = "yes";
+    #       "guest ok" = "yes";
+    #       comment = "Public samba share.";
+    #     };
+    #   };
+    # };
 
     # gnome3 = {
     #   gnome-keyring.enable = true;
@@ -249,8 +283,10 @@
       # Enable touchpad support.
       libinput = {
         enable = true;
-        clickMethod = "clickfinger";
-        disableWhileTyping = true;
+        touchpad = {
+          clickMethod = "clickfinger";
+          disableWhileTyping = true;
+        };
       };
       # Keyboard settings
       layout = "us";
@@ -319,7 +355,7 @@
   system.stateVersion = "21.03"; # Did you read the comment?
 
   #virtualisation.anbox.enable = true;
-  #virtualisation.docker.enable = true;
+  virtualisation.docker.enable = true;
   #virtualisation.libvirtd.enable = true;
 
 }

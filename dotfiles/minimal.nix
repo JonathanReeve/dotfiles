@@ -108,15 +108,23 @@ in
       blur = true;
       shadow = true;
       # TODO replace with https://github.com/ibhagwan/picom
-      # package = pkgs.picom.overrideAttrs (old: rec {
-      #   src = pkgs.fetchFromGitHub {
-      #     owner = "ibhagwan"; repo = "picom";
-      #     rev = "vNext";
-      #     sha256 = "0gjksayz2xpmgglvw17ppsan2imrd1fijs579kbf27xwp503xgfl";
-      #     fetchSubmodules = true;
-      #   };
-      # });
-
+      package = pkgs.picom.overrideAttrs (old: rec {
+        src = pkgs.fetchFromGitHub {
+          owner = "ibhagwan"; repo = "picom"; rev = "git";
+          sha256 = "0gjksayz2xpmgglvw17ppsan2imrd1fijs579kbf27xwp503xgfl";
+          fetchSubmodules = true;
+        };
+      });
+      extraOptions = ''
+        corner-radius: 25.0;
+        blur: {
+          method = "kawase";
+          strength = 10;
+          background = false;
+          background-frame = false;
+          background-fixed = false;
+        }
+      '';
       vSync = true;
     };
     polybar = {
@@ -243,7 +251,7 @@ in
         };
         Service = {
           Type = "oneshot";
-          ExecStart = "${scripts}/dynamic-wallpaper/dwall.sh -p -s room";
+          ExecStart = "${scripts}/dynamic-wallpaper/dwall.sh -p -s aurora";
         };
         Install = {
           WantedBy = ["multi-user.target"];
@@ -344,6 +352,7 @@ in
               "XF86AudioMute" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute";
               # Open agenda with Super + A
               "Mod4+a" = "exec emacsclient -c -e '(org-agenda-list)(delete-other-windows)(org-agenda-day-view)'";
+              "Mod4+m" = "exec emacsclient -c -e '(mu4e)(mu4e-update-mail-and-index)'";
               # lock screen with Super + L
               "Mod4+l" = "exec ${lockCmd}";
               # Change wallpaper

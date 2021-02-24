@@ -22,3 +22,12 @@
 
 ;; Query Org files
 (package! org-ql)
+
+;; Fancy LISPy repl
+;; (package! sly)
+
+;; Make eshell better
+(package! fish-completion)
+
+;; Edit Turtle files
+(package! ttl-mode)

@@ -14,6 +14,11 @@
 ;; Get system notifications through libnotify
 (setq alert-default-style 'libnotify)
 
+(after! eshell
+  (when (and (executable-find "fish")
+             (require 'fish-completion nil t))
+    (global-fish-completion-mode)))
+
 ;; Don't prompt when opening journal or other large files
 ;(setq large-file-warning-threshold 20000000)
 
@@ -198,6 +203,17 @@
 
   (advice-add 'org-agenda :before #'+agenda-files-update)
 
+  ;; Allow for "letter" class. This allows me to write subtrees in Org
+  ;; and then later export them to Letter-class LaTeX-generated PDFs.
+  ;; This is useful for drafting cover letters and the like.
+  (add-to-list 'org-latex-classes
+               '("letter"
+                 "\\documentclass{letter}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 )
 
 (after! org-roam
