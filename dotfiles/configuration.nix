@@ -9,7 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       # <home-manager/nixos>
-      /etc/nixos/cachix.nix
+      # /etc/nixos/cachix.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
