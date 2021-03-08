@@ -30,4 +30,4 @@
 (package! fish-completion)
 
 ;; Edit Turtle files
-(package! ttl-mode)
+;; (package! ttl-mode)

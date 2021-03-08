@@ -426,7 +426,7 @@ in
     enable = true;
     dataFile = {
       "qutebrowser/userscripts/" = {
-        source = "${scripts}/qutebrowser-userscripts";
+        source = ../scripts/qutebrowser-userscripts;
         recursive = true;
       };
     };

@@ -356,7 +356,7 @@ in
               # lock screen with Super + L
               "Mod4+l" = "exec ${lockCmd}";
               # Change wallpaper
-              "Mod4+w" = "exec ${pkgs.pywal}/bin/wal -i ${/home/jon/Bildujo/Ekranfonoj} -o ${../scripts/pywal-reload.sh}";
+              "Mod4+w" = "exec ${pkgs.pywal}/bin/wal -i /home/jon/Bildujo/Ekranfonoj -o ${../scripts/pywal-reload.sh}";
             };
           modes = {
             resize = {
