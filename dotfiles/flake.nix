@@ -22,7 +22,7 @@
                        programs.doom-emacs = {
                          enable = true;
                          doomPrivateDir = ./emacs/doom.d;
-                         extraPackages = epkgs: [ pkgs.mu pkgs.pass pkgs.gnupg ];
+                         extraPackages = with pkgs; [ mu pass gnupg ];
                          extraConfig = ''
                           (setq mu4e-mu-binary "${pkgs.mu}/bin/mu")
                           (setq epg-gpg-program "${pkgs.gnupg}/bin/gpg")
