@@ -261,6 +261,7 @@
     # };
 
     flatpak.enable = true;
+    keybase.enable = true;
 
     # localtime.enable = true;
 
