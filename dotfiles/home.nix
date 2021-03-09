@@ -196,8 +196,12 @@ in
          unvault="fusermount -u $vaultmount";
          jnl="vault; and emacsclient -c $vaultmount/Journal/jnl.org; and unvault";
          upgrade=''
-            sudo -i nixos-rebuild switch --upgrade; and nix-env -u;
-            and home-manager switch --upgrade;
+            for input in nixos home-manager nix-doom-emacs
+              echo "Updating input: $input"
+              nix flake update --update-input $input
+            end
+            echo "Rebuilding system."
+            sudo nixos-rebuild switch --flake ${dots}
             '';
          clean = "nix-store --gc --print-roots; and sudo nix-collect-garbage --delete-older-than 5d";
          # A function for renaming the most recent PDF, and putting it in my Papers dir.
@@ -267,6 +271,9 @@ in
     };
     password-store = {
       enable = true;
+      settings = {
+        PASSWORD_STORE_DIR = "/home/jon/Dokumentujo/Personal/.password-store";
+      };
     };
     qutebrowser = {
       enable = true;
@@ -285,8 +292,8 @@ in
         "i" =  "scroll right";
         "j" =  "search-next";
         "b" =  "set-cmd-text -s :buffer";
-        "gL" =  "spawn --userscript org-link.hs";
-        "gM" =  "spawn --userscript org-movie";
+        "gL" =  "open javascript:location.href='org-protocol://capture?template=l&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
+        "gM" =  "open javascript:location.href='org-protocol://capture?template=m&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
         "gR" = "open javascript:location.href='org-protocol://roam-ref?template=r&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
         "pf" =  "spawn --userscript qute-pass";
         "gz" =  "jseval var d=document,s=d.createElement('script';;s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement;.appendChild(s;;void(0;;";

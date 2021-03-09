@@ -16,6 +16,9 @@
     # Enable magic sysrql (Alt+PrtSc) keys for recovery
     kernel.sysctl = { "kernel.sysrq" = 1; };
     kernelPackages = pkgs.linuxPackages_latest;
+    # Dell XPS 13 has some bad memory. Let's see if we can get around it.
+    # Bad memory is from 8567M to 8663M
+    kernelParams = [ "memmap=100M$8567M" ];
     cleanTmpDir = true;
     plymouth.enable = true;
     resumeDevice = "/dev/nvme0n1p4";
