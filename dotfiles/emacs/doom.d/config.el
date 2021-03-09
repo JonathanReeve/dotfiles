@@ -206,14 +206,14 @@
   ;; Allow for "letter" class. This allows me to write subtrees in Org
   ;; and then later export them to Letter-class LaTeX-generated PDFs.
   ;; This is useful for drafting cover letters and the like.
-  (add-to-list 'org-latex-classes
-               '("letter"
-                 "\\documentclass{letter}"
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  ;; (add-to-list 'org-latex-classes
+  ;;              '("letter"
+  ;;                "\\documentclass{letter}"
+  ;;                ("\\section{%s}" . "\\section*{%s}")
+  ;;                ("\\subsection{%s}" . "\\subsection*{%s}")
+  ;;                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+  ;;                ("\\paragraph{%s}" . "\\paragraph*{%s}")
+  ;;                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 )
 
 (after! org-roam
@@ -226,19 +226,19 @@
            "* %?"
            :file-name "Daily/%<%Y-%m-%d>"
            :head "#+title: %<%Y-%m-%d>\n\n")))
-  (use-package! org-roam-server
-    :config
-    (setq org-roam-server-host "127.0.0.1"
-          org-roam-server-port 8080
-          org-roam-server-authenticate nil
-          org-roam-server-export-inline-images t
-          org-roam-server-serve-files nil
-          org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-          org-roam-server-network-poll t
-          org-roam-server-network-arrows nil
-          org-roam-server-network-label-truncate t
-          org-roam-server-network-label-truncate-length 60
-          org-roam-server-network-label-wrap-length 20))
+  ;; (use-package! org-roam-server
+  ;;   :config
+  ;;   (setq org-roam-server-host "127.0.0.1"
+  ;;         org-roam-server-port 8080
+  ;;         org-roam-server-authenticate nil
+  ;;         org-roam-server-export-inline-images t
+  ;;         org-roam-server-serve-files nil
+  ;;         org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+  ;;         org-roam-server-network-poll t
+  ;;         org-roam-server-network-arrows nil
+  ;;         org-roam-server-network-label-truncate t
+  ;;         org-roam-server-network-label-truncate-length 60
+  ;;         org-roam-server-network-label-wrap-length 20))
 )
 
 ;;(setq org-agenda-window-setup 'only-window)
@@ -289,8 +289,8 @@
                         (smtpmail-smtp-user . "jonathan@jonreeve.com")
                         (user-mail-address  . "jonathan@jonreeve.com")
                         (smtpmail-smtp-server "mail.privateemail.com")
-                        (smtpmail-smtp-service . 465)
-                        (smtpmail-stream-type . ssl)
+                        (smtpmail-smtp-service . 587)
+                        (smtpmail-stream-type . starttls)
                         (mu4e-compose-signature . "---\nJonathan Reeve\nhttp://jonreeve.com"))
                       t)
   (setq message-send-mail-function 'smtpmail-send-it
@@ -401,3 +401,6 @@
                      ((numberp (cadr alpha)) (cadr alpha)))
                100)
           '(85 . 50) '(100 . 100)))))
+
+;; Treat all themes as safe
+(setq custom-safe-themes t)
