@@ -18,7 +18,7 @@
     kernelPackages = pkgs.linuxPackages_latest;
     # Dell XPS 13 has some bad memory. Let's see if we can get around it.
     # Bad memory is from 8567M to 8663M
-    kernelParams = [ "memmap=100M$8567M" ];
+    # kernelParams = [ "memmap=100M$8567M" ];
     cleanTmpDir = true;
     plymouth.enable = true;
     resumeDevice = "/dev/nvme0n1p4";
@@ -30,7 +30,8 @@
     hostName = "jon-laptop"; # Define your hostname .
     networkmanager.enable = true;
     useDHCP = false;
-    interfaces.wlp0s20f3.useDHCP = true;
+    # interfaces.wlp0s20f3.useDHCP = true;
+    interfaces.enp0s13f0u1u3u1.useDHCP = true;
     # firewall.allowedTCPPorts = [ 8000 ]; # For local agenda server
   };
 
@@ -182,6 +183,8 @@
      chromium               # Another web browser
      firefox                # Yes, a third
 
+     # Ugh
+     zoom-us
      # calibre                # Ebooks
 
      # Gnome
