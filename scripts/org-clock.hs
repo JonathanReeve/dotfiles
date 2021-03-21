@@ -21,7 +21,13 @@ main = do
     -- Emacs is on, but returns "-1", which means that org-clock is not running.
     (ExitSuccess, "-1\n") -> TIO.putStrLn $ red "Protocolu!"
     -- Emacs is on and clocking. Print the clock value.
-    (ExitSuccess, out) -> TIO.putStrLn $ T.take 25 $ T.drop 1 $ head $
-      drop 1 $ T.splitOn "\"" out
+    (ExitSuccess, out) -> TIO.putStrLn $ T.take 25 $ T.drop 1 $
+      T.splitOn "\"" out !! 1
     -- Emacs is not on.
-    (ExitFailure err, _) -> TIO.putStrLn $ red "Ensalutu!" -- <> repr err
+    (ExitFailure err, _) -> do
+      TIO.putStrLn $ red "Ensalutu!" -- <> repr err
+      -- TODO: record how long I've been clocked out,
+      -- and prompt me to log in if it's been too long
+      let countFile = "/tmp/unclocked-count"
+      -- count <- input countFile
+      output countFile ((input countFile) + 1)

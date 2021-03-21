@@ -144,7 +144,8 @@ in
     };
     neovim = {
       enable = true;
-      # plugins = [ pkgs.vimPlugins.vim-airline ];
+      package = pkgs.neovim-nightly;
+      plugins = with pkgs.vimPlugins; [ spacevim ];
       vimAlias = true;
       extraConfig =
       ''
@@ -196,11 +197,7 @@ in
          unvault="fusermount -u $vaultmount";
          jnl="vault; and emacsclient -c $vaultmount/Journal/jnl.org; and unvault";
          upgrade=''
-            for input in nixos home-manager nix-doom-emacs
-              echo "Updating input: $input"
-              nix flake update --update-input $input
-            end
-            echo "Rebuilding system."
+            nix flake update ${dots}
             sudo nixos-rebuild switch --flake ${dots}
             '';
          clean = "nix-store --gc --print-roots; and sudo nix-collect-garbage --delete-older-than 5d";
@@ -253,17 +250,26 @@ in
 
             #eval (direnv hook fish)
          '';
-       # plugins = [
-       #   {
-       #     name = "z";
-       #     src = pkgs.fetchFromGitHub {
-       #       owner = "jethrokuan";
-       #       repo = "z";
-       #       rev = "13a320bee8b815704772d94f5994745b11cd1e03";
-       #       sha256 = "0c5i7sdrsp0q3vbziqzdyqn4fmp235ax4mn4zslrswvn8g3fvdyh";
-       #     };
-       #   }
-       # ];
+       plugins = [
+         {
+           name = "z";
+           src = pkgs.fetchFromGitHub {
+             owner = "jethrokuan";
+             repo = "z";
+             rev = "97ca1fd1b281f5f240e7adb90d0a28f9eb4567db";
+             sha256 = "VIeRzaA/Dg0mpCjMB9rNXmIhNGzzYCxgkFUXNUOyJ50=";
+           };
+         }
+         {
+           name = "bang-bang";
+           src = pkgs.fetchFromGitHub {
+             owner = "oh-my-fish";
+             repo = "plugin-bang-bang";
+             rev = "f969c618301163273d0a03d002614d9a81952c1e";
+             sha256 = "A8ydBX4LORk+nutjHurqNNWFmW6LIiBPQcxS3x4nbeQ=";
+           };
+         }
+       ];
     };
     fzf = {
       enable = true;
@@ -383,23 +389,24 @@ in
         options = [ "caps:escape" "esperanto:colemak" ];
         variant = "colemak";
       };
-      # packages = with pkgs; [
-      #   # doom-emacs
-      # ];
+      packages = with pkgs; [
+        # doom-emacs
+        neovim-nightly
+      ];
       file = {
-        ".doom.d/" = {
-          source = ./emacs/doom.d;
-          recursive = true;
-          onChange = "$HOME/.emacs.d/bin/doom sync";
-        };
+      #   ".doom.d/" = {
+      #     source = ./emacs/doom.d;
+      #     recursive = true;
+      #     onChange = "$HOME/.emacs.d/bin/doom sync";
+      #   };
         ".local/share/applications/org-protocol.desktop".text = ''
-  [Desktop Entry]
-  Name=Org-Protocol
-  Exec=emacsclient %u
-  Icon=emacs-icon
-  Type=Application
-  Terminal=false
-  MimeType=x-scheme-handler/org-protocol
+          [Desktop Entry]
+          Name=Org-Protocol
+          Exec=emacsclient %u
+          Icon=emacs-icon
+          Type=Application
+          Terminal=false
+          MimeType=x-scheme-handler/org-protocol
         '';
         # ".emacs.d/init.el".text = ''
         #     (load "default.el")
