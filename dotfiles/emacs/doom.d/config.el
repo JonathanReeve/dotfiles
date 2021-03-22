@@ -288,7 +288,7 @@
                         (mu4e-drafts-folder . "/personal/Drafts")
                         (smtpmail-smtp-user . "jonathan@jonreeve.com")
                         (user-mail-address  . "jonathan@jonreeve.com")
-                        (smtpmail-smtp-server "mail.privateemail.com")
+                        (smtpmail-smtp-server . "mail.privateemail.com")
                         (smtpmail-smtp-service . 587)
                         (smtpmail-stream-type . starttls)
                         (mu4e-compose-signature . "---\nJonathan Reeve\nhttp://jonreeve.com"))

@@ -107,9 +107,10 @@ in
       enable = true;
       userName = "${name}";
       userEmail = "${email}";
-      # extraConfig = {
-      #   url = { "git@github.com:" = { insteadOf = "https://github.com"; }; };
-      # };
+      extraConfig = {
+        pull.rebase = false;
+        # url = { "git@github.com:" = { insteadOf = "https://github.com"; }; };
+      };
     };
     mbsync = {
       enable = true;
