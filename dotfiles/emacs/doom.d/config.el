@@ -7,6 +7,9 @@
 (setq package-enable-at-startup nil)
 (package-initialize)
 
+;; Set location of custom.el
+(setq custom-file "~/.emacs.d/custom.el")
+
 (setq doom-font (font-spec :family "Fira Code" :size 14))
 
 (setq vc-follow-symlinks t) ;; Always follow symlinks.
@@ -226,20 +229,23 @@
            "* %?"
            :file-name "Daily/%<%Y-%m-%d>"
            :head "#+title: %<%Y-%m-%d>\n\n")))
-  ;; (use-package! org-roam-server
-  ;;   :config
-  ;;   (setq org-roam-server-host "127.0.0.1"
-  ;;         org-roam-server-port 8080
-  ;;         org-roam-server-authenticate nil
-  ;;         org-roam-server-export-inline-images t
-  ;;         org-roam-server-serve-files nil
-  ;;         org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-  ;;         org-roam-server-network-poll t
-  ;;         org-roam-server-network-arrows nil
-  ;;         org-roam-server-network-label-truncate t
-  ;;         org-roam-server-network-label-truncate-length 60
-  ;;         org-roam-server-network-label-wrap-length 20))
-)
+  ;; (setq org-roam-capture-templates
+  ;;       '(("n" "note" entry
+  ;;          #'org-roam-capture--get-point
+  ;;          "* %?"
+  ;;          :file-name "")))
+    (setq org-roam-server-host "127.0.0.1"
+          org-roam-server-port 8080
+          org-roam-server-authenticate nil
+          org-roam-server-export-inline-images t
+          org-roam-server-serve-files nil
+          org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+          org-roam-server-network-poll t
+          org-roam-server-network-arrows nil
+          org-roam-server-network-label-truncate t
+          org-roam-server-network-label-truncate-length 60
+          org-roam-server-network-label-wrap-length 20)
+    )
 
 ;;(setq org-agenda-window-setup 'only-window)
 ;; Prose linting

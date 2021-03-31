@@ -6,8 +6,8 @@
       inputs.nixpkgs.follows = "nixos";
     };
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs";
-    # nixos.url = "nixpkgs/nixos-unstable";
-    nixos.url = "/home/jon/Code/nixpkgs";
+    nixos.url = "nixpkgs/nixos-unstable";
+    # nixos.url = "/home/jon/Code/nixpkgs";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
   outputs = { self, nixos, home-manager, nix-doom-emacs, neovim-nightly-overlay }: {

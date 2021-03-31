@@ -276,6 +276,13 @@ in
       enable = true;
       enableFishIntegration = true;
     };
+    nushell = {
+      enable = true;
+      settings = {
+        edit_mode = "vi";
+        startup = [ "alias em [f] {emacsclient -c $f &; disown}" ];
+      };
+    };
     password-store = {
       enable = true;
       settings = {

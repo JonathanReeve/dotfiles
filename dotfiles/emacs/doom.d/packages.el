@@ -31,3 +31,9 @@
 
 ;; Edit Turtle files
 ;; (package! ttl-mode)
+
+(package! org-roam-server)
+
+;; Python Requests-like package for elisp
+;; for querying APIs
+(package! request)

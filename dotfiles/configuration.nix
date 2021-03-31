@@ -99,6 +99,10 @@
      xclip                  # Clipboard on the command line
      dict                   # Dictionary
 
+     # Ugh
+     wine
+     winetricks
+
      (emacsWithPackages (epkgs: with emacsPackages; [
        pdf-tools
      ]))
@@ -108,7 +112,7 @@
 
 
      (haskellPackages.ghcWithPackages (ps: with ps; [
-       pandoc-citeproc
+       # pandoc-citeproc
        shake         # Build tool
        hlint         # Required for spacemacs haskell-mode
        apply-refact  # Required for spacemacs haskell-mode
@@ -182,13 +186,13 @@
 
      # Ugh
      zoom-us
-     # calibre                # Ebooks
+     calibre                # Ebooks
 
      # Gnome
      deja-dup               # Backups 
      gthumb                 # Photos
      gnome3.gnome-tweak-tool
-     # gnome3.gnome-boxes
+     gnome3.gnome-boxes
 
      ntfs3g ntfsprogs       # Windows drives compatibility
 
@@ -317,6 +321,7 @@
       enable = true;
     };
     # gnome-documents.enable = true;
+    gnome-terminal.enable = true;
     # xonsh.enable = true;
     # light.enable = true;
     gnupg.agent = { enable = true; enableSSHSupport = true; };
@@ -359,6 +364,6 @@
 
   #virtualisation.anbox.enable = true;
   virtualisation.docker.enable = true;
-  #virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd.enable = true;
 
 }
