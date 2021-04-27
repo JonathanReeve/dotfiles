@@ -28,18 +28,9 @@
 ;; Default spelling dictionary is English
 (setq ispell-dictionary "en")
 
-(after! org-ref
-  (setq org-ref-note-title-format
-        "** TODO %y - %9a - %t
-  :PROPERTIES:
-  :Custom_ID: %k
-  :AUTHOR: %9a
-  :JOURNAL: %j
-  :AVAILABILITY:
-  :YEAR: %y
-  :END:
-  ")
-  )
+;; (after! org-ref
+;;   (setq )
+;;   )
 
 ;; Get system notifications through libnotify
 (setq alert-default-style 'libnotify)
@@ -49,11 +40,6 @@
 (setq! +biblio-pdf-library-dir "~/Dokumentujo/Papers/"
        +biblio-default-bibliography-files '("~/Dokumentujo/Papers/library.bib")
        +biblio-notes-path "~/Dokumentujo/Org/Projects/books.org")
-
-(require 'biblio-bibsonomy)
-(setq
- biblio-bibsonomy-api-key "13411a53797ef6742ea9e14e2de6a587"
- biblio-bibsonomy-username "JonathanReeve")
 
 ;; Org Mode
 (after! org
@@ -217,7 +203,19 @@
   ;;                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
   ;;                ("\\paragraph{%s}" . "\\paragraph*{%s}")
   ;;                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  ;; I might not need this.
+  ;; (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
+
+  ;; Org-projectile stuff
+  ;; (require 'org-projectile)
+  ;; (setq org-projectile-projects-file
+  ;;       "/your/path/to/an/org/file/for/storing/project/todos.org")
+  ;; (push (org-projectile-project-todo-entry) org-capture-templates)
+  ;; (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+  ;; (global-set-key (kbd "C-c c") 'org-capture)
+  ;; (global-set-key (kbd "C-c n p") 'org-projectile-project-todo-completing-read)
 )
+
 
 (after! org-roam
   ;; Org-roam
@@ -269,7 +267,7 @@
   (require 'auth-source-pass)
   (auth-source-pass-enable)
   (setq auth-sources '(password-store))
-  (set-email-account! "Gmail"
+  (set-email-account! "gmail"
                       '((mu4e-sent-folder   . "/gmail/[Gmail]/Sent Mail")
                         (mu4e-drafts-folder . "/gmail/[Gmail]/Drafts")
                         (smtpmail-smtp-user . "jon.reeve")
@@ -279,7 +277,7 @@
                         (user-mail-address  . "jon.reeve@gmail.com")
                         (mu4e-compose-signature . "---\nJonathanReeve\njonreeve.com"))
                       t)
-  (set-email-account! "Columbia"
+  (set-email-account! "columbia"
                       '((mu4e-sent-folder   . "/columbia/[Gmail]/Sent Mail")
                         (mu4e-drafts-folder . "/columbia/[Gmail]/Drafts")
                         (smtpmail-smtp-user . "jpr2152@columbia.edu")
@@ -289,7 +287,7 @@
                         (smtpmail-stream-type . starttls)
                         (mu4e-compose-signature . "---\nJonathan Reeve\nPhD Candidate, Department of English and Comparative Literature\nhttp://jonreeve.com"))
                       t)
-  (set-email-account! "Personal"
+  (set-email-account! "personal"
                       '((mu4e-sent-folder   . "/personal/Sent")
                         (mu4e-drafts-folder . "/personal/Drafts")
                         (smtpmail-smtp-user . "jonathan@jonreeve.com")
@@ -382,6 +380,7 @@
 (map! :map evil-treemacs-state-map "n" 'treemacs-next-line
                                    "e" 'treemacs-previous-line)
 
+(map! :map bibtex-mode-map "")
 (setq lsp-haskell-server-wrapper-function (lambda (argv)
                                             (append
                                              (append (list "nix-shell" "-I" "." "--command" )
@@ -410,3 +409,6 @@
 
 ;; Treat all themes as safe
 (setq custom-safe-themes t)
+
+;; Fancy splash image
+;; (setq fancy-splash-image "/home/jon/Bildujo/typewriter1.jpg")

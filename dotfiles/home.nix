@@ -209,7 +209,7 @@ in
          search="for engine in $argv[1..-2]; qutebrowser \":open -t $engine $argv[-1]\"; end";
          # Proverbs for greeting
          fish_greeting = "shuf -n 1 ${scripts}/proverboj.txt | ${pkgs.neo-cowsay}/bin/cowsay";
-
+         em = "emacsclient -c $argv &; disown";
        };
        interactiveShellInit =
          ''
@@ -280,8 +280,16 @@ in
       enable = true;
       settings = {
         edit_mode = "vi";
-        startup = [ "alias em [f] {emacsclient -c $f &; disown}" ];
+        startup = [ "def em [f] {emacsclient -c $f &; disown}" ];
+        prompt = "echo $(starship prompt)";
+        env = { STARSHIP_SHELL = "nushell"; };
       };
+    };
+    starship = {
+      enable = true;
+      # settings = { add_newline = false;
+      #              character = { format = "$symbol "; };
+      #            };
     };
     password-store = {
       enable = true;
@@ -300,12 +308,12 @@ in
         "N" =  "tab-next";
         "E" =  "tab-prev";
         "K" =  "search-prev";
-        "l" =  "enter-mode insert";
+        "l" =  "mode-enter insert";
         "n" =  "scroll down";
         "e" =  "scroll up";
         "i" =  "scroll right";
         "j" =  "search-next";
-        "b" =  "set-cmd-text -s :buffer";
+        "b" =  "set-cmd-text -s :tab-select ";
         "gL" =  "open javascript:location.href='org-protocol://capture?template=l&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
         "gM" =  "open javascript:location.href='org-protocol://capture?template=m&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
         "gR" = "open javascript:location.href='org-protocol://roam-ref?template=r&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
@@ -329,7 +337,10 @@ in
         "o" =  "https://search.nixos.org/options?channel=unstable&from=0&size=50&sort=relevance&query={}";
         "p" =  "https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&query={}";
         "d" =  "https://en.wiktionary.org/wiki/{}";
+        "v" =  "https://eo.wiktionary.org/wiki/{}";
+        "melpa" =  "https://melpa.org/#/?q={}";
         "s" =  "http://stackoverflow.com/search?q={}";
+        "ss" = "https://www.semanticscholar.org/search?q={}";
         "m" =  "https://maps.google.com/maps?q={}";
         "c" =  "https://clio.columbia.edu/quicksearch?q={}";
         "gh" =  "https://github.com/search?q={}&type=Repositories";

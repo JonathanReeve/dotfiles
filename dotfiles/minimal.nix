@@ -34,7 +34,7 @@ in
   };
   programs = {
     termite = {
-      enable = true;
+      enable = false;
       clickableUrl = true;
       # backgroundColor = "\${xrdb:background}";
       backgroundColor = "rgba(32, 45, 56, 0.8)";
@@ -337,6 +337,9 @@ in
               "Mod1+e" = "focus up";
               "Mod1+i" = "focus right";
               "Mod4+r" = "mode resize";
+              "Mod4+o" = "exec emacsclient --eval '(org-clock-in-last)'";
+              "Mod4+Shift+o" = "exec emacsclient --eval '(org-clock-out)'";
+              "Mod4+Shift+e" = "exec emacsclient -c";
               "Mod1+Shift+h" = "move left";
               "Mod1+Shift+n" = "move down";
               "Mod1+Shift+e" = "move up";
@@ -357,6 +360,7 @@ in
               "Mod4+l" = "exec ${lockCmd}";
               # Change wallpaper
               "Mod4+w" = "exec ${pkgs.pywal}/bin/wal -i /home/jon/Bildujo/Ekranfonoj -o ${../scripts/pywal-reload.sh}";
+              "Mod4+Shift+w" = "exec ${pkgs.pywal}/bin/wal -i /run/media/jon/systemrestore/.systemrestore/Bildoj/ -o ${../scripts/pywal-reload.sh}";
             };
           modes = {
             resize = {

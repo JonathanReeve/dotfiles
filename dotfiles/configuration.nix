@@ -100,12 +100,25 @@
      dict                   # Dictionary
 
      # Ugh
-     wine
-     winetricks
+     #wine
+     #winetricks
 
-     (emacsWithPackages (epkgs: with emacsPackages; [
-       pdf-tools
-     ]))
+     # (emacsWithPackages (epkgs: with emacsPackages; [
+     #   pdf-tools
+     # ]))
+
+     # Requires neovim-nightly
+     # (vscodeWithExtensions.override {
+     #   vscodeExtensions = with vscode-extensions; [
+     #     (vscode-utils.extensionsFromVscodeMarketplace [
+     #       {
+     #         name = "vscode-neovim";
+     #         publisher = "asvetliakov";
+     #         version = "a0ac4a2";
+     #         sha256 = "166ia73vrcl5c9hm4q1a73qdn56m0jc7flfsk5p5q41na9f10lb0";
+     #       }])
+     #   ]})
+
 
      poppler # PDF stuff but also needed for emacs stuff
      poppler_utils
@@ -186,7 +199,7 @@
 
      # Ugh
      zoom-us
-     calibre                # Ebooks
+     # calibre                # Ebooks
 
      # Gnome
      deja-dup               # Backups 
@@ -266,6 +279,10 @@
     #   tracker-miners.enable = true;
     # };
 
+    dictd = {
+      enable = true;
+      DBs = with pkgs.dictdDBs; [ wiktionary wordnet ];
+    };
     flatpak.enable = true;
     keybase.enable = true;
 
@@ -362,7 +379,7 @@
   # should.
   system.stateVersion = "21.03"; # Did you read the comment?
 
-  #virtualisation.anbox.enable = true;
+  # virtualisation.anbox.enable = true;
   virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;
 

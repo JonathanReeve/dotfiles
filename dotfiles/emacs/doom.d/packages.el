@@ -37,3 +37,9 @@
 ;; Python Requests-like package for elisp
 ;; for querying APIs
 (package! request)
+
+;; Look things up in dictionaries
+;; (package! dictionary)
+
+;; Associate todo files with projects
+;; (package! org-projectile)
