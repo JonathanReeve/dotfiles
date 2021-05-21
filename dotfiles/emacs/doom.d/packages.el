@@ -43,3 +43,6 @@
 
 ;; Associate todo files with projects
 ;; (package! org-projectile)
+
+;; Pollen, the document processing language for Racket
+(package! pollen-mode)

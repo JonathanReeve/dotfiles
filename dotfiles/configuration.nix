@@ -72,7 +72,7 @@
      # Nix stuff
      nix-index              # Indexing files for nix-locate
      nix-prefetch-git nix-prefetch-scripts # Help writing .nix files
-     cabal2nix pypi2nix
+     cabal2nix # pypi2nix
      nixfmt
      # Security
      yubico-pam yubioath-desktop yubikey-personalization
@@ -316,7 +316,7 @@
       layout = "us";
       xkbVariant = "colemak";
       displayManager.gdm.enable = true;
-      desktopManager.gnome3.enable = true;
+      desktopManager.gnome.enable = true;
       desktopManager.session = [{
         name = "home-manager";
         start = ''

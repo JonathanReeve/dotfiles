@@ -34,7 +34,7 @@ in
   };
   programs = {
     termite = {
-      enable = false;
+      enable = true;
       clickableUrl = true;
       # backgroundColor = "\${xrdb:background}";
       backgroundColor = "rgba(32, 45, 56, 0.8)";

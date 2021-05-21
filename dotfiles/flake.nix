@@ -7,19 +7,14 @@
     };
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs";
     # nixos.url = "nixpkgs/nixos-unstable";
-    nixos.url = "/home/jon/Code/nixpkgs";
-    # We need a nightly neovim to get the neovim vscode plugin to work.
-    neovim-nightly-overlay = {
-      url = "github:nix-community/neovim-nightly-overlay";
-      inputs.nixpkgs.follows = "nixos";
-    };
+    nixos.url = "github:nixos/nixpkgs";
+    # nixos.url = "/home/jon/Code/nixpkgs";
   };
-  outputs = { self, nixos, home-manager, nix-doom-emacs, neovim-nightly-overlay }: {
+  outputs = { self, nixos, home-manager, nix-doom-emacs }: {
      nixosConfigurations.jon-laptop = nixos.lib.nixosSystem {
        system = "x86_64-linux";
        modules = [ ./configuration.nix
                    home-manager.nixosModules.home-manager {
-                     nixpkgs.overlays = [ neovim-nightly-overlay.overlay ];
                      home-manager.useGlobalPkgs = true;
                      home-manager.useUserPackages = true;
                      home-manager.users.jon = { pkgs, ... }: {

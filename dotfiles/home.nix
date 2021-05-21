@@ -145,7 +145,7 @@ in
     };
     neovim = {
       enable = true;
-      package = pkgs.neovim-nightly;
+      # package = pkgs.neovim;
       plugins = with pkgs.vimPlugins; [ spacevim ];
       vimAlias = true;
       extraConfig =
@@ -410,7 +410,7 @@ in
       };
       packages = with pkgs; [
         # doom-emacs
-        neovim-nightly
+        # neovim-nightly
       ];
       file = {
       #   ".doom.d/" = {
