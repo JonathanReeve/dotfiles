@@ -120,10 +120,12 @@
      #   ]})
 
 
-     poppler # PDF stuff but also needed for emacs stuff
-     poppler_utils
+     # poppler # PDF stuff but also needed for emacs stuff
+     # poppler_utils
 
+     protonmail-bridge
 
+     stack
      (haskellPackages.ghcWithPackages (ps: with ps; [
        # pandoc-citeproc
        shake         # Build tool
@@ -194,7 +196,7 @@
      neofetch               # Fancy system information
      # GUI
      #qutebrowser            # Web browser
-     chromium               # Another web browser
+     #chromium               # Another web browser
      firefox                # Yes, a third
 
      # Ugh

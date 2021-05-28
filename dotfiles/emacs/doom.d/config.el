@@ -43,6 +43,7 @@
 
 ;; Org Mode
 (after! org
+  (org-indent-mode)
   (setq org-directory "~/Dokumentujo/Org"
         org-startup-indented t
         org-startup-folded t
@@ -275,7 +276,7 @@
                         (smtpmail-smtp-service . 587)
                         (smtpmail-stream-type . starttls)
                         (user-mail-address  . "jon.reeve@gmail.com")
-                        (mu4e-compose-signature . "---\nJonathanReeve\njonreeve.com"))
+                        (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
                       t)
   (set-email-account! "columbia"
                       '((mu4e-sent-folder   . "/columbia/[Gmail]/Sent Mail")
@@ -285,7 +286,7 @@
                         (smtpmail-smtp-server . "smtp.gmail.com")
                         (smtpmail-smtp-service . 587)
                         (smtpmail-stream-type . starttls)
-                        (mu4e-compose-signature . "---\nJonathan Reeve\nPhD Candidate, Department of English and Comparative Literature\nhttp://jonreeve.com"))
+                        (mu4e-compose-signature . "--\nJonathan Reeve\nPhD Candidate, Department of English and Comparative Literature\nhttps://jonreeve.com"))
                       t)
   (set-email-account! "personal"
                       '((mu4e-sent-folder   . "/personal/Sent")
@@ -295,7 +296,7 @@
                         (smtpmail-smtp-server . "mail.privateemail.com")
                         (smtpmail-smtp-service . 587)
                         (smtpmail-stream-type . starttls)
-                        (mu4e-compose-signature . "---\nJonathan Reeve\nhttp://jonreeve.com"))
+                        (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
                       t)
   (setq message-send-mail-function 'smtpmail-send-it
         )

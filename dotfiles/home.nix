@@ -70,17 +70,27 @@ in
         neomutt.enable = true;
         notmuch.enable = true;
       };
-      personal = {
+      protonmail = {
         address = "jonathan@jonreeve.com";
         userName = "jonathan@jonreeve.com";
-        passwordCommand = "${pkgs.pass}/bin/pass privateemail.com";
+        passwordCommand = "${pkgs.pass}/bin/pass protonmailbridge";
         imap = {
-          host = "mail.privateemail.com";
-          port = 993;
+          host = "127.0.0.1";
+          port = 1143;
+          tls = {
+            enable = true;
+            useStartTls = true;
+            certificatesFile = "/home/jon/.config/protonmail/bridge/cert.pem";
+          };
         };
         smtp = {
-          host = "mail.privateemail.com";
-          port = 465;
+          host = "127.0.0.1";
+          port = 1025;
+          tls = {
+            enable = true;
+            useStartTls = true;
+            certificatesFile = "/home/jon/.config/protonmail/bridge/cert.pem";
+          };
         };
         mu.enable = true;
         notmuch.enable = true;
@@ -395,7 +405,6 @@ in
     # Give Termite some internal spacing.
     gtk3.extraCss = ".termite {padding: 10px;}";
   };
-
   qt = {
     enable = true;
     # useGtkTheme = true;
@@ -452,6 +461,14 @@ in
       language = {
         base = "eo";
       };
+  };
+
+  systemd.user.services = {
+    protonmail = {
+      Unit = { Description = "Protonmail Bridge"; };
+      Service.ExecStart = "${pkgs.protonmail-bridge}/bin/protonmail-bridge --noninteractive";
+      Install.WantedBy = [ "default.target" ];
+    };
   };
 
   # Dotfiles for ~/.config, ~/.local/share, etc.
