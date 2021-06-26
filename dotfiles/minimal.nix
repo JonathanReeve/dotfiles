@@ -293,7 +293,9 @@ in
           assigns = { "9" = [{ class = "^MEGAsync$"; }]; };
           floating.criteria = [{ class = "^MEGAsync$"; }];
           bars = [];
-          fonts = [ "Font Awesome" "${font} 11" ];
+          fonts = { names = [ "Font Awesome" "${font}"];
+                    size = 11.0;
+                  };
           gaps = {
             outer = 10;
             inner = 10;
@@ -344,6 +346,8 @@ in
               "Mod1+Shift+n" = "move down";
               "Mod1+Shift+e" = "move up";
               "Mod1+Shift+i" = "move right";
+              "Mod4+s" = "move scratchpad";
+              "Mod4+Shift+s" = "scratchpad show";
               "Mod4+t" = "floating toggle";
               "Mod4+x" = "layout toggle all";
               "Mod4+v" = "split v";

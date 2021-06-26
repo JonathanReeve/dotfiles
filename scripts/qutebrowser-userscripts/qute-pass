@@ -1,4 +1,4 @@
-#!/run/current-system/sw/bin/python
+#!/usr/bin/env python3
 
 # Copyright 2017 Chris Braun (cryzed) <cryzed@googlemail.com>
 #
@@ -15,7 +15,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with qutebrowser.  If not, see <http://www.gnu.org/licenses/>.
+# along with qutebrowser.  If not, see <https://www.gnu.org/licenses/>.
 
 """
 Insert login information using pass and a dmenu-compatible application (e.g. dmenu, rofi -dmenu, ...). A short
@@ -156,6 +156,8 @@ def pass_(path):
 
 
 def pass_otp(path):
+    if arguments.mode == "gopass":
+        return _run_pass(['otp', '-o', path])
     return _run_pass(['otp', path])
 
 
@@ -177,7 +179,7 @@ def main(arguments):
         argument_parser.print_help()
         return ExitCodes.FAILURE
 
-    extractor = tldextract.TLDExtract(cache_file="/tmp/tld", extra_suffixes=arguments.extra_url_suffixes.split(','))
+    extractor = tldextract.TLDExtract(extra_suffixes=arguments.extra_url_suffixes.split(','))
     extract_result = extractor(arguments.url)
 
     # Try to find candidates using targets in the following order: fully-qualified domain name (includes subdomains),
@@ -245,7 +247,7 @@ def main(arguments):
         fake_key_raw(password)
 
     if arguments.insert_mode:
-        qute_command('enter-mode insert')
+        qute_command('mode-enter insert')
 
     return ExitCodes.SUCCESS
 

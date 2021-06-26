@@ -298,6 +298,16 @@
                         (smtpmail-stream-type . starttls)
                         (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
                       t)
+  (set-email-account! "protonmail"
+                      '((mu4e-sent-folder   . "/protonmail/Sent")
+                        (mu4e-drafts-folder . "/protonmail/Drafts")
+                        (smtpmail-smtp-user . "jonathan@jonreeve.com")
+                        (user-mail-address  . "jonathan@jonreeve.com")
+                        (smtpmail-smtp-server . "127.0.0.1")
+                        (smtpmail-smtp-service . 1025)
+                        (smtpmail-stream-type . starttls)
+                        (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
+                      t)
   (setq message-send-mail-function 'smtpmail-send-it
         )
   (setq mu4e-maildir "~/Mail"
@@ -311,9 +321,9 @@
         `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
           ("date:7d..now NOT flag:trashed AND NOT flag:replied" "Last 7 days unreplied" ?w)
           ("maildir:/columbia/Inbox NOT flag:trashed AND NOT flag:replied" "Columbia" ?c)
-          ("maildir:/columbia/Inbox OR maildir:/gmail/Inbox OR maildir:/personal/Inbox NOT flag:trashed" "All" ?a)
+          ("maildir:/columbia/Inbox OR maildir:/gmail/Inbox OR maildir:/personal/Inbox OR maildir:/protonmail/Inbox NOT flag:trashed" "All" ?a)
           ("maildir:/gmail/Inbox NOT flag:trashed AND NOT flag:replied" "Gmail" ?g)
-          ("maildir:/gmail/Lists NOT flag:trashed AND NOT flag:replied" "Lists" ?l)
+          ("maildir:/gmail/Lists OR maildir:/protonmail/Lists NOT flag:trashed AND NOT flag:replied" "Lists" ?l)
           ("maildir:/personal/Inbox NOT flag:trashed AND NOT flag:replied" "Personal" ?p)
           ("maildir:/columbia/Homework NOT flag:trashed" "Homework" ?h)
           ))

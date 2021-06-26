@@ -73,7 +73,7 @@ in
       protonmail = {
         address = "jonathan@jonreeve.com";
         userName = "jonathan@jonreeve.com";
-        passwordCommand = "${pkgs.pass}/bin/pass protonmailbridge";
+        passwordCommand = "${pkgs.gopass}/bin/gopass -o 127.0.0.1:1143/jonathan@jonreeve.com";
         imap = {
           host = "127.0.0.1";
           port = 1143;
@@ -112,6 +112,10 @@ in
     home-manager = {
       enable = true;
       # path = "/home/jon/Code/home-manager";
+    };
+    direnv = {
+      nix-direnv.enable = true;
+      enable = true;
     };
     git = {
       enable = true;

@@ -7,7 +7,7 @@ import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
 
 getClock :: Text
-getClock = "/run/current-system/sw/bin/emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)'"
+getClock = "/etc/profiles/per-user/jon/bin/emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)'"
 
 out :: Shell Line
 out = inshell getClock empty
@@ -28,6 +28,6 @@ main = do
       TIO.putStrLn $ red "Ensalutu!" -- <> repr err
       -- TODO: record how long I've been clocked out,
       -- and prompt me to log in if it's been too long
-      let countFile = "/tmp/unclocked-count"
-      -- count <- input countFile
-      output countFile ((input countFile) + 1)
+      -- let countFile = "/tmp/unclocked-count"
+      -- -- count <- input countFile
+      -- output countFile ((input countFile) + 1)

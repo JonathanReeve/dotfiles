@@ -35,7 +35,12 @@
   # Reflex stuff
   nix = {
     package = pkgs.nixFlakes; # For flakes
-    extraOptions = "experimental-features = nix-command flakes";
+    extraOptions = ''
+      experimental-features = nix-command flakes
+      keep-outputs = true
+      keep-derivations = true
+    '';
+    # Extra options from https://github.com/nix-community/nix-direnv
     # binaryCaches = [ "https://nixcache.reflex-frp.org" ];
     # binaryCachePublicKeys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
   };
@@ -79,7 +84,9 @@
      yubikey-manager # Provides ykman
      yubikey-personalization-gui
 
-     # megasync             # Backups
+     megasync             # Backups
+     keybase-gui          # Also backups
+     logseq               # Fancy notes
 
      # CLI
      fish                   # Shell
@@ -94,7 +101,7 @@
      wget
      isync mu w3m           # Mail
      pandoc
-     direnv                 # Essential project management thingy
+     #direnv                 # Essential project management thingy
      graphviz               # Simple charts
      xclip                  # Clipboard on the command line
      dict                   # Dictionary
@@ -173,7 +180,7 @@
        pip
        numpy
        nose
-       #tldextract # required by qute-pass
+       tldextract # required by qute-pass
      ]))
      # Elm
      # elmPackages.elm
