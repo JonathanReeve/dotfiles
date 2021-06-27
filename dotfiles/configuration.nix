@@ -191,7 +191,7 @@
      autojump               # Jump around! With `j`
      mpv                    # Minimalist video player
      #termite                # Vim-like modal terminal
-     feh                    # Display imaes
+     feh                    # Display images
      libnotify              # Notifications
      fzf                    # Fuzzy file finder
      ag                     # Fast grep replacement

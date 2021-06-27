@@ -295,7 +295,7 @@ in
       settings = {
         edit_mode = "vi";
         startup = [ "def em [f] {emacsclient -c $f &; disown}" ];
-        prompt = "echo $(starship prompt)";
+        prompt = "echo (starship prompt)";
         env = { STARSHIP_SHELL = "nushell"; };
       };
     };
