@@ -10,6 +10,3 @@
 [submodule "dynamic-wallpaper"]
 	path = dynamic-wallpaper
 	url = https://github.com/adi1090x/dynamic-wallpaper.git
-[submodule "scripts/dynamic-wallpaper"]
-	path = scripts/dynamic-wallpaper
-	url = https://github.com/adi1090x/dynamic-wallpaper.git

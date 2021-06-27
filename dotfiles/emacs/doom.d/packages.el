@@ -32,17 +32,17 @@
 ;; Edit Turtle files
 ;; (package! ttl-mode)
 
-(package! org-roam-server)
+;; (package! org-roam-server)
 
 ;; Org-roam v2 Stuff.
 ;; From [[https://org-roam.discourse.group/t/org-roam-bibtex-for-org-roam-v2/1574/70?u=jonathan][this comment]]:
-;; (package! org-roam
-;;   :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
+(package! org-roam :pin "8bed015cdff44bc813cad5c9cbe0194026d53370")
+  ;; :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
 
-;; (package! org-roam-bibtex
-;;   :recipe (:host github :repo "org-roam/org-roam-bibtex" :branch "org-roam-v2"))
+(package! org-roam-bibtex
+  :recipe (:host github :repo "org-roam/org-roam-bibtex" :branch "org-roam-v2"))
 
-;; (unpin! bibtex-completion helm-bibtex ivy-bibtex)
+(unpin! bibtex-completion helm-bibtex ivy-bibtex)
 
 ;; Python Requests-like package for elisp
 ;; for querying APIs
