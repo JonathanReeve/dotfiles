@@ -42,7 +42,7 @@
 (package! org-roam-bibtex
   :recipe (:host github :repo "org-roam/org-roam-bibtex" :branch "org-roam-v2"))
 
-(unpin! bibtex-completion helm-bibtex ivy-bibtex)
+(unpin! bibtex-completion helm-bibtex ivy-bibtex org-roam-bibtex)
 
 ;; ;; Python Requests-like package for elisp
 ;; ;; for querying APIs
