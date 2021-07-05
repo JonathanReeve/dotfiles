@@ -73,7 +73,7 @@ in
       protonmail = {
         address = "jonathan@jonreeve.com";
         userName = "jonathan@jonreeve.com";
-        passwordCommand = "${pkgs.gopass}/bin/gopass -o 127.0.0.1:1143/jonathan@jonreeve.com";
+        passwordCommand = "${pkgs.gopass}/bin/gopass show 127.0.0.1:1143/jonathan@jonreeve.com";
         imap = {
           host = "127.0.0.1";
           port = 1143;
@@ -98,7 +98,7 @@ in
           enable = true;
           create = "maildir";
           expunge = "both";
-          patterns = [ "*" ];
+          patterns = [ "INBOX" "Labels/Lists" "Sent" "Drafts" "Spam" ];
           extraConfig.channel = {
             MaxMessages = 2000;
             ExpireUnread = "yes";
