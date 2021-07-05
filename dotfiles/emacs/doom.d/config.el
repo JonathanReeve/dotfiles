@@ -441,7 +441,7 @@
         "g" #'org-roam-graph
         "m" #'org-roam
         "t" #'org-roam-tag-add
-        "T" #'org-roam-tag-delete
+        "T" #'org-roam-tag-delete)
   :config
   (defun +org-init-roam-maybe-h ()
     "Activate `org-roam-mode'. If it fails, fail gracefully."
@@ -483,10 +483,10 @@
 
   ;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
   ;; makes it easier to distinguish from other org buffers.
-  (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode))
+  (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
+  )
 
 
 ;; Since the org module lazy loads org-protocol (waits until an org URL is
 ;; detected), we can safely chain `org-roam-protocol' to it.
-(use-package! org-roam-protocol
-  :after org-protocol)
+(use-package! org-roam-protocol :after org-protocol)
