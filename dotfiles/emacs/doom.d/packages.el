@@ -42,6 +42,8 @@
 (package! org-roam-bibtex
   :recipe (:host github :repo "org-roam/org-roam-bibtex" :branch "org-roam-v2"))
 
+(package! emacsql-sqlite)
+
 (unpin! bibtex-completion helm-bibtex ivy-bibtex org-roam-bibtex)
 
 ;; ;; Python Requests-like package for elisp

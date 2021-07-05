@@ -443,50 +443,50 @@
         "t" #'org-roam-tag-add
         "T" #'org-roam-tag-delete)
   :config
-  (defun +org-init-roam-maybe-h ()
-    "Activate `org-roam-mode'. If it fails, fail gracefully."
-    (unless (with-demoted-errors "ORG ROAM ERROR: %s"
-              (org-roam-setup +1)
-              t)
-      (message "To try reinitializing org-roam, run 'M-x org-roam-mode'")
-      (org-roam-setup -1)))
+  ;; (defun +org-init-roam-maybe-h ()
+  ;;   "Activate `org-roam-mode'. If it fails, fail gracefully."
+  ;;   (unless (with-demoted-errors "ORG ROAM ERROR: %s"
+  ;;             (org-roam-setup +1)
+  ;;             t)
+  ;;     (message "To try reinitializing org-roam, run 'M-x org-roam-mode'")
+  ;;     (org-roam-setup -1)))
 
-  (setq org-roam-directory
-        (file-name-as-directory
-         (file-truename
-          (expand-file-name (or org-roam-directory "roam")
-                            org-directory)))
-        org-roam-db-location (or org-roam-db-location
-                                 (concat doom-etc-dir "org-roam.db"))
-        ;; Make org-roam buffer sticky; i.e. don't replace it when opening a
-        ;; file with an *-other-window command.
-        org-roam-buffer-window-parameters '((no-delete-other-windows . t))
-        org-roam-completion-everywhere t
-        org-roam-completion-system
-        (cond ((featurep! :completion helm) 'helm)
-              ((featurep! :completion ivy) 'ivy)
-              ((featurep! :completion ido) 'ido)
-              ('default)))
+  ;; (setq org-roam-directory
+  ;;       (file-name-as-directory
+  ;;        (file-truename
+  ;;         (expand-file-name (or org-roam-directory "roam")
+  ;;                           org-directory)))
+  ;;       org-roam-db-location (or org-roam-db-location
+  ;;                                (concat doom-etc-dir "org-roam.db"))
+  ;;       ;; Make org-roam buffer sticky; i.e. don't replace it when opening a
+  ;;       ;; file with an *-other-window command.
+  ;;       org-roam-buffer-window-parameters '((no-delete-other-windows . t))
+  ;;       org-roam-completion-everywhere t
+  ;;       org-roam-completion-system
+  ;;       (cond ((featurep! :completion helm) 'helm)
+  ;;             ((featurep! :completion ivy) 'ivy)
+  ;;             ((featurep! :completion ido) 'ido)
+  ;;             ('default)))
 
   ;; Normally, the org-roam buffer doesn't open until you explicitly call
   ;; `org-roam'. If `+org-roam-open-buffer-on-find-file' is non-nil, the
   ;; org-roam buffer will be opened for you when you use `org-roam-find-file'
   ;; (but not `find-file', to limit the scope of this behavior).
-  (add-hook! 'find-file-hook
-    (defun +org-roam-open-buffer-maybe-h ()
-      (and +org-roam-open-buffer-on-find-file
-           (memq 'org-roam-buffer--update-maybe post-command-hook)
-           (not (window-parameter nil 'window-side)) ; don't proc for popups
-           (not (eq 'visible (org-roam-buffer--visibility)))
-           (with-current-buffer (window-buffer)
-             (org-roam-buffer--get-create)))))
+  ;; (add-hook! 'find-file-hook
+  ;;   (defun +org-roam-open-buffer-maybe-h ()
+  ;;     (and +org-roam-open-buffer-on-find-file
+  ;;          (memq 'org-roam-buffer--update-maybe post-command-hook)
+  ;;          (not (window-parameter nil 'window-side)) ; don't proc for popups
+  ;;          (not (eq 'visible (org-roam-buffer--visibility)))
+  ;;          (with-current-buffer (window-buffer)
+  ;;            (org-roam-buffer--get-create)))))
 
   ;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
   ;; makes it easier to distinguish from other org buffers.
-  (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
+  ;; (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
   )
 
 
 ;; Since the org module lazy loads org-protocol (waits until an org URL is
 ;; detected), we can safely chain `org-roam-protocol' to it.
-(use-package! org-roam-protocol :after org-protocol)
+;; (use-package! org-roam-protocol :after org-protocol)
