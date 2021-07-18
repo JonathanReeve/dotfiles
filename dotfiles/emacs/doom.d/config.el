@@ -28,10 +28,6 @@
 ;; Default spelling dictionary is English
 (setq ispell-dictionary "en")
 
-;; (after! org-ref
-;;   (setq )
-;;   )
-
 ;; Get system notifications through libnotify
 (setq alert-default-style 'libnotify)
 
@@ -39,7 +35,7 @@
 (setq! org-ref-notes-directory "")
 (setq! +biblio-pdf-library-dir "~/Dokumentujo/Papers/"
        +biblio-default-bibliography-files '("~/Dokumentujo/Papers/library.bib")
-       +biblio-notes-path "~/Dokumentujo/Org/Projects/books.org")
+       +biblio-notes-path "~/Dokumentujo/Org/Roam/")
 
 ;; Org Mode
 (after! org
@@ -54,7 +50,6 @@
         diary-file "~/Dokumentujo/Org/diary"
         org-agenda-include-diary t
         org-agenda-files (list "~/Dokumentujo/Org/Projects/")
-        org-projectile-file "~/Dokumentujo/Org/Projects/todo.org"
         org-agenda-skip-scheduled-if-done t
         org-agenda-skip-deadline-if-done t
         org-todo-keywords '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
@@ -97,101 +92,106 @@
     (interactive)
     (org-insert-heading)
     (org-insert-time-stamp (current-time) t t))
+
   ;; Clock break time in pomodoro
   (setq org-pomodoro-clock-break t)
   (add-hook 'org-mode-hook 'visual-line-mode)
 
-  ;; Dynamically add org-roam files containing TODOs to agenda files list
-  ;; Adapted from here: https://org-roam.discourse.group/t/tips-dynamically-add-org-roam-files-to-your-agenda-file/1122
-  ;;
-  ;; (defvar dynamic-agenda-files nil
-  ;;   "Dynamically generate agenda files list when changing org state.")
+  ;; Org-roam
+  (map! :after org
+        :map org-mode-map
+        :localleader
+        (:prefix-map ("n" . "notes")
+         :prefix ("r" . "org-roam")
+         "f" #'org-roam-node-find
+         "g" #'org-roam-graph
+         "m" #'org-roam
+         "t" #'org-roam-tag-add
+         "T" #'org-roam-tag-delete))
 
-  ;; (defun update-dynamic-agenda-hook ()
-  ;;   (let ((done (or (not org-state) ;; nil when no TODO list
-  ;;                   (member org-state org-done-keywords)))
-  ;;         (file (buffer-file-name))
-  ;;         (agenda (funcall (ad-get-orig-definition 'org-agenda-files)) ))
-  ;;     (unless (member file agenda)
-  ;;       (if done
-  ;;           (save-excursion
-  ;;             (goto-char (point-min))
-  ;;             ;; Delete file from dynamic files when all TODO entry changed to DONE
-  ;;             (unless (search-forward-regexp org-not-done-heading-regexp nil t)
-  ;;               (customize-save-variable
-  ;;                'dynamic-agenda-files
-  ;;                (cl-delete-if (lambda (k) (string= k file))
-  ;;                              dynamic-agenda-files))))
-  ;;         ;; Add this file to dynamic agenda files
-  ;;         (unless (member file dynamic-agenda-files)
-  ;;           (customize-save-variable 'dynamic-agenda-files
-  ;;                                    (add-to-list 'dynamic-agenda-files file)))))))
+  (setq org-roam-directory "~/Dokumentujo/Org/Roam")
+  (setq org-roam-dailies-directory "Daily/")
+  (setq org-roam-db-location "~/Dokumentujo/Org/Roam/org-roam.db")
+  ;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
+  ;; makes it easier to distinguish from other org buffers.
+  ;; (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
 
-  ;; (defun dynamic-agenda-files-advice (orig-val)
-  ;;   (union orig-val dynamic-agenda-files :test #'equal))
 
-  ;; (advice-add 'org-agenda-files :filter-return #'dynamic-agenda-files-advice)
-  ;; (add-to-list 'org-after-todo-state-change-hook 'update-dynamic-agenda-hook t)
-
-  ;; The above solution is behaving strangely.
-  ;; Now trying a different one from this blog post:
+  ;; Automatically assign the tag Project for project notes
   ;; https://app.getpocket.com/read/3231443951
-  ;;
-  ;; (defun +org-notes-project-p ()
-  ;;   "Return non-nil if current buffer has any todo entry.
+  (require 'vulpea)
+  (defun vulpea-project-p ()
+    "Return non-nil if current buffer has any todo entry.
 
-  ;; TODO entries marked as done are ignored, meaning the this
-  ;; function returns nil if current buffer contains only completed
-  ;; tasks."
-  ;;   (seq-find                                 ; (3)
-  ;;    (lambda (type)
-  ;;      (eq type 'todo))
-  ;;    (org-element-map                         ; (2)
-  ;;        (org-element-parse-buffer 'headline) ; (1)
-  ;;        'headline
-  ;;      (lambda (h)
-  ;;        (org-element-property :todo-type h)))))
+  TODO entries marked as done are ignored, meaning the this
+  function returns nil if current buffer contains only completed
+  tasks."
+    (seq-find                                 ; (3)
+     (lambda (type)
+       (eq type 'todo))
+     (org-element-map                         ; (2)
+         (org-element-parse-buffer 'headline) ; (1)
+         'headline
+       (lambda (h)
+         (org-element-property :todo-type h)))))
 
-  ;; (defun +org-notes-project-update-tag ()
-  ;;   "Update PROJECT tag in the current buffer."
-  ;;   (when (and (not (active-minibuffer-window))
-  ;;              (+org-notes-buffer-p))
-  ;;     (let* ((file (buffer-file-name (buffer-base-buffer)))
-  ;;            (all-tags (org-roam--extract-tags file))
-  ;;            (prop-tags (org-roam--extract-tags-prop file))
-  ;;            (tags prop-tags))
-  ;;       (if (+org-notes-project-p)
-  ;;           (setq tags (cons "Project" tags))
-  ;;         (setq tags (remove "Project" tags)))
-  ;;       (unless (eq prop-tags tags)
-  ;;         (org-roam--set-global-prop
-  ;;          "ROAM_TAGS"
-  ;;          (combine-and-quote-strings (seq-uniq tags)))))))
+  (defun vulpea-project-update-tag ()
+    "Update PROJECT tag in the current buffer."
+    (when (and (not (active-minibuffer-window))
+               (vulpea-buffer-p))
+      (save-excursion
+        (goto-char (point-min))
+        (let* ((tags (vulpea-buffer-tags-get))
+               (original-tags tags))
+          (if (vulpea-project-p)
+              (setq tags (cons "project" tags))
+            (setq tags (remove "project" tags)))
+          (unless (eq original-tags tags)
+            (apply #'vulpea-buffer-tags-set (seq-uniq tags)))))))
 
-  ;; (defun +org-notes-buffer-p ()
-  ;;   "Return non-nil if the currently visited buffer is a note."
-  ;;   (and buffer-file-name
-  ;;        (string-prefix-p
-  ;;         (expand-file-name (file-name-as-directory org-roam-directory))
-  ;;         (file-name-directory buffer-file-name))))
+  (defun vulpea-buffer-p ()
+    "Return non-nil if the currently visited buffer is a note."
+    (and buffer-file-name
+         (string-prefix-p
+          (expand-file-name (file-name-as-directory org-roam-directory))
+          (file-name-directory buffer-file-name))))
 
-  ;; (defun +org-notes-project-files ()
-  ;;   "Return a list of note files containing Project tag."
-  ;;   (seq-map
-  ;;    #'car
-  ;;    (org-roam-db-query
-  ;;     [:select file
-  ;;      :from tags
-  ;;      :where (like tags (quote "%\"Project\"%"))])))
+  (defun vulpea-project-files ()
+    "Return a list of note files containing 'project' tag." ;
+    (seq-uniq
+     (seq-map
+      #'car
+      (org-roam-db-query
+       [:select [nodes:file]
+        :from tags
+        :left-join nodes
+        :on (= tags:node-id nodes:id)
+        :where (like tag (quote "%\"project\"%"))]))))
 
-  ;; (defun +agenda-files-update (&rest _)
-  ;;   "Update the value of `org-agenda-files'."
-  ;;   (setq org-agenda-files (delete-dups (append org-agenda-files (+org-notes-project-files)))))
+  (defun vulpea-agenda-files-update (&rest _)
+    "Update the value of `org-agenda-files'."
+    (setq org-agenda-files (delete-dups (append org-agenda-files (vulpea-project-files)))))
 
-  ;; (add-hook 'find-file-hook #'+org-notes-project-update-tag)
-  ;; (add-hook 'before-save-hook #'+org-notes-project-update-tag)
+  (add-hook 'find-file-hook #'vulpea-project-update-tag)
+  (add-hook 'before-save-hook #'vulpea-project-update-tag)
+  (advice-add 'org-agenda :before #'vulpea-agenda-files-update)
 
-  ;; (advice-add 'org-agenda :before #'+agenda-files-update)
+  ;; Org-roam-server
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 8080
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files nil
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20)
+
+  ;; Since the org module lazy loads org-protocol (waits until an org URL is
+  ;; detected), we can safely chain `org-roam-protocol' to it.
+  ;; (use-package! org-roam-protocol :after org-protocol)
 
   ;; Allow for "letter" class. This allows me to write subtrees in Org
   ;; and then later export them to Letter-class LaTeX-generated PDFs.
@@ -217,35 +217,6 @@
   ;; (global-set-key (kbd "C-c n p") 'org-projectile-project-todo-completing-read)
 )
 
-
-(after! org-roam
-  ;; Org-roam
-  (setq org-roam-directory "~/Dokumentujo/Org/Roam")
-  (setq org-roam-dailies-directory "Daily/")
-  ;; (setq org-roam-dailies-capture-templates
-  ;;       '(("d" "default" entry
-  ;;          #'org-roam-capture--get-point
-  ;;          "* %?"
-  ;;          :file-name "Daily/%<%Y-%m-%d>"
-  ;;          :head "#+title: %<%Y-%m-%d>\n\n")))
-  ;; (setq org-roam-capture-templates
-  ;;       '(("n" "note" entry
-  ;;          #'org-roam-capture--get-point
-  ;;          "* %?"
-  ;;          :file-name "")))
-    ;; (setq org-roam-server-host "127.0.0.1"
-    ;;       org-roam-server-port 8080
-    ;;       org-roam-server-authenticate nil
-    ;;       org-roam-server-export-inline-images t
-    ;;       org-roam-server-serve-files nil
-    ;;       org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-    ;;       org-roam-server-network-poll t
-    ;;       org-roam-server-network-arrows nil
-    ;;       org-roam-server-network-label-truncate t
-    ;;       org-roam-server-network-label-truncate-length 60
-    ;;       org-roam-server-network-label-wrap-length 20)
-)
-
 ;;(setq org-agenda-window-setup 'only-window)
 ;; Prose linting
 ;; (require 'flycheck-vale)
@@ -255,11 +226,8 @@
 ;; (delete '("\\.pdf\\'" . default) org-file-apps)
 ;; (add-to-list 'org-file-apps '("\\.pdf\\'" . system))
 
-;; Org-brain
-
 ;; Markdown
 (add-hook 'markdown-mode 'visual-line-mode)
-
 
 ;; Mail
 (after! mu4e
@@ -357,6 +325,7 @@
 
 (add-hook 'elfeed-show-mode-hook 'visual-line-mode)
 
+;; Unbind QWERTY, bind Colemak
 (map! :n "l" #'evil-insert
       :n "L" #'evil-insert-line
       :nvm "n" #'evil-next-visual-line
@@ -424,69 +393,3 @@
 ;; Fancy splash image
 ;; (setq fancy-splash-image "/home/jon/Bildujo/typewriter1.jpg")
 
-;; Org-roam config
-;; Putting this here for 2.0 stuff
-(use-package! org-roam
-  :after org
-  :commands (org-roam-buffer
-   org-roam-setup
-   org-roam-capture
-   org-roam-node-find)
-  :init
-  (map! :after org
-        :map org-mode-map
-        :localleader
-        :prefix ("m" . "org-roam")
-        "f" #'org-roam-node-find
-        "g" #'org-roam-graph
-        "m" #'org-roam
-        "t" #'org-roam-tag-add
-        "T" #'org-roam-tag-delete)
-  :config
-  ;; (defun +org-init-roam-maybe-h ()
-  ;;   "Activate `org-roam-mode'. If it fails, fail gracefully."
-  ;;   (unless (with-demoted-errors "ORG ROAM ERROR: %s"
-  ;;             (org-roam-setup +1)
-  ;;             t)
-  ;;     (message "To try reinitializing org-roam, run 'M-x org-roam-mode'")
-  ;;     (org-roam-setup -1)))
-
-  ;; (setq org-roam-directory
-  ;;       (file-name-as-directory
-  ;;        (file-truename
-  ;;         (expand-file-name (or org-roam-directory "roam")
-  ;;                           org-directory)))
-  ;;       org-roam-db-location (or org-roam-db-location
-  ;;                                (concat doom-etc-dir "org-roam.db"))
-  ;;       ;; Make org-roam buffer sticky; i.e. don't replace it when opening a
-  ;;       ;; file with an *-other-window command.
-  ;;       org-roam-buffer-window-parameters '((no-delete-other-windows . t))
-  ;;       org-roam-completion-everywhere t
-  ;;       org-roam-completion-system
-  ;;       (cond ((featurep! :completion helm) 'helm)
-  ;;             ((featurep! :completion ivy) 'ivy)
-  ;;             ((featurep! :completion ido) 'ido)
-  ;;             ('default)))
-
-  ;; Normally, the org-roam buffer doesn't open until you explicitly call
-  ;; `org-roam'. If `+org-roam-open-buffer-on-find-file' is non-nil, the
-  ;; org-roam buffer will be opened for you when you use `org-roam-find-file'
-  ;; (but not `find-file', to limit the scope of this behavior).
-  ;; (add-hook! 'find-file-hook
-  ;;   (defun +org-roam-open-buffer-maybe-h ()
-  ;;     (and +org-roam-open-buffer-on-find-file
-  ;;          (memq 'org-roam-buffer--update-maybe post-command-hook)
-  ;;          (not (window-parameter nil 'window-side)) ; don't proc for popups
-  ;;          (not (eq 'visible (org-roam-buffer--visibility)))
-  ;;          (with-current-buffer (window-buffer)
-  ;;            (org-roam-buffer--get-create)))))
-
-  ;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
-  ;; makes it easier to distinguish from other org buffers.
-  ;; (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
-  )
-
-
-;; Since the org module lazy loads org-protocol (waits until an org URL is
-;; detected), we can safely chain `org-roam-protocol' to it.
-;; (use-package! org-roam-protocol :after org-protocol)

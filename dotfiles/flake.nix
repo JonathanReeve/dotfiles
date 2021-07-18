@@ -6,8 +6,8 @@
       inputs.nixpkgs.follows = "nixos";
     };
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs";
-    # nixos.url = "nixpkgs/nixos-unstable";
-    nixos.url = "github:nixos/nixpkgs";
+    nixos.url = "nixpkgs/nixos-unstable";
+    # nixos.url = "github:nixos/nixpkgs";
     # nixos.url = "/home/jon/Code/nixpkgs";
   };
   outputs = { self, nixos, home-manager, nix-doom-emacs }: {
@@ -32,7 +32,7 @@
             src = pkgs.fetchFromGitHub {
               owner = "jethrokuan";
               repo = "org-roam";
-              rev = "8bed015cdff44bc813cad5c9cbe0194026d53370";
+              rev = "6285561c4ff7254bbeead8908422cd4263786c6f";
               sha256 = "iicx/zsZIk/5ivy5xn3HW03JBCO4ascVdgc5qzu3yww=";
               };
             });
@@ -44,6 +44,14 @@
               sha256 = "iicx/zsZIk/5ivy5xn3HW03JBCO4ascVdgc5qzu3yww=";
               };
             });
+         vulpea = super.vulpea.overrideAttrs (esuper: {
+           src = pkgs.fetchFromGitHub {
+             owner = "d12frosted";
+             repo = "vulpea";
+             rev = "a053350af4f43705908bfbd862824bf01e6b45cd";
+             sha256 = "DOccj9qr1sQAKWXNcFds1Y29khgYbxpUdzoMx0oND4E=";
+           };
+         });
          };
        extraPackages = with pkgs; [ mu pass gnupg ];
        extraConfig = ''

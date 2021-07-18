@@ -42,6 +42,11 @@
 (package! org-roam-bibtex
   :recipe (:host github :repo "org-roam/org-roam-bibtex" :branch "org-roam-v2"))
 
+(package! vulpea :recipe (:host github :repo "d12frosted/vulpea" :branch "feature/org-roam-v2" ))
+
+(package! org-roam-server)
+
+
 (package! emacsql-sqlite)
 
 (unpin! bibtex-completion helm-bibtex ivy-bibtex org-roam-bibtex)

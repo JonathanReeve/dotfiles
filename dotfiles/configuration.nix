@@ -184,7 +184,7 @@
        tldextract # required by qute-pass
      ]))
      # Elm
-     # elmPackages.elm
+     elmPackages.elm
      # Minimal computing
      ranger highlight       # File manager
      scrot                  # Screenshots

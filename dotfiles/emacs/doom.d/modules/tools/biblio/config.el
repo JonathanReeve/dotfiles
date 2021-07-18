@@ -107,8 +107,7 @@ In case of directory the path must end with a slash."
           '(("r" "ref" plain (function org-roam-capture--get-point)
              ""
              :file-name "${slug}"
-             :head "#+TITLE: ${=key=}: ${title}\n#+roam_key: ${ref}\n#+roam_tags: lit
-
+             :head "#+title: ${=key=}: ${title}
 - tags ::
 - keywords :: ${keywords}
 
