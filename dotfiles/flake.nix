@@ -30,18 +30,18 @@
          # I wish I could just do this in my doom config, but nix-straight.el doesn't seem to respect recipes.
          org-roam = super.org-roam.overrideAttrs (esuper: {
             src = pkgs.fetchFromGitHub {
-              owner = "jethrokuan";
+              owner = "org-roam";
               repo = "org-roam";
-              rev = "6285561c4ff7254bbeead8908422cd4263786c6f";
-              sha256 = "iicx/zsZIk/5ivy5xn3HW03JBCO4ascVdgc5qzu3yww=";
+              rev = "e997c017deab234a0a067914d7bb6e81e3fa9d88";
+              sha256 = "Jf36HnGVtwDhrV7542isfmncWuZ6IV/v4lYfPwLzfSs=";
               };
             });
          org-roam-bibtex = super.org-roam-bibtex.overrideAttrs (esuper: {
             src = pkgs.fetchFromGitHub {
               owner = "org-roam";
               repo = "org-roam-bibtex";
-              rev = "c4d3afcb3143cd7db30589c81110f677510c1bf9";
-              sha256 = "iicx/zsZIk/5ivy5xn3HW03JBCO4ascVdgc5qzu3yww=";
+              rev = "c9865196efe7cfdfcced0d47ea3e5b39bdddd162";
+              sha256 = "z9ORXNMiFDdW1GsdQIIhWDCNO5NiTXJqGv+pFbI5PjE=";
               };
             });
          vulpea = super.vulpea.overrideAttrs (esuper: {
