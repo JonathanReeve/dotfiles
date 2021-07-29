@@ -109,6 +109,7 @@
          "t" #'org-roam-tag-add
          "T" #'org-roam-tag-delete))
 
+  (setq org-roam-v2-ack t)
   (setq org-roam-directory "~/Dokumentujo/Org/Roam")
   (setq org-roam-dailies-directory "Daily/")
   (setq org-roam-db-location "~/Dokumentujo/Org/Roam/org-roam.db")
