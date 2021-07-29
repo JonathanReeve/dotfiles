@@ -169,7 +169,7 @@
      (python3.withPackages(ps: with ps; [
        pandas
        matplotlib
-       python-language-server # Spacemacs integration
+       # python-language-server # Spacemacs integration
        flake8 # Syntax checking for emacs
        #scikitlearn
        # atair
@@ -185,6 +185,8 @@
      ]))
      # Elm
      elmPackages.elm
+     # Julia
+     julia-stable-bin
      # Minimal computing
      ranger highlight       # File manager
      scrot                  # Screenshots
