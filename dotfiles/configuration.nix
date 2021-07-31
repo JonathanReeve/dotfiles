@@ -166,6 +166,7 @@
      sqlite sqlite-interactive # Sqlite
      # Python Development
      pipenv
+     poetry
      (python3.withPackages(ps: with ps; [
        pandas
        matplotlib
