@@ -98,21 +98,31 @@
   (add-hook 'org-mode-hook 'visual-line-mode)
 
   ;; Org-roam
-  (map! :after org
-        :map org-mode-map
-        :localleader
-        (:prefix-map ("n" . "notes")
-         :prefix ("r" . "org-roam")
-         "f" #'org-roam-node-find
-         "g" #'org-roam-graph
-         "m" #'org-roam
-         "t" #'org-roam-tag-add
-         "T" #'org-roam-tag-delete))
+  ;; (map! :after org
+  ;;       :map org-mode-map
+  ;;       :localleader
+  ;;       (:prefix-map ("n" . "notes")
+  ;;        :prefix ("r" . "org-roam")
+  ;;        "f" #'org-roam-node-find
+  ;;        "g" #'org-roam-graph
+  ;;        "m" #'org-roam
+  ;;        "t" #'org-roam-tag-add
+  ;;        "T" #'org-roam-tag-delete))
 
   (setq org-roam-v2-ack t)
   (setq org-roam-directory "~/Dokumentujo/Org/Roam")
   (setq org-roam-dailies-directory "Daily/")
   (setq org-roam-db-location "~/Dokumentujo/Org/Roam/org-roam.db")
+  (setq org-roam-capture-templates
+        '(
+          ("d" "default" plain "%?" :if-new
+           (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+           :unnarrowed t)
+          ;; bibliography note template
+          ("r" "bibliography reference" plain "%?" :if-new
+           (file+head "references/${citekey}.org" "#+title: ${title}\n")
+           :unnarrowed t)))
+
   ;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
   ;; makes it easier to distinguish from other org buffers.
   ;; (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
@@ -178,17 +188,17 @@
   (advice-add 'org-agenda :before #'vulpea-agenda-files-update)
 
   ;; Org-roam-server
-  (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 8080
-        org-roam-server-authenticate nil
-        org-roam-server-export-inline-images t
-        org-roam-server-serve-files nil
-        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-        org-roam-server-network-poll t
-        org-roam-server-network-arrows nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20)
+  ;; (setq org-roam-server-host "127.0.0.1"
+  ;;       org-roam-server-port 8080
+  ;;       org-roam-server-authenticate nil
+  ;;       org-roam-server-export-inline-images t
+  ;;       org-roam-server-serve-files nil
+  ;;       org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+  ;;       org-roam-server-network-poll t
+  ;;       org-roam-server-network-arrows nil
+  ;;       org-roam-server-network-label-truncate t
+  ;;       org-roam-server-network-label-truncate-length 60
+  ;;       org-roam-server-network-label-wrap-length 20)
 
   ;; Since the org module lazy loads org-protocol (waits until an org URL is
   ;; detected), we can safely chain `org-roam-protocol' to it.

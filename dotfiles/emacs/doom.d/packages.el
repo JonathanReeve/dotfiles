@@ -36,16 +36,15 @@
 
 ;; Org-roam v2 Stuff.
 ;; From [[https://org-roam.discourse.group/t/org-roam-bibtex-for-org-roam-v2/1574/70?u=jonathan][this comment]]:
-(package! org-roam
-  :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
+;; (package! org-roam
+;;   :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
 
-(package! org-roam-bibtex
-  :recipe (:host github :repo "org-roam/org-roam-bibtex" :branch "org-roam-v2"))
+;; (package! org-roam-bibtex
+;;   :recipe (:host github :repo "org-roam/org-roam-bibtex" :branch "org-roam-v2"))
 
 (package! vulpea :recipe (:host github :repo "d12frosted/vulpea" :branch "feature/org-roam-v2" ))
 
-(package! org-roam-server)
-
+;; (package! org-roam-server)
 
 (package! emacsql-sqlite)
 
