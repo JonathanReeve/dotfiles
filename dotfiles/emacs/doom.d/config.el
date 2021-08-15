@@ -109,7 +109,6 @@
   ;;        "t" #'org-roam-tag-add
   ;;        "T" #'org-roam-tag-delete))
 
-  (setq org-roam-v2-ack t)
   (setq org-roam-directory "~/Dokumentujo/Org/Roam")
   (setq org-roam-dailies-directory "Daily/")
   (setq org-roam-db-location "~/Dokumentujo/Org/Roam/org-roam.db")
@@ -123,10 +122,18 @@
            (file+head "references/${citekey}.org" "#+title: ${title}\n")
            :unnarrowed t)))
 
+  ;; Configure org-roam buffer display.
+  ;; See https://www.orgroam.com/manual.html#Navigating-the-Org_002droam-Buffer
+  (add-to-list 'display-buffer-alist
+               '("\\*org-roam\\*"
+                 (display-buffer-in-direction)
+                 (direction . right)
+                 (window-width . 0.33)
+                 (window-height . fit-window-to-buffer)))
+
   ;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
   ;; makes it easier to distinguish from other org buffers.
   ;; (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
-
 
   ;; Automatically assign the tag Project for project notes
   ;; https://app.getpocket.com/read/3231443951

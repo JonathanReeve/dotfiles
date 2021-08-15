@@ -34,6 +34,9 @@
 
 ;; (package! org-roam-server)
 
+(package! websocket)
+(package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
+
 ;; Org-roam v2 Stuff.
 ;; From [[https://org-roam.discourse.group/t/org-roam-bibtex-for-org-roam-v2/1574/70?u=jonathan][this comment]]:
 ;; (package! org-roam

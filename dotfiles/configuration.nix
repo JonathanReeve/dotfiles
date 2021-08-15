@@ -176,7 +176,7 @@
        # atair
        #vega
        jupyter
-       jupyterlab
+       # jupyterlab
        virtualenvwrapper
        nltk
        pip
