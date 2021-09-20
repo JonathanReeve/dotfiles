@@ -10,7 +10,7 @@
 ;; Set location of custom.el
 (setq custom-file "~/.emacs.d/custom.el")
 
-(setq doom-font (font-spec :family "Fira Code" :size 14))
+(setq doom-font (font-spec :family "Monoid" :size 14))
 
 (setq vc-follow-symlinks t) ;; Always follow symlinks.
 

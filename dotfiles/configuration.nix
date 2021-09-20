@@ -68,6 +68,9 @@
     victor-mono
     emacs-all-the-icons-fonts
     hack-font
+    # input-fonts
+    monoid
+    kochi-substitute # Japanese
   ];
   # Set your time zone.
   time.timeZone = "America/New_York";

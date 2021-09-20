@@ -14,7 +14,7 @@ let
   dots = "/home/jon/Dotfiles/dotfiles";
   scripts = "/home/jon/Dotfiles/scripts";
   # Preferences
-  font = "Fira Code";
+  font = "Monoid";
   backgroundColor = "#243442"; # Blue steel
   foregroundColor = "#deedf9"; # Light blue
   warningColor = "#e23131"; # Reddish
