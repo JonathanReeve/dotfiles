@@ -5,9 +5,11 @@
 import Turtle
 import qualified Data.Text as T
 import qualified Data.Text.IO as TIO
+import System.Posix.Env
+import Data.Maybe
 
 getClock :: Text
-getClock = "/etc/profiles/per-user/jon/bin/emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)'"
+getClock = "/run/current-system/sw/bin/emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)'"
 
 out :: Shell Line
 out = inshell getClock empty
@@ -26,6 +28,13 @@ main = do
     -- Emacs is not on.
     (ExitFailure err, _) -> do
       TIO.putStrLn $ red "Ensalutu!" -- <> repr err
+      -- clockVal <- getEnv "clock"
+      -- let clock = (read (fromMaybe "0" clockVal)) :: Int
+      -- setEnv "clock" (show (clock + 1)) True
+      -- clockVal <- getEnv "clock"
+      -- let clock = (read (fromMaybe "0" clockVal)) :: Int
+      -- print clock
+
       -- TODO: record how long I've been clocked out,
       -- and prompt me to log in if it's been too long
       -- let countFile = "/tmp/unclocked-count"

@@ -108,15 +108,16 @@
      #direnv                 # Essential project management thingy
      graphviz               # Simple charts
      xclip                  # Clipboard on the command line
+     x11idle
      dict                   # Dictionary
 
      # Ugh
      #wine
      #winetricks
 
-     # (emacsWithPackages (epkgs: with emacsPackages; [
-     #   pdf-tools
-     # ]))
+     (emacsWithPackages (epkgs: with emacsPackages; [
+       pdf-tools
+     ]))
 
      # Requires neovim-nightly
      # (vscodeWithExtensions.override {
@@ -179,7 +180,7 @@
        # atair
        #vega
        jupyter
-       # jupyterlab
+       jupyterlab
        virtualenvwrapper
        nltk
        pip

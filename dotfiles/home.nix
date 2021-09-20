@@ -10,7 +10,7 @@ let
   scripts = "/home/jon/Dotfiles/scripts";
   maildir = "/home/jon/Mail";
   # Preferences
-  font = "Fira Code";
+  font = "Monoid";
   # doom-emacs = pkgs.callPackage (builtins.fetchTarball {
   #   url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
   # }) {
@@ -109,6 +109,15 @@ in
   };
   programs = {
     # Have home-manager manage itself.
+    gnome-terminal = {
+      profile.default = {
+        allowBold = false;
+        allowBell = false;
+        font = "${font}";
+        transparencyPercent = 90;
+        themeVariant = "dark";
+      };
+    };
     home-manager = {
       enable = true;
       # path = "/home/jon/Code/home-manager";
@@ -202,9 +211,11 @@ in
          # "lock" = "${lockCmd}";
          "new-session" = "dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.DisplayManager $XDG_SEAT_PATH org.freedesktop.DisplayManager.Seat.SwitchToGreeter";
          "portrait-monitor" = "xrandr --output DP-1 --rotate left --auto --right-of eDP-1";
-         # Use vim as pager for manfiles, since it's prettier
+         "monitor" = "xrandr --output DP-1 --auto --above eDP-1";
+         "monitor-off" = "xrandr --output DP-1 --off";
        };
        shellAliases = {
+         # Use vim as pager for manfiles, since it's prettier
          "man" = "env PAGER=\"vim -R -c 'set ft=man'\" man";
          };
        functions = {
@@ -426,11 +437,11 @@ in
         # neovim-nightly
       ];
       file = {
-      #   ".doom.d/" = {
-      #     source = ./emacs/doom.d;
-      #     recursive = true;
-      #     onChange = "$HOME/.emacs.d/bin/doom sync";
-      #   };
+        ".doom.d/" = {
+          source = ./emacs/doom.d;
+          recursive = true;
+          onChange = "$HOME/.emacs.d/bin/doom sync";
+        };
         ".local/share/applications/org-protocol.desktop".text = ''
           [Desktop Entry]
           Name=Org-Protocol
@@ -440,9 +451,9 @@ in
           Terminal=false
           MimeType=x-scheme-handler/org-protocol
         '';
-        # ".emacs.d/init.el".text = ''
-        #     (load "default.el")
-        # '';
+        #".emacs.d/init.el".text = ''
+        #    (load "default.el")
+        #'';
 
         # Vim all the things!
         ".inputrc".text =

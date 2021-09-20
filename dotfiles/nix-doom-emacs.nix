@@ -10,8 +10,8 @@
         src = pkgs.fetchFromGitHub {
           owner = "org-roam";
           repo = "org-roam";
-          rev = "5dce6261a2a45798cdf0c65371b76c83dd5b1de6";
-          sha256 = "4U75vYoaVrPA9mXNd6c4Jmjn1uEgFXPk7DhZo08v9Dg=";
+          rev = "e9ae19c01cb1fac8256e404b3f9c06f4be5468e6";
+          sha256 = "4U75arstVrPA9mXNd6c4Jmjn1uEgFXPk7DhZo08v9Dg=";
         };
       });
       org-roam-bibtex = super.org-roam-bibtex.overrideAttrs (esuper: {
@@ -50,14 +50,6 @@
           maintainers = with nixos.lib.maintainers; [ JonathanReeve ];
         };
       };
-      vulpea = super.vulpea.overrideAttrs (esuper: {
-        src = pkgs.fetchFromGitHub {
-          owner = "d12frosted";
-          repo = "vulpea";
-          rev = "ebbfc00978603c40222e260f06dbec9d781e3306";
-          sha256 = "Bxs2op8mX3XsnYLTwBVr/4yaoVHFqnLMJRXWk0GBqL8=";
-        };
-      });
     };
     extraPackages = with pkgs; [ mu pass gnupg ];
     extraConfig = ''

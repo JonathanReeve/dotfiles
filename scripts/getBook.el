@@ -21,7 +21,26 @@
 
 (require 'enlive)
 (require 'seq)
+(url-copy-file "http://google.com")
 
+; asynchronously
+(defun print-url (url)
+  (url-retrieve url 'print))
+
+(print-url "http://www.gnu.org")
+
+; synchronously
+(defun get-url (url)
+  (with-current-buffer (url-retrieve-synchronously url) (buffer-string)))
+
+(print )
+
+(setq data )
+
+(with-temp-buffer (get-url "http://www.google.com"))
+
+
+(insert data)
 (defun getBook (query)
 "Get a book from a query. Add it to database."
   (interactive)

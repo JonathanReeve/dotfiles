@@ -37,21 +37,16 @@
 (package! websocket)
 (package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
 
-;; Org-roam v2 Stuff.
-;; From [[https://org-roam.discourse.group/t/org-roam-bibtex-for-org-roam-v2/1574/70?u=jonathan][this comment]]:
-;; (package! org-roam
-;;   :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
+;;(package! org-roam-bibtex
+;;  :recipe (:host github :repo "org-roam/org-roam-bibtex")) 
 
-;; (package! org-roam-bibtex
-;;   :recipe (:host github :repo "org-roam/org-roam-bibtex" :branch "org-roam-v2"))
-
-(package! vulpea :recipe (:host github :repo "d12frosted/vulpea" :branch "feature/org-roam-v2" ))
+(package! vulpea :recipe (:host github :repo "d12frosted/vulpea"))
 
 ;; (package! org-roam-server)
 
 (package! emacsql-sqlite)
 
-(unpin! bibtex-completion helm-bibtex ivy-bibtex org-roam-bibtex)
+;; (unpin! bibtex-completion helm-bibtex ivy-bibtex org-roam-bibtex org-roam)
 
 ;; ;; Python Requests-like package for elisp
 ;; ;; for querying APIs
