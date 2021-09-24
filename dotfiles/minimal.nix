@@ -179,7 +179,7 @@ in
            format-charging = " <label-charging>";
            format-discharging = "<ramp-capacity> <label-discharging>";
            format-full = "";
-           ramp-capacity-0 = "";
+           ramp-capacity-0 = "%{F#f00}%{F-}";
            ramp-capacity-1 = "";
            ramp-capacity-2 = "";
            ramp-capacity-3 = "";
