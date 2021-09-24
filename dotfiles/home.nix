@@ -422,7 +422,11 @@ in
   };
   qt = {
     enable = true;
-    # useGtkTheme = true;
+    style = {
+      name = "adwaita-dark";
+      package = pkgs.adwaita-qt;
+    };
+    platformTheme = "gnome";
   };
 
   # Dotfiles for the home root, ~/
