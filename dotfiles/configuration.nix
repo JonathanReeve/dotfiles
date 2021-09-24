@@ -301,7 +301,12 @@
       DBs = with pkgs.dictdDBs; [ wiktionary wordnet ];
     };
     flatpak.enable = true;
+
     keybase.enable = true;
+    kbfs = {
+      enable = true;
+      mountPoint = "%h/Keybase";
+    };
 
     # localtime.enable = true;
 
