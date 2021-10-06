@@ -42,8 +42,6 @@
 
 (package! vulpea :recipe (:host github :repo "d12frosted/vulpea"))
 
-;; (package! org-roam-server)
-
 (package! emacsql-sqlite)
 
 ;; (unpin! bibtex-completion helm-bibtex ivy-bibtex org-roam-bibtex org-roam)
