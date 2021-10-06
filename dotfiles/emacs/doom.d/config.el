@@ -229,7 +229,7 @@ tasks."
   "Update the value of `org-agenda-files'."
   (setq org-agenda-files (delete-dups (append org-agenda-files (vulpea-project-files)))))
 
-(add-hook 'find-file-hook #'vulpea-project-update-tag)
+;; (add-hook 'find-file-hook #'vulpea-project-update-tag)
 (add-hook 'before-save-hook #'vulpea-project-update-tag)
 
 (advice-add 'org-agenda :before #'vulpea-agenda-files-update)
@@ -315,14 +315,14 @@ If nil it defaults to `split-string-default-separators', normally
   ;; Allow for "letter" class. This allows me to write subtrees in Org
   ;; and then later export them to Letter-class LaTeX-generated PDFs.
   ;; This is useful for drafting cover letters and the like.
-  ;; (add-to-list 'org-latex-classes
-  ;;              '("letter"
-  ;;                "\\documentclass{letter}"
-  ;;                ("\\section{%s}" . "\\section*{%s}")
-  ;;                ("\\subsection{%s}" . "\\subsection*{%s}")
-  ;;                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-  ;;                ("\\paragraph{%s}" . "\\paragraph*{%s}")
-  ;;                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  (add-to-list 'org-latex-classes
+               '("letter"
+                 "\\documentclass{letter}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
   ;; I might not need this.
   ;; (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
 
@@ -453,7 +453,7 @@ If nil it defaults to `split-string-default-separators', normally
       :nvm "e" #'evil-previous-visual-line
       :nvm "ge" #'evil-previous-line
       :nvm "i" #'evil-forward-char
-      :nvm "j" #'evil-fordard-word-end
+      :nvm "j" #'evil-forward-word-end
       :nvm "J" #'evil-forward-WORD-end
       :nvm "gj" #'evil-backward-word-end
       :nvm "gJ" #'evil-backward-WORD-end
@@ -512,3 +512,5 @@ If nil it defaults to `split-string-default-separators', normally
 ;; Fancy splash image
 ;; (setq fancy-splash-image "/home/jon/Bildujo/typewriter1.jpg")
 
+;; Stop autocompleting parentheses and quotation marks
+(remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
