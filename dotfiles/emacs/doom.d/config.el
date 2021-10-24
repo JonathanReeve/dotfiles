@@ -17,28 +17,26 @@
 ;; Get system notifications through libnotify
 (setq alert-default-style 'libnotify)
 
-(after! eshell
-  (when (and (executable-find "fish")
-             (require 'fish-completion nil t))
-    (global-fish-completion-mode)))
-
 ;; Don't prompt when opening journal or other large files
 ;(setq large-file-warning-threshold 20000000)
 
 ;; Default spelling dictionary is English
 (setq ispell-dictionary "en")
 
-;; Get system notifications through libnotify
-(setq alert-default-style 'libnotify)
-
 ;; Bibliography
-(setq! bibtex-actions-bibliography '("~/Dokumentujo/Papers/library.bib"))
-(setq! bibtex-completion-bibliography '("~/Dokumentujo/Papers/library.bib"))
-(setq! bibtex-completion-library-path '("~/Dokumentujo/Papers/")
-       bibtex-completion-notes-path "~/Dokumentujo/Org/Roam/")
 
-(setq org-cite-global-bibliography bibtex-actions-bibliography
-      org-cite-insert-processor 'oc-bibtex-actions-insert
+;; Bibtex-actions
+;; See https://github.com/bdarcus/doom-emacs/blob/biblio-org-cite/modules/tools/biblio/README.org
+;; and https://github.com/bdarcus/bibtex-actions#configuration
+(setq! bibtex-actions-bibliography '("~/Dokumentujo/Papers/library.bib") ;; List
+       bibtex-actions-library-paths '("~/Dokumentujo/Papers/") ;; List
+       bibtex-actions-notes-paths  '("~/Dokumentujo/Org/Roam/") ;; List
+       bibtex-completion-bibliography '("~/Dokumentujo/Papers/library.bib") ;; List
+       bibtex-completion-library-path '("~/Dokumentujo/Papers/") ;; List
+       bibtex-completion-notes-path "~/Dokumentujo/Org/Roam/" ;; !! String
+       )
+
+(setq org-cite-insert-processor 'oc-bibtex-actions-insert
       org-cite-follow-processor 'oc-bibtex-actions
       org-cite-activate-processor 'oc-bibtex-actions
       bibtex-actions-at-point-function 'embark-act)
@@ -62,20 +60,20 @@
         (bibtex-actions-filenotify-setup '(LaTeX-mode-hook org-mode-hook))
 
         (setq bibtex-actions-symbols
-        `((file . (,(all-the-icons-icon-for-file "foo.pdf" :face 'all-the-icons-dred) .
-                ,(all-the-icons-icon-for-file "foo.pdf" :face 'bibtex-actions-icon-dim)))
-        (note . (,(all-the-icons-icon-for-file "foo.txt") .
-                ,(all-the-icons-icon-for-file "foo.txt" :face 'bibtex-actions-icon-dim)))
-        (link .
-                (,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'all-the-icons-dpurple) .
-                ,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'bibtex-actions-icon-dim)))))
+              `((file . (,(all-the-icons-icon-for-file "foo.pdf" :face 'all-the-icons-dred) .
+                         ,(all-the-icons-icon-for-file "foo.pdf" :face 'bibtex-actions-icon-dim)))
+                (note . (,(all-the-icons-icon-for-file "foo.txt") .
+                         ,(all-the-icons-icon-for-file "foo.txt" :face 'bibtex-actions-icon-dim)))
+                (link .
+                      (,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'all-the-icons-dpurple) .
+                       ,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'bibtex-actions-icon-dim)))))
 
         ;; Here we define a face to dim non 'active' icons, but preserve alignment
         (defface bibtex-actions-icon-dim
-        '((((background dark)) :foreground "#282c34")
-        (((background light)) :foreground "#fafafa"))
-        "Face for obscuring/dimming icons"
-        :group 'all-the-icons-faces)
+          '((((background dark)) :foreground "#282c34")
+            (((background light)) :foreground "#fafafa"))
+          "Face for obscuring/dimming icons"
+          :group 'all-the-icons-faces)
 
         (setq bibtex-actions-file-note-org-include '(org-id org-roam-ref))
 
@@ -222,6 +220,7 @@
   ;;                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
   ;;                ("\\paragraph{%s}" . "\\paragraph*{%s}")
   ;;                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
   ;; Configure org-roam buffer display.
   ;; See https://www.orgroam.com/manual.html#Navigating-the-Org_002droam-Buffer
   (add-to-list 'display-buffer-alist
@@ -392,10 +391,6 @@ If nil it defaults to `split-string-default-separators', normally
   (let ((value (vulpea-buffer-prop-get name)))
     (when (and value (not (string-empty-p value)))
       (split-string-and-unquote value separators))))
-
-  ;; Since the org module lazy loads org-protocol (waits until an org URL is
-  ;; detected), we can safely chain `org-roam-protocol' to it.
-  ;; (use-package! org-roam-protocol :after org-protocol)
 
   ;; (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
 

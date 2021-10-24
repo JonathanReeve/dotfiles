@@ -7,8 +7,6 @@
 
 (package! flycheck-vale)
 
-;; (package! ox-ipynb :recipe (:host github :repo "jkitchin/ox-ipynb"))
-
 (package! pdf-tools :built-in 'prefer)
 
 ;; Read epubs
@@ -23,16 +21,11 @@
 ;; Query Org files
 (package! org-ql)
 
-;; Fancy LISPy repl
-;; (package! sly)
-
 ;; Make eshell better
 (package! fish-completion)
 
 ;; Edit Turtle files
 ;; (package! ttl-mode)
-
-;; (package! org-roam-server)
 
 (package! websocket)
 (package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
