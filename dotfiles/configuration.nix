@@ -235,6 +235,13 @@
      alsa-firmware
      pavucontrol
 
+     # Keyboard stuff
+     plover.dev
+     # xorg.libxcb
+     # xorg.xcbutil
+     # libsForQt5.qtstyleplugins
+     waydroid
+
    ];
 
   environment.variables = {
