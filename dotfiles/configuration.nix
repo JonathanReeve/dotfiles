@@ -190,6 +190,8 @@
      ]))
      # Elm
      elmPackages.elm
+     elmPackages.elm-review
+     elmPackages.elm-format
      # Julia
      julia-stable-bin
      # Minimal computing
