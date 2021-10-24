@@ -62,35 +62,35 @@
   (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
   )
 
-(after! bibtex-actions
-        (setq bibtex-actions-templates
-        '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
-                (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords:*}")
-                (note . "#+title: Notes on ${author editor}, ${title}")))
+;; (after! bibtex-actions
+;;         (setq bibtex-actions-templates
+;;         '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
+;;                 (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords:*}")
+;;                 (note . "#+title: Notes on ${author editor}, ${title}")))
 
-        (bibtex-actions-filenotify-setup '(LaTeX-mode-hook org-mode-hook))
+;;         (bibtex-actions-filenotify-setup '(LaTeX-mode-hook org-mode-hook))
 
-        (setq bibtex-actions-symbols
-        `((file . (,(all-the-icons-icon-for-file "foo.pdf" :face 'all-the-icons-dred) .
-                ,(all-the-icons-icon-for-file "foo.pdf" :face 'bibtex-actions-icon-dim)))
-        (note . (,(all-the-icons-icon-for-file "foo.txt") .
-                ,(all-the-icons-icon-for-file "foo.txt" :face 'bibtex-actions-icon-dim)))
-        (link .
-                (,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'all-the-icons-dpurple) .
-                ,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'bibtex-actions-icon-dim)))))
+;;         (setq bibtex-actions-symbols
+;;         `((file . (,(all-the-icons-icon-for-file "foo.pdf" :face 'all-the-icons-dred) .
+;;                 ,(all-the-icons-icon-for-file "foo.pdf" :face 'bibtex-actions-icon-dim)))
+;;         (note . (,(all-the-icons-icon-for-file "foo.txt") .
+;;                 ,(all-the-icons-icon-for-file "foo.txt" :face 'bibtex-actions-icon-dim)))
+;;         (link .
+;;                 (,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'all-the-icons-dpurple) .
+;;                 ,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'bibtex-actions-icon-dim)))))
 
-        ;; Here we define a face to dim non 'active' icons, but preserve alignment
-        (defface bibtex-actions-icon-dim
-        '((((background dark)) :foreground "#282c34")
-        (((background light)) :foreground "#fafafa"))
-        "Face for obscuring/dimming icons"
-        :group 'all-the-icons-faces)
+;;         ;; Here we define a face to dim non 'active' icons, but preserve alignment
+;;         (defface bibtex-actions-icon-dim
+;;         '((((background dark)) :foreground "#282c34")
+;;         (((background light)) :foreground "#fafafa"))
+;;         "Face for obscuring/dimming icons"
+;;         :group 'all-the-icons-faces)
 
-        (setq bibtex-actions-file-note-org-include '(org-id org-roam-ref))
+;;         (setq bibtex-actions-file-note-org-include '(org-id org-roam-ref))
 
-        ;; Use org-roam-bibtex function instead
-        ;; (setq bibtex-actions-file-open-note-function 'orb-bibtex-actions-edit-note)
-)
+;;         ;; Use org-roam-bibtex function instead
+;;         ;; (setq bibtex-actions-file-open-note-function 'orb-bibtex-actions-edit-note)
+;; )
 
 ;; Org Mode
 (after! org
@@ -168,47 +168,48 @@
   (setq org-roam-dailies-directory "Daily/")
   (setq org-roam-db-location "~/Dokumentujo/Org/Roam/org-roam.db")
 
-  (require 'org-roam-bibtex)
-  (use-package! org-roam-bibtex
-    :when (featurep! :lang org +roam2)
-    :after org
-    :preface
-    ;; if the user has not set a template mechanism set a reasonable one of them
-    ;; The package already tests for nil itself so we define a dummy tester
-    (defvar orb-preformat-keywords
-      '("title" "url" "file" "author-or-editor" "keywords" "citekey" "pdf"))
-    ;;:hook (org-roam-mode . org-roam-bibtex-mode)
-    :custom
-    (orb-note-actions-interface (cond ((featurep! :completion ivy)  'ivy)
-                                      ((featurep! :completion helm) 'helm)
-                                      ((t                           'default))))
-    :config
-    (setq orb-insert-interface (cond ((featurep! :completion ivy)  'ivy-bibtex)
-                                     ((featurep! :completion helm) 'helm-bibtex)
-                                     ((t                           'generic))))
-    (setq orb-process-file-keyword t
-          orb-file-field-extensions '("pdf"))
+;;   (require 'org-roam-bibtex)
+;;   (use-package! org-roam-bibtex
+;;     :when (featurep! :lang org +roam2)
+;;     :after org
+;;     :preface
+;;     ;; if the user has not set a template mechanism set a reasonable one of them
+;;     ;; The package already tests for nil itself so we define a dummy tester
+;;     (defvar orb-preformat-keywords
+;;       '("title" "url" "file" "author-or-editor" "keywords" "citekey" "pdf"))
+;;     ;;:hook (org-roam-mode . org-roam-bibtex-mode)
+;;     :custom
+;;     (orb-note-actions-interface (cond ((featurep! :completion ivy)  'ivy)
+;;                                       ((featurep! :completion helm) 'helm)
+;;                                       ((t                           'default))))
+;;     :config
+;;     (setq orb-insert-interface (cond ((featurep! :completion ivy)  'ivy-bibtex)
+;;                                      ((featurep! :completion helm) 'helm-bibtex)
+;;                                      ((t                           'generic))))
+;;     (setq orb-process-file-keyword t
+;;           orb-file-field-extensions '("pdf"))
 
-    (add-to-list 'org-roam-capture-templates
-                 '("b" "Bibliography note" plain
-                   "%?
-- keywords :: %^{keywords}
-- related ::
-* %^{title}
-:PROPERTIES:
-:Custom_ID: %^{citekey}
-:URL: %^{url}
-:AUTHOR: %^{author-or-editor}
-:NOTER_DOCUMENT: %^{file}
-:NOTER_PAGE:
-:END:\n\n"
-                   :if-new (file+head "${citekey}.org" ":PROPERTIES:
-:ROAM_REFS: cite:${citekey}
-:END:
-#+TITLE: ${title}\n")
-                   :unnarrowed t))
-    (require 'org-ref))
-  (org-roam-bibtex-mode)
+;;     (add-to-list 'org-roam-capture-templates
+;;                  '("b" "Bibliography note" plain
+;;                    "%?
+;; - keywords :: %^{keywords}
+;; - related ::
+;; * %^{title}
+;; :PROPERTIES:
+;; :Custom_ID: %^{citekey}
+;; :URL: %^{url}
+;; :AUTHOR: %^{author-or-editor}
+;; :NOTER_DOCUMENT: %^{file}
+;; :NOTER_PAGE:
+;; :END:\n\n"
+;;                    :if-new (file+head "${citekey}.org" ":PROPERTIES:
+;; :ROAM_REFS: cite:${citekey}
+;; :END:
+;; #+TITLE: ${title}\n")
+;;                    :unnarrowed t))
+;;     (require 'org-ref))
+
+;; (org-roam-bibtex-mode)
 
 ;;   (setq org-roam-capture-templates
 ;;         '(
