@@ -37,8 +37,9 @@
 (package! websocket)
 (package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
 
-;;(package! org-roam-bibtex
-;;  :recipe (:host github :repo "org-roam/org-roam-bibtex")) 
+(package! org-ref)
+(package! org-roam-bibtex
+ :recipe (:host github :repo "org-roam/org-roam-bibtex"))
 
 (package! vulpea :recipe (:host github :repo "d12frosted/vulpea"))
 

@@ -32,10 +32,65 @@
 (setq alert-default-style 'libnotify)
 
 ;; Bibliography
-(setq! org-ref-notes-directory "")
-(setq! +biblio-pdf-library-dir "~/Dokumentujo/Papers/"
-       +biblio-default-bibliography-files '("~/Dokumentujo/Papers/library.bib")
-       +biblio-notes-path "~/Dokumentujo/Org/Roam/")
+;; (setq! org-ref-notes-directory "")
+;; (setq! +biblio-pdf-library-dir "~/Dokumentujo/Papers/"
+;;        +biblio-default-bibliography-files '("~/Dokumentujo/Papers/library.bib")
+;;        +biblio-notes-path "~/Dokumentujo/Org/Roam/")
+;; (setq +biblio-default-bibliography "~/Dokumentujo/Papers/library.bib")
+
+(setq! bibtex-actions-bibliography '("~/Dokumentujo/Papers/library.bib"))
+(setq! bibtex-completion-bibliography '("~/Dokumentujo/Papers/library.bib"))
+;; (setq org-cite-global-bibliography  '("~/Dokumentujo/Papers/library.bib"))
+(setq! bibtex-completion-library-path '("~/Dokumentujo/Papers/")
+       bibtex-completion-notes-path '("~/Dokumentujo/Org/Roam"))
+
+;; (setq bibtex-actions-bibliography +biblio-default-bibliography
+;;       org-cite-global-bibliography +biblio-default-bibliography
+;;       org-cite-insert-processor 'oc-bibtex-actions-insert
+;;       org-cite-follow-processor 'oc-bibtex-actions
+;;       org-cite-activate-processor 'oc-bibtex-actions
+;;       bibtex-actions-at-point-function 'embark-act)
+
+
+;; Make the 'bibtex-actions' bindings and targets available to `embark'.
+(after! embark
+  (add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
+  (add-to-list 'embark-keymap-alist '(bib-reference . bibtex-actions-map))
+  (add-to-list 'embark-keymap-alist '(citation-key . bibtex-actions-buffer-map))
+
+  ;; use consult-completing-read for enhanced interface
+  (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
+  )
+
+(after! bibtex-actions
+        (setq bibtex-actions-templates
+        '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
+                (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords:*}")
+                (note . "#+title: Notes on ${author editor}, ${title}")))
+
+        (bibtex-actions-filenotify-setup '(LaTeX-mode-hook org-mode-hook))
+
+        (setq bibtex-actions-symbols
+        `((file . (,(all-the-icons-icon-for-file "foo.pdf" :face 'all-the-icons-dred) .
+                ,(all-the-icons-icon-for-file "foo.pdf" :face 'bibtex-actions-icon-dim)))
+        (note . (,(all-the-icons-icon-for-file "foo.txt") .
+                ,(all-the-icons-icon-for-file "foo.txt" :face 'bibtex-actions-icon-dim)))
+        (link .
+                (,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'all-the-icons-dpurple) .
+                ,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'bibtex-actions-icon-dim)))))
+
+        ;; Here we define a face to dim non 'active' icons, but preserve alignment
+        (defface bibtex-actions-icon-dim
+        '((((background dark)) :foreground "#282c34")
+        (((background light)) :foreground "#fafafa"))
+        "Face for obscuring/dimming icons"
+        :group 'all-the-icons-faces)
+
+        (setq bibtex-actions-file-note-org-include '(org-id org-roam-ref))
+
+        ;; Use org-roam-bibtex function instead
+        ;; (setq bibtex-actions-file-open-note-function 'orb-bibtex-actions-edit-note)
+)
 
 ;; Org Mode
 (after! org
@@ -112,7 +167,49 @@
   (setq org-roam-directory "~/Dokumentujo/Org/Roam")
   (setq org-roam-dailies-directory "Daily/")
   (setq org-roam-db-location "~/Dokumentujo/Org/Roam/org-roam.db")
-  ;; (require 'org-roam-bibtex)
+
+  (require 'org-roam-bibtex)
+  (use-package! org-roam-bibtex
+    :when (featurep! :lang org +roam2)
+    :after org
+    :preface
+    ;; if the user has not set a template mechanism set a reasonable one of them
+    ;; The package already tests for nil itself so we define a dummy tester
+    (defvar orb-preformat-keywords
+      '("title" "url" "file" "author-or-editor" "keywords" "citekey" "pdf"))
+    ;;:hook (org-roam-mode . org-roam-bibtex-mode)
+    :custom
+    (orb-note-actions-interface (cond ((featurep! :completion ivy)  'ivy)
+                                      ((featurep! :completion helm) 'helm)
+                                      ((t                           'default))))
+    :config
+    (setq orb-insert-interface (cond ((featurep! :completion ivy)  'ivy-bibtex)
+                                     ((featurep! :completion helm) 'helm-bibtex)
+                                     ((t                           'generic))))
+    (setq orb-process-file-keyword t
+          orb-file-field-extensions '("pdf"))
+
+    (add-to-list 'org-roam-capture-templates
+                 '("b" "Bibliography note" plain
+                   "%?
+- keywords :: %^{keywords}
+- related ::
+* %^{title}
+:PROPERTIES:
+:Custom_ID: %^{citekey}
+:URL: %^{url}
+:AUTHOR: %^{author-or-editor}
+:NOTER_DOCUMENT: %^{file}
+:NOTER_PAGE:
+:END:\n\n"
+                   :if-new (file+head "${citekey}.org" ":PROPERTIES:
+:ROAM_REFS: cite:${citekey}
+:END:
+#+TITLE: ${title}\n")
+                   :unnarrowed t))
+    (require 'org-ref))
+  (org-roam-bibtex-mode)
+
 ;;   (setq org-roam-capture-templates
 ;;         '(
 ;;           ("d" "default" plain "%?" :if-new
@@ -138,6 +235,14 @@
 ;; ")
 ;;           :unnarrowed t)))
 
+  ;; (add-to-list 'org-latex-classes
+  ;;              '("letter"
+  ;;                "\\documentclass{letter}"
+  ;;                ("\\section{%s}" . "\\section*{%s}")
+  ;;                ("\\subsection{%s}" . "\\subsection*{%s}")
+  ;;                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+  ;;                ("\\paragraph{%s}" . "\\paragraph*{%s}")
+  ;;                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
   ;; Configure org-roam buffer display.
   ;; See https://www.orgroam.com/manual.html#Navigating-the-Org_002droam-Buffer
   (add-to-list 'display-buffer-alist
@@ -161,7 +266,8 @@
     (setq org-roam-ui-sync-theme t
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start nil))
+          org-roam-ui-open-on-start nil)
+    )
 
   ;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
   ;; makes it easier to distinguish from other org buffers.
@@ -312,18 +418,6 @@ If nil it defaults to `split-string-default-separators', normally
   ;; detected), we can safely chain `org-roam-protocol' to it.
   ;; (use-package! org-roam-protocol :after org-protocol)
 
-  ;; Allow for "letter" class. This allows me to write subtrees in Org
-  ;; and then later export them to Letter-class LaTeX-generated PDFs.
-  ;; This is useful for drafting cover letters and the like.
-  (add-to-list 'org-latex-classes
-               '("letter"
-                 "\\documentclass{letter}"
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-  ;; I might not need this.
   ;; (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
 
   ;; Org-projectile stuff
