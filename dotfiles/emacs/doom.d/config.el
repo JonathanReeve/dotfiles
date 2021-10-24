@@ -32,25 +32,16 @@
 (setq alert-default-style 'libnotify)
 
 ;; Bibliography
-;; (setq! org-ref-notes-directory "")
-;; (setq! +biblio-pdf-library-dir "~/Dokumentujo/Papers/"
-;;        +biblio-default-bibliography-files '("~/Dokumentujo/Papers/library.bib")
-;;        +biblio-notes-path "~/Dokumentujo/Org/Roam/")
-;; (setq +biblio-default-bibliography "~/Dokumentujo/Papers/library.bib")
-
 (setq! bibtex-actions-bibliography '("~/Dokumentujo/Papers/library.bib"))
 (setq! bibtex-completion-bibliography '("~/Dokumentujo/Papers/library.bib"))
-;; (setq org-cite-global-bibliography  '("~/Dokumentujo/Papers/library.bib"))
 (setq! bibtex-completion-library-path '("~/Dokumentujo/Papers/")
-       bibtex-completion-notes-path '("~/Dokumentujo/Org/Roam"))
+       bibtex-completion-notes-path "~/Dokumentujo/Org/Roam/")
 
-;; (setq bibtex-actions-bibliography +biblio-default-bibliography
-;;       org-cite-global-bibliography +biblio-default-bibliography
-;;       org-cite-insert-processor 'oc-bibtex-actions-insert
-;;       org-cite-follow-processor 'oc-bibtex-actions
-;;       org-cite-activate-processor 'oc-bibtex-actions
-;;       bibtex-actions-at-point-function 'embark-act)
-
+(setq org-cite-global-bibliography bibtex-actions-bibliography
+      org-cite-insert-processor 'oc-bibtex-actions-insert
+      org-cite-follow-processor 'oc-bibtex-actions
+      org-cite-activate-processor 'oc-bibtex-actions
+      bibtex-actions-at-point-function 'embark-act)
 
 ;; Make the 'bibtex-actions' bindings and targets available to `embark'.
 (after! embark
@@ -151,18 +142,6 @@
   ;; Clock break time in pomodoro
   (setq org-pomodoro-clock-break t)
   (add-hook 'org-mode-hook 'visual-line-mode)
-
-  ;; Org-roam
-  ;; (map! :after org
-  ;;       :map org-mode-map
-  ;;       :localleader
-  ;;       (:prefix-map ("n" . "notes")
-  ;;        :prefix ("r" . "org-roam")
-  ;;        "f" #'org-roam-node-find
-  ;;        "g" #'org-roam-graph
-  ;;        "m" #'org-roam
-  ;;        "t" #'org-roam-tag-add
-  ;;        "T" #'org-roam-tag-delete))
 
   (setq org-roam-directory "~/Dokumentujo/Org/Roam")
   (setq org-roam-dailies-directory "Daily/")

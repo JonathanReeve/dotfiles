@@ -45,18 +45,6 @@
 
 (package! emacsql-sqlite)
 
-;; (unpin! bibtex-completion helm-bibtex ivy-bibtex org-roam-bibtex org-roam)
-
-;; ;; Python Requests-like package for elisp
-;; ;; for querying APIs
-;; (package! request)
-
-;; Look things up in dictionaries
-;; (package! dictionary)
-
-;; Associate todo files with projects
-;; (package! org-projectile)
-
 ;; Pollen, the document processing language for Racket
 (package! pollen-mode)
 
