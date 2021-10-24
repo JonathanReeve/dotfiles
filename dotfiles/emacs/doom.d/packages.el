@@ -43,3 +43,6 @@
 
 ;; Web scraping
 (package! enlive)
+
+;; Life in the danger zone!
+(unpin! org-ref org-roam-bibtex bibtex-actions)
