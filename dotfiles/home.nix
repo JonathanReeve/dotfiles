@@ -108,7 +108,12 @@ in
     };
   };
   programs = {
-    # Have home-manager manage itself.
+    bottom.enable = true;
+    broot = {
+      enable = true;
+      enableFishIntegration = true;
+      modal = true;
+    };
     gnome-terminal = {
       profile.default = {
         allowBold = false;
