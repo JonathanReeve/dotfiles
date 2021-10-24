@@ -123,6 +123,7 @@ in
         themeVariant = "dark";
       };
     };
+    # Have home-manager manage itself.
     home-manager = {
       enable = true;
       # path = "/home/jon/Code/home-manager";

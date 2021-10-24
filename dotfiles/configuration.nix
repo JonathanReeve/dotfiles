@@ -159,6 +159,7 @@
      cabal-install
      texlive.combined.scheme-full
      git                    # Version control
+     github-cli
      unzip                  # Archives
 
      texlive.combined.scheme-full
