@@ -411,17 +411,23 @@ in
   };
   services = {
     gpg-agent.enable = true;
+    xsuspender = {
+      enable = true;
+      defaults = {
+        downclockOnBattery = 1;
+      };
+    };
   };
   gtk = {
     enable = false;
-    theme = {
-      package = pkgs.breeze-gtk;
-      name = "Breeze-Dark";
-    };
-    iconTheme = {
-      package = pkgs.breeze-icons;
-      name = "breeze-dark";
-    };
+    # theme = {
+    #   package = pkgs.adwaita-gtk;
+    #   name = "Breeze-Dark";
+    # };
+    # iconTheme = {
+    #   package = pkgs.breeze-icons;
+    #   name = "breeze-dark";
+    # };
     # Give Termite some internal spacing.
     gtk3.extraCss = ".termite {padding: 10px;}";
   };
