@@ -2,28 +2,13 @@
 
 ;; Place your private configuration here
 
-;; Enables Nixos-installed packages to be loaded
-(require 'package)
-(setq package-enable-at-startup nil)
-(package-initialize)
-
 ;; Set location of custom.el
 (setq custom-file "~/.emacs.d/custom.el")
 
 (setq doom-font (font-spec :family "Monoid" :size 14))
 
-(setq vc-follow-symlinks t) ;; Always follow symlinks.
-
 ;; Get system notifications through libnotify
 (setq alert-default-style 'libnotify)
-
-(after! eshell
-  (when (and (executable-find "fish")
-             (require 'fish-completion nil t))
-    (global-fish-completion-mode)))
-
-;; Don't prompt when opening journal or other large files
-;(setq large-file-warning-threshold 20000000)
 
 ;; Default spelling dictionary is English
 (setq ispell-dictionary "en")
@@ -31,26 +16,10 @@
 ;; Get system notifications through libnotify
 (setq alert-default-style 'libnotify)
 
-;; Bibliography
-;; (setq! org-ref-notes-directory "")
-;; (setq! +biblio-pdf-library-dir "~/Dokumentujo/Papers/"
-;;        +biblio-default-bibliography-files '("~/Dokumentujo/Papers/library.bib")
-;;        +biblio-notes-path "~/Dokumentujo/Org/Roam/")
-;; (setq +biblio-default-bibliography "~/Dokumentujo/Papers/library.bib")
-
 (setq! bibtex-actions-bibliography '("~/Dokumentujo/Papers/library.bib"))
 (setq! bibtex-completion-bibliography '("~/Dokumentujo/Papers/library.bib"))
-;; (setq org-cite-global-bibliography  '("~/Dokumentujo/Papers/library.bib"))
 (setq! bibtex-completion-library-path '("~/Dokumentujo/Papers/")
        bibtex-completion-notes-path '("~/Dokumentujo/Org/Roam"))
-
-;; (setq bibtex-actions-bibliography +biblio-default-bibliography
-;;       org-cite-global-bibliography +biblio-default-bibliography
-;;       org-cite-insert-processor 'oc-bibtex-actions-insert
-;;       org-cite-follow-processor 'oc-bibtex-actions
-;;       org-cite-activate-processor 'oc-bibtex-actions
-;;       bibtex-actions-at-point-function 'embark-act)
-
 
 ;; Make the 'bibtex-actions' bindings and targets available to `embark'.
 (after! embark
@@ -61,36 +30,6 @@
   ;; use consult-completing-read for enhanced interface
   (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
   )
-
-;; (after! bibtex-actions
-;;         (setq bibtex-actions-templates
-;;         '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
-;;                 (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords:*}")
-;;                 (note . "#+title: Notes on ${author editor}, ${title}")))
-
-;;         (bibtex-actions-filenotify-setup '(LaTeX-mode-hook org-mode-hook))
-
-;;         (setq bibtex-actions-symbols
-;;         `((file . (,(all-the-icons-icon-for-file "foo.pdf" :face 'all-the-icons-dred) .
-;;                 ,(all-the-icons-icon-for-file "foo.pdf" :face 'bibtex-actions-icon-dim)))
-;;         (note . (,(all-the-icons-icon-for-file "foo.txt") .
-;;                 ,(all-the-icons-icon-for-file "foo.txt" :face 'bibtex-actions-icon-dim)))
-;;         (link .
-;;                 (,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'all-the-icons-dpurple) .
-;;                 ,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'bibtex-actions-icon-dim)))))
-
-;;         ;; Here we define a face to dim non 'active' icons, but preserve alignment
-;;         (defface bibtex-actions-icon-dim
-;;         '((((background dark)) :foreground "#282c34")
-;;         (((background light)) :foreground "#fafafa"))
-;;         "Face for obscuring/dimming icons"
-;;         :group 'all-the-icons-faces)
-
-;;         (setq bibtex-actions-file-note-org-include '(org-id org-roam-ref))
-
-;;         ;; Use org-roam-bibtex function instead
-;;         ;; (setq bibtex-actions-file-open-note-function 'orb-bibtex-actions-edit-note)
-;; )
 
 ;; Org Mode
 (after! org
@@ -152,98 +91,10 @@
   (setq org-pomodoro-clock-break t)
   (add-hook 'org-mode-hook 'visual-line-mode)
 
-  ;; Org-roam
-  ;; (map! :after org
-  ;;       :map org-mode-map
-  ;;       :localleader
-  ;;       (:prefix-map ("n" . "notes")
-  ;;        :prefix ("r" . "org-roam")
-  ;;        "f" #'org-roam-node-find
-  ;;        "g" #'org-roam-graph
-  ;;        "m" #'org-roam
-  ;;        "t" #'org-roam-tag-add
-  ;;        "T" #'org-roam-tag-delete))
-
   (setq org-roam-directory "~/Dokumentujo/Org/Roam")
   (setq org-roam-dailies-directory "Daily/")
   (setq org-roam-db-location "~/Dokumentujo/Org/Roam/org-roam.db")
 
-;;   (require 'org-roam-bibtex)
-;;   (use-package! org-roam-bibtex
-;;     :when (featurep! :lang org +roam2)
-;;     :after org
-;;     :preface
-;;     ;; if the user has not set a template mechanism set a reasonable one of them
-;;     ;; The package already tests for nil itself so we define a dummy tester
-;;     (defvar orb-preformat-keywords
-;;       '("title" "url" "file" "author-or-editor" "keywords" "citekey" "pdf"))
-;;     ;;:hook (org-roam-mode . org-roam-bibtex-mode)
-;;     :custom
-;;     (orb-note-actions-interface (cond ((featurep! :completion ivy)  'ivy)
-;;                                       ((featurep! :completion helm) 'helm)
-;;                                       ((t                           'default))))
-;;     :config
-;;     (setq orb-insert-interface (cond ((featurep! :completion ivy)  'ivy-bibtex)
-;;                                      ((featurep! :completion helm) 'helm-bibtex)
-;;                                      ((t                           'generic))))
-;;     (setq orb-process-file-keyword t
-;;           orb-file-field-extensions '("pdf"))
-
-;;     (add-to-list 'org-roam-capture-templates
-;;                  '("b" "Bibliography note" plain
-;;                    "%?
-;; - keywords :: %^{keywords}
-;; - related ::
-;; * %^{title}
-;; :PROPERTIES:
-;; :Custom_ID: %^{citekey}
-;; :URL: %^{url}
-;; :AUTHOR: %^{author-or-editor}
-;; :NOTER_DOCUMENT: %^{file}
-;; :NOTER_PAGE:
-;; :END:\n\n"
-;;                    :if-new (file+head "${citekey}.org" ":PROPERTIES:
-;; :ROAM_REFS: cite:${citekey}
-;; :END:
-;; #+TITLE: ${title}\n")
-;;                    :unnarrowed t))
-;;     (require 'org-ref))
-
-;; (org-roam-bibtex-mode)
-
-;;   (setq org-roam-capture-templates
-;;         '(
-;;           ("d" "default" plain "%?" :if-new
-;;            (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-;;            :unnarrowed t)
-;;           ("m" "movie" plain "%?"
-;;            :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-;;                               "#+title: ${title}\n#+filetags: movie\n#+wikidata: ")
-;;            :unnarrowed t)
-;;           ;; bibliography note template
-;;           ("r" "bibliography reference" plain "%?"
-;;            :if-new (file+head "references/${citekey}.org"
-;;                               "#+title: ${title}
-
-;; * %^{title}
-;; :PROPERTIES:
-;; :Custom_ID: %^{citekey}
-;; :URL: %^{url}
-;; :AUTHOR: %^{author-or-editor}
-;; :NOTER_DOCUMENT: %^{file}
-;; :NOTER_PAGE:
-;; :END:
-;; ")
-;;           :unnarrowed t)))
-
-  ;; (add-to-list 'org-latex-classes
-  ;;              '("letter"
-  ;;                "\\documentclass{letter}"
-  ;;                ("\\section{%s}" . "\\section*{%s}")
-  ;;                ("\\subsection{%s}" . "\\subsection*{%s}")
-  ;;                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-  ;;                ("\\paragraph{%s}" . "\\paragraph*{%s}")
-  ;;                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
   ;; Configure org-roam buffer display.
   ;; See https://www.orgroam.com/manual.html#Navigating-the-Org_002droam-Buffer
   (add-to-list 'display-buffer-alist
@@ -269,10 +120,6 @@
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start nil)
     )
-
-  ;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
-  ;; makes it easier to distinguish from other org buffers.
-  ;; (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
 
   ;; Automatically assign the tag Project for project notes
   ;; Code: https://gist.github.com/d12frosted/a60e8ccb9aceba031af243dff0d19b2e
@@ -415,30 +262,12 @@ If nil it defaults to `split-string-default-separators', normally
     (when (and value (not (string-empty-p value)))
       (split-string-and-unquote value separators))))
 
-  ;; Since the org module lazy loads org-protocol (waits until an org URL is
-  ;; detected), we can safely chain `org-roam-protocol' to it.
-  ;; (use-package! org-roam-protocol :after org-protocol)
-
-  ;; (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
-
-  ;; Org-projectile stuff
-  ;; (require 'org-projectile)
-  ;; (setq org-projectile-projects-file
-  ;;       "/your/path/to/an/org/file/for/storing/project/todos.org")
-  ;; (push (org-projectile-project-todo-entry) org-capture-templates)
-  ;; (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
-  ;; (global-set-key (kbd "C-c c") 'org-capture)
-  ;; (global-set-key (kbd "C-c n p") 'org-projectile-project-todo-completing-read)
 )
 
 ;;(setq org-agenda-window-setup 'only-window)
 ;; Prose linting
 ;; (require 'flycheck-vale)
 ;; (flycheck-vale-setup)
-
-;; Open PDFs with system viewer
-;; (delete '("\\.pdf\\'" . default) org-file-apps)
-;; (add-to-list 'org-file-apps '("\\.pdf\\'" . system))
 
 ;; Markdown
 (add-hook 'markdown-mode 'visual-line-mode)
@@ -511,9 +340,6 @@ If nil it defaults to `split-string-default-separators', normally
           ))
 
 )
-  ;; (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
-  ;; (setq mu4e-html2text-command "w3m -T text/html")
-
 
 ;; Set browser
 (setq browse-url-browser-function 'browse-url-generic
@@ -573,13 +399,6 @@ If nil it defaults to `split-string-default-separators', normally
 
 (map! :map evil-treemacs-state-map "n" 'treemacs-next-line
                                    "e" 'treemacs-previous-line)
-
-;; (map! :map bibtex-mode-map "")
-;; (setq lsp-haskell-server-wrapper-function (lambda (argv)
-;;                                             (append
-;;                                              (append (list "nix-shell" "-I" "." "--command" )
-;;                                                      (list (mapconcat 'identity argv " ")))
-;;                                              (list (concat (lsp-haskell--get-root) "/shell.nix")))))
 
 ;; Epub
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
