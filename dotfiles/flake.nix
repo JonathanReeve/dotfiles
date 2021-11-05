@@ -17,6 +17,10 @@
        modules = [ ./configuration.nix
                    # TODO. This makes the kernel rebuild, apparently
                    # nixos-hardware.nixosModules.dell-xps-13-9310
+                   nixos-hardware.nixosModules.common-cpu-intel
+                   nixos-hardware.nixosModules.common-pc-laptop
+                   nixos-hardware.nixosModules.common-pc-laptop-ssd
+
                    home-manager.nixosModules.home-manager {
                      home-manager.useGlobalPkgs = true;
                      home-manager.useUserPackages = true;

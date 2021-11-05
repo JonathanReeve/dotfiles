@@ -36,7 +36,7 @@ This module provides no flags.
 ** Plugins
 +  [[https://github.com/tmalsburg/helm-bibtex][bibtex-completion]]
 + ~:completion vertico~
-  + [[https://github.com/bdarcus/bibtex-actions][bibtex-actions]]
+  + [[https://github.com/bdarcus/citar][citar]]
 + ~:completion helm~
   + [[https://github.com/tmalsburg/helm-bibtex][helm-bibtex]]
 + ~:completion ivy~
@@ -56,7 +56,7 @@ For vertico, helm, or ivy bibtex completion you should enable =:completion verti
 
 * Features
 Both [[https://github.com/tmalsburg/helm-bibtex][helm-bibtex]] (includes helm-bibtex, ivy-bibtex and bibtex-completion code)
-and [[https://github.com/bdarcus/bibtex-actions][bibtex-actions]] provide an extensive range of features so it is best to check their
+and [[https://github.com/bdarcus/bibtex-actions][citar]] provide an extensive range of features so it is best to check their
 respective sites for a full list of features.
 
 On a high-level you can expect:
@@ -92,15 +92,15 @@ needs.
 This module makes available the following processors:
 
 1. The core =oc-basic=, =oc-natbib=, =oc-biblatex=, and =oc-csl=.
-2. [[https://github.com/bdarcus/bibtex-actions][bibtex-actions]] for integration with =vertico= completion.
+2. [[https://github.com/bdarcus/bibtex-actions][citar]] for integration with =vertico= completion.
 
 For user-interface, the module configures these processors as follows for the different completion modules:
 
-| Feature  | Vertico        | Ivy      | Helm     |
-|----------+----------------+----------+----------|
-| Insert   | bibtex-actions | oc-basic | oc-basic |
-| Activate | bibtex-actions | oc-basic | oc-basic |
-| Follow   | bibtex-actions | oc-basic | oc-basic |
+| Feature  | Vertico | Ivy      | Helm     |
+|----------+---------+----------+----------|
+| Insert   | citar   | oc-basic | oc-basic |
+| Activate | citar   | oc-basic | oc-basic |
+| Follow   | citar   | oc-basic | oc-basic |
 
 
 *** Other configuration options
@@ -114,7 +114,7 @@ directory for your CSL styles:
 
 ** Path configuration
 
-You must set the path variable for either =bibtex-actions= (if using =vertico=
+You must set the path variable for either =citar= (if using =vertico=
 completion) or =bibtex-completion= (if using =ivy= or =helm=); this module will
 in turn set the =org-cite-global-bibliography= path variable to this:
 
@@ -123,7 +123,7 @@ in turn set the =org-cite-global-bibliography= path variable to this:
 #+END_src
 
 #+BEGIN_src emacs-lisp
-(setq! bibtex-actions-bibliography '("/path/to/references.bib"))
+(setq! citar-bibliography '("/path/to/references.bib"))
 #+END_src
 
 You may also set the respective note and library path variables as well for
@@ -135,8 +135,8 @@ enhanced functionality:
 #+END_src
 
 #+BEGIN_src emacs-lisp
-(setq! bibtex-actions-library-paths '("/path/to/library/files/")
-       bibtex-actions-notes-paths '("/path/to/your/notes/"))
+(setq! citar-library-paths '("/path/to/library/files/")
+       citar-notes-paths '("/path/to/your/notes/"))
 #+END_src
 
 ** Templates
@@ -147,3 +147,5 @@ instructions.
 
 * Troubleshooting
 # Common issues and their solution, or places to look for help.
+
+Look to the respective package repositories.

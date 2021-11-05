@@ -16,6 +16,8 @@
     # Enable magic sysrql (Alt+PrtSc) keys for recovery
     kernel.sysctl = { "kernel.sysrq" = 1; };
     kernelPackages = pkgs.linuxPackages_latest;
+    kernelModules = [ "btqca" "hci_qca" "hci_uart" "bluetooth" ];
+    blacklistedKernelModules = [ "psmouse" ];
     cleanTmpDir = true;
     plymouth.enable = true;
     resumeDevice = "/dev/nvme0n1p4";
@@ -58,6 +60,9 @@
 
   # Fonts!
   fonts.fonts = with pkgs; [
+    fantasque-sans-mono
+    font-awesome_5
+    fira-code
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
@@ -88,7 +93,7 @@
      yubikey-manager # Provides ykman
      yubikey-personalization-gui
 
-     megasync             # Backups
+     # megasync             # Backups
      keybase-gui          # Also backups
      logseq               # Fancy notes
 
@@ -111,9 +116,12 @@
      x11idle
      dict                   # Dictionary
 
+     pywal
+     ranger
      # Ugh
      #wine
      #winetricks
+
 
      (emacsWithPackages (epkgs: with emacsPackages; [
        pdf-tools

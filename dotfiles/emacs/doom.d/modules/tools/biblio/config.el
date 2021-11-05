@@ -12,13 +12,12 @@
   :config
   (add-to-list 'ivy-re-builders-alist '(ivy-bibtex . ivy--regex-plus)))
 
-(use-package! bibtex-actions
+(use-package! citar
   :when (featurep! :completion vertico)
-  :after embark bibtex-completion
-  :config
-  (add-to-list 'embark-keymap-alist '(bib-reference . bibtex-actions-map))
+  :after bibtex-completion
+  :custom
   (when (featurep! +roam2)
-    setq bibtex-actions-file-note-org-include '(org-id org-roam-ref)))
+    (citar-file-note-org-include '(org-id org-roam-ref))))
 
 (use-package! citeproc
   :defer t)
@@ -26,14 +25,14 @@
 ;;; Org-Cite configuration
 
 (use-package! oc
-  :after org bibtex-completion bibtex-actions
+  :after org bibtex-completion citar
   :config
   (require 'ox)
   (map! :map org-mode-map
         :localleader
         :desc "Insert citation" "@" #'org-cite-insert)
   (setq org-cite-global-bibliography
-        (let ((paths (or bibtex-actions-bibliography
+        (let ((paths (or citar-bibliography
                          bibtex-completion-bibliography)))
           ;; Always return bibliography paths as list for org-cite.
           (if (stringp paths) (list paths) paths)))
@@ -54,14 +53,13 @@
 
 ;;;; Third-party
 
-(use-package! oc-bibtex-actions
-  :when (featurep! :completion vertico)
-  :after oc
-  :demand t
-  :config
-  (add-to-list 'embark-keymap-alist '(oc-citation . oc-bibtex-actions-buffer-map))
-  (setq org-cite-insert-processor 'oc-bibtex-actions
-        org-cite-follow-processor 'oc-bibtex-actions
-        org-cite-activate-processor 'oc-bibtex-actions
-        ;; The activate processor relies on shift-select, so we set to t.
-        org-support-shift-select t))
+(use-package! citar-org
+  :no-require
+  :custom
+  (org-cite-insert-processor 'citar)
+  (org-cite-follow-processor 'citar)
+  (org-cite-activate-processor 'citar)
+  (org-support-shift-select t)
+  (when (featurep! :lang org +roam2)
+    ;; Include property drawer metadata for 'org-roam' v2.
+    (citar-file-note-org-include '(org-id org-roam-ref))))

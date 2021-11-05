@@ -10,7 +10,7 @@
 ;; Set location of custom.el
 (setq custom-file "~/.emacs.d/custom.el")
 
-(setq doom-font (font-spec :family "Monoid" :size 14))
+(setq doom-font (font-spec :family "Fantasque Sans Mono" :size 18))
 
 (setq vc-follow-symlinks t) ;; Always follow symlinks.
 
@@ -25,61 +25,15 @@
 
 ;; Bibliography
 
-;; Bibtex-actions
-;; See https://github.com/bdarcus/doom-emacs/blob/biblio-org-cite/modules/tools/biblio/README.org
-;; and https://github.com/bdarcus/bibtex-actions#configuration
-(setq! bibtex-actions-bibliography '("~/Dokumentujo/Papers/library.bib") ;; List
-       bibtex-actions-library-paths '("~/Dokumentujo/Papers/") ;; List
-       bibtex-actions-notes-paths  '("~/Dokumentujo/Org/Roam/") ;; List
-       bibtex-completion-bibliography '("~/Dokumentujo/Papers/library.bib") ;; List
-       bibtex-completion-library-path '("~/Dokumentujo/Papers/") ;; List
-       bibtex-completion-notes-path "~/Dokumentujo/Org/Roam/" ;; !! String
-       )
+;; Citar
+;; See https://github.com/hlissner/doom-emacs/blob/4612b39695405f7238dd3da0d4fd6d3a5cdd93d6/modules/tools/biblio/README.org
+(setq! citar-bibliography '("~/Dokumentujo/Papers/library.bib")
+       citar-library-paths '("~/Dokumentujo/Papers/")
+       citar-notes-paths '("~/Dokumentujo/Org/Roam/"))
 
-(setq org-cite-insert-processor 'oc-bibtex-actions-insert
-      org-cite-follow-processor 'oc-bibtex-actions
-      org-cite-activate-processor 'oc-bibtex-actions
-      bibtex-actions-at-point-function 'embark-act)
-
-;; Make the 'bibtex-actions' bindings and targets available to `embark'.
-(after! embark
-  (add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
-  (add-to-list 'embark-keymap-alist '(bib-reference . bibtex-actions-map))
-  (add-to-list 'embark-keymap-alist '(citation-key . bibtex-actions-buffer-map))
-
-  ;; use consult-completing-read for enhanced interface
-  (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
-  )
-
-(after! bibtex-actions
-        (setq bibtex-actions-templates
-        '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
-                (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords:*}")
-                (note . "#+title: Notes on ${author editor}, ${title}")))
-
-        (bibtex-actions-filenotify-setup '(LaTeX-mode-hook org-mode-hook))
-
-        (setq bibtex-actions-symbols
-              `((file . (,(all-the-icons-icon-for-file "foo.pdf" :face 'all-the-icons-dred) .
-                         ,(all-the-icons-icon-for-file "foo.pdf" :face 'bibtex-actions-icon-dim)))
-                (note . (,(all-the-icons-icon-for-file "foo.txt") .
-                         ,(all-the-icons-icon-for-file "foo.txt" :face 'bibtex-actions-icon-dim)))
-                (link .
-                      (,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'all-the-icons-dpurple) .
-                       ,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'bibtex-actions-icon-dim)))))
-
-        ;; Here we define a face to dim non 'active' icons, but preserve alignment
-        (defface bibtex-actions-icon-dim
-          '((((background dark)) :foreground "#282c34")
-            (((background light)) :foreground "#fafafa"))
-          "Face for obscuring/dimming icons"
-          :group 'all-the-icons-faces)
-
-        (setq bibtex-actions-file-note-org-include '(org-id org-roam-ref))
-
-        ;; Use org-roam-bibtex function instead
-        ;; (setq bibtex-actions-file-open-note-function 'orb-bibtex-actions-edit-note)
-)
+(setq! bibtex-completion-bibliography "~/Dokumentujo/Papers/library.bib"
+       bibtex-completion-notes-path "~/Dokumentujo/Org/Roam/"
+       bibtex-completion-library-path "~/Dokumentujo/Papers/")
 
 ;; Org Mode
 (after! org
@@ -156,13 +110,9 @@
       '("title" "url" "file" "author-or-editor" "keywords" "citekey" "pdf"))
     ;;:hook (org-roam-mode . org-roam-bibtex-mode)
     :custom
-    (orb-note-actions-interface (cond ((featurep! :completion ivy)  'ivy)
-                                      ((featurep! :completion helm) 'helm)
-                                      ((t                           'default))))
+    (orb-note-actions-interface 'default)
     :config
-    (setq orb-insert-interface (cond ((featurep! :completion ivy)  'ivy-bibtex)
-                                     ((featurep! :completion helm) 'helm-bibtex)
-                                     ((t                           'generic))))
+    (setq orb-insert-interface 'generic)
     (setq orb-process-file-keyword t
           orb-file-field-extensions '("pdf"))
 
@@ -220,6 +170,13 @@
   ;;                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
   ;;                ("\\paragraph{%s}" . "\\paragraph*{%s}")
   ;;                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+  ;; (setq citar-templates
+  ;;       '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
+  ;;        (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords keywords:*}")
+  ;;        (note . "#+title: ${author editor}, ${title}")))
+
+  (setq citar-file-open-note-function 'orb-bibtex-actions-edit-note)
 
   ;; Configure org-roam buffer display.
   ;; See https://www.orgroam.com/manual.html#Navigating-the-Org_002droam-Buffer
@@ -546,6 +503,16 @@ If nil it defaults to `split-string-default-separators', normally
 
 (map! :map evil-treemacs-state-map "n" 'treemacs-next-line
                                    "e" 'treemacs-previous-line)
+
+(map! :map evil-window-map "n" #'evil-window-down
+                           "N" 'evil-window-move-very-bottom
+                           "e" 'evil-window-up
+                           "E" 'evil-window-move-very-top
+                           "i" 'evil-window-right
+                           "I" 'evil-window-move-far-right
+                           "j" 'evil-window-new)
+
+(map! :n "SPC w c" 'evil-window-new)
 
 ;; (map! :map bibtex-mode-map "")
 ;; (setq lsp-haskell-server-wrapper-function (lambda (argv)

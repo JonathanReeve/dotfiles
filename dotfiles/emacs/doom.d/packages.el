@@ -19,10 +19,10 @@
 (package! ewal-doom-themes)
 
 ;; Query Org files
-(package! org-ql)
+;; (package! org-ql)
 
 ;; Make eshell better
-(package! fish-completion)
+;; (package! fish-completion)
 
 ;; Edit Turtle files
 ;; (package! ttl-mode)
@@ -34,15 +34,15 @@
 (package! org-roam-bibtex
  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
 
-(package! vulpea :recipe (:host github :repo "d12frosted/vulpea"))
+;; (package! vulpea :recipe (:host github :repo "d12frosted/vulpea"))
 
-(package! emacsql-sqlite)
+;; (package! emacsql-sqlite)
 
 ;; Pollen, the document processing language for Racket
-(package! pollen-mode)
+;; (package! pollen-mode)
 
 ;; Web scraping
-(package! enlive)
+;; (package! enlive)
 
 ;; Life in the danger zone!
-(unpin! org-ref org-roam-bibtex bibtex-actions)
+;; (unpin! org-ref org-roam-bibtex)
