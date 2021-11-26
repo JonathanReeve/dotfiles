@@ -34,6 +34,10 @@
 (package! org-roam-bibtex
  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
 
+
+(package! org-clock-reminder
+  :recipe (:host github :repo "inickey/org-clock-reminder"))
+
 ;; (package! vulpea :recipe (:host github :repo "d12frosted/vulpea"))
 
 ;; (package! emacsql-sqlite)

@@ -15,6 +15,7 @@
      nixosConfigurations.jon-laptop = nixos.lib.nixosSystem {
        system = "x86_64-linux";
        modules = [ ./configuration.nix
+                   # ./cachix.nix
                    # TODO. This makes the kernel rebuild, apparently
                    # nixos-hardware.nixosModules.dell-xps-13-9310
                    nixos-hardware.nixosModules.common-cpu-intel
@@ -26,8 +27,8 @@
                      home-manager.useUserPackages = true;
                      home-manager.users.jon = { pkgs, ... }: {
                        imports = [ ./home.nix
-                                   # ./nix-doom-emacs.nix
-                                   # nix-doom-emacs.hmModule
+                                 #  ./nix-doom-emacs.nix
+                                 #  nix-doom-emacs.hmModule
                                  ];
                      };
                    }

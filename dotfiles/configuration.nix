@@ -8,7 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      # /etc/nixos/cachix.nix
+      ./cachix.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -72,8 +72,7 @@
     libertine
     victor-mono
     emacs-all-the-icons-fonts
-    hack-font
-    # input-fonts
+    # font-fonts
     monoid
     kochi-substitute # Japanese
   ];
@@ -109,6 +108,9 @@
      gnupg
      wget
      isync mu w3m           # Mail
+     protonmail-bridge
+     gnutls                 # For mail auth
+     protonvpn-cli          # VPN
      pandoc
      #direnv                 # Essential project management thingy
      graphviz               # Simple charts
@@ -118,6 +120,7 @@
 
      pywal
      ranger
+
      # Ugh
      #wine
      #winetricks
@@ -128,8 +131,10 @@
      ]))
 
      # Requires neovim-nightly
+     # vscode-with-extensions.override { vscodeExtensions = with vscode-extensions; [ ms-vsliveshare.vsliveshare ]; }
      # (vscodeWithExtensions.override {
      #   vscodeExtensions = with vscode-extensions; [
+     #     ms-vsliveshare.vsliveshare
      #     (vscode-utils.extensionsFromVscodeMarketplace [
      #       {
      #         name = "vscode-neovim";
@@ -137,7 +142,7 @@
      #         version = "a0ac4a2";
      #         sha256 = "166ia73vrcl5c9hm4q1a73qdn56m0jc7flfsk5p5q41na9f10lb0";
      #       }])
-     #   ]})
+     #   ]; } )
 
 
      # poppler # PDF stuff but also needed for emacs stuff

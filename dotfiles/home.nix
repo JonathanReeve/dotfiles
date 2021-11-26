@@ -13,17 +13,6 @@ let
   # font = "Monoid";
   # font = "Nova Mono";
   font = "Fantasque Sans Mono";
-  # doom-emacs = pkgs.callPackage (builtins.fetchTarball {
-  #   url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
-  # }) {
-  #   doomPrivateDir = ./emacs/doom.d;  # Directory containing your config.el init.el
-  #   extraPackages = epkgs: [ pkgs.mu pkgs.pass pkgs.gnupg ];
-  #   extraConfig = ''
-  #     (setq mu4e-mu-binary "${pkgs.mu}/bin/mu")
-  #     (setq epg-gpg-program "${pkgs.gnupg}/bin/gpg")
-  #   '';
-  # };
-  #
   backgroundColor = "#243442"; # Blue steel
   foregroundColor = "#deedf9"; # Light blue
   warningColor = "#e23131"; # Reddish
@@ -241,7 +230,7 @@ in
          clean = "nix-store --gc --print-roots; and sudo nix-collect-garbage --delete-older-than 5d";
          # A function for renaming the most recent PDF, and putting it in my Papers dir.
          rename-pdf="mv (ls -t /tmp/*.pdf | head -n 1) ~/Dokumentujo/Papers/$argv.pdf";
-         find-book="for engine in b c libgen; qutebrowser \":open -t $engine $argv\"; end";
+         find-book="for engine in b c libgen ia; qutebrowser \":open -t $engine $argv\"; end";
          # Search several search engines at once. `search b g l "search query"`
          search="for engine in $argv[1..-2]; qutebrowser \":open -t $engine $argv[-1]\"; end";
          # Proverbs for greeting
@@ -319,6 +308,7 @@ in
                     "def wal-fav [] {open ~/.cache/wal/colors.json | get wallpaper | each { echo $it (char newline)} | str collect | save -a ~/.cache/wal/favs}"
                     "def wal-fav-set [] {wal -i (open ~/.cache/wal/favs | lines | shuffle | keep 1)}"
                     "def wal-recent [] {wal -i (ls /run/media/jon/systemrestore/.systemrestore/Bildoj | where type == 'File' | sort-by modified -r | keep 50 | shuffle | keep 1 | get name)}"
+                    "def wal-backup [] {sudo rsync -a /home/systemrestore/Bildoj /run/media/jon/systemrestore/.systemrestore}"
                     "def proj [project] {
                         open projects.yaml | where name == $project | select websites | each { qutebrowser $it.websites };
                         open projects.yaml | where name == $project | select textFiles | each { emacsclient -c $it.textFiles & };
@@ -416,6 +406,7 @@ in
         "c" =  "https://clio.columbia.edu/quicksearch?q={}";
         "gh" =  "https://github.com/search?q={}&type=Repositories";
         "h" =  "https://hackage.haskell.org/packages/search?terms={}";
+        "ho" = "https://hoogle.haskell.org/?hoogle={}";
         "libgen" =  "https://libgen.is/search.php?req={}";
         "viki" =  "https://eo.wikipedia.org/w/index.php?search={}";
         "ia" =  "https://archive.org/details/texts?and%5B%5D={}&sin=";
@@ -505,16 +496,17 @@ in
       # TODO replace with https://github.com/ibhagwan/picom
       package = pkgs.picom.overrideAttrs (old: rec {
         src = pkgs.fetchFromGitHub {
-          owner = "ibhagwan"; repo = "picom"; rev = "git";
-          sha256 = "0gjksayz2xpmgglvw17ppsan2imrd1fijs579kbf27xwp503xgfl";
+          owner = "jonaburg"; repo = "picom";
+          rev = "a8445684fe18946604848efb73ace9457b29bf80";
+          sha256 = "R+YUGBrLst6CpUgG9VCwaZ+LiBSDWTp0TLt1Ou4xmpQ=";
           fetchSubmodules = true;
         };
       });
       extraOptions = ''
-        corner-radius: 25.0;
+        # corner-radius: 10.0;
         blur: {
-          method = "kawase";
-          strength = 10;
+          method = "dual_kawase";
+          strength = 5;
           background = false;
           background-frame = false;
           background-fixed = false;
@@ -668,7 +660,6 @@ in
         variant = "colemak";
       };
       packages = with pkgs; [
-        # doom-emacs
         # neovim-nightly
       ];
       file = {

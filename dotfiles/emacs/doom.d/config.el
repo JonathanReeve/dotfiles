@@ -11,6 +11,7 @@
 (setq custom-file "~/.emacs.d/custom.el")
 
 (setq doom-font (font-spec :family "Fantasque Sans Mono" :size 18))
+(setq doom-themes-treemacs-enable-variable-pitch 'nil)
 
 (setq vc-follow-symlinks t) ;; Always follow symlinks.
 
@@ -99,6 +100,16 @@
   (setq org-roam-dailies-directory "Daily/")
   (setq org-roam-db-location "~/Dokumentujo/Org/Roam/org-roam.db")
 
+  (setq org-roam-dailies-capture-templates
+      '(("d" "default" entry
+         "* %?"
+         :target (file+head "%<%Y-%m-%d>.org"
+                            "#+title: %<%Y-%m-%d>\n"))))
+
+  (setq org-clock-idle-time 15)
+  (setq org-clock-auto-clockout t)
+  (setq org-clock-auto-clockout-timer 20)
+
   (require 'org-roam-bibtex)
   (use-package! org-roam-bibtex
     :when (featurep! :lang org +roam2)
@@ -171,12 +182,13 @@
   ;;                ("\\paragraph{%s}" . "\\paragraph*{%s}")
   ;;                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-  ;; (setq citar-templates
-  ;;       '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
-  ;;        (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords keywords:*}")
-  ;;        (note . "#+title: ${author editor}, ${title}")))
+  (setq citar-templates
+        '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
+         (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords keywords:*}")
+         (note . "#+title: ${author editor}, ${title}")))
 
-  (setq citar-file-open-note-function 'orb-bibtex-actions-edit-note)
+  (setq citar-file-open-note-function 'orb-citar-edit-note)
+  ;; (setq citar-file-open-note-function 'citar-file-open-notes-default-org)
 
   ;; Configure org-roam buffer display.
   ;; See https://www.orgroam.com/manual.html#Navigating-the-Org_002droam-Buffer
@@ -272,8 +284,7 @@ tasks."
 
 ;; (add-hook 'find-file-hook #'vulpea-project-update-tag)
 (add-hook 'before-save-hook #'vulpea-project-update-tag)
-
-(advice-add 'org-agenda :before #'vulpea-agenda-files-update)
+(add-hook 'org-agenda-mode-hook #'vulpea-agenda-files-update)
 
 ;; functions borrowed from `vulpea' library
 ;; https://github.com/d12frosted/vulpea/blob/6a735c34f1f64e1f70da77989e9ce8da7864e5ff/vulpea-buffer.el
@@ -361,6 +372,11 @@ If nil it defaults to `split-string-default-separators', normally
   ;; (global-set-key (kbd "C-c n p") 'org-projectile-project-todo-completing-read)
 )
 
+;; (use-package! org-clock-reminder
+;;   :config
+;;   (org-clock-reminder-activate)
+;;   (setq org-clock-reminder-remind-inactivity 't))
+
 ;;(setq org-agenda-window-setup 'only-window)
 ;; Prose linting
 ;; (require 'flycheck-vale)
@@ -420,8 +436,8 @@ If nil it defaults to `split-string-default-separators', normally
                         (smtpmail-stream-type . starttls)
                         (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
                       t)
-  (setq message-send-mail-function 'smtpmail-send-it
-        )
+  (setq message-send-mail-function 'smtpmail-send-it)
+  (add-to-list 'gnutls-trustfiles "~/.config/protonmail/bridge/cert.pem")
   (setq mu4e-maildir "~/Mail"
         mu4e-trash-folder "/Trash"
         mu4e-refile-folder "/Archive"
@@ -525,7 +541,7 @@ If nil it defaults to `split-string-default-separators', normally
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 (defun my-nov-font-setup ()
   (face-remap-add-relative 'variable-pitch :family "Liberation Serif"
-                                           :height 1.6))
+                                           :height 1.4))
 (add-hook 'nov-mode-hook 'my-nov-font-setup)
 
 ;; Toggle transparency
