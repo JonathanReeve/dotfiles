@@ -12,6 +12,9 @@
 ;; Read epubs
 (package! nov)
 
+;; See https://github.com/fuxialexander/org-pdftools
+;; (package! org-pdftools)
+
 ;; Use BibSonomy
 ;; (package! biblio-bibsonomy)
 
@@ -34,6 +37,7 @@
 (package! org-roam-bibtex
  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
 
+(package! org-cite-csl-activate :recipe (:host github :repo "andras-simonyi/org-cite-csl-activate" :files ("*.el")))
 
 (package! org-clock-reminder
   :recipe (:host github :repo "inickey/org-clock-reminder"))
@@ -43,7 +47,11 @@
 ;; (package! emacsql-sqlite)
 
 ;; Pollen, the document processing language for Racket
-;; (package! pollen-mode)
+(package! pollen-mode)
+
+;; Scribble, the language Pollen is written in
+(package! scribble-mode)
+
 
 ;; Web scraping
 ;; (package! enlive)
