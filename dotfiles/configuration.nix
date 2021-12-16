@@ -239,6 +239,10 @@
      gthumb                 # Photos
      gnome3.gnome-tweak-tool
      gnome3.gnome-boxes
+     gnomeExtensions.appindicator
+     gnomeExtensions.caffeine
+     gnomeExtensions.dash-to-dock
+     gnomeExtensions.gsconnect
 
      ntfs3g ntfsprogs       # Windows drives compatibility
 
@@ -342,6 +346,13 @@
     # Power management
     upower.enable = true;
 
+    # Plex media server
+    # plex = {
+    #   user = "systemrestore";
+    #   group = "users";
+    #   enable = true;
+    #   openFirewall = true;
+    # };
     # Security
     udev.packages = [ pkgs.yubikey-personalization pkgs.libu2f-host ];
     pcscd.enable = true;
