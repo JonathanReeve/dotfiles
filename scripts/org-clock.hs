@@ -18,16 +18,21 @@ main = do
   out <- shellStrict getClock empty
   -- TODO: make it so that this changes automatically depending on the desktop environment
   -- let red str = "<span color=\"#f00\">" <> str <> "</span>"
-  let red str = "%{F#f00}" <> str
+  currentDesktop <- getEnv "XDG_CURRENT_DESKTOP"
+  let gnome = "GNOME" :: Text
+  let emptyString = "" :: String
+  let emptyText = "" :: Text
+  let isGNOME = T.pack $ fromMaybe emptyString currentDesktop
+  let red = if isGNOME == gnome then emptyText else "%{F#f00}"
   case out of
     -- Emacs is on, but returns "-1", which means that org-clock is not running.
-    (ExitSuccess, "-1\n") -> TIO.putStrLn $ red "Protocolu!"
+    (ExitSuccess, "-1\n") -> TIO.putStrLn $ red <> "Protocolu!"
     -- Emacs is on and clocking. Print the clock value.
     (ExitSuccess, out) -> TIO.putStrLn $ T.take 25 $ T.drop 1 $
       T.splitOn "\"" out !! 1
     -- Emacs is not on.
     (ExitFailure err, _) -> do
-      TIO.putStrLn $ red "Ensalutu!" -- <> repr err
+      TIO.putStrLn $ red <> "Ensalutu!" -- <> repr err
       -- clockVal <- getEnv "clock"
       -- let clock = (read (fromMaybe "0" clockVal)) :: Int
       -- setEnv "clock" (show (clock + 1)) True
