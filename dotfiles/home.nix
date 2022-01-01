@@ -103,6 +103,14 @@ in
     };
   };
   programs = {
+    alacritty = {
+      enable = true;
+      settings = {
+        font.normal.family = font;
+        font.size = 9;
+        window.opacity = 0.7;
+      };
+    };
     bottom.enable = true;
     broot = {
       enable = true;
@@ -337,6 +345,22 @@ in
       theme = "~/.cache/wal/colors-rofi-dark.rasi";
       font = "${font} 12";
     };
+    waybar = {
+      enable = true;
+      settings = [ {
+        mainBar = {
+          layer = "top";
+          position = "top";
+          height = 30;
+          output = [ "eDP-1" "DP-1-1" ];
+          modules-left = [ "sway/workspaces" "sway/mode" "wlr/taskbar" ];
+          modules-center = [ "sway/window" ];
+          modules-right = [ ];
+          modules = {
+          };
+        };
+      } ];
+    };
     zathura = {
       enable = false;
       extraConfig = ''
@@ -376,7 +400,7 @@ in
         "j" =  "search-next";
         "b" =  "set-cmd-text -s :tab-select ";
         "gL" =  "open javascript:location.href='org-protocol://capture?template=l&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
-        "gM" =  "open javascript:location.href='org-protocol://capture?template=m&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
+        "gM" =  "open javascript:location.href='org-protocol://roam-ref?template=m&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
         "gR" = "open javascript:location.href='org-protocol://roam-ref?template=r&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
         "pf" =  "spawn --userscript qute-pass";
         "gz" =  "jseval var d=document,s=d.createElement('script';;s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement;.appendChild(s;;void(0;;";
@@ -742,7 +766,104 @@ in
       };
     };
   };
-
+  wayland = {
+    windowManager.sway = {
+      enable = true;
+      config = {
+        bars = [];
+        colors = {};
+        fonts = { names = [ "Font Awesome" "${font}"]; size = 14.0;};
+        gaps = { outer = 10; inner = 10; };
+        colors = {
+          focused = {
+            background = "$c2";
+            border = "$c2";
+            text = "$fg";
+            indicator = "$c2";
+            childBorder = "$c2";
+          };
+          focusedInactive = {
+            background = "$c1";
+            text = "$fg";
+            border = "$c1";
+            indicator = "$c1";
+            childBorder = "$c1";
+          };
+          unfocused = {
+            background = "$c1";
+            border = "$c2";
+            text = "$fg";
+            indicator = "$c1";
+            childBorder = "$c1";
+          };
+        };
+        left = "h";
+        down = "n";
+        up = "e";
+        right = "i";
+        modifier = "Mod4";
+        keybindings =
+          {
+            "Mod4+Return" = "exec ${pkgs.alacritty}/bin/alacritty";
+            "Mod4+Shift+c" = "kill";
+            "Mod4+space" = "exec ${pkgs.ulauncher}/bin/ulauncher";
+            "Mod4+n" = "workspace next";
+            "Mod4+e" = "workspace prev";
+            "Mod4+Shift+q" = "exec sway-msg exit";
+            "Mod4+p" = "focus parent";
+            "Mod4+Shift+p" = "focus child";
+            "Mod1+h" = "focus left";
+            "Mod1+n" = "focus down";
+            "Mod1+e" = "focus up";
+            "Mod1+i" = "focus right";
+            "Mod4+r" = "mode resize";
+            "Mod4+o" = "exec emacsclient --eval '(org-clock-in-last)'";
+            "Mod4+Shift+o" = "exec emacsclient --eval '(org-clock-out)'";
+            "Mod4+Shift+e" = "exec emacsclient -c";
+            "Mod1+Shift+h" = "move left";
+            "Mod1+Shift+n" = "move down";
+            "Mod1+Shift+e" = "move up";
+            "Mod1+Shift+i" = "move right";
+            "Mod4+s" = "move scratchpad";
+            "Mod4+Shift+s" = "scratchpad show";
+            "Mod4+t" = "floating toggle";
+            "Mod4+x" = "layout toggle all";
+            "Mod4+v" = "split v";
+            "Mod4+Shift+v" = "split h";
+            "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '+10%'";
+            "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '10%-'";
+            "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up";
+            "XF86AudioLowerVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl down";
+            "XF86AudioMute" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute";
+            # Open agenda with Super + A
+            "Mod4+a" = "exec emacsclient -c -e '(org-agenda-list)(delete-other-windows)(org-agenda-day-view)'";
+            "Mod4+m" = "exec emacsclient -c -e '(mu4e)(mu4e-update-mail-and-index)'";
+            # lock screen with Super + L
+            "Mod4+l" = "exec ${lockCmd}";
+            # Change wallpaper
+            "Mod4+w" = "exec ${pkgs.pywal}/bin/wal -i /home/jon/Bildujo/Ekranfonoj -o ${../scripts/pywal-reload.sh}";
+            "Mod4+Shift+w" = "exec ${pkgs.pywal}/bin/wal -i /run/media/jon/systemrestore/.systemrestore/Bildoj/ -o ${../scripts/pywal-reload.sh}";
+          };
+        modes = {
+          resize = {
+            h = "resize shrink width 10 px or 10 ppt";
+            n = "resize grow height 10 px or 10 ppt";
+            e = "resize shrink height 10 px or 10 ppt";
+            i = "resize grow width 10 px or 10 ppt";
+            Escape = "mode default";
+          };
+        };
+        startup = [
+          { command = "${pkgs.pywal}/bin/wal -R"; }
+          { command = "megasync"; }
+          # { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; }
+          # { command = "setxkbmap -layout us -variant colemak -option caps:escape -option esperanto:colemak"; }
+          # { command = "exec systemctl --user import-environment"; always = true; notification = false; }
+        ];
+        window.border = 10;
+      };
+    };
+  };
   xsession = {
     enable = true;
     scriptPath = ".xsession-hm";

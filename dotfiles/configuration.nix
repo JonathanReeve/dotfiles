@@ -204,7 +204,7 @@
      ]))
      # Elm
      elmPackages.elm
-     elmPackages.elm-review
+     # elmPackages.elm-review
      elmPackages.elm-format
      # Julia
      julia-stable-bin
@@ -222,7 +222,8 @@
      ripgrep                # Another fast grep replacement
      bat                    # Cat replacement
      fd                     # Find replacement
-     gotop                  # Top replacement (system monitor)
+     sd                     # Sed replacement
+     bottom                 # Top replacement (system monitor)
      ncdu                   # Fancy disk usage analyzer
      neofetch               # Fancy system information
      # GUI
@@ -243,6 +244,7 @@
      gnomeExtensions.caffeine
      gnomeExtensions.dash-to-dock
      gnomeExtensions.gsconnect
+     gnomeExtensions.pop-shell
 
      ntfs3g ntfsprogs       # Windows drives compatibility
 
@@ -379,7 +381,9 @@
           ${pkgs.stdenv.shell} $HOME/.xsession-hm &
           waitPID=$!
         '';
-      }];
+      }
+      { name = "sway"; start = ''${pkgs.sway}/bin/sway''; }
+                               ];
       # windowManager.exwm = {
       #   enable = true;
       #   enableDefaultConfig = true;
@@ -395,6 +399,10 @@
     };
     # gnome-documents.enable = true;
     gnome-terminal.enable = true;
+    kdeconnect = {
+      enable = true;
+      package = pkgs.gnomeExtensions.gsconnect;
+    };
     # xonsh.enable = true;
     # light.enable = true;
     gnupg.agent = { enable = true; enableSSHSupport = true; };

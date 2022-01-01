@@ -104,15 +104,23 @@
       '(("d" "default" entry
          "* %?"
          :target (file+head "%<%Y-%m-%d>.org"
-                            "#+title: %<%Y-%m-%d>\n\n #+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"<-1d>\" :tend \"<now>\"\n#+END"))))
+                            "#+title: %<%Y-%m-%d>\n\n #+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"%<%Y-%m-%d>\" :tend \"<now>\"\n#+END"))))
 
   (setq org-roam-capture-templates
         '(("d" "default" plain "%?" :target
            (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
            :unnarrowed t)
-          ("m" "movie" plain "*** ${title}\n :PROPERTIES:\n :RATING:\n:END:\n%t\n"
+          ("m" "movie" plain "*** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%t\n"
            :target (file+olp "movies.org" ("Watched")
            ))))
+  (setq org-roam-capture-ref-templates
+        '(("r" "ref" plain "%?" :target
+           (file+head "${slug}.org" "#+title: ${title}") :unnarrowed t)
+          ("m" "movie" plain "*** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%t\n"
+           :target (file+olp "movies.org" ("Watched")))
+          )
+        )
+
 
   (setq org-clock-idle-time 15)
   (setq org-clock-auto-clockout t)
