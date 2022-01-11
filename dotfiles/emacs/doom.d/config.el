@@ -110,13 +110,13 @@
         '(("d" "default" plain "%?" :target
            (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
            :unnarrowed t)
-          ("m" "movie" plain "*** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%t\n"
+          ("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%u\n"
            :target (file+olp "movies.org" ("Watched")
            ))))
   (setq org-roam-capture-ref-templates
         '(("r" "ref" plain "%?" :target
            (file+head "${slug}.org" "#+title: ${title}") :unnarrowed t)
-          ("m" "movie" plain "*** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%t\n"
+          ("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :WIKIDATA: ${ref}\n :END:\n%u\n"
            :target (file+olp "movies.org" ("Watched")))
           )
         )
@@ -453,7 +453,7 @@ If nil it defaults to `split-string-default-separators', normally
                         (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
                       t)
   (setq message-send-mail-function 'smtpmail-send-it)
-  (add-to-list 'gnutls-trustfiles "~/.config/protonmail/bridge/cert.pem")
+  ;; (add-to-list 'gnutls-trustfiles "~/.config/protonmail/bridge/cert.pem")
   (setq mu4e-maildir "~/Mail"
         mu4e-trash-folder "/Trash"
         mu4e-refile-folder "/Archive"
@@ -625,3 +625,5 @@ If nil it defaults to `split-string-default-separators', normally
   (require 'oc-csl-activate)
   (setq org-cite-activate-processor 'csl-activate)
   )
+
+;; (add-to-list 'auto-mode-alist '("\\.cljs\\.hl\\'" . clojurescript-mode)

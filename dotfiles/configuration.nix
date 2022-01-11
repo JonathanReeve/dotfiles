@@ -196,6 +196,7 @@
        jupyter
        jupyterlab
        virtualenvwrapper
+       tensorflow
        nltk
        pip
        numpy
@@ -234,6 +235,7 @@
      # Ugh
      zoom-us
      # calibre                # Ebooks
+     foliate                 # Ebooks
 
      # Gnome
      deja-dup               # Backups 
