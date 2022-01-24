@@ -88,9 +88,9 @@
      cabal2nix # pypi2nix
      nixfmt
      # Security
-     yubico-pam yubioath-desktop yubikey-personalization
-     yubikey-manager # Provides ykman
-     yubikey-personalization-gui
+     # yubico-pam yubioath-desktop yubikey-personalization
+     # yubikey-manager # Provides ykman
+     # yubikey-personalization-gui
 
      # megasync             # Backups
      keybase-gui          # Also backups
@@ -125,6 +125,9 @@
      #wine
      #winetricks
 
+     # Building stuff
+     cmake
+     extra-cmake-modules
 
      (emacsWithPackages (epkgs: with emacsPackages; [
        pdf-tools
@@ -168,6 +171,7 @@
        tokenize
        # chatter
      ]))
+     # ihaskell
 
      cabal-install
      texlive.combined.scheme-full
@@ -195,7 +199,6 @@
        #vega
        jupyter
        jupyterlab
-       virtualenvwrapper
        tensorflow
        nltk
        pip
@@ -232,6 +235,9 @@
      #chromium               # Another web browser
      firefox                # Yes, a third
 
+     R
+     rstudio
+
      # Ugh
      zoom-us
      # calibre                # Ebooks
@@ -240,13 +246,13 @@
      # Gnome
      deja-dup               # Backups 
      gthumb                 # Photos
-     gnome3.gnome-tweak-tool
-     gnome3.gnome-boxes
-     gnomeExtensions.appindicator
-     gnomeExtensions.caffeine
-     gnomeExtensions.dash-to-dock
-     gnomeExtensions.gsconnect
-     gnomeExtensions.pop-shell
+     # gnome3.gnome-tweak-tool
+     # gnome3.gnome-boxes
+     # gnomeExtensions.appindicator
+     # gnomeExtensions.caffeine
+     # gnomeExtensions.dash-to-dock
+     # gnomeExtensions.gsconnect
+     # gnomeExtensions.pop-shell
 
      ntfs3g ntfsprogs       # Windows drives compatibility
 
@@ -264,12 +270,22 @@
      # libsForQt5.qtstyleplugins
      waydroid
 
+     # Plasma
+     plasma5Packages.bismuth
+     nordic
+     adapta-kde-theme
+     arc-kde-theme
+     materia-kde-theme
+     ark
+
+
    ];
 
   environment.variables = {
     # Preferred applications
     EDITOR = "emacsclient -c";
     BROWSER = "qutebrowser";
+    CM_LAUNCHER = "rofi"; # Clipmenu
   };
 
   # Enable sound.
@@ -375,8 +391,8 @@
       # Keyboard settings
       layout = "us";
       xkbVariant = "colemak";
-      displayManager.gdm.enable = true;
-      desktopManager.gnome.enable = true;
+      displayManager.sddm.enable = true;
+      desktopManager.plasma5.enable = true;
       desktopManager.session = [{
         name = "home-manager";
         start = ''
@@ -403,7 +419,7 @@
     gnome-terminal.enable = true;
     kdeconnect = {
       enable = true;
-      package = pkgs.gnomeExtensions.gsconnect;
+      # package = pkgs.gnomeExtensions.gsconnect;
     };
     # xonsh.enable = true;
     # light.enable = true;

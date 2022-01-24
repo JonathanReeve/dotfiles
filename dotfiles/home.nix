@@ -42,7 +42,7 @@ in
           };
         };
         realName = "${name}";
-        neomutt.enable = true;
+        # neomutt.enable = true;
         # notmuch.enable = true;
       };
       columbia = {
@@ -62,8 +62,8 @@ in
           };
         };
         realName = "${name}";
-        neomutt.enable = true;
-        notmuch.enable = true;
+        # neomutt.enable = true;
+        # notmuch.enable = true;  #
       };
       protonmail = {
         address = "jonathan@jonreeve.com";
@@ -88,7 +88,7 @@ in
           };
         };
         mu.enable = true;
-        notmuch.enable = true;
+        # notmuch.enable = true;
         mbsync = {
           enable = true;
           create = "maildir";
@@ -106,9 +106,10 @@ in
     alacritty = {
       enable = true;
       settings = {
-        font.normal.family = font;
+        font.normal.family = "${font}";
         font.size = 9;
-        window.opacity = 0.7;
+        window.opacity = 0.1;
+        colors.transparent_background_colors = true;
       };
     };
     bottom.enable = true;
@@ -151,7 +152,7 @@ in
       enable = true;
     };
     neomutt = {
-      enable = true;
+      enable = false;
       vimKeys = true;
       extraConfig = ''
       color normal white default
@@ -283,26 +284,44 @@ in
 
             #eval (direnv hook fish)
          '';
-       plugins = [
-         {
-           name = "z";
-           src = pkgs.fetchFromGitHub {
-             owner = "jethrokuan";
-             repo = "z";
-             rev = "97ca1fd1b281f5f240e7adb90d0a28f9eb4567db";
-             sha256 = "VIeRzaA/Dg0mpCjMB9rNXmIhNGzzYCxgkFUXNUOyJ50=";
-           };
-         }
-         {
-           name = "bang-bang";
-           src = pkgs.fetchFromGitHub {
-             owner = "oh-my-fish";
-             repo = "plugin-bang-bang";
-             rev = "f969c618301163273d0a03d002614d9a81952c1e";
-             sha256 = "A8ydBX4LORk+nutjHurqNNWFmW6LIiBPQcxS3x4nbeQ=";
-           };
-         }
-       ];
+       # plugins = [
+       #   {
+       #     name = "z";
+       #     src = pkgs.fetchFromGitHub {
+       #       owner = "jethrokuan";
+       #       repo = "z";
+       #       rev = "45a9ff6d0932b0e9835cbeb60b9794ba706eef10";
+       #       sha256 = "pWkEhjbcxXduyKz1mAFo90IuQdX7R8bLCQgb0R+hXs4=";
+       #     };
+       #   }
+       #   {
+       #     name = "bang-bang";
+       #     src = pkgs.fetchFromGitHub {
+       #       owner = "oh-my-fish";
+       #       repo = "plugin-bang-bang";
+       #       rev = "f969c618301163273d0a03d002614d9a81952c1e";
+       #       sha256 = "A8ydBX4LORk+nutjHurqNNWFmW6LIiBPQcxS3x4nbeQ=";
+       #     };
+       #   }
+       #   {
+       #     name = "fzf.fish";
+       #     src = pkgs.fetchFromGitHub {
+       #       owner = "PatrickF1";
+       #       repo = "fzf.fish";
+       #       rev = "0dc2795255d6ac0759e6f1d572f64ea0768acefb";
+       #       sha256 = "fl4/Pgtkojk5AE52wpGDnuLajQxHoVqyphE90IIPYFU=";
+       #     };
+       #   }
+       #   {
+       #     name = "bass";
+       #     src = pkgs.fetchFromGitHub {
+       #       owner = "edc";
+       #       repo = "bass";
+       #       rev = "2fd3d2157d5271ca3575b13daec975ca4c10577a";
+       #       sha256 = "fl4/Pgtkojk5AE52wpGDnuLajQxHoVqyphE90IIPYFU=";
+       #     };
+       #   }
+       # ];
     };
     fzf = {
       enable = true;
@@ -402,6 +421,7 @@ in
         "gL" =  "open javascript:location.href='org-protocol://capture?template=l&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
         "gM" =  "open javascript:location.href='org-protocol://roam-ref?template=m&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
         "gR" = "open javascript:location.href='org-protocol://roam-ref?template=r&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
+        "gB" = "spawn -m ~/Dotfiles/scripts/downloadBook.py {url}";
         "pf" =  "spawn --userscript qute-pass";
         "gz" =  "jseval var d=document,s=d.createElement('script';;s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement;.appendChild(s;;void(0;;";
         "t" =  "set-cmd-text -s :open -t";
@@ -473,6 +493,7 @@ in
         downclockOnBattery = 1;
       };
     };
+    clipmenu.enable = true;
     dunst = {
       enable = true;
       settings = {
@@ -668,7 +689,7 @@ in
     gtk3.extraCss = ".termite {padding: 10px;}";
   };
   qt = {
-    enable = true;
+    enable = false;
     style = {
       name = "adwaita-dark";
       package = pkgs.adwaita-qt;
@@ -769,32 +790,32 @@ in
   wayland = {
     windowManager.sway = {
       enable = true;
+      extraConfig = "include \"$HOME/.cache/wal/colors-sway\"";
       config = {
         bars = [];
-        colors = {};
         fonts = { names = [ "Font Awesome" "${font}"]; size = 14.0;};
         gaps = { outer = 10; inner = 10; };
         colors = {
           focused = {
-            background = "$c2";
-            border = "$c2";
-            text = "$fg";
-            indicator = "$c2";
-            childBorder = "$c2";
+            background = "$color2";
+            border = "$color2";
+            text = "$foreground";
+            indicator = "$color2";
+            childBorder = "$color2";
           };
           focusedInactive = {
-            background = "$c1";
-            text = "$fg";
-            border = "$c1";
-            indicator = "$c1";
-            childBorder = "$c1";
+            background = "$color1";
+            text = "$foreground";
+            border = "$color1";
+            indicator = "$color1";
+            childBorder = "$color1";
           };
           unfocused = {
-            background = "$c1";
-            border = "$c2";
-            text = "$fg";
-            indicator = "$c1";
-            childBorder = "$c1";
+            background = "$color1";
+            border = "$color2";
+            text = "$foreground";
+            indicator = "$color1";
+            childBorder = "$color1";
           };
         };
         left = "h";
@@ -830,11 +851,11 @@ in
             "Mod4+x" = "layout toggle all";
             "Mod4+v" = "split v";
             "Mod4+Shift+v" = "split h";
-            "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '+10%'";
-            "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '10%-'";
-            "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up";
-            "XF86AudioLowerVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl down";
-            "XF86AudioMute" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute";
+            # "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '+10%'";
+            # "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '10%-'";
+            # "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up";
+            # "XF86AudioLowerVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl down";
+            # "XF86AudioMute" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute";
             # Open agenda with Super + A
             "Mod4+a" = "exec emacsclient -c -e '(org-agenda-list)(delete-other-windows)(org-agenda-day-view)'";
             "Mod4+m" = "exec emacsclient -c -e '(mu4e)(mu4e-update-mail-and-index)'";
@@ -942,6 +963,7 @@ in
               "Mod4+x" = "layout toggle all";
               "Mod4+v" = "split v";
               "Mod4+Shift+v" = "split h";
+              "Mod4+c" = "exec clipmenu";
               "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '+10%'";
               "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '10%-'";
               "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up";

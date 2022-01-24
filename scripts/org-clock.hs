@@ -19,11 +19,11 @@ main = do
   -- TODO: make it so that this changes automatically depending on the desktop environment
   -- let red str = "<span color=\"#f00\">" <> str <> "</span>"
   currentDesktop <- getEnv "XDG_CURRENT_DESKTOP"
-  let gnome = "GNOME" :: Text
+  let desktops = [ "GNOME", "KDE" ] :: [Text]
   let emptyString = "" :: String
   let emptyText = "" :: Text
-  let isGNOME = T.pack $ fromMaybe emptyString currentDesktop
-  let red = if isGNOME == gnome then emptyText else "%{F#f00}"
+  let thisDesktop = T.pack $ fromMaybe emptyString currentDesktop
+  let red = if thisDesktop `elem` desktops then emptyText else "%{F#f00}"
   case out of
     -- Emacs is on, but returns "-1", which means that org-clock is not running.
     (ExitSuccess, "-1\n") -> TIO.putStrLn $ red <> "Protocolu!"
