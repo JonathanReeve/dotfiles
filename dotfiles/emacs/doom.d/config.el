@@ -22,7 +22,7 @@
 ;(setq large-file-warning-threshold 20000000)
 
 ;; Default spelling dictionary is English
-(setq ispell-dictionary "en")
+(setq ispell-dictionary "english")
 
 ;; Bibliography
 
@@ -500,6 +500,7 @@ If nil it defaults to `split-string-default-separators', normally
           (defun shr-fill-line () nil)))
 
 (add-hook 'elfeed-show-mode-hook 'visual-line-mode)
+(setq rmh-elfeed-org-files '("/home/jon/Dokumentujo/Org/RSS.org"))
 
 ;; Unbind QWERTY, bind Colemak
 (map! :n "l" #'evil-insert
@@ -546,11 +547,28 @@ If nil it defaults to `split-string-default-separators', normally
 
 (map! :n "SPC w c" 'evil-window-new)
 
-(map! :map pdf-view-mode-map "C-i" 'org-noter-insert-precise-note
-                          "C-n" 'pdf-view-next-page
-                          "C-e" 'pdf-view-previous-page
-                          "n"   'pdf-view-scroll-up-or-next-page
-                          "e"   'pdf-view-scroll-down-or-previous-page)
+;; (map! :map pdf-view-mode-map "C-i" 'org-noter-insert-precise-note
+;;                              "C-n" 'pdf-view-next-page-command
+;;                              "C-e" 'pdf-view-previous-page-command
+;;                              "n"   'pdf-view-scroll-up-or-next-page
+;;                              "e"   'pdf-view-scroll-down-or-previous-page)
+
+;; Unbind stuff so that I can rebind it below
+;; (map! :after evil-mc-mode :map :n "C-n" nil)
+;; (map! :after better-jumper-mode :map :n "C-i" nil)
+;; (map! :after evil-commands-mode :map :n "C-e" nil)
+;; (map! :after evil-collection-pdf-mode :map :n "n" nil)
+;; (map! :after evil-collection-pdf-mode :map :n "e" nil)
+
+;; Bind stuff
+(map! :after pdf-tools :map pdf-view-mode-map :n "C-i" 'org-noter-insert-precise-note
+                             :n "C-n" 'pdf-view-next-page
+                             :n "C-e" 'pdf-view-previous-page
+                             :n "n"   'pdf-view-scroll-up-or-next-page
+                             :n "e"   'pdf-view-scroll-down-or-previous-page)
+
+;; (map! :after evil-collection :map pdf-view-mode-map :n "n" 'evil-collection-pdf-view-next-line-or-next-page
+;;                                                     :n "e" 'evil-collection-pdf-view-previous-line-or-previous-page )
 
 ;; (map! :map bibtex-mode-map "")
 ;; (setq lsp-haskell-server-wrapper-function (lambda (argv)
@@ -627,3 +645,13 @@ If nil it defaults to `split-string-default-separators', normally
   )
 
 ;; (add-to-list 'auto-mode-alist '("\\.cljs\\.hl\\'" . clojurescript-mode)
+
+(defun rename-pdf ()
+  " Rename the most recently modified PDF in the /tmp dir with the latest bibtex key. "
+  (interactive)
+  (setq most-recent-pdf (string-trim-right (shell-command-to-string "ls -t /tmp/*.pdf | head -1")))
+  (setq dest-pdf-filename (string-trim-right (concat bibtex-completion-library-path (bibtex-completion-get-key-bibtex) ".pdf")))
+  (if (yes-or-no-p (concat "Rename " most-recent-pdf " to " dest-pdf-filename "?"))
+  (rename-file most-recent-pdf dest-pdf-filename)
+  (message "Aborted.")
+  ))
