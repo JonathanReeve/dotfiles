@@ -394,13 +394,10 @@ If nil it defaults to `split-string-default-separators', normally
 ;;   (setq org-clock-reminder-remind-inactivity 't))
 
 ;;(setq org-agenda-window-setup 'only-window)
+
 ;; Prose linting
 ;; (require 'flycheck-vale)
 ;; (flycheck-vale-setup)
-
-;; Open PDFs with system viewer
-;; (delete '("\\.pdf\\'" . default) org-file-apps)
-;; (add-to-list 'org-file-apps '("\\.pdf\\'" . system))
 
 ;; Markdown
 (add-hook 'markdown-mode 'visual-line-mode)
@@ -547,35 +544,12 @@ If nil it defaults to `split-string-default-separators', normally
 
 (map! :n "SPC w c" 'evil-window-new)
 
-;; (map! :map pdf-view-mode-map "C-i" 'org-noter-insert-precise-note
-;;                              "C-n" 'pdf-view-next-page-command
-;;                              "C-e" 'pdf-view-previous-page-command
-;;                              "n"   'pdf-view-scroll-up-or-next-page
-;;                              "e"   'pdf-view-scroll-down-or-previous-page)
-
-;; Unbind stuff so that I can rebind it below
-;; (map! :after evil-mc-mode :map :n "C-n" nil)
-;; (map! :after better-jumper-mode :map :n "C-i" nil)
-;; (map! :after evil-commands-mode :map :n "C-e" nil)
-;; (map! :after evil-collection-pdf-mode :map :n "n" nil)
-;; (map! :after evil-collection-pdf-mode :map :n "e" nil)
-
 ;; Bind stuff
 (map! :after pdf-tools :map pdf-view-mode-map :n "C-i" 'org-noter-insert-precise-note
                              :n "C-n" 'pdf-view-next-page
                              :n "C-e" 'pdf-view-previous-page
                              :n "n"   'pdf-view-scroll-up-or-next-page
                              :n "e"   'pdf-view-scroll-down-or-previous-page)
-
-;; (map! :after evil-collection :map pdf-view-mode-map :n "n" 'evil-collection-pdf-view-next-line-or-next-page
-;;                                                     :n "e" 'evil-collection-pdf-view-previous-line-or-previous-page )
-
-;; (map! :map bibtex-mode-map "")
-;; (setq lsp-haskell-server-wrapper-function (lambda (argv)
-;;                                             (append
-;;                                              (append (list "nix-shell" "-I" "." "--command" )
-;;                                                      (list (mapconcat 'identity argv " ")))
-;;                                              (list (concat (lsp-haskell--get-root) "/shell.nix")))))
 
 ;; Epub
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
@@ -605,39 +579,6 @@ If nil it defaults to `split-string-default-separators', normally
 
 ;; Stop autocompleting parentheses and quotation marks
 (remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
-
-;; (use-package! org-noter-pdftools
-;;   :after org-noter
-;;   :config
-;;   ;; Add a function to ensure precise note is inserted
-;;   (defun org-noter-pdftools-insert-precise-note (&optional toggle-no-questions)
-;;     (interactive "P")
-;;     (org-noter--with-valid-session
-;;      (let ((org-noter-insert-note-no-questions (if toggle-no-questions
-;;                                                    (not org-noter-insert-note-no-questions)
-;;                                                  org-noter-insert-note-no-questions))
-;;            (org-pdftools-use-isearch-link t)
-;;            (org-pdftools-use-freestyle-annot t))
-;;        (org-noter-insert-note (org-noter--get-precise-info)))))
-
-;;   ;; fix https://github.com/weirdNox/org-noter/pull/93/commits/f8349ae7575e599f375de1be6be2d0d5de4e6cbf
-;;   (defun org-noter-set-start-location (&optional arg)
-;;     "When opening a session with this document, go to the current location.
-;; With a prefix ARG, remove start location."
-;;     (interactive "P")
-;;     (org-noter--with-valid-session
-;;      (let ((inhibit-read-only t)
-;;            (ast (org-noter--parse-root))
-;;            (location (org-noter--doc-approx-location (when (called-interactively-p 'any) 'interactive))))
-;;        (with-current-buffer (org-noter--session-notes-buffer session)
-;;          (org-with-wide-buffer
-;;           (goto-char (org-element-property :begin ast))
-;;           (if arg
-;;               (org-entry-delete nil org-noter-property-note-location)
-;;             (org-entry-put nil org-noter-property-note-location
-;;                            (org-noter--pretty-print-location location))))))))
-;;   (with-eval-after-load 'pdf-annot
-;;     (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
 
 (after! org-cite
   (require 'oc-csl-activate)
