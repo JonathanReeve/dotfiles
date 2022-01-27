@@ -706,6 +706,7 @@ in
       };
       packages = with pkgs; [
         # neovim-nightly
+        #
       ];
       file = {
         ".doom.d/" = {

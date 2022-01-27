@@ -206,6 +206,8 @@
        nose
        tldextract # required by qute-pass
      ]))
+
+
      # Elm
      elmPackages.elm
      # elmPackages.elm-review
@@ -235,8 +237,8 @@
      #chromium               # Another web browser
      firefox                # Yes, a third
 
-     R
-     rstudio
+     (rWrapper.override { packages = with pkgs.rPackages; [ dplyr ggplot2 reshape2 httr XML ]; } )
+     (rstudioWrapper.override { packages = with pkgs.rPackages; [ dplyr ggplot2 reshape2 httr XML ]; } )
 
      # Ugh
      zoom-us
@@ -246,13 +248,13 @@
      # Gnome
      deja-dup               # Backups 
      gthumb                 # Photos
-     # gnome3.gnome-tweak-tool
-     # gnome3.gnome-boxes
-     # gnomeExtensions.appindicator
-     # gnomeExtensions.caffeine
-     # gnomeExtensions.dash-to-dock
-     # gnomeExtensions.gsconnect
-     # gnomeExtensions.pop-shell
+     gnome3.gnome-tweaks
+     gnome3.gnome-boxes
+     gnomeExtensions.appindicator
+     gnomeExtensions.caffeine
+     gnomeExtensions.dash-to-dock
+     gnomeExtensions.gsconnect
+     gnomeExtensions.pop-shell
 
      ntfs3g ntfsprogs       # Windows drives compatibility
 
@@ -271,12 +273,12 @@
      waydroid
 
      # Plasma
-     plasma5Packages.bismuth
-     nordic
-     adapta-kde-theme
-     arc-kde-theme
-     materia-kde-theme
-     ark
+     # plasma5Packages.bismuth
+     # nordic
+     # adapta-kde-theme
+     # arc-kde-theme
+     # materia-kde-theme
+     # ark
 
 
    ];
@@ -335,13 +337,13 @@
     #   };
     # };
 
-    # gnome3 = {
-    #   gnome-keyring.enable = true;
-    #   gnome-online-accounts.enable = true;
-    #   gnome-online-miners.enable = true;
-    #   tracker.enable = true;
-    #   tracker-miners.enable = true;
-    # };
+    gnome3 = {
+      gnome-keyring.enable = true;
+      gnome-online-accounts.enable = true;
+      gnome-online-miners.enable = true;
+      tracker.enable = true;
+      tracker-miners.enable = true;
+    };
 
     dictd = {
       enable = true;
@@ -391,17 +393,14 @@
       # Keyboard settings
       layout = "us";
       xkbVariant = "colemak";
-      displayManager.sddm.enable = true;
-      desktopManager.plasma5.enable = true;
-      desktopManager.session = [{
-        name = "home-manager";
-        start = ''
-          ${pkgs.stdenv.shell} $HOME/.xsession-hm &
-          waitPID=$!
-        '';
-      }
-      { name = "sway"; start = ''${pkgs.sway}/bin/sway''; }
-                               ];
+      displayManager.gdm.enable = true;
+      desktopManager.gnome3.enable = true;
+      desktopManager.session = [
+        { name = "home-manager";
+          start = ''${pkgs.stdenv.shell} $HOME/.xsession-hm 
+	            & waitPID=$!''; }
+        { name = "sway"; start = ''${pkgs.sway}/bin/sway''; }
+      ];
       # windowManager.exwm = {
       #   enable = true;
       #   enableDefaultConfig = true;
@@ -419,7 +418,7 @@
     gnome-terminal.enable = true;
     kdeconnect = {
       enable = true;
-      # package = pkgs.gnomeExtensions.gsconnect;
+      package = pkgs.gnomeExtensions.gsconnect;
     };
     # xonsh.enable = true;
     # light.enable = true;
