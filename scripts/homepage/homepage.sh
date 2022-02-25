@@ -1,4 +1,4 @@
-#!/home/jon/.nix-profile/bin/fish
+#!/etc/profiles/per-user/jon/bin/fish
 set file "$HOME/Dokumentujo/Org/notes.org"
 set out "$HOME/Dokumentujo/Org/notes.html"
 set id "c8c13cd9-1ab1-4f48-afb6-9f48f0b38002"

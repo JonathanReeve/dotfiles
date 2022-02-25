@@ -114,7 +114,7 @@ in
     };
     bottom.enable = true;
     broot = {
-      enable = true;
+      enable = false;
       enableFishIntegration = true;
       modal = true;
     };
@@ -336,10 +336,13 @@ in
                     "def wal-fav-set [] {wal -i (open ~/.cache/wal/favs | lines | shuffle | keep 1)}"
                     "def wal-recent [] {wal -i (ls /run/media/jon/systemrestore/.systemrestore/Bildoj | where type == 'File' | sort-by modified -r | keep 50 | shuffle | keep 1 | get name)}"
                     "def wal-backup [] {sudo rsync -a /home/systemrestore/Bildoj /run/media/jon/systemrestore/.systemrestore}"
+                    "let scripts = ~/Dotfiles/scripts"
                     "def proj [project] {
-                        open projects.yaml | where name == $project | select websites | each { qutebrowser $it.websites };
-                        open projects.yaml | where name == $project | select textFiles | each { emacsclient -c $it.textFiles & };
+                        open ~/Dotfiles/scripts/projects.yaml | where name == $project | select websites | each { qutebrowser $it.websites };
+                        open ~/Dotfiles/scripts/projects.yaml | where name == $project | select textFiles | each { emacsclient -c $it.textFiles & };
                     }"
+                    "zoxide init nushell --hook prompt | save ~/.zoxide.nu"
+                    "source ~/.zoxide.nu"
                   ];
         prompt = "echo (starship prompt)";
         env = { STARSHIP_SHELL = "nushell"; };
@@ -350,6 +353,9 @@ in
       # settings = { add_newline = false;
       #              character = { format = "$symbol "; };
       #            };
+    };
+    zoxide = {
+      enable = true;
     };
     termite = {
       enable = true;
@@ -457,6 +463,7 @@ in
         "mm" =  "https://muse-jhu-edu.ezproxy.cul.columbia.edu/search?action=search&query=content:{}:and&limit=journal_id:131&min=1&max=10&t=search_journal_header";
         };
       settings = {
+        content.headers.accept_language = "eo,fr,en-US,en";
         colors = {
           completion.category.bg = "#333333";
           tabs = {
@@ -486,6 +493,7 @@ in
     # };
   };
   services = {
+    # gnome-keyring.enable = true;
     gpg-agent.enable = true;
     xsuspender = {
       enable = true;
@@ -564,6 +572,25 @@ in
       package = pkgs.polybarFull;
       script = "/usr/bin/env polybar main_bar &";
       config = {
+        "bar/ext_bar" = {
+           monitor = "DP-1-1";
+           bottom = "false";
+           height = 30;
+           fixed-center = "true";
+           background = "\${xrdb:background}";
+           foreground = "\${xrdb:foreground}";
+           line-size = 7;
+           line-color = "\${xrdb:color4}";
+           padding-right = "1%";
+           module-margin-left = 1;
+           module-margin-right = 1;
+           font-0 = "${font}:size=14;1";
+           font-1 = "Font Awesome 5 Free:size=11:style=Solid;1";
+           font-2 = "Noto Sans Symbols:size=11;1";
+           modules-left = "i3 xwindow";
+           modules-center = "date";
+           modules-right = "org-clock volume backlight filesystem memory cpu battery network";
+        };
         "bar/main_bar" = {
            monitor = "eDP-1";
            bottom = "false";
@@ -674,6 +701,7 @@ in
       enable = true;
       lockCmd = "${lockCmd}";
     };
+
   };
   gtk = {
     enable = false;
@@ -707,6 +735,8 @@ in
       packages = with pkgs; [
         # neovim-nightly
         #
+        pkgs.pass # This is necessary for protonmail-bridge
+        pkgs.gnome.gnome-keyring # Same
       ];
       file = {
         ".doom.d/" = {
@@ -754,11 +784,11 @@ in
 
   systemd.user = {
     services = {
-      protonmail = {
-        Unit = { Description = "Protonmail Bridge"; };
-        Service.ExecStart = "${pkgs.protonmail-bridge}/bin/protonmail-bridge --noninteractive";
-        Install.WantedBy = [ "default.target" ];
-      };
+      # protonmail = {
+      #   Unit = { Description = "Protonmail Bridge"; };
+      #   Service.ExecStart = "${pkgs.protonmail-bridge}/bin/protonmail-bridge --noninteractive";
+      #   Install.WantedBy = [ "default.target" ];
+      # };
       dwall = {
         Unit = {
           Description = "Set dynamic wallpaper using Dwall";
@@ -903,7 +933,10 @@ in
         '';
         config = {
           assigns = { "9" = [{ class = "^MEGAsync$"; }]; };
-          floating.criteria = [{ class = "^MEGAsync$"; }];
+          floating.criteria = [
+            { class = "^MEGAsync$"; }
+            { class = "zoom"; }
+          ];
           bars = [];
           fonts = { names = [ "Font Awesome" "${font}"];
                     size = 14.0;
@@ -990,7 +1023,7 @@ in
           };
           startup = [
             { command = "${pkgs.pywal}/bin/wal -R"; notification = false; }
-            { command = "megasync"; notification = false; }
+            # { command = "megasync"; notification = false; }
             { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
             { command = "setxkbmap -layout us -variant colemak -option caps:escape -option esperanto:colemak"; }
             # { command = "exec systemctl --user import-environment"; always = true; notification = false; }

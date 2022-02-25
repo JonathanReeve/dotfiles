@@ -82,6 +82,13 @@ bookLink = findBookLink(soup)
 
 pdfDest = f"/home/jon/Dokumentujo/Papers/{key}.pdf"
 
-downloadBook(bookLink, pdfDest)
+if bookLink.strip().endswith('pdf'):
+    dest = f"/home/jon/Dokumentujo/Papers/{key}.pdf"
+    downloadBook(bookLink, dest)
+elif bookLink.strip().endswith('epub'):
+    dest = f"/home/jon/Dokumentujo/Papers/{key}.epub"
+    downloadBook(bookLink, dest)
+else:
+    exit(f"Can't download book with this extension.")
 
 openNotes(key)

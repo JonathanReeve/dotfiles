@@ -104,7 +104,7 @@
       '(("d" "default" entry
          "* %?"
          :target (file+head "%<%Y-%m-%d>.org"
-                            "#+title: %<%Y-%m-%d>\n\n #+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"%<%Y-%m-%d>\" :tend \"<now>\"\n#+END"))))
+                            "#+title: %<%Y-%m-%d>\n\n#+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"%<%Y-%m-%d>\" :tend \"<now>\"\n#+END:"))))
 
   (setq org-roam-capture-templates
         '(("d" "default" plain "%?" :target
@@ -201,7 +201,14 @@
   (setq citar-templates
         '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
          (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords keywords:*}")
+         (preview . "${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
          (note . "#+title: ${author editor}, ${title}")))
+
+  (setq citar-symbols
+        `((file ,(all-the-icons-faicon "file-o" :face 'all-the-icons-green :v-adjust -0.1) . " ")
+          (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
+          (link ,(all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01) . " ")))
+  (setq citar-symbol-separator "  ")
 
   (setq citar-file-open-note-function 'orb-citar-edit-note)
   ;; (setq citar-file-open-note-function 'citar-file-open-notes-default-org)
@@ -307,12 +314,15 @@ tasks."
 
 (defun vulpea-buffer-tags-get ()
   "Return filetags value in current buffer."
-  (vulpea-buffer-prop-get-list "filetags" " "))
+  (vulpea-buffer-prop-get-list "filetags" "[ :]"))
 
 (defun vulpea-buffer-tags-set (&rest tags)
   "Set TAGS in current buffer.
 If filetags value is already set, replace it."
-  (vulpea-buffer-prop-set "filetags" (string-join tags " ")))
+  (if tags
+      (vulpea-buffer-prop-set
+       "filetags" (concat ":" (string-join tags ":") ":"))
+    (vulpea-buffer-prop-remove "filetags")))
 
 (defun vulpea-buffer-tags-add (tag)
   "Add a TAG to filetags in current buffer."
@@ -386,6 +396,8 @@ If nil it defaults to `split-string-default-separators', normally
   ;; (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
   ;; (global-set-key (kbd "C-c c") 'org-capture)
   ;; (global-set-key (kbd "C-c n p") 'org-projectile-project-todo-completing-read)
+  (setq org-link-abbrev-alist
+      '(("wikidata"        . "https://www.wikidata.org/wiki/")))
 )
 
 ;; (use-package! org-clock-reminder
@@ -468,6 +480,8 @@ If nil it defaults to `split-string-default-separators', normally
           ("maildir:/personal/Inbox NOT flag:trashed AND NOT flag:replied" "Personal" ?p)
           ("maildir:/columbia/Homework NOT flag:trashed" "Homework" ?h)
           ))
+  ;; Only alert interesting emails
+  (setq mu4e-alert-interesting-mail-query "maildir:/columbia/Inbox OR maildir:/gmail/Inbox OR maildir:/personal/Inbox OR maildir:/protonmail/Inbox NOT flag:trashed")
 
 )
   ;; (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
@@ -596,3 +610,11 @@ If nil it defaults to `split-string-default-separators', normally
   (rename-file most-recent-pdf dest-pdf-filename)
   (message "Aborted.")
   ))
+
+;; (use-package! notebook-mode)
+
+;; (use-package! evil-colemak-basics
+;;   :after evil
+;;   :config
+;;   (global-evil-colemak-basics-mode) ; Enable colemak rebinds
+;;   )

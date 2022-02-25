@@ -24,5 +24,5 @@
        nose
        tldextract # required by qute-pass
      ]))
-  ]
+  ];
 }

@@ -7,8 +7,11 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
       ./cachix.nix
+      ./gnome.nix
+      ./hardware-configuration.nix
+      ./python.nix
+      ./R.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -43,8 +46,10 @@
       keep-derivations = true
     '';
     # Extra options from https://github.com/nix-community/nix-direnv
-    binaryCaches = [ "https://nixcache.reflex-frp.org" ];
-    binaryCachePublicKeys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
+    settings = {
+      substituters = [ "https://nixcache.reflex-frp.org" ];
+      trusted-public-keys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
+    };
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -81,18 +86,21 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = with pkgs;
+    [
      # Nix stuff
      nix-index              # Indexing files for nix-locate
      nix-prefetch-git nix-prefetch-scripts # Help writing .nix files
      cabal2nix # pypi2nix
      nixfmt
+
      # Security
      # yubico-pam yubioath-desktop yubikey-personalization
      # yubikey-manager # Provides ykman
      # yubikey-personalization-gui
 
      # megasync             # Backups
+     megacmd
      keybase-gui          # Also backups
      logseq               # Fancy notes
 
@@ -121,10 +129,6 @@
      pywal
      ranger
 
-     # Ugh
-     #wine
-     #winetricks
-
      # Building stuff
      cmake
      extra-cmake-modules
@@ -132,26 +136,6 @@
      (emacsWithPackages (epkgs: with emacsPackages; [
        pdf-tools
      ]))
-
-     # Requires neovim-nightly
-     # vscode-with-extensions.override { vscodeExtensions = with vscode-extensions; [ ms-vsliveshare.vsliveshare ]; }
-     # (vscodeWithExtensions.override {
-     #   vscodeExtensions = with vscode-extensions; [
-     #     ms-vsliveshare.vsliveshare
-     #     (vscode-utils.extensionsFromVscodeMarketplace [
-     #       {
-     #         name = "vscode-neovim";
-     #         publisher = "asvetliakov";
-     #         version = "a0ac4a2";
-     #         sha256 = "166ia73vrcl5c9hm4q1a73qdn56m0jc7flfsk5p5q41na9f10lb0";
-     #       }])
-     #   ]; } )
-
-
-     # poppler # PDF stuff but also needed for emacs stuff
-     # poppler_utils
-
-     protonmail-bridge
 
      stack
      (haskellPackages.ghcWithPackages (ps: with ps; [
@@ -186,27 +170,6 @@
      imagemagick            # Image manipulation
      libxml2
      sqlite sqlite-interactive # Sqlite
-     # Python Development
-     pipenv
-     poetry
-     (python3.withPackages(ps: with ps; [
-       pandas
-       matplotlib
-       # python-language-server # Spacemacs integration
-       flake8 # Syntax checking for emacs
-       #scikitlearn
-       # atair
-       #vega
-       jupyter
-       jupyterlab
-       tensorflow
-       nltk
-       pip
-       numpy
-       nose
-       tldextract # required by qute-pass
-     ]))
-
 
      # Elm
      elmPackages.elm
@@ -237,24 +200,9 @@
      #chromium               # Another web browser
      firefox                # Yes, a third
 
-     (rWrapper.override { packages = with pkgs.rPackages; [ dplyr ggplot2 reshape2 httr XML ]; } )
-     (rstudioWrapper.override { packages = with pkgs.rPackages; [ dplyr ggplot2 reshape2 httr XML ]; } )
-
      # Ugh
      zoom-us
      # calibre                # Ebooks
-     foliate                 # Ebooks
-
-     # Gnome
-     deja-dup               # Backups 
-     gthumb                 # Photos
-     gnome3.gnome-tweaks
-     gnome3.gnome-boxes
-     gnomeExtensions.appindicator
-     gnomeExtensions.caffeine
-     gnomeExtensions.dash-to-dock
-     gnomeExtensions.gsconnect
-     gnomeExtensions.pop-shell
 
      ntfs3g ntfsprogs       # Windows drives compatibility
 
@@ -271,15 +219,6 @@
      # xorg.xcbutil
      # libsForQt5.qtstyleplugins
      waydroid
-
-     # Plasma
-     # plasma5Packages.bismuth
-     # nordic
-     # adapta-kde-theme
-     # arc-kde-theme
-     # materia-kde-theme
-     # ark
-
 
    ];
 
@@ -308,43 +247,6 @@
   };
 
   services = {
-    # Attempt to set up a local fileshare.
-    # Not really working.
-    # samba = {
-    #   enable = true;
-    #   securityType = "user";
-    #   extraConfig = ''
-    #     workgroup = WORKGROUP
-    #     server string = smbnix
-    #     netbios name = smbnix
-    #     security = user
-    #     #use sendfile = yes
-    #     #max protocol = smb2
-    #     hosts allow = 192.168.0  localhost
-    #     hosts deny = 0.0.0.0/0
-    #     guest account = nobody
-    #     map to guest = bad user
-    #   '';
-
-    #   shares = {
-    #     public = {
-    #       path = "/home/jon/Publike";
-    #       "read only" = true;
-    #       browseable = "yes";
-    #       "guest ok" = "yes";
-    #       comment = "Public samba share.";
-    #     };
-    #   };
-    # };
-
-    gnome3 = {
-      gnome-keyring.enable = true;
-      gnome-online-accounts.enable = true;
-      gnome-online-miners.enable = true;
-      tracker.enable = true;
-      tracker-miners.enable = true;
-    };
-
     dictd = {
       enable = true;
       DBs = with pkgs.dictdDBs; [ wiktionary wordnet ];
@@ -393,8 +295,6 @@
       # Keyboard settings
       layout = "us";
       xkbVariant = "colemak";
-      displayManager.gdm.enable = true;
-      desktopManager.gnome3.enable = true;
       desktopManager.session = [
         { name = "home-manager";
           start = ''${pkgs.stdenv.shell} $HOME/.xsession-hm 
@@ -414,14 +314,6 @@
     chromium = {
       enable = true;
     };
-    # gnome-documents.enable = true;
-    gnome-terminal.enable = true;
-    kdeconnect = {
-      enable = true;
-      package = pkgs.gnomeExtensions.gsconnect;
-    };
-    # xonsh.enable = true;
-    # light.enable = true;
     gnupg.agent = { enable = true; enableSSHSupport = true; };
   };
 
@@ -454,6 +346,15 @@
     # };
     };
 
+  systemd.user.services.protonmail = {
+    description = "Protonmail Bridge";
+    enable = true;
+    script =
+      "${pkgs.protonmail-bridge}/bin/protonmail-bridge --log-level debug";
+    path = [ pkgs.gnome3.gnome-keyring ]; # HACK: https://github.com/ProtonMail/proton-bridge/issues/176
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+  };
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you

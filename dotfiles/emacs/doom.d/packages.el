@@ -58,3 +58,8 @@
 
 ;; Life in the danger zone!
 ;; (unpin! org-ref org-roam-bibtex)
+
+;; (package! notebook-mode :recipe (:host github :repo "rougier/notebook-mode" :files ("*.el")))
+
+;; ~/.doom.d/packages.el
+(package! evil-colemak-basics) ; colemak remaps
