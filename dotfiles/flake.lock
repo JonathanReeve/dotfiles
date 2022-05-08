@@ -1,26 +1,5 @@
 {
   "nodes": {
-    "benpkgs": {
-      "inputs": {
-        "nixpkgs": [
-          "knock",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1638237664,
-        "narHash": "sha256-9SkZPl1EZ1ezWZoMdhYOzPm2HK0Ca5hkfphjlPNk/FY=",
-        "owner": "BentonEdmondson",
-        "repo": "benpkgs",
-        "rev": "da71a3a488de3ae7ab8daff2c2a9354d2f0464bf",
-        "type": "github"
-      },
-      "original": {
-        "owner": "BentonEdmondson",
-        "repo": "benpkgs",
-        "type": "github"
-      }
-    },
     "doom-emacs": {
       "flake": false,
       "locked": {
@@ -202,26 +181,6 @@
         "type": "github"
       }
     },
-    "knock": {
-      "inputs": {
-        "benpkgs": "benpkgs",
-        "nixpkgs": "nixpkgs",
-        "rmdrm": "rmdrm"
-      },
-      "locked": {
-        "lastModified": 1638655094,
-        "narHash": "sha256-u1lo61TC7n3D/dQms5Hd0r8xAhr0LjbOZC9Qtk+dkQw=",
-        "owner": "BentonEdmondson",
-        "repo": "knock",
-        "rev": "8fd6244db8b895d96ae1d6da5aaea4c2eb0f48ff",
-        "type": "github"
-      },
-      "original": {
-        "owner": "BentonEdmondson",
-        "repo": "knock",
-        "type": "github"
-      }
-    },
     "nix-doom-emacs": {
       "inputs": {
         "doom-emacs": "doom-emacs",
@@ -235,7 +194,7 @@
         "flake-utils": "flake-utils",
         "format-all": "format-all",
         "nix-straight": "nix-straight",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs",
         "nose": "nose",
         "ob-racket": "ob-racket",
         "org": "org",
@@ -307,22 +266,6 @@
       }
     },
     "nixpkgs": {
-      "locked": {
-        "lastModified": 1638198142,
-        "narHash": "sha256-plU9b8r4St6q4U7VHtG9V7oF8k9fIpfXl/KDaZLuY9k=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "8a308775674e178495767df90c419425474582a1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
       "locked": {
         "lastModified": 1651779476,
         "narHash": "sha256-wPXzrSdad3qocoz2t375Gtm/2sh2+e2A/Iqsc9+oiF4=",
@@ -449,31 +392,9 @@
         "type": "github"
       }
     },
-    "rmdrm": {
-      "inputs": {
-        "nixpkgs": [
-          "knock",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1638240151,
-        "narHash": "sha256-2FHEb4xaskyLdS5M/eILue74Idplve9g8FRxg9D1Z/4=",
-        "owner": "BentonEdmondson",
-        "repo": "rmdrm",
-        "rev": "c60eaa0c4338be5ee6165f59f2a1816566aba8a0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "BentonEdmondson",
-        "repo": "rmdrm",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
-        "knock": "knock",
         "nix-doom-emacs": "nix-doom-emacs",
         "nixos": "nixos",
         "nixos-hardware": "nixos-hardware"

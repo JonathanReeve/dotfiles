@@ -5,7 +5,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixos";
     };
-    # knock.url = "github:BentonEdmondson/knock";
+    knock.url = "github:BentonEdmondson/knock";
     nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
     nixos-hardware.url = github:NixOS/nixos-hardware/master;
     nixos.url = "nixpkgs/nixos-unstable";
@@ -13,7 +13,7 @@
     # nixos.url = "github:nixos/nixpkgs";
     # nixos.url = "/home/jon/Code/nixpkgs";
   };
-  outputs = { self, nixos, nixos-hardware, home-manager, nix-doom-emacs }: {
+  outputs = { self, knock, nixos, nixos-hardware, home-manager, nix-doom-emacs }: {
      nixosConfigurations.jon-laptop = nixos.lib.nixosSystem {
        system = "x86_64-linux";
        modules = [ ./configuration.nix
