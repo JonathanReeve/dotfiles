@@ -41,12 +41,9 @@ def findBookLink(soup):
                 return a.attrs['href']
 
 def isbnToBibtex(isbn):
-    url = f"https://www.ottobib.com/isbn/{isbn}/bibtex"
+    url = f"https://www.ebook.de/de/tools/isbn2bibtex?isbn={isbn}"
     resp = requests.get(url)
-    text = resp.text
-    soup = BeautifulSoup(text, features='html.parser')
-    textArea = soup.find('textarea')
-    return textArea.get_text()
+    return resp.text
 
 def appendBibtex(bibtex, destFile=destFile):
     bibtex = f"\n{bibtex}\n"

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ pkgs, ... }:
 
 let
     pmt = pkgs.rPackages.buildRPackage {

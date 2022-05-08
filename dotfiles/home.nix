@@ -16,7 +16,7 @@ let
   backgroundColor = "#243442"; # Blue steel
   foregroundColor = "#deedf9"; # Light blue
   warningColor = "#e23131"; # Reddish
-  lockCmd = "${pkgs.i3lock-fancy}/bin/i3lock-fancy -p -t ''";
+  lockCmd = "${pkgs.i3lock-blur}/bin/i3lock-blur";
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
 in
 {
@@ -141,6 +141,7 @@ in
       userName = "${name}";
       userEmail = "${email}";
       extraConfig = {
+        core.editor = "emacsclient -c";
         pull.rebase = false;
         # url = { "git@github.com:" = { insteadOf = "https://github.com"; }; };
       };
@@ -463,7 +464,8 @@ in
         "mm" =  "https://muse-jhu-edu.ezproxy.cul.columbia.edu/search?action=search&query=content:{}:and&limit=journal_id:131&min=1&max=10&t=search_journal_header";
         };
       settings = {
-        content.headers.accept_language = "eo,fr,en-US,en";
+        content.headers.accept_language = "eo,en-US,en,fr";
+        content.pdfjs = true;
         colors = {
           completion.category.bg = "#333333";
           tabs = {
@@ -482,15 +484,19 @@ in
         url.default_page = "${scripts}/homepage/homepage.html";
       };
     };
-    # vscode = {
-    #   enable = true;
-    #   extensions = with pkgs.vscode-extensions; [
-    #     ms-python.python
-    #     vscodevim.vim
-    #   ];
-    # haskell = {
-    #   enable = true;
-    # };
+    vscode = {
+      enable = true;
+      extensions = with pkgs.vscode-extensions; [
+        ms-python.python
+        vscodevim.vim
+        ms-vsliveshare.vsliveshare
+      ];
+      haskell = {
+        enable = true;
+        # THis says it needs a special overlay of some sort, so disabling
+        hie.enable = false;
+      };
+    };
   };
   services = {
     # gnome-keyring.enable = true;

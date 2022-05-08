@@ -13,6 +13,8 @@
      gnomeExtensions.pop-shell
      foliate                 # Ebooks
 
+     gnome-firmware-updater
+
      # GTK Themes
      theme-vertex
      arc-theme

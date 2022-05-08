@@ -11,7 +11,7 @@
       ./gnome.nix
       ./hardware-configuration.nix
       ./python.nix
-      ./R.nix
+      # ./R.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -73,7 +73,6 @@
     noto-fonts-emoji
     fira-code
     fira-code-symbols
-    font-awesome-ttf
     libertine
     victor-mono
     emacs-all-the-icons-fonts
@@ -120,6 +119,7 @@
      gnutls                 # For mail auth
      protonvpn-cli          # VPN
      pandoc
+     wkhtmltopdf
      #direnv                 # Essential project management thingy
      graphviz               # Simple charts
      xclip                  # Clipboard on the command line
@@ -154,11 +154,13 @@
        HandsomeSoup
        tokenize
        # chatter
+       pandoc-crossref
+       pandoc-sidenote
      ]))
      # ihaskell
 
      cabal-install
-     texlive.combined.scheme-full
+     # texlive.combined.scheme-full
      git                    # Version control
      github-cli
      unzip                  # Archives
@@ -187,7 +189,6 @@
      feh                    # Display images
      libnotify              # Notifications
      fzf                    # Fuzzy file finder
-     ag                     # Fast grep replacement
      ripgrep                # Another fast grep replacement
      bat                    # Cat replacement
      fd                     # Find replacement
@@ -218,7 +219,7 @@
      # xorg.libxcb
      # xorg.xcbutil
      # libsForQt5.qtstyleplugins
-     waydroid
+     # waydroid
 
    ];
 
@@ -235,10 +236,12 @@
     firmware = with pkgs; [ firmwareLinuxNonfree ]; 
     pulseaudio = {
       enable = true;
-      extraModules = [ pkgs.pulseaudio-modules-bt ];
     };
     sensor.iio.enable = true;
     bluetooth.enable = true;
+    # See https://github.com/NixOS/nixos-hardware/blob/master/dell/xps/13-9310/default.nix
+    enableRedistributableFirmware = true;
+
   };
   # home-manager.users.jon = import ./home.nix;
   powerManagement = {
@@ -252,11 +255,18 @@
       DBs = with pkgs.dictdDBs; [ wiktionary wordnet ];
     };
     flatpak.enable = true;
-
+    fwupd.enable = true;
     keybase.enable = true;
     kbfs = {
       enable = true;
       mountPoint = "%h/Keybase";
+    };
+    fprintd = {
+      enable = true;
+      # tod = {
+      #   enable = true;
+      #   driver = pkgs.libfprint-2-tod1-goodix;
+      # };
     };
 
     # localtime.enable = true;
@@ -269,6 +279,7 @@
 
     # Power management
     upower.enable = true;
+    thermald.enable = true;
 
     # Plex media server
     # plex = {
@@ -338,6 +349,12 @@
   # Don't ask for my password *quite* as often.
   security = {
     sudo.extraConfig = "Defaults timestamp_timeout=60";
+    pam.services.jon = {
+      fprintAuth = true;
+      enableGnomeKeyring = true;
+      gnupg.enable = true;
+    };
+
     # pam.u2f = {
     #   enable = true;
     #   # control = "required";

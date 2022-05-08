@@ -15,9 +15,9 @@
        vega
        vega_datasets
        jupyter
-       jupyterlab
+       # jupyterlab
        # jupytext
-       tensorflow
+       # tensorflow
        nltk
        pip
        numpy

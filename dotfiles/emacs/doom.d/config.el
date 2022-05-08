@@ -61,6 +61,10 @@
   (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
   (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
 
+  ;; enable dead keys
+  ;; See https://www.emacswiki.org/emacs/DeadKeys
+  (require 'iso-transl)
+
   ;; Adapted from http://stackoverflow.com/a/12751732/584121
   ; (require 'org-protocol)
   (setq org-protocol-default-template-key "l")
@@ -410,6 +414,7 @@ If nil it defaults to `split-string-default-separators', normally
 ;; Prose linting
 ;; (require 'flycheck-vale)
 ;; (flycheck-vale-setup)
+;; (setq flycheck-checker-error-threshold 2000)
 
 ;; Markdown
 (add-hook 'markdown-mode 'visual-line-mode)
@@ -610,6 +615,9 @@ If nil it defaults to `split-string-default-separators', normally
   (rename-file most-recent-pdf dest-pdf-filename)
   (message "Aborted.")
   ))
+
+;; Lenses are really annoying
+(setq lsp-lens-enable nil)
 
 ;; (use-package! notebook-mode)
 
