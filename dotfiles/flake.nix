@@ -5,6 +5,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixos";
     };
+    # knock.url = "github:BentonEdmondson/knock";
     nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
     nixos-hardware.url = github:NixOS/nixos-hardware/master;
     nixos.url = "nixpkgs/nixos-unstable";

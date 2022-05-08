@@ -7,7 +7,7 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./cachix.nix
+      # ./cachix.nix
       ./gnome.nix
       ./hardware-configuration.nix
       ./python.nix
@@ -87,6 +87,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs;
     [
+     # knock.defaultPackage.x86_64-linux
      # Nix stuff
      nix-index              # Indexing files for nix-locate
      nix-prefetch-git nix-prefetch-scripts # Help writing .nix files
@@ -310,7 +311,7 @@
         { name = "home-manager";
           start = ''${pkgs.stdenv.shell} $HOME/.xsession-hm 
 	            & waitPID=$!''; }
-        { name = "sway"; start = ''${pkgs.sway}/bin/sway''; }
+        { name = "sway"; start = ''${pkgs.stdenv.shell} ${pkgs.sway}/bin/sway & waitPID=$!''; }
       ];
       # windowManager.exwm = {
       #   enable = true;

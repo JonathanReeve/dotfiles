@@ -235,7 +235,7 @@ in
          jnl="vault; and emacsclient -c $vaultmount/Journal/jnl.org; and unvault";
          upgrade=''
             nix flake update ${dots}
-            sudo nixos-rebuild switch --flake ${dots}
+            nixos-rebuild --use-remote-sudo switch --flake ${dots}
             '';
          clean = "nix-store --gc --print-roots; and sudo nix-collect-garbage --delete-older-than 5d";
          # A function for renaming the most recent PDF, and putting it in my Papers dir.
@@ -832,29 +832,29 @@ in
         bars = [];
         fonts = { names = [ "Font Awesome" "${font}"]; size = 14.0;};
         gaps = { outer = 10; inner = 10; };
-        colors = {
-          focused = {
-            background = "$color2";
-            border = "$color2";
-            text = "$foreground";
-            indicator = "$color2";
-            childBorder = "$color2";
-          };
-          focusedInactive = {
-            background = "$color1";
-            text = "$foreground";
-            border = "$color1";
-            indicator = "$color1";
-            childBorder = "$color1";
-          };
-          unfocused = {
-            background = "$color1";
-            border = "$color2";
-            text = "$foreground";
-            indicator = "$color1";
-            childBorder = "$color1";
-          };
-        };
+        # colors = {
+        #   focused = {
+        #     background = "$color2";
+        #     border = "$color2";
+        #     text = "$foreground";
+        #     indicator = "$color2";
+        #     childBorder = "$color2";
+        #   };
+        #   focusedInactive = {
+        #     background = "$color1";
+        #     text = "$foreground";
+        #     border = "$color1";
+        #     indicator = "$color1";
+        #     childBorder = "$color1";
+        #   };
+        #   unfocused = {
+        #     background = "$color1";
+        #     border = "$color2";
+        #     text = "$foreground";
+        #     indicator = "$color1";
+        #     childBorder = "$color1";
+        #   };
+        # };
         left = "h";
         down = "n";
         up = "e";
@@ -925,10 +925,10 @@ in
   xsession = {
     enable = true;
     scriptPath = ".xsession-hm";
-    pointerCursor = {
-      name = "Vanilla-DMZ";
-      package = pkgs.vanilla-dmz;
-    };
+    # pointerCursor = {
+    #   name = "Vanilla-DMZ";
+    #   package = pkgs.vanilla-dmz;
+    # };
     windowManager.i3 = {
         enable = true;
         extraConfig = ''
