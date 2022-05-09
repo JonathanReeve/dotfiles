@@ -87,7 +87,6 @@
   # $ nix search wget
   environment.systemPackages = with pkgs;
     [
-     # knock.defaultPackage.x86_64-linux
      # Nix stuff
      nix-index              # Indexing files for nix-locate
      nix-prefetch-git nix-prefetch-scripts # Help writing .nix files

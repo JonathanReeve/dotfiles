@@ -32,6 +32,7 @@
                                  #  ./nix-doom-emacs.nix
                                  #  nix-doom-emacs.hmModule
                                  ];
+                       home.packages = [ knock.defaultPackage.x86_64-linux ];
                      };
                    }
                  ];
