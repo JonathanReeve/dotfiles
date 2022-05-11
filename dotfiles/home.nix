@@ -42,8 +42,6 @@ in
           };
         };
         realName = "${name}";
-        # neomutt.enable = true;
-        # notmuch.enable = true;
       };
       columbia = {
         address = "jonathan.reeve@columbia.edu";
@@ -62,8 +60,6 @@ in
           };
         };
         realName = "${name}";
-        # neomutt.enable = true;
-        # notmuch.enable = true;  #
       };
       protonmail = {
         address = "jonathan@jonreeve.com";
@@ -152,31 +148,6 @@ in
     };
     mu = {
       enable = true;
-    };
-    neomutt = {
-      enable = false;
-      vimKeys = true;
-      extraConfig = ''
-      color normal white default
-      color attachment red default
-      color hdrdefault cyan default
-      color indicator brightyellow default
-      color markers brightred default
-      color quoted cyan default
-      color quoted1 magenta default
-      color quoted2 blue default
-      color signature yellow default
-      color status default default
-      color tilde blue default
-      color tree brightred default
-      color header brightyellow default ^From:
-      color header yellow default ^To:
-      color header brightcyan default ^Date
-      color header yellow default ^Cc:
-      color header brightgreen default ^Subject:
-      color header brightcyan default ^X-TRASH:
-      color status brightgreen default
-      '';
     };
     neovim = {
       enable = true;
@@ -352,9 +323,6 @@ in
     };
     starship = {
       enable = true;
-      # settings = { add_newline = false;
-      #              character = { format = "$symbol "; };
-      #            };
     };
     zoxide = {
       enable = true;
@@ -396,6 +364,7 @@ in
     };
     qutebrowser = {
       enable = true;
+      package = pkgs.hello; # Don't install qutebrowser here, since it doesn't work .
       extraConfig = ''
         c.statusbar.padding = {'top': 5, 'bottom': 5, 'left': 3, 'right': 3}
         c.tabs.padding = {'top': 2, 'bottom': 2, 'left': 2, 'right': 2}
@@ -524,6 +493,7 @@ in
         pkgs.pass # This is necessary for protonmail-bridge
         pkgs.gnome.gnome-keyring # Same
         pkgs.fantasque-sans-mono
+        pkgs.protonmail-bridge
       ];
       file = {
         ".doom.d/" = {
