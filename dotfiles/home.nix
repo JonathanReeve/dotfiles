@@ -102,10 +102,11 @@ in
   programs = {
     alacritty = {
       enable = true;
+      package = pkgs.hello; # Don't actually install it
       settings = {
         font.normal.family = "${font}";
-        font.size = 9;
-        window.opacity = 0.1;
+        font.size = 16;
+        window.opacity = 0.9;
         colors.transparent_background_colors = true;
       };
     };
@@ -199,7 +200,7 @@ in
        };
        shellAliases = {
          # Use vim as pager for manfiles, since it's prettier
-         "man" = "env PAGER=\"vim -R -c 'set ft=man'\" man";
+         # "man" = "env PAGER=\"vim -R -c 'set ft=man'\" man";
          };
        functions = {
          vault="encfs $vaultloc $vaultmount";
@@ -234,7 +235,7 @@ in
             if contains $TERM $acceptable_terms
               fish_vi_key_bindings
               # Load pywal colors
-              cat ~/.cache/wal/sequences
+              # cat ~/.cache/wal/sequences
             end
 
             set -U vaultmount ~/.private-mount
@@ -321,19 +322,22 @@ in
         env = { STARSHIP_SHELL = "nushell"; };
       };
     };
+
     starship = {
       enable = true;
     };
     zoxide = {
       enable = true;
     };
-    termite = {
+    foot = {
       enable = true;
-      clickableUrl = true;
-      # backgroundColor = "\${xrdb:background}";
-      backgroundColor = "rgba(32, 45, 56, 0.8)";
-      foregroundColor = "\${xrdb:foreground}";
-      font = "${font} 14";
+      settings = {
+        main = {
+          term = "xterm-256color";
+          font = "${font}:size=8";
+        };
+        colors.alpha = 0.8;
+      };
     };
     rofi = {
       enable = true;
@@ -342,19 +346,43 @@ in
     };
     waybar = {
       enable = true;
-      settings = [ {
-        mainBar = {
+      settings = [{
           layer = "top";
-          position = "top";
           height = 30;
-          output = [ "eDP-1" "DP-1-1" ];
-          modules-left = [ "sway/workspaces" "sway/mode" "wlr/taskbar" ];
-          modules-center = [ "sway/window" ];
-          modules-right = [ ];
-          modules = {
+          modules-left = [ "sway/workspaces" "sway/mode" "sway/window" ];
+          modules-center = [ "custom/clock" ];
+          modules-right = [ "custom/org-clock" "cpu" "memory" "network" "battery" "clock" ];
+          battery = {
+            format = "{capacity}% {icon}";
+            format-icons = [ "" "" "" "" ""];
           };
-        };
-      } ];
+          cpu = {
+            format = "{usage}% ";
+            tooltip = false;
+          };
+          memory = {
+            format = "{}% ";
+          };
+          network = {
+            format-wifi = "{essid} ({signalStrength}%) ";
+            format-ethernet = "{ipaddr}/{cidr} ";
+            tooltip-format = "{ifname} via {gwaddr} ";
+            format-linked = "{ifname} (No IP) ";
+            format-disconnected = "Disconnected ⚠";
+            format-alt = "{ifname}: {ipaddr}/{cidr}";
+          };
+          "custom/clock" = {
+            interval = 10;
+            exec = "date '+%a %d %b W%V-%u %R'";
+            format-alt = "{:%a, %d. %b  %H:%M}";
+          };
+          "custom/org-clock" = {
+            format = "{}";
+            max-length = 40;
+            interval = "30s";
+            exec = "/bin/bash ${scripts}/org-clock.sh";
+          };
+      }];
     };
     password-store = {
       enable = true;
@@ -554,12 +582,108 @@ in
     timers = {
     };
   };
+  targets.genericLinux.enable = true;
+  wayland = {
+    windowManager.sway = {
+      enable = true;
+      config = {
+        bars = [];
+        colors = {};
+        fonts = { names = [ "Font Awesome" "${font}"]; size = 14.0;};
+        gaps = { outer = 10; inner = 10; };
+        input = { "*" = {
+          xkb_layout = "us";
+          xkb_variant = "colemak";
+          xkb_options = "caps:escape,esperanto:colemak";
+        }; };
+        left = "h";
+        down = "n";
+        up = "e";
+        right = "i";
+        modifier = "Mod4";
+        keybindings =
+          {
+            "Mod4+1" = "workspace 1";
+            "Mod4+2" = "workspace 2";
+            "Mod4+3" = "workspace 3";
+            "Mod4+4" = "workspace 4";
+            "Mod4+5" = "workspace 5";
+            "Mod4+Shift+1" = "move container to workspace number 1";
+            "Mod4+Shift+2" = "move container to workspace number 2";
+            "Mod4+Shift+3" = "move container to workspace number 3";
+            "Mod4+Shift+4" = "move container to workspace number 4";
+            "Mod4+Shift+5" = "move container to workspace number 5";
+            "Mod4+Return" = "exec alacritty";
+            "Mod4+Shift+c" = "kill";
+            "Mod4+space" = "exec ${pkgs.ulauncher}/bin/ulauncher";
+            "Mod4+n" = "workspace next";
+            "Mod4+e" = "workspace prev";
+            "Mod4+Shift+q" = "exit";
+            "Mod4+Shift+r" = "restart";
+            "Mod4+p" = "focus parent";
+            "Mod4+Shift+p" = "focus child";
+            "Mod1+h" = "focus left";
+            "Mod1+n" = "focus down";
+            "Mod1+e" = "focus up";
+            "Mod1+i" = "focus right";
+            "Mod4+r" = "mode resize";
+            "Mod4+o" = "exec emacsclient --eval '(org-clock-in-last)'";
+            "Mod4+Shift+o" = "exec emacsclient --eval '(org-clock-out)'";
+            "Mod4+Shift+e" = "exec emacsclient -c";
+            "Mod1+Shift+h" = "move left";
+            "Mod1+Shift+n" = "move down";
+            "Mod1+Shift+e" = "move up";
+            "Mod1+Shift+i" = "move right";
+            "Mod4+s" = "move scratchpad";
+            "Mod4+Shift+s" = "scratchpad show";
+            "Mod4+t" = "floating toggle";
+            "Mod4+x" = "layout toggle all";
+            "Mod4+v" = "split v";
+            "Mod4+Shift+v" = "split h";
+            "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '+10%'";
+            "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '10%-'";
+            "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up";
+            "XF86AudioLowerVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl down";
+            "XF86AudioMute" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute";
+            # Open agenda with Super + A
+            "Mod4+a" = "exec emacsclient -c -e '(org-agenda-list)(delete-other-windows)(org-agenda-day-view)'";
+            "Mod4+m" = "exec emacsclient -c -e '(mu4e)(mu4e-update-mail-and-index)'";
+            # lock screen with Super + L
+            "Mod4+l" = "exec ${lockCmd}";
+            # Change wallpaper
+            "Mod4+w" = "exec ${pkgs.pywal}/bin/wal -i /home/jon/Bildujo/Ekranfonoj -o ${../scripts/pywal-reload.sh}";
+            "Mod4+Shift+w" = "exec ${pkgs.pywal}/bin/wal -i /run/media/jon/systemrestore/.systemrestore/Bildoj/ -o ${../scripts/pywal-reload.sh}";
+          };
+        modes = {
+          resize = {
+            h = "resize shrink width 10 px or 10 ppt";
+            n = "resize grow height 10 px or 10 ppt";
+            e = "resize shrink height 10 px or 10 ppt";
+            i = "resize grow width 10 px or 10 ppt";
+            Escape = "mode default";
+          };
+        };
+        startup = [
+          { command = "${pkgs.pywal}/bin/wal -R"; }
+          { command = "megasync"; }
+          { command = "waybar"; }
+        ];
+        window.border = 10;
+      };
+
+    };
+  };
   xdg = {
     enable = true;
     dataFile = {
       "qutebrowser/userscripts/" = {
         source = ../scripts/qutebrowser-userscripts;
         recursive = true;
+      };
+    };
+    configFile = {
+      "waybar/style.css" = {
+        source = ./waybar-style.css;
       };
     };
   };
