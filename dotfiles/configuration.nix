@@ -7,11 +7,11 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./cachix.nix
+      #./cachix.nix
       ./gnome.nix
       ./hardware-configuration.nix
       ./python.nix
-      ./R.nix
+      #./R.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -37,7 +37,6 @@
     # firewall.allowedTCPPorts = [ 8000 ]; # For local agenda server
   };
 
-  # Reflex stuff
   nix = {
     package = pkgs.nixFlakes; # For flakes
     extraOptions = ''
@@ -45,11 +44,6 @@
       keep-outputs = true
       keep-derivations = true
     '';
-    # Extra options from https://github.com/nix-community/nix-direnv
-    settings = {
-      substituters = [ "https://nixcache.reflex-frp.org" ];
-      trusted-public-keys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
-    };
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -73,7 +67,7 @@
     noto-fonts-emoji
     fira-code
     fira-code-symbols
-    font-awesome-ttf
+    font-awesome
     libertine
     victor-mono
     emacs-all-the-icons-fonts
@@ -134,7 +128,7 @@
      extra-cmake-modules
 
      (emacsWithPackages (epkgs: with emacsPackages; [
-       pdf-tools
+       # pdf-tools
      ]))
 
      stack
@@ -181,14 +175,12 @@
      ranger highlight       # File manager
      scrot                  # Screenshots
      tree                   # Show file hierarchies
-     autojump               # Jump around! With `j`
      mpv                    # Minimalist video player
      #termite                # Vim-like modal terminal
      feh                    # Display images
      libnotify              # Notifications
      fzf                    # Fuzzy file finder
-     ag                     # Fast grep replacement
-     ripgrep                # Another fast grep replacement
+     ripgrep                # Fast grep replacement
      bat                    # Cat replacement
      fd                     # Find replacement
      sd                     # Sed replacement
@@ -220,6 +212,7 @@
      # libsForQt5.qtstyleplugins
      waydroid
 
+     swaybg
    ];
 
   environment.variables = {
@@ -235,7 +228,6 @@
     firmware = with pkgs; [ firmwareLinuxNonfree ]; 
     pulseaudio = {
       enable = true;
-      extraModules = [ pkgs.pulseaudio-modules-bt ];
     };
     sensor.iio.enable = true;
     bluetooth.enable = true;
@@ -251,7 +243,7 @@
       enable = true;
       DBs = with pkgs.dictdDBs; [ wiktionary wordnet ];
     };
-    flatpak.enable = true;
+    #flatpak.enable = true;
 
     keybase.enable = true;
     kbfs = {
@@ -299,7 +291,7 @@
         { name = "home-manager";
           start = ''${pkgs.stdenv.shell} $HOME/.xsession-hm 
 	            & waitPID=$!''; }
-        { name = "sway"; start = ''${pkgs.sway}/bin/sway''; }
+        # { name = "sway"; start = ''${pkgs.sway}/bin/sway''; }
       ];
       # windowManager.exwm = {
       #   enable = true;
@@ -315,6 +307,10 @@
       enable = true;
     };
     gnupg.agent = { enable = true; enableSSHSupport = true; };
+    sway = {
+      enable = true;
+      wrapperFeatures.gtk = true;
+    };
   };
 
   users.users = {

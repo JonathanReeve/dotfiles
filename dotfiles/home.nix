@@ -16,7 +16,8 @@ let
   backgroundColor = "#243442"; # Blue steel
   foregroundColor = "#deedf9"; # Light blue
   warningColor = "#e23131"; # Reddish
-  lockCmd = "${pkgs.i3lock-fancy}/bin/i3lock-fancy -p -t ''";
+  # lockCmd = "${pkgs.i3lock-fancy}/bin/i3lock-fancy -p -t ''";
+  lockCmd = "${pkgs.swaylock-fancy}/bin/swaylock-fancy -p -t ''";
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
 in
 {
@@ -107,8 +108,8 @@ in
       enable = true;
       settings = {
         font.normal.family = "${font}";
-        font.size = 9;
-        window.opacity = 0.1;
+        font.size = 16;
+        window.opacity = 0.9;
         colors.transparent_background_colors = true;
       };
     };
@@ -182,7 +183,7 @@ in
       plugins = with pkgs.vimPlugins; [ spacevim ];
       vimAlias = true;
       extraConfig =
-      ''
+        ''
         set mouse=a
         " Colemak some things
         nnoremap n j
@@ -194,60 +195,60 @@ in
         nnoremap i l
         nnoremap l i
       '';
-     };
+    };
     fish = {
-       enable = true;
-       shellAbbrs = {
-         # Git abbreviations
-         "edit-home" = "$EDITOR ${dots}/home.nix";
-         "edit-conf" = "$EDITOR ${dots}/configuration.nix";
-         "ga" = "git add";
-         "gc" = "git commit";
-         "gcam" = "git commit -am";
-         "gcm" = "git commit -m";
-         "gco" = "git checkout";
-         "gcob" = "git checkout -b";
-         "gcom" = "git checkout master";
-         "gcod" = "git checkout develop";
-         "gd" = "git diff";
-         "gp" = "git push";
-         "gdc" = "git diff --cached";
-         "glg" = "git log --color --graph --pretty --oneline";
-         "glgb" = "git log --all --graph --decorate --oneline --simplify-by-decoration";
-         "gst" = "git status";
-         # Other abbreviations
-         "em" = "emacsclient -c";
-         # "pw" = "vim ~/Dokumentujo/Personal/.p10.txt";
-         # "lock" = "${lockCmd}";
-         "new-session" = "dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.DisplayManager $XDG_SEAT_PATH org.freedesktop.DisplayManager.Seat.SwitchToGreeter";
-         "portrait-monitor" = "xrandr --output DP-1 --rotate left --auto --right-of eDP-1";
-         "monitor" = "xrandr --output DP-1 --auto --above eDP-1";
-         "monitor-off" = "xrandr --output DP-1 --off";
-       };
-       shellAliases = {
-         # Use vim as pager for manfiles, since it's prettier
-         "man" = "env PAGER=\"vim -R -c 'set ft=man'\" man";
-         };
-       functions = {
-         vault="encfs $vaultloc $vaultmount";
-         unvault="fusermount -u $vaultmount";
-         jnl="vault; and emacsclient -c $vaultmount/Journal/jnl.org; and unvault";
-         upgrade=''
+      enable = true;
+      shellAbbrs = {
+        # Git abbreviations
+        "edit-home" = "$EDITOR ${dots}/home.nix";
+        "edit-conf" = "$EDITOR ${dots}/configuration.nix";
+        "ga" = "git add";
+        "gc" = "git commit";
+        "gcam" = "git commit -am";
+        "gcm" = "git commit -m";
+        "gco" = "git checkout";
+        "gcob" = "git checkout -b";
+        "gcom" = "git checkout master";
+        "gcod" = "git checkout develop";
+        "gd" = "git diff";
+        "gp" = "git push";
+        "gdc" = "git diff --cached";
+        "glg" = "git log --color --graph --pretty --oneline";
+        "glgb" = "git log --all --graph --decorate --oneline --simplify-by-decoration";
+        "gst" = "git status";
+        # Other abbreviations
+        "em" = "emacsclient -c";
+        # "pw" = "vim ~/Dokumentujo/Personal/.p10.txt";
+        # "lock" = "${lockCmd}";
+        "new-session" = "dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.DisplayManager $XDG_SEAT_PATH org.freedesktop.DisplayManager.Seat.SwitchToGreeter";
+        "portrait-monitor" = "xrandr --output DP-1 --rotate left --auto --right-of eDP-1";
+        "monitor" = "xrandr --output DP-1 --auto --above eDP-1";
+        "monitor-off" = "xrandr --output DP-1 --off";
+      };
+      shellAliases = {
+        # Use vim as pager for manfiles, since it's prettier
+        # "man" = "env PAGER=\"vim -R -c 'set ft=man'\" man";
+      };
+      functions = {
+        vault="encfs $vaultloc $vaultmount";
+        unvault="fusermount -u $vaultmount";
+        jnl="vault; and emacsclient -c $vaultmount/Journal/jnl.org; and unvault";
+        upgrade=''
             nix flake update ${dots}
             sudo nixos-rebuild switch --flake ${dots}
             '';
-         clean = "nix-store --gc --print-roots; and sudo nix-collect-garbage --delete-older-than 5d";
-         # A function for renaming the most recent PDF, and putting it in my Papers dir.
-         rename-pdf="mv (ls -t /tmp/*.pdf | head -n 1) ~/Dokumentujo/Papers/$argv.pdf";
-         find-book="for engine in b c libgen ia; qutebrowser \":open -t $engine $argv\"; end";
-         # Search several search engines at once. `search b g l "search query"`
-         search="for engine in $argv[1..-2]; qutebrowser \":open -t $engine $argv[-1]\"; end";
-         # Proverbs for greeting
-         fish_greeting = "shuf -n 1 ${scripts}/proverboj.txt | ${pkgs.neo-cowsay}/bin/cowsay";
-         em = "emacsclient -c $argv &; disown";
-       };
-       interactiveShellInit =
-         ''
+        clean = "nix-store --gc --print-roots; and sudo nix-collect-garbage --delete-older-than 5d";
+        # A function for renaming the most recent PDF, and putting it in my Papers dir.
+        rename-pdf="mv (ls -t /tmp/*.pdf | head -n 1) ~/Dokumentujo/Papers/$argv.pdf";
+        find-book="for engine in b c libgen ia; qutebrowser \":open -t $engine $argv\"; end";
+        # Search several search engines at once. `search b g l "search query"`
+        search="for engine in $argv[1..-2]; qutebrowser \":open -t $engine $argv[-1]\"; end";
+        # Proverbs for greeting
+        fish_greeting = "shuf -n 1 ${scripts}/proverboj.txt | ${pkgs.neo-cowsay}/bin/cowsay";
+        em = "emacsclient -c $argv &; disown";
+      };
+      interactiveShellInit =
+        ''
             # Use Fisher for plugin management
             if not functions -q fisher
                 set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
@@ -284,44 +285,44 @@ in
 
             #eval (direnv hook fish)
          '';
-       # plugins = [
-       #   {
-       #     name = "z";
-       #     src = pkgs.fetchFromGitHub {
-       #       owner = "jethrokuan";
-       #       repo = "z";
-       #       rev = "45a9ff6d0932b0e9835cbeb60b9794ba706eef10";
-       #       sha256 = "pWkEhjbcxXduyKz1mAFo90IuQdX7R8bLCQgb0R+hXs4=";
-       #     };
-       #   }
-       #   {
-       #     name = "bang-bang";
-       #     src = pkgs.fetchFromGitHub {
-       #       owner = "oh-my-fish";
-       #       repo = "plugin-bang-bang";
-       #       rev = "f969c618301163273d0a03d002614d9a81952c1e";
-       #       sha256 = "A8ydBX4LORk+nutjHurqNNWFmW6LIiBPQcxS3x4nbeQ=";
-       #     };
-       #   }
-       #   {
-       #     name = "fzf.fish";
-       #     src = pkgs.fetchFromGitHub {
-       #       owner = "PatrickF1";
-       #       repo = "fzf.fish";
-       #       rev = "0dc2795255d6ac0759e6f1d572f64ea0768acefb";
-       #       sha256 = "fl4/Pgtkojk5AE52wpGDnuLajQxHoVqyphE90IIPYFU=";
-       #     };
-       #   }
-       #   {
-       #     name = "bass";
-       #     src = pkgs.fetchFromGitHub {
-       #       owner = "edc";
-       #       repo = "bass";
-       #       rev = "2fd3d2157d5271ca3575b13daec975ca4c10577a";
-       #       sha256 = "fl4/Pgtkojk5AE52wpGDnuLajQxHoVqyphE90IIPYFU=";
-       #     };
-       #   }
-       # ];
+      # plugins = [
+      #   {
+      #     name = "z";
+      #     src = pkgs.fetchFromGitHub {
+      #       owner = "jethrokuan";
+      #       repo = "z";
+      #       rev = "45a9ff6d0932b0e9835cbeb60b9794ba706eef10";
+      #       sha256 = "pWkEhjbcxXduyKz1mAFo90IuQdX7R8bLCQgb0R+hXs4=";
+      #     };
+      #   }
+      #   {
+      #     name = "bang-bang";
+      #     src = pkgs.fetchFromGitHub {
+      #       owner = "oh-my-fish";
+      #       repo = "plugin-bang-bang";
+      #       rev = "f969c618301163273d0a03d002614d9a81952c1e";
+      #       sha256 = "A8ydBX4LORk+nutjHurqNNWFmW6LIiBPQcxS3x4nbeQ=";
+      #     };
+      #   }
+      #   {
+      #     name = "fzf.fish";
+      #     src = pkgs.fetchFromGitHub {
+      #       owner = "PatrickF1";
+      #       repo = "fzf.fish";
+      #       rev = "0dc2795255d6ac0759e6f1d572f64ea0768acefb";
+      #       sha256 = "fl4/Pgtkojk5AE52wpGDnuLajQxHoVqyphE90IIPYFU=";
+      #     };
+      #   }
+      #   {
+      #     name = "bass";
+      #     src = pkgs.fetchFromGitHub {
+      #       owner = "edc";
+      #       repo = "bass";
+      #       rev = "2fd3d2157d5271ca3575b13daec975ca4c10577a";
+      #       sha256 = "fl4/Pgtkojk5AE52wpGDnuLajQxHoVqyphE90IIPYFU=";
+      #     };
+      #   }
+      # ];
     };
     fzf = {
       enable = true;
@@ -369,22 +370,47 @@ in
       enable = true;
       theme = "~/.cache/wal/colors-rofi-dark.rasi";
       font = "${font} 12";
+      package = pkgs.rofi-wayland;
     };
     waybar = {
       enable = true;
-      settings = [ {
-        mainBar = {
-          layer = "top";
-          position = "top";
-          height = 30;
-          output = [ "eDP-1" "DP-1-1" ];
-          modules-left = [ "sway/workspaces" "sway/mode" "wlr/taskbar" ];
-          modules-center = [ "sway/window" ];
-          modules-right = [ ];
-          modules = {
-          };
+      settings = [{
+        layer = "top";
+        height = 30;
+        modules-left = [ "sway/workspaces" "sway/mode" "sway/window" ];
+        modules-center = [ "custom/clock" ];
+        modules-right = [ "custom/org-clock" "cpu" "memory" "network" "battery" "clock" ];
+        battery = {
+          format = "{capacity}% {icon}";
+          format-icons = [ "" "" "" "" ""];
         };
-      } ];
+        cpu = {
+          format = "{usage}% ";
+          tooltip = false;
+        };
+        memory = {
+          format = "{}% ";
+        };
+        network = {
+          format-wifi = "{essid} ({signalStrength}%) ";
+          format-ethernet = "{ipaddr}/{cidr} ";
+          tooltip-format = "{ifname} via {gwaddr} ";
+          format-linked = "{ifname} (No IP) ";
+          format-disconnected = "Disconnected ⚠";
+          format-alt = "{ifname}: {ipaddr}/{cidr}";
+        };
+        "custom/clock" = {
+          interval = 10;
+          exec = "date '+%a %d %b W%V-%u %R'";
+          format-alt = "{:%a, %d. %b  %H:%M}";
+        };
+        "custom/org-clock" = {
+          format = "{}";
+          max-length = 40;
+          interval = "30s";
+          exec = "${pkgs.bash}/bin/bash ${scripts}/org-clock.sh";
+        };
+      }];
     };
     zathura = {
       enable = false;
@@ -415,26 +441,26 @@ in
       '';
       keyBindings = {
         normal = {
-        "N" =  "tab-next";
-        "E" =  "tab-prev";
-        "K" =  "search-prev";
-        "l" =  "mode-enter insert";
-        "n" =  "scroll down";
-        "e" =  "scroll up";
-        "i" =  "scroll right";
-        "j" =  "search-next";
-        "b" =  "set-cmd-text -s :tab-select ";
-        "gL" =  "open javascript:location.href='org-protocol://capture?template=l&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
-        "gM" =  "open javascript:location.href='org-protocol://roam-ref?template=m&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
-        "gR" = "open javascript:location.href='org-protocol://roam-ref?template=r&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
-        "gB" = "spawn -m ~/Dotfiles/scripts/downloadBook.py {url}";
-        "pf" =  "spawn --userscript qute-pass";
-        "gz" =  "jseval var d=document,s=d.createElement('script';;s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement;.appendChild(s;;void(0;;";
-        "t" =  "set-cmd-text -s :open -t";
-        "Y" =  "yank selection";
-        "O" =  "set-cmd-text :open {url:pretty}";
-        "<Alt-Left>" =  "back";
-        "<Alt-Right>" =  "forward";
+          "N" =  "tab-next";
+          "E" =  "tab-prev";
+          "K" =  "search-prev";
+          "l" =  "mode-enter insert";
+          "n" =  "scroll down";
+          "e" =  "scroll up";
+          "i" =  "scroll right";
+          "j" =  "search-next";
+          "b" =  "set-cmd-text -s :tab-select ";
+          "gL" =  "open javascript:location.href='org-protocol://capture?template=l&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
+          "gM" =  "open javascript:location.href='org-protocol://roam-ref?template=m&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
+          "gR" = "open javascript:location.href='org-protocol://roam-ref?template=r&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
+          "gB" = "spawn -m ~/Dotfiles/scripts/downloadBook.py {url}";
+          "pf" =  "spawn --userscript qute-pass";
+          "gz" =  "jseval var d=document,s=d.createElement('script';;s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement;.appendChild(s;;void(0;;";
+          "t" =  "set-cmd-text -s :open -t";
+          "Y" =  "yank selection";
+          "O" =  "set-cmd-text :open {url:pretty}";
+          "<Alt-Left>" =  "back";
+          "<Alt-Right>" =  "forward";
         };
       };
       searchEngines = {
@@ -461,7 +487,7 @@ in
         "viki" =  "https://eo.wikipedia.org/w/index.php?search={}";
         "ia" =  "https://archive.org/details/texts?and%5B%5D={}&sin=";
         "mm" =  "https://muse-jhu-edu.ezproxy.cul.columbia.edu/search?action=search&query=content:{}:and&limit=journal_id:131&min=1&max=10&t=search_journal_header";
-        };
+      };
       settings = {
         content.headers.accept_language = "eo,fr,en-US,en";
         colors = {
@@ -515,7 +541,7 @@ in
           markup = "full";
           alignment = "left";
           word_wrap = "true";
-          };
+        };
         shortcuts = {
           close = "ctrl+space";
           close_all = "ctrl+shift+space";
@@ -536,8 +562,9 @@ in
           timeout = 0;
           foreground = "${foregroundColor}";
           background = "${warningColor}";
-          };
+        };
       };
+      waylandDisplay = "eDP-1";
     };
     picom = {
       enable = true;
@@ -573,42 +600,42 @@ in
       script = "/usr/bin/env polybar main_bar &";
       config = {
         "bar/ext_bar" = {
-           monitor = "DP-1-1";
-           bottom = "false";
-           height = 30;
-           fixed-center = "true";
-           background = "\${xrdb:background}";
-           foreground = "\${xrdb:foreground}";
-           line-size = 7;
-           line-color = "\${xrdb:color4}";
-           padding-right = "1%";
-           module-margin-left = 1;
-           module-margin-right = 1;
-           font-0 = "${font}:size=14;1";
-           font-1 = "Font Awesome 5 Free:size=11:style=Solid;1";
-           font-2 = "Noto Sans Symbols:size=11;1";
-           modules-left = "i3 xwindow";
-           modules-center = "date";
-           modules-right = "org-clock volume backlight filesystem memory cpu battery network";
+          monitor = "DP-1-1";
+          bottom = "false";
+          height = 30;
+          fixed-center = "true";
+          background = "\${xrdb:background}";
+          foreground = "\${xrdb:foreground}";
+          line-size = 7;
+          line-color = "\${xrdb:color4}";
+          padding-right = "1%";
+          module-margin-left = 1;
+          module-margin-right = 1;
+          font-0 = "${font}:size=14;1";
+          font-1 = "Font Awesome 5 Free:size=11:style=Solid;1";
+          font-2 = "Noto Sans Symbols:size=11;1";
+          modules-left = "i3 xwindow";
+          modules-center = "date";
+          modules-right = "org-clock volume backlight filesystem memory cpu battery network";
         };
         "bar/main_bar" = {
-           monitor = "eDP-1";
-           bottom = "false";
-           height = 30;
-           fixed-center = "true";
-           background = "\${xrdb:background}";
-           foreground = "\${xrdb:foreground}";
-           line-size = 7;
-           line-color = "\${xrdb:color4}";
-           padding-right = "1%";
-           module-margin-left = 1;
-           module-margin-right = 1;
-           font-0 = "${font}:size=14;1";
-           font-1 = "Font Awesome 5 Free:size=11:style=Solid;1";
-           font-2 = "Noto Sans Symbols:size=11;1";
-           modules-left = "i3 xwindow";
-           modules-center = "date";
-           modules-right = "org-clock volume backlight filesystem memory cpu battery network";
+          monitor = "eDP-1";
+          bottom = "false";
+          height = 30;
+          fixed-center = "true";
+          background = "\${xrdb:background}";
+          foreground = "\${xrdb:foreground}";
+          line-size = 7;
+          line-color = "\${xrdb:color4}";
+          padding-right = "1%";
+          module-margin-left = 1;
+          module-margin-right = 1;
+          font-0 = "${font}:size=14;1";
+          font-1 = "Font Awesome 5 Free:size=11:style=Solid;1";
+          font-2 = "Noto Sans Symbols:size=11;1";
+          modules-left = "i3 xwindow";
+          modules-center = "date";
+          modules-right = "org-clock volume backlight filesystem memory cpu battery network";
         };
         "module/i3" = {
           type = "internal/i3";
@@ -631,19 +658,19 @@ in
           format-prefix-foreground = "\${xrdb:foreground}";
         };
         "module/battery" = {
-           type = "internal/battery";
-           battery = "BAT0";
-           adapter = "ADP1";
-           full-at = 96;
-           format-charging = " <label-charging>";
-           format-discharging = "<ramp-capacity> <label-discharging>";
-           format-full = "";
-           ramp-capacity-0 = "%{F#f00}%{F-}";
-           ramp-capacity-1 = "";
-           ramp-capacity-2 = "";
-           ramp-capacity-3 = "";
-           ramp-capacity-4 = "";
-           ramp-capacity-foreground = "\${xrdb:foreground}";
+          type = "internal/battery";
+          battery = "BAT0";
+          adapter = "ADP1";
+          full-at = 96;
+          format-charging = " <label-charging>";
+          format-discharging = "<ramp-capacity> <label-discharging>";
+          format-full = "";
+          ramp-capacity-0 = "%{F#f00}%{F-}";
+          ramp-capacity-1 = "";
+          ramp-capacity-2 = "";
+          ramp-capacity-3 = "";
+          ramp-capacity-4 = "";
+          ramp-capacity-foreground = "\${xrdb:foreground}";
         };
         "settings" = {screenchange-reload = "true";};
         "module/xwindow" = {
@@ -701,6 +728,13 @@ in
       enable = true;
       lockCmd = "${lockCmd}";
     };
+    swayidle = {
+      enable = true;
+      events = [{
+        event = "before-sleep";
+        command = "${lockCmd}";
+      }];
+    };
 
   };
   gtk = {
@@ -727,24 +761,29 @@ in
 
   # Dotfiles for the home root, ~/
   home = {
-      # This should only be necessary with non-NixOS
-      keyboard = {
-        options = [ "caps:escape" "esperanto:colemak" ];
-        variant = "colemak";
+    # This should only be necessary with non-NixOS
+    keyboard = {
+      options = [ "caps:escape" "esperanto:colemak" ];
+      variant = "colemak";
+    };
+    pointerCursor = {
+      name = "Vanilla-DMZ";
+      package = pkgs.vanilla-dmz;
+      x11.enable = true;
+    };
+    packages = with pkgs; [
+      # neovim-nightly
+      #
+      pkgs.pass # This is necessary for protonmail-bridge
+      pkgs.gnome.gnome-keyring # Same
+    ];
+    file = {
+      ".doom.d/" = {
+        source = ./emacs/doom.d;
+        recursive = true;
+        onChange = "$HOME/.emacs.d/bin/doom sync";
       };
-      packages = with pkgs; [
-        # neovim-nightly
-        #
-        pkgs.pass # This is necessary for protonmail-bridge
-        pkgs.gnome.gnome-keyring # Same
-      ];
-      file = {
-        ".doom.d/" = {
-          source = ./emacs/doom.d;
-          recursive = true;
-          onChange = "$HOME/.emacs.d/bin/doom sync";
-        };
-        ".local/share/applications/org-protocol.desktop".text = ''
+      ".local/share/applications/org-protocol.desktop".text = ''
           [Desktop Entry]
           Name=Org-Protocol
           Exec=emacsclient %u
@@ -753,17 +792,17 @@ in
           Terminal=false
           MimeType=x-scheme-handler/org-protocol
         '';
-        #".emacs.d/init.el".text = ''
-        #    (load "default.el")
-        #'';
+      #".emacs.d/init.el".text = ''
+      #    (load "default.el")
+      #'';
 
-        # Vim all the things!
-        ".inputrc".text =
+      # Vim all the things!
+      ".inputrc".text =
         ''
           set editing-mode vi
           set keymap vi-command
         '';
-        ".stack/config.yaml".text =
+      ".stack/config.yaml".text =
         ''
           templates:
             params:
@@ -774,12 +813,12 @@ in
           nix:
             enable: true
         '';
-      };
-      language = {
-        base = "eo";
-      };
-      sessionVariables.LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
-      sessionVariables.LC_ALL = "eo.UTF-8";
+    };
+    language = {
+      base = "eo";
+    };
+    sessionVariables.LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
+    sessionVariables.LC_ALL = "eo.UTF-8";
   };
 
   systemd.user = {
@@ -818,50 +857,176 @@ in
       };
     };
   };
-  wayland = {
-    windowManager.sway = {
-      enable = true;
-      extraConfig = "include \"$HOME/.cache/wal/colors-sway\"";
+  wayland.windowManager.sway = {
+    enable = true;
+    extraConfigEarly = ''include "$HOME/.cache/wal/colors-sway"'';
+    config = {
+      bars = [];
+      colors = {
+        focused = {
+          background = "$color2";
+          border = "$color2";
+          text = "$foreground";
+          indicator = "$color2";
+          childBorder = "$color2";
+        };
+        focusedInactive = {
+          background = "$color1";
+          text = "$foreground";
+          border = "$color1";
+          indicator = "$color1";
+          childBorder = "$color1";
+        };
+        unfocused = {
+          background = "$color1";
+          border = "$color2";
+          text = "$foreground";
+          indicator = "$color1";
+          childBorder = "$color1";
+        };
+      };
+      fonts = { names = [ "Font Awesome" "${font}"]; size = 14.0;};
+      gaps = { outer = 10; inner = 10; };
+      input = { "*" = {
+        xkb_layout = "us";
+        xkb_variant = "colemak";
+        xkb_options = "caps:escape,esperanto:colemak";
+      }; };
+      output = { "eDP-1" = {
+        background = "$wallpaper fill";
+      }; };
+      left = "h";
+      down = "n";
+      up = "e";
+      right = "i";
+      modifier = "Mod4";
+      keybindings =
+        {
+          "Mod4+1" = "workspace 1";
+          "Mod4+2" = "workspace 2";
+          "Mod4+3" = "workspace 3";
+          "Mod4+4" = "workspace 4";
+          "Mod4+5" = "workspace 5";
+          "Mod4+Shift+1" = "move container to workspace number 1";
+          "Mod4+Shift+2" = "move container to workspace number 2";
+          "Mod4+Shift+3" = "move container to workspace number 3";
+          "Mod4+Shift+4" = "move container to workspace number 4";
+          "Mod4+Shift+5" = "move container to workspace number 5";
+          "Mod4+Return" = "exec alacritty";
+          "Mod4+Shift+c" = "kill";
+          "Mod4+space" = "exec ${pkgs.rofi}/bin/rofi -show drun";
+          "Mod4+n" = "workspace next";
+          "Mod4+e" = "workspace prev";
+          "Mod4+Shift+q" = "exit";
+          "Mod4+Shift+r" = "restart";
+          "Mod4+p" = "focus parent";
+          "Mod4+Shift+p" = "focus child";
+          "Mod1+h" = "focus left";
+          "Mod1+n" = "focus down";
+          "Mod1+e" = "focus up";
+          "Mod1+i" = "focus right";
+          "Mod4+r" = "mode resize";
+          "Mod4+o" = "exec emacsclient --eval '(org-clock-in-last)'";
+          "Mod4+Shift+o" = "exec emacsclient --eval '(org-clock-out)'";
+          "Mod4+Shift+e" = "exec emacsclient -c";
+          "Mod1+Shift+h" = "move left";
+          "Mod1+Shift+n" = "move down";
+          "Mod1+Shift+e" = "move up";
+          "Mod1+Shift+i" = "move right";
+          "Mod4+s" = "move scratchpad";
+          "Mod4+Shift+s" = "scratchpad show";
+          "Mod4+t" = "floating toggle";
+          "Mod4+x" = "layout toggle all";
+          "Mod4+v" = "split v";
+          "Mod4+Shift+v" = "split h";
+          "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '+10%'";
+          "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '10%-'";
+          "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up";
+          "XF86AudioLowerVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl down";
+          "XF86AudioMute" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute";
+          # Open agenda with Super + A
+          "Mod4+a" = "exec emacsclient -c -e '(org-agenda-list)(delete-other-windows)(org-agenda-day-view)'";
+          "Mod4+m" = "exec emacsclient -c -e '(mu4e)(mu4e-update-mail-and-index)'";
+          # lock screen with Super + L
+          "Mod4+l" = "exec ${lockCmd}";
+          # Change wallpaper
+          "Mod4+w" = "exec ${pkgs.pywal}/bin/wal -i /home/jon/Bildujo/Ekranfonoj -o ${../scripts/pywal-reload.sh}";
+          "Mod4+Shift+w" = "exec ${pkgs.pywal}/bin/wal -i /run/media/jon/systemrestore/.systemrestore/Bildoj/ -o ${../scripts/pywal-reload.sh}";
+        };
+      modes = {
+        resize = {
+          h = "resize shrink width 10 px or 10 ppt";
+          n = "resize grow height 10 px or 10 ppt";
+          e = "resize shrink height 10 px or 10 ppt";
+          i = "resize grow width 10 px or 10 ppt";
+          Escape = "mode default";
+        };
+      };
+      startup = [
+        { command = "${pkgs.pywal}/bin/wal -R"; }
+        { command = "megasync"; }
+        { command = "waybar"; }
+      ];
+      window.border = 10;
+    };
+  };
+  xsession = {
+    enable = false;
+    scriptPath = ".xsession-hm";
+    windowManager.i3 = {
+      enable = false;
+      extraConfig = ''
+          set_from_resource $bg i3wm.background ${backgroundColor}
+          set_from_resource $fg i3wm.foreground ${foregroundColor}
+          set_from_resource $c1 i3wm.color1 ${backgroundColor}
+          set_from_resource $c2 i3wm.color2 ${foregroundColor}
+        '';
       config = {
+        assigns = { "9" = [{ class = "^MEGAsync$"; }]; };
+        floating.criteria = [
+          { class = "^MEGAsync$"; }
+          { class = "zoom"; }
+        ];
         bars = [];
-        fonts = { names = [ "Font Awesome" "${font}"]; size = 14.0;};
-        gaps = { outer = 10; inner = 10; };
+        fonts = { names = [ "Font Awesome" "${font}"];
+                  size = 14.0;
+                };
+        gaps = {
+          outer = 10;
+          inner = 10;
+        };
         colors = {
           focused = {
-            background = "$color2";
-            border = "$color2";
-            text = "$foreground";
-            indicator = "$color2";
-            childBorder = "$color2";
+            background = "$c2";
+            border = "$c2";
+            text = "$fg";
+            indicator = "$c2";
+            childBorder = "$c2";
           };
           focusedInactive = {
-            background = "$color1";
-            text = "$foreground";
-            border = "$color1";
-            indicator = "$color1";
-            childBorder = "$color1";
+            background = "$c1";
+            text = "$fg";
+            border = "$c1";
+            indicator = "$c1";
+            childBorder = "$c1";
           };
           unfocused = {
-            background = "$color1";
-            border = "$color2";
-            text = "$foreground";
-            indicator = "$color1";
-            childBorder = "$color1";
+            background = "$c1";
+            border = "$c2";
+            text = "$fg";
+            indicator = "$c1";
+            childBorder = "$c1";
           };
         };
-        left = "h";
-        down = "n";
-        up = "e";
-        right = "i";
         modifier = "Mod4";
         keybindings =
-          {
-            "Mod4+Return" = "exec ${pkgs.alacritty}/bin/alacritty";
+          lib.mkOptionDefault {
+            "Mod4+Return" = "exec termite";
             "Mod4+Shift+c" = "kill";
-            "Mod4+space" = "exec ${pkgs.ulauncher}/bin/ulauncher";
+            "Mod4+space" = "exec rofi -show drun";
             "Mod4+n" = "workspace next";
             "Mod4+e" = "workspace prev";
-            "Mod4+Shift+q" = "exec sway-msg exit";
+            "Mod4+Shift+q" = "exec i3-msg exit";
             "Mod4+p" = "focus parent";
             "Mod4+Shift+p" = "focus child";
             "Mod1+h" = "focus left";
@@ -882,11 +1047,12 @@ in
             "Mod4+x" = "layout toggle all";
             "Mod4+v" = "split v";
             "Mod4+Shift+v" = "split h";
-            # "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '+10%'";
-            # "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '10%-'";
-            # "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up";
-            # "XF86AudioLowerVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl down";
-            # "XF86AudioMute" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute";
+            "Mod4+c" = "exec clipmenu";
+            "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '+10%'";
+            "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '10%-'";
+            "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up";
+            "XF86AudioLowerVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl down";
+            "XF86AudioMute" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute";
             # Open agenda with Super + A
             "Mod4+a" = "exec emacsclient -c -e '(org-agenda-list)(delete-other-windows)(org-agenda-day-view)'";
             "Mod4+m" = "exec emacsclient -c -e '(mu4e)(mu4e-update-mail-and-index)'";
@@ -906,132 +1072,16 @@ in
           };
         };
         startup = [
-          { command = "${pkgs.pywal}/bin/wal -R"; }
-          { command = "megasync"; }
-          # { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; }
-          # { command = "setxkbmap -layout us -variant colemak -option caps:escape -option esperanto:colemak"; }
+          { command = "${pkgs.pywal}/bin/wal -R"; notification = false; }
+          # { command = "megasync"; notification = false; }
+          { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
+          { command = "setxkbmap -layout us -variant colemak -option caps:escape -option esperanto:colemak"; }
           # { command = "exec systemctl --user import-environment"; always = true; notification = false; }
+          { command = "exec systemctl --user restart polybar"; always = true; notification = false; }
+          # { command = "${pkgs.gnome3.gnome_settings_daemon}/libexec/gsd-xsettings"; }
         ];
         window.border = 10;
       };
-    };
-  };
-  xsession = {
-    enable = true;
-    scriptPath = ".xsession-hm";
-    pointerCursor = {
-      name = "Vanilla-DMZ";
-      package = pkgs.vanilla-dmz;
-    };
-    windowManager.i3 = {
-        enable = true;
-        extraConfig = ''
-          set_from_resource $bg i3wm.background ${backgroundColor}
-          set_from_resource $fg i3wm.foreground ${foregroundColor}
-          set_from_resource $c1 i3wm.color1 ${backgroundColor}
-          set_from_resource $c2 i3wm.color2 ${foregroundColor}
-        '';
-        config = {
-          assigns = { "9" = [{ class = "^MEGAsync$"; }]; };
-          floating.criteria = [
-            { class = "^MEGAsync$"; }
-            { class = "zoom"; }
-          ];
-          bars = [];
-          fonts = { names = [ "Font Awesome" "${font}"];
-                    size = 14.0;
-                  };
-          gaps = {
-            outer = 10;
-            inner = 10;
-          };
-          colors = {
-            focused = {
-              background = "$c2";
-              border = "$c2";
-              text = "$fg";
-              indicator = "$c2";
-              childBorder = "$c2";
-            };
-            focusedInactive = {
-              background = "$c1";
-              text = "$fg";
-              border = "$c1";
-              indicator = "$c1";
-              childBorder = "$c1";
-            };
-            unfocused = {
-              background = "$c1";
-              border = "$c2";
-              text = "$fg";
-              indicator = "$c1";
-              childBorder = "$c1";
-            };
-          };
-          modifier = "Mod4";
-          keybindings =
-            lib.mkOptionDefault {
-              "Mod4+Return" = "exec termite";
-              "Mod4+Shift+c" = "kill";
-              "Mod4+space" = "exec rofi -show drun";
-              "Mod4+n" = "workspace next";
-              "Mod4+e" = "workspace prev";
-              "Mod4+Shift+q" = "exec i3-msg exit";
-              "Mod4+p" = "focus parent";
-              "Mod4+Shift+p" = "focus child";
-              "Mod1+h" = "focus left";
-              "Mod1+n" = "focus down";
-              "Mod1+e" = "focus up";
-              "Mod1+i" = "focus right";
-              "Mod4+r" = "mode resize";
-              "Mod4+o" = "exec emacsclient --eval '(org-clock-in-last)'";
-              "Mod4+Shift+o" = "exec emacsclient --eval '(org-clock-out)'";
-              "Mod4+Shift+e" = "exec emacsclient -c";
-              "Mod1+Shift+h" = "move left";
-              "Mod1+Shift+n" = "move down";
-              "Mod1+Shift+e" = "move up";
-              "Mod1+Shift+i" = "move right";
-              "Mod4+s" = "move scratchpad";
-              "Mod4+Shift+s" = "scratchpad show";
-              "Mod4+t" = "floating toggle";
-              "Mod4+x" = "layout toggle all";
-              "Mod4+v" = "split v";
-              "Mod4+Shift+v" = "split h";
-              "Mod4+c" = "exec clipmenu";
-              "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '+10%'";
-              "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '10%-'";
-              "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up";
-              "XF86AudioLowerVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl down";
-              "XF86AudioMute" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute";
-              # Open agenda with Super + A
-              "Mod4+a" = "exec emacsclient -c -e '(org-agenda-list)(delete-other-windows)(org-agenda-day-view)'";
-              "Mod4+m" = "exec emacsclient -c -e '(mu4e)(mu4e-update-mail-and-index)'";
-              # lock screen with Super + L
-              "Mod4+l" = "exec ${lockCmd}";
-              # Change wallpaper
-              "Mod4+w" = "exec ${pkgs.pywal}/bin/wal -i /home/jon/Bildujo/Ekranfonoj -o ${../scripts/pywal-reload.sh}";
-              "Mod4+Shift+w" = "exec ${pkgs.pywal}/bin/wal -i /run/media/jon/systemrestore/.systemrestore/Bildoj/ -o ${../scripts/pywal-reload.sh}";
-            };
-          modes = {
-            resize = {
-              h = "resize shrink width 10 px or 10 ppt";
-              n = "resize grow height 10 px or 10 ppt";
-              e = "resize shrink height 10 px or 10 ppt";
-              i = "resize grow width 10 px or 10 ppt";
-              Escape = "mode default";
-            };
-          };
-          startup = [
-            { command = "${pkgs.pywal}/bin/wal -R"; notification = false; }
-            # { command = "megasync"; notification = false; }
-            { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
-            { command = "setxkbmap -layout us -variant colemak -option caps:escape -option esperanto:colemak"; }
-            # { command = "exec systemctl --user import-environment"; always = true; notification = false; }
-            { command = "exec systemctl --user restart polybar"; always = true; notification = false; }
-            # { command = "${pkgs.gnome3.gnome_settings_daemon}/libexec/gsd-xsettings"; }
-          ];
-          window.border = 10;
-        };
     };
     windowManager.xmonad = {
       enable = false;
@@ -1048,6 +1098,11 @@ in
   # Dotfiles for ~/.config, ~/.local/share, etc.
   xdg = {
     enable = true;
+    configFile = {
+      "waybar/style.css" = {
+        source = ./waybar-style.css;
+      };
+    };
     dataFile = {
       "qutebrowser/userscripts/" = {
         source = ../scripts/qutebrowser-userscripts;

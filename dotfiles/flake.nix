@@ -2,7 +2,7 @@
   description = "My NixOS configuration.";
   inputs = {
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "/home/jon/Code/home-manager";
       inputs.nixpkgs.follows = "nixos";
     };
     nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";

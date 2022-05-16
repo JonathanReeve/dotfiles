@@ -6,11 +6,11 @@
      gthumb                 # Photos
      gnome3.gnome-tweaks
      # gnome3.gnome-boxes
-     gnomeExtensions.appindicator
-     gnomeExtensions.caffeine
-     gnomeExtensions.dash-to-dock
-     gnomeExtensions.gsconnect
-     gnomeExtensions.pop-shell
+     #gnomeExtensions.appindicator
+     #gnomeExtensions.caffeine
+     #gnomeExtensions.dash-to-dock
+     #gnomeExtensions.gsconnect
+     #gnomeExtensions.pop-shell
      foliate                 # Ebooks
 
      # GTK Themes

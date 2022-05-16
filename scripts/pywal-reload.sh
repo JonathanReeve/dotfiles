@@ -12,6 +12,11 @@ c.colors.tabs.selected.even.bg = \"$color2\"
 c.colors.tabs.selected.odd.bg = \"$color2\"
 " > /tmp/config.py
 
+# Waybar
+cat ~/.cache/wal/colors-waybar.css ~/.config/waybar/style.css > /tmp/waybar.css
+pkill waybar
+exec waybar -s /tmp/waybar.css
+
 running=`ps cax | grep qutebrowser | wc -l`
 if [ $running -gt 0 ]; then
     qutebrowser ":config-source /tmp/config.py"
