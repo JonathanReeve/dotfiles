@@ -331,6 +331,7 @@ in
     nushell = {
       enable = true;
       config = ./config.nu;
+      env = ./env.nu;
     };
     starship = {
       enable = true;
