@@ -15,7 +15,7 @@ c.colors.tabs.selected.odd.bg = \"$color2\"
 # Waybar
 cat ~/.cache/wal/colors-waybar.css ~/.config/waybar/style.css > /tmp/waybar.css
 pkill waybar
-exec waybar -s /tmp/waybar.css
+exec waybar -s /tmp/waybar.css &
 
 running=`ps cax | grep qutebrowser | wc -l`
 if [ $running -gt 0 ]; then
@@ -24,6 +24,9 @@ fi
 
 # Trigger homepage reload
 # ./homepage/homepage.sh
+
+# Workaround for pywal bug: https://github.com/dylanaraps/pywal/issues/624
+echo "element-text, element-icon {background-color: inherit; text-color: inherit;}" >> ~/.cache/wal/colors-rofi-dark.rasi
 
 # Trigger emacs reload
 emacsclient --eval "(load-theme 'ewal-doom-one)"

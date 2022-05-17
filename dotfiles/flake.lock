@@ -168,11 +168,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1652722728,
-        "narHash": "sha256-ObdopFiuzrv0kb7Q5sQq4wkdmw3Kt6ab7Wa3C0xuSvk=",
+        "lastModified": 1652804989,
+        "narHash": "sha256-9MwJd0322sj/MUtDoMUQbC/iJOesTzOXJ2TzfYU8k4A=",
         "ref": "master",
-        "rev": "18d66e32d6e97e612c9e75f528f2a54498c676e7",
-        "revCount": 2127,
+        "rev": "8989a4a1f5ba5821391c4b48f5fdfbd01035f778",
+        "revCount": 2129,
         "type": "git",
         "url": "file:///home/jon/Code/home-manager"
       },
@@ -236,11 +236,11 @@
     },
     "nixos": {
       "locked": {
-        "lastModified": 1652572281,
-        "narHash": "sha256-UEsrB5XBOj0blVe2ldc0lHvlhLYZJDHroELMHlg7XxA=",
+        "lastModified": 1652659998,
+        "narHash": "sha256-FqNrXC1EE6U2RACwXBlsAvg1lqQGLYpuYb6+W3DL9vA=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "43ff6cb1c027d13dc938b88eb099462210fea52f",
+        "rev": "1d7db1b9e4cf1ee075a9f52e5c36f7b9f4207502",
         "type": "github"
       },
       "original": {
