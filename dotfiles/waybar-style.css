@@ -253,3 +253,10 @@ label:focus {
 #keyboard-state > label.locked {
     background: rgba(0, 0, 0, 0.2);
 }
+
+#custom-org-clock.protocolu {
+    background-color: #f53c3c;
+}
+#custom-org-clock.ensalutu {
+    background-color: #f53c3c;
+}

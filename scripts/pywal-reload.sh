@@ -17,6 +17,10 @@ cat ~/.cache/wal/colors-waybar.css ~/.config/waybar/style.css > /tmp/waybar.css
 pkill waybar
 exec waybar -s /tmp/waybar.css &
 
+# Sway
+pkill swaybg
+exec swaybg -o '*' -m fill -i $wallpaper &
+
 running=`ps cax | grep qutebrowser | wc -l`
 if [ $running -gt 0 ]; then
     qutebrowser ":config-source /tmp/config.py"

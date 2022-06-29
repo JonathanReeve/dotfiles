@@ -111,13 +111,13 @@
            (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
            :unnarrowed t)
           ("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%u\n"
-           :target (file+olp "movies.org" ("Watched")
+           :target (file+olp "movies.org" ("watched")
            ))))
   (setq org-roam-capture-ref-templates
         '(("r" "ref" plain "%?" :target
            (file+head "${slug}.org" "#+title: ${title}") :unnarrowed t)
           ("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :WIKIDATA: ${ref}\n :END:\n%u\n"
-           :target (file+olp "movies.org" ("Watched")))
+           :target (file+olp "movies.org" ("watched")))
           )
         )
 
@@ -462,7 +462,7 @@ If nil it defaults to `split-string-default-separators', normally
                         (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
                       t)
   (setq message-send-mail-function 'smtpmail-send-it)
-  ;; (add-to-list 'gnutls-trustfiles "~/.config/protonmail/bridge/cert.pem")
+  ;;(add-to-list 'gnutls-trustfiles "~/.config/protonmail/bridge/cert.pem")
   (setq mu4e-maildir "~/Mail"
         mu4e-trash-folder "/Trash"
         mu4e-refile-folder "/Archive"
@@ -565,6 +565,15 @@ If nil it defaults to `split-string-default-separators', normally
                              :n "n"   'pdf-view-scroll-up-or-next-page
                              :n "e"   'pdf-view-scroll-down-or-previous-page)
 
+(map! :after ranger :map ranger-normal-mode-map
+      :nvm "h" 'ranger-up-directory
+      :nvm "n" 'ranger-next-file
+      :nvm "e" 'ranger-prev-file
+      :nvm "i" 'ranger-find-file
+      :nvm "N" 'ranger-half-page-down
+      :nvm "E" 'ranger-half-page-up
+      )
+
 ;; Epub
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 (defun my-nov-font-setup ()
@@ -618,3 +627,9 @@ If nil it defaults to `split-string-default-separators', normally
 ;;   :config
 ;;   (global-evil-colemak-basics-mode) ; Enable colemak rebinds
 ;;   )
+
+;; Workaround; see https://github.com/nnicandro/emacs-jupyter/issues/380#issuecomment-1014026589
+(after! ob-jupyter
+  (defun jupyter-ansi-color-apply-on-region (begin end)
+    (ansi-color-apply-on-region begin end t))
+  )

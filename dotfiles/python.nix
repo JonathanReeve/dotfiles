@@ -5,6 +5,7 @@
      # Python Development
      pipenv
      poetry
+     # mach-nix
      (python3.withPackages(ps: with ps; [
        pandas
        matplotlib
@@ -15,9 +16,9 @@
        vega
        vega_datasets
        jupyter
-       jupyterlab
+       # jupyterlab
        # jupytext
-       tensorflow
+       # tensorflow
        nltk
        pip
        numpy

@@ -16,11 +16,11 @@ let
   backgroundColor = "#243442"; # Blue steel
   foregroundColor = "#deedf9"; # Light blue
   warningColor = "#e23131"; # Reddish
-  # lockCmd = "${pkgs.i3lock-fancy}/bin/i3lock-fancy -p -t ''";
   lockCmd = "${pkgs.swaylock-fancy}/bin/swaylock-fancy -p -t ''";
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
 in
 {
+  # imports = [ ./sway.nix ];
 
   accounts.email = {
     maildirBasePath = "${maildir}";
@@ -43,8 +43,6 @@ in
           };
         };
         realName = "${name}";
-        # neomutt.enable = true;
-        # notmuch.enable = true;
       };
       columbia = {
         address = "jonathan.reeve@columbia.edu";
@@ -63,8 +61,6 @@ in
           };
         };
         realName = "${name}";
-        # neomutt.enable = true;
-        # notmuch.enable = true;  #
       };
       protonmail = {
         address = "jonathan@jonreeve.com";
@@ -89,7 +85,6 @@ in
           };
         };
         mu.enable = true;
-        # notmuch.enable = true;
         mbsync = {
           enable = true;
           create = "maildir";
@@ -108,7 +103,7 @@ in
       enable = true;
       settings = {
         font.normal.family = "${font}";
-        font.size = 16;
+        font.size = 14;
         window.opacity = 0.9;
         colors.transparent_background_colors = true;
       };
@@ -152,31 +147,6 @@ in
     mu = {
       enable = true;
     };
-    neomutt = {
-      enable = false;
-      vimKeys = true;
-      extraConfig = ''
-      color normal white default
-      color attachment red default
-      color hdrdefault cyan default
-      color indicator brightyellow default
-      color markers brightred default
-      color quoted cyan default
-      color quoted1 magenta default
-      color quoted2 blue default
-      color signature yellow default
-      color status default default
-      color tilde blue default
-      color tree brightred default
-      color header brightyellow default ^From:
-      color header yellow default ^To:
-      color header brightcyan default ^Date
-      color header yellow default ^Cc:
-      color header brightgreen default ^Subject:
-      color header brightcyan default ^X-TRASH:
-      color status brightgreen default
-      '';
-    };
     neovim = {
       enable = true;
       # package = pkgs.neovim;
@@ -195,6 +165,10 @@ in
         nnoremap i l
         nnoremap l i
       '';
+    };
+    nix-index = {
+      enable = true;
+      enableFishIntegration = true;
     };
     fish = {
       enable = true;
@@ -363,7 +337,7 @@ in
         height = 30;
         modules-left = [ "sway/workspaces" "sway/mode" "sway/window" ];
         modules-center = [ "custom/clock" ];
-        modules-right = [ "custom/org-clock" "cpu" "memory" "network" "battery" "clock" ];
+        modules-right = [ "custom/org-clock" "pulseaudio" "cpu" "memory" "network" "battery" "clock" ];
         battery = {
           format = "{capacity}% {icon}";
           format-icons = [ "" "" "" "" ""];
@@ -390,9 +364,28 @@ in
         };
         "custom/org-clock" = {
           format = "{}";
-          max-length = 40;
-          interval = "30s";
-          exec = "${pkgs.bash}/bin/bash ${scripts}/org-clock.sh";
+          max-length = 80;
+          interval = 30;
+          exec = "/run/current-system/sw/bin/env ${scripts}/org-clock.hs";
+        };
+        "pulseaudio" = {
+           "scroll-step" = 1;
+            "format" = "{volume}% {icon} {format_source}";
+            "format-bluetooth" = "{volume}% {icon} {format_source}";
+            "format-bluetooth-muted" = " {icon} {format_source}";
+            "format-muted" = " {format_source}";
+            "format-source" = "{volume}% ";
+            "format-source-muted" = "";
+            "format-icons" = {
+              "headphone" = "";
+              "hands-free" = "";
+              "headset" = "";
+              "phone" = "";
+              "portable" = "";
+              "car" = "";
+              "default" = ["" "" ""];
+            };
+            "on-click" = "pavucontrol";
         };
       }];
     };
@@ -452,6 +445,7 @@ in
         "g" =  "https://www.google.com/search?q={}";
         "l" =  "https://www.google.com/search?hl=en&q={}&btnI=I";
         "w" =  "https://en.wikipedia.org/w/index.php?search={}";
+        "wd" = "https://www.wikidata.org/w/index.php?search={}";
         "gs" =  "https://scholar.google.com/scholar?q={}";
         "b" =  "https://www.google.com/search?tbm=bks&q={}";
         "aw" =  "https://wiki.archlinux.org/?search={}";
@@ -505,12 +499,6 @@ in
   services = {
     # gnome-keyring.enable = true;
     gpg-agent.enable = true;
-    xsuspender = {
-      enable = true;
-      defaults = {
-        downclockOnBattery = 1;
-      };
-    };
     clipmenu.enable = true;
     dunst = {
       enable = true;
@@ -550,161 +538,37 @@ in
       };
       waylandDisplay = "eDP-1";
     };
-    picom = {
+    kanshi = {
       enable = true;
-      experimentalBackends = true;
-      fade = true;
-      fadeDelta = 5;
-      blur = true;
-      shadow = true;
-      # TODO replace with https://github.com/ibhagwan/picom
-      package = pkgs.picom.overrideAttrs (old: rec {
-        src = pkgs.fetchFromGitHub {
-          owner = "jonaburg"; repo = "picom";
-          rev = "a8445684fe18946604848efb73ace9457b29bf80";
-          sha256 = "R+YUGBrLst6CpUgG9VCwaZ+LiBSDWTp0TLt1Ou4xmpQ=";
-          fetchSubmodules = true;
+      profiles = {
+        undocked = {
+          outputs = [
+            {
+              criteria = "eDP-1";
+            }
+          ];
         };
-      });
-      extraOptions = ''
-        # corner-radius: 10.0;
-        blur: {
-          method = "dual_kawase";
-          strength = 5;
-          background = false;
-          background-frame = false;
-          background-fixed = false;
-        }
-      '';
-      vSync = true;
-    };
-    polybar = {
-      enable = true;
-      package = pkgs.polybarFull;
-      script = "/usr/bin/env polybar main_bar &";
-      config = {
-        "bar/ext_bar" = {
-          monitor = "DP-1-1";
-          bottom = "false";
-          height = 30;
-          fixed-center = "true";
-          background = "\${xrdb:background}";
-          foreground = "\${xrdb:foreground}";
-          line-size = 7;
-          line-color = "\${xrdb:color4}";
-          padding-right = "1%";
-          module-margin-left = 1;
-          module-margin-right = 1;
-          font-0 = "${font}:size=14;1";
-          font-1 = "Font Awesome 5 Free:size=11:style=Solid;1";
-          font-2 = "Noto Sans Symbols:size=11;1";
-          modules-left = "i3 xwindow";
-          modules-center = "date";
-          modules-right = "org-clock volume backlight filesystem memory cpu battery network";
+        docked = {
+          outputs = [
+            { criteria = "eDP-1";
+              position = "0,0";
+            }
+            {
+              criteria = "Samsung Electric Company SAMSUNG 0x00000F00";
+              position = "380,1440";
+            }
+          ];
         };
-        "bar/main_bar" = {
-          monitor = "eDP-1";
-          bottom = "false";
-          height = 30;
-          fixed-center = "true";
-          background = "\${xrdb:background}";
-          foreground = "\${xrdb:foreground}";
-          line-size = 7;
-          line-color = "\${xrdb:color4}";
-          padding-right = "1%";
-          module-margin-left = 1;
-          module-margin-right = 1;
-          font-0 = "${font}:size=14;1";
-          font-1 = "Font Awesome 5 Free:size=11:style=Solid;1";
-          font-2 = "Noto Sans Symbols:size=11;1";
-          modules-left = "i3 xwindow";
-          modules-center = "date";
-          modules-right = "org-clock volume backlight filesystem memory cpu battery network";
-        };
-        "module/i3" = {
-          type = "internal/i3";
-          label-focused-underline = "\${xrdb:color4}";
-          label-unfocused-underline = "\${xrdb:background}";
-          label-focused = "%index%";
-          label-unfocused = "%index%";
-          label-urgent = "%index%";
-          label-visible = "%index%";
-          label-focused-padding = 1;
-          label-unfocused-padding = 1;
-          label-urgent-padding = 1;
-          label-visible-padding = 1;
-        };
-        "module/date" = {
-          type = "custom/script";
-          # type = "internal/date";
-          interval = 5;
-          exec = "/run/current-system/sw/bin/date '+%a %d %b W%V-%u %R'";
-          format-prefix-foreground = "\${xrdb:foreground}";
-        };
-        "module/battery" = {
-          type = "internal/battery";
-          battery = "BAT0";
-          adapter = "ADP1";
-          full-at = 96;
-          format-charging = " <label-charging>";
-          format-discharging = "<ramp-capacity> <label-discharging>";
-          format-full = "";
-          ramp-capacity-0 = "%{F#f00}%{F-}";
-          ramp-capacity-1 = "";
-          ramp-capacity-2 = "";
-          ramp-capacity-3 = "";
-          ramp-capacity-4 = "";
-          ramp-capacity-foreground = "\${xrdb:foreground}";
-        };
-        "settings" = {screenchange-reload = "true";};
-        "module/xwindow" = {
-          type = "internal/xwindow";
-          label = "%title:0:30:...%";
-          label-padding = 10;
-          label-foreground = "\${xrdb:color4}";
-        };
-        "module/network" = {
-          type = "internal/network";
-          interface = "wlp0s20f3";
-          interval = "3.0";
-          format-connected = "<label-connected>";
-          label-connected = "";
-        };
-        "module/cpu" = {
-          type = "internal/cpu";
-          label = " %percentage:2%%";
-        };
-        "module/org-clock" = {
-          type = "custom/script";
-          interval =20;
-          exec = "/run/current-system/sw/bin/runhaskell ${scripts}/org-clock.hs 2> /dev/null";
-          click-left = "emacsclient --eval '(org-clock-out)' && echo ' Stopped!'";
-        };
-        "module/memory" = {
-          type = "internal/memory";
-          label = " %percentage_used%%";
-        };
-        "module/filesystem" = {
-          type = "internal/fs";
-          mount-0 = "/";
-          label-mounted = " %percentage_used%%";
-        };
-        "module/volume" = {
-          type = "internal/alsa";
-          master-soundcard = "hw:0";
-          label-volume = " %percentage%";
-          label-muted = "";
-          click-left = "pactl set-sink-mute 1 toggle";
-        };
-        "module/backlight" = {
-          type = "internal/backlight";
-          card = "intel_backlight";
-          format = "<ramp>";
-          ramp-0 = "";
-          ramp-1 = "";
-          ramp-2 = "";
-          ramp-3 = "";
-          ramp-4 = "";
+        clamshell = {
+          outputs = [
+            { criteria = "eDP-1";
+              status = "disable";
+            }
+            {
+              criteria = "Samsung Electric Company SAMSUNG 0x00000F00";
+              position = "0,0";
+            }
+          ];
         };
       };
     };
@@ -718,21 +582,8 @@ in
         event = "before-sleep";
         command = "${lockCmd}";
       }];
+      timeouts = [{ timeout = 900; command = "${lockCmd}"; }];
     };
-
-  };
-  gtk = {
-    enable = false;
-    # theme = {
-    #   package = pkgs.adwaita-gtk;
-    #   name = "Breeze-Dark";
-    # };
-    # iconTheme = {
-    #   package = pkgs.breeze-icons;
-    #   name = "breeze-dark";
-    # };
-    # Give Termite some internal spacing.
-    gtk3.extraCss = ".termite {padding: 10px;}";
   };
   qt = {
     enable = false;
@@ -801,8 +652,8 @@ in
     language = {
       base = "eo";
     };
-    sessionVariables.LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
-    sessionVariables.LC_ALL = "eo.UTF-8";
+    # sessionVariables.LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
+    # sessionVariables.LC_ALL = "eo.UTF-8";
   };
 
   systemd.user = {
@@ -886,19 +737,19 @@ in
       modifier = "Mod4";
       keybindings =
         {
-          "Mod4+1" = "workspace 1";
-          "Mod4+2" = "workspace 2";
-          "Mod4+3" = "workspace 3";
-          "Mod4+4" = "workspace 4";
-          "Mod4+5" = "workspace 5";
-          "Mod4+Shift+1" = "move container to workspace number 1";
-          "Mod4+Shift+2" = "move container to workspace number 2";
-          "Mod4+Shift+3" = "move container to workspace number 3";
-          "Mod4+Shift+4" = "move container to workspace number 4";
-          "Mod4+Shift+5" = "move container to workspace number 5";
-          "Mod4+Return" = "exec alacritty";
+          "Mod4+j" = "workspace 1";
+          "Mod4+l" = "workspace 2";
+          "Mod4+u" = "workspace 3";
+          "Mod4+y" = "workspace 4";
+          "Mod4+Shift+j" = "move container to workspace number 1";
+          "Mod4+Shift+l" = "move container to workspace number 2";
+          "Mod4+Shift+u" = "move container to workspace number 3";
+          "Mod4+Shift+y" = "move container to workspace number 4";
+          "Mod4+h" = "exec alacritty";
           "Mod4+Shift+c" = "kill";
           "Mod4+space" = "exec ${pkgs.rofi}/bin/rofi -show drun";
+          # "Mod4+y" = "output eDP-1 disable";
+          # "Mod4+Shift+y" = "output eDP-1 enable";
           "Mod4+n" = "workspace next";
           "Mod4+e" = "workspace prev";
           "Mod4+Shift+q" = "exit";
@@ -932,10 +783,10 @@ in
           "Mod4+a" = "exec emacsclient -c -e '(org-agenda-list)(delete-other-windows)(org-agenda-day-view)'";
           "Mod4+m" = "exec emacsclient -c -e '(mu4e)(mu4e-update-mail-and-index)'";
           # lock screen with Super + L
-          "Mod4+l" = "exec ${lockCmd}";
+          # "Mod4+l" = "exec ${lockCmd}";
           # Change wallpaper
-          "Mod4+w" = "exec ${pkgs.pywal}/bin/wal -i /home/jon/Bildujo/Ekranfonoj -o ${../scripts/pywal-reload.sh}";
-          "Mod4+Shift+w" = "exec ${pkgs.pywal}/bin/wal -i /run/media/jon/systemrestore/.systemrestore/Bildoj/ -o ${../scripts/pywal-reload.sh}";
+          "Mod4+w" = "exec ${pkgs.pywal}/bin/wal -e -t -i /home/jon/Bildujo/Ekranfonoj -o ${../scripts/pywal-reload.sh}";
+          "Mod4+Shift+w" = "exec ${pkgs.pywal}/bin/wal -e -t -i /run/media/jon/systemrestore/.systemrestore/Bildoj/ -o ${../scripts/pywal-reload.sh}";
         };
       modes = {
         resize = {
@@ -947,137 +798,20 @@ in
         };
       };
       startup = [
-        { command = "${pkgs.pywal}/bin/wal -R"; }
-        { command = "megasync"; }
-        { command = "waybar"; }
+        { command = "exec ${pkgs.pywal}/bin/wal -R"; }
+        { command = "exec megasync"; }
+        { command = "exec waybar"; }
+        { command = "exec ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"; }
       ];
       window.border = 10;
     };
-  };
-  xsession = {
-    enable = false;
-    scriptPath = ".xsession-hm";
-    windowManager.i3 = {
-      enable = false;
-      extraConfig = ''
-          set_from_resource $bg i3wm.background ${backgroundColor}
-          set_from_resource $fg i3wm.foreground ${foregroundColor}
-          set_from_resource $c1 i3wm.color1 ${backgroundColor}
-          set_from_resource $c2 i3wm.color2 ${foregroundColor}
-        '';
-      config = {
-        assigns = { "9" = [{ class = "^MEGAsync$"; }]; };
-        floating.criteria = [
-          { class = "^MEGAsync$"; }
-          { class = "zoom"; }
-        ];
-        bars = [];
-        fonts = { names = [ "Font Awesome" "${font}"];
-                  size = 14.0;
-                };
-        gaps = {
-          outer = 10;
-          inner = 10;
-        };
-        colors = {
-          focused = {
-            background = "$c2";
-            border = "$c2";
-            text = "$fg";
-            indicator = "$c2";
-            childBorder = "$c2";
-          };
-          focusedInactive = {
-            background = "$c1";
-            text = "$fg";
-            border = "$c1";
-            indicator = "$c1";
-            childBorder = "$c1";
-          };
-          unfocused = {
-            background = "$c1";
-            border = "$c2";
-            text = "$fg";
-            indicator = "$c1";
-            childBorder = "$c1";
-          };
-        };
-        modifier = "Mod4";
-        keybindings =
-          lib.mkOptionDefault {
-            "Mod4+Return" = "exec termite";
-            "Mod4+Shift+c" = "kill";
-            "Mod4+space" = "exec rofi -show drun";
-            "Mod4+n" = "workspace next";
-            "Mod4+e" = "workspace prev";
-            "Mod4+Shift+q" = "exec i3-msg exit";
-            "Mod4+p" = "focus parent";
-            "Mod4+Shift+p" = "focus child";
-            "Mod1+h" = "focus left";
-            "Mod1+n" = "focus down";
-            "Mod1+e" = "focus up";
-            "Mod1+i" = "focus right";
-            "Mod4+r" = "mode resize";
-            "Mod4+o" = "exec emacsclient --eval '(org-clock-in-last)'";
-            "Mod4+Shift+o" = "exec emacsclient --eval '(org-clock-out)'";
-            "Mod4+Shift+e" = "exec emacsclient -c";
-            "Mod1+Shift+h" = "move left";
-            "Mod1+Shift+n" = "move down";
-            "Mod1+Shift+e" = "move up";
-            "Mod1+Shift+i" = "move right";
-            "Mod4+s" = "move scratchpad";
-            "Mod4+Shift+s" = "scratchpad show";
-            "Mod4+t" = "floating toggle";
-            "Mod4+x" = "layout toggle all";
-            "Mod4+v" = "split v";
-            "Mod4+Shift+v" = "split h";
-            "Mod4+c" = "exec clipmenu";
-            "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '+10%'";
-            "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '10%-'";
-            "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up";
-            "XF86AudioLowerVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl down";
-            "XF86AudioMute" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute";
-            # Open agenda with Super + A
-            "Mod4+a" = "exec emacsclient -c -e '(org-agenda-list)(delete-other-windows)(org-agenda-day-view)'";
-            "Mod4+m" = "exec emacsclient -c -e '(mu4e)(mu4e-update-mail-and-index)'";
-            # lock screen with Super + L
-            "Mod4+l" = "exec ${lockCmd}";
-            # Change wallpaper
-            "Mod4+w" = "exec ${pkgs.pywal}/bin/wal -i /home/jon/Bildujo/Ekranfonoj -o ${../scripts/pywal-reload.sh}";
-            "Mod4+Shift+w" = "exec ${pkgs.pywal}/bin/wal -i /run/media/jon/systemrestore/.systemrestore/Bildoj/ -o ${../scripts/pywal-reload.sh}";
-          };
-        modes = {
-          resize = {
-            h = "resize shrink width 10 px or 10 ppt";
-            n = "resize grow height 10 px or 10 ppt";
-            e = "resize shrink height 10 px or 10 ppt";
-            i = "resize grow width 10 px or 10 ppt";
-            Escape = "mode default";
-          };
-        };
-        startup = [
-          { command = "${pkgs.pywal}/bin/wal -R"; notification = false; }
-          # { command = "megasync"; notification = false; }
-          { command = "xrdb -merge ~/.cache/wal/colors.Xresources"; notification = false; }
-          { command = "setxkbmap -layout us -variant colemak -option caps:escape -option esperanto:colemak"; }
-          # { command = "exec systemctl --user import-environment"; always = true; notification = false; }
-          { command = "exec systemctl --user restart polybar"; always = true; notification = false; }
-          # { command = "${pkgs.gnome3.gnome_settings_daemon}/libexec/gsd-xsettings"; }
-        ];
-        window.border = 10;
-      };
-    };
-    windowManager.xmonad = {
-      enable = false;
-      enableContribAndExtras = true;
-      config = "${dots}/xmonad.hs";
-      extraPackages = haskellPackages: [
-        haskellPackages.xmonad-contrib
-        haskellPackages.monad-logger
-      ];
-
-
-    };
+    extraConfig = ''
+      # Clamshell mode
+      set $laptop eDP-1
+      bindswitch --reload --locked lid:on output $laptop disable
+      bindswitch --reload --locked lid:off output $laptop enable
+      exec_always ${scripts}/sway-reload.sh
+    '';
   };
   # Dotfiles for ~/.config, ~/.local/share, etc.
   xdg = {
@@ -1091,6 +825,18 @@ in
       "qutebrowser/userscripts/" = {
         source = ../scripts/qutebrowser-userscripts;
         recursive = true;
+      };
+    };
+    mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "application/pdf" = "org.gnome.Evince.desktop";
+        "text/html" = "org.qutebrowser.qutebrowser.desktop";
+        "x-scheme-handler/org-protocol" = "org-protocol.desktop";
+        "x-scheme-handler/http" = "org.qutebrowser.qutebrowser.desktop";
+        "x-scheme-handler/https" = "org.qutebrowser.qutebrowser.desktop";
+        "x-scheme-handler/about" = "org.qutebrowser.qutebrowser.desktop";
+        "x-scheme-handler/unknown" = "org.qutebrowser.qutebrowser.desktop";
       };
     };
   };

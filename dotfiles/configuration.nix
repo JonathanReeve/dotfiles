@@ -53,7 +53,7 @@
 
   # Select internationalisation properties.
   i18n = {
-    defaultLocale = "eo.UTF-8";
+    defaultLocale = "eo";
     #supportedLocales = [ "en_US.UTF-8/UTF-8" ];
   };
 
@@ -72,7 +72,7 @@
     victor-mono
     emacs-all-the-icons-fonts
     # font-fonts
-    monoid
+    # monoid
     kochi-substitute # Japanese
   ];
   # Set your time zone.
@@ -93,7 +93,7 @@
      # yubikey-manager # Provides ykman
      # yubikey-personalization-gui
 
-     # megasync             # Backups
+     megasync             # Backups
      megacmd
      keybase-gui          # Also backups
      logseq               # Fancy notes
@@ -128,7 +128,7 @@
      extra-cmake-modules
 
      (emacsWithPackages (epkgs: with emacsPackages; [
-       # pdf-tools
+       pdf-tools
      ]))
 
      stack
@@ -212,7 +212,16 @@
      # libsForQt5.qtstyleplugins
      waydroid
 
+     # sway related
      swaybg
+     wdisplays
+     polkit
+     wl-clipboard
+     autotiling
+
+
+     # Web dev
+     nodejs
    ];
 
   environment.variables = {
@@ -243,7 +252,7 @@
       enable = true;
       DBs = with pkgs.dictdDBs; [ wiktionary wordnet ];
     };
-    #flatpak.enable = true;
+    flatpak.enable = true;
 
     keybase.enable = true;
     kbfs = {
@@ -292,6 +301,9 @@
           start = ''${pkgs.stdenv.shell} $HOME/.xsession-hm 
 	            & waitPID=$!''; }
         # { name = "sway"; start = ''${pkgs.sway}/bin/sway''; }
+        { name = "newm";
+          start = ''${pkgs.stdenv.shell} /home/jon/Aplikaĵoj/result/bin/start-newm & waitPID=$!'';
+        }
       ];
       # windowManager.exwm = {
       #   enable = true;

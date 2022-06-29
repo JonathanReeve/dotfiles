@@ -26,13 +26,13 @@ main = do
   let red = if thisDesktop `elem` desktops then emptyText else "%{F#f00}"
   case out of
     -- Emacs is on, but returns "-1", which means that org-clock is not running.
-    (ExitSuccess, "-1\n") -> TIO.putStrLn $ red <> "Protocolu!"
+    (ExitSuccess, "-1\n") -> TIO.putStrLn $ "Protocolu!\nProtocolu!\nprotocolu"
     -- Emacs is on and clocking. Print the clock value.
-    (ExitSuccess, out) -> TIO.putStrLn $ T.take 25 $ T.drop 1 $
-      T.splitOn "\"" out !! 1
+    (ExitSuccess, out) -> TIO.putStrLn $ clockstr <> "\n" <> clockstr <> "\nclock" where
+      clockstr = T.drop 1 $ T.splitOn "\"" out !! 1
     -- Emacs is not on.
     (ExitFailure err, _) -> do
-      TIO.putStrLn $ red <> "Ensalutu!" -- <> repr err
+      TIO.putStrLn $ "Ensalutu!\nEnsalutu\nensalutu" -- <> repr err
       -- clockVal <- getEnv "clock"
       -- let clock = (read (fromMaybe "0" clockVal)) :: Int
       -- setEnv "clock" (show (clock + 1)) True
