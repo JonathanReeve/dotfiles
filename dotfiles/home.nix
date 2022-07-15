@@ -573,11 +573,11 @@ in
       };
     };
     screen-locker = {
-      enable = true;
+      enable = false;
       lockCmd = "${lockCmd}";
     };
     swayidle = {
-      enable = true;
+      enable = false;
       events = [{
         event = "before-sleep";
         command = "${lockCmd}";
@@ -694,7 +694,7 @@ in
   };
   wayland.windowManager.sway = {
     enable = true;
-    extraConfigEarly = ''include "$HOME/.cache/wal/colors-sway"'';
+    extraConfigEarly = ''include "${dots}/colors-sway"'';
     config = {
       bars = [];
       colors = {
