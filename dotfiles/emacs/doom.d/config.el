@@ -104,7 +104,7 @@
       '(("d" "default" entry
          "* %?"
          :target (file+head "%<%Y-%m-%d>.org"
-                            "#+title: %<%Y-%m-%d>\n\n#+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"%<%Y-%m-%d>\" :tend \"<now>\"\n#+END:"))))
+                            "#+title: %<%Y-%m-%d>\n\n#+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"%<%Y-%m-%d>\" :tend \"%<%Y-%m-%d>\"\n#+END:"))))
 
   (setq org-roam-capture-templates
         '(("d" "default" plain "%?" :target
@@ -467,7 +467,7 @@ If nil it defaults to `split-string-default-separators', normally
         mu4e-trash-folder "/Trash"
         mu4e-refile-folder "/Archive"
         mu4e-view-show-addresses t
-        mu4e-attachment-dir "~/Elŝutujo"
+        mu4e-attachment-dir "~/Elŝutoj"
         mu4e-compose-dont-reply-to-self t
         mu4e-user-mail-address-list '("jon.reeve@gmail.com" "jonathan.reeve@columbia.edu" "jpr2152@columbia.edu"))
   (setq mu4e-bookmarks
@@ -633,3 +633,13 @@ If nil it defaults to `split-string-default-separators', normally
   (defun jupyter-ansi-color-apply-on-region (begin end)
     (ansi-color-apply-on-region begin end t))
   )
+
+;; Fixes for mu45 icons, see https://github.com/doomemacs/doomemacs/issues/6609
+(setq mu4e-headers-list-mark       (cons "s" (+mu4e-normalised-icon "list"))
+      mu4e-headers-personal-mark   (cons "p" (+mu4e-normalised-icon "user"))
+      mu4e-headers-calendar-mark   (cons "c" (+mu4e-normalised-icon "calendar")))
+
+(add-hook 'spell-fu-mode-hook
+  (lambda ()
+    (spell-fu-dictionary-add
+      (spell-fu-get-personal-dictionary "en-personal" "/home/jon/Dotfiles/scripts/aspell.en.pws"))))

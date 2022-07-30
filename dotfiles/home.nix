@@ -65,7 +65,7 @@ in
       protonmail = {
         address = "jonathan@jonreeve.com";
         userName = "jonathan@jonreeve.com";
-        passwordCommand = "${pkgs.gopass}/bin/gopass show 127.0.0.1:1143/jonathan@jonreeve.com";
+        passwordCommand = "${pkgs.pass}/bin/pass show 127.0.0.1:1143/jonathan@jonreeve.com";
         imap = {
           host = "127.0.0.1";
           port = 1143;
@@ -798,10 +798,12 @@ in
         };
       };
       startup = [
-        { command = "exec ${pkgs.pywal}/bin/wal -R"; }
+        { command = "exec swaybg -i ~/Bildujo/Ekranfonoj/yz6ggt7m18l41.png -o '*' -m fill"; }
+        { command = "exec ${pkgs.pywal}/bin/wal --theme base16-nord"; }
         { command = "exec megasync"; }
         { command = "exec waybar"; }
         { command = "exec ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"; }
+        { command = "exec ${pkgs.autotiling}/bin/autotiling"; }
       ];
       window.border = 10;
     };

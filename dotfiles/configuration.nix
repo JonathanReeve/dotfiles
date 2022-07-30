@@ -18,7 +18,7 @@
   boot = {
     # Enable magic sysrql (Alt+PrtSc) keys for recovery
     kernel.sysctl = { "kernel.sysrq" = 1; };
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_5_18;
     kernelModules = [ "btqca" "hci_qca" "hci_uart" "bluetooth" ];
     blacklistedKernelModules = [ "psmouse" ];
     cleanTmpDir = true;
@@ -53,8 +53,8 @@
 
   # Select internationalisation properties.
   i18n = {
-    defaultLocale = "eo";
-    #supportedLocales = [ "en_US.UTF-8/UTF-8" ];
+    # defaultLocale = "eo";
+    # supportedLocales = [ "eo/UTF-8" "en_US.UTF-8/UTF-8" ];
   };
 
   # Fonts!
@@ -217,7 +217,7 @@
      wdisplays
      polkit
      wl-clipboard
-     autotiling
+     # autotiling
 
 
      # Web dev
