@@ -2,8 +2,19 @@
 def em [f] {emacsclient -c $f &; disown}
 
 # Wallpaper management
-def wal-fav [] {open ~/.cache/wal/colors.json | get wallpaper | each { |it| echo $it (char newline)} | str collect | save --append ~/.cache/wal/favs}
-def wal-fav-set [] {wal -i (open ~/.cache/wal/favs | lines | shuffle | first )}
+def wal-fav [] {
+  open ~/.cache/wal/colors.json | get wallpaper |
+  each { |it| echo $it (char newline)} |
+  str collect | save --append ~/.cache/wal/favs
+}
+
+def wal-fav-set [] {
+  let w = (open ~/.cache/wal/favs | lines | uniq | shuffle | first)
+  echo $"Using ($w)"
+  pkill swaybg
+  swaybg -o 'DP-6' -i $w -m fill
+}
+
 def wal-recent [] {wal -i (ls /run/media/jon/systemrestore/.systemrestore/Bildoj | sort-by modified -r | first 50 | shuffle | first | get name)}
 def wal-backup [] {sudo rsync -a /home/systemrestore/Bildoj /run/media/jon/systemrestore/.systemrestore}
 

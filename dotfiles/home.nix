@@ -304,8 +304,8 @@ in
     };
     nushell = {
       enable = true;
-      config = ./config.nu;
-      env = ./env.nu;
+      configFile.source = ./config.nu;
+      envFile.text = ''let-env STARSHIP_SHELL = "nushell"'';
     };
     starship = {
       enable = true;
@@ -586,7 +586,7 @@ in
     };
   };
   qt = {
-    enable = false;
+    enable = true;
     style = {
       name = "adwaita-dark";
       package = pkgs.adwaita-qt;

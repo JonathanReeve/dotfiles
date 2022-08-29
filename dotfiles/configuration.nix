@@ -49,12 +49,12 @@
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;
 
-  console.useXkbConfig = true;
+  # console.useXkbConfig = true;
 
   # Select internationalisation properties.
   i18n = {
-    # defaultLocale = "eo";
-    # supportedLocales = [ "eo/UTF-8" "en_US.UTF-8/UTF-8" ];
+    defaultLocale = "eo";
+    supportedLocales = [ "eo/UTF-8" "en_US.UTF-8/UTF-8" ];
   };
 
   # Fonts!
@@ -190,7 +190,7 @@
      # GUI
      #qutebrowser            # Web browser
      #chromium               # Another web browser
-     firefox                # Yes, a third
+     firefox-wayland         # Yes, a third
 
      # Ugh
      zoom-us
@@ -363,11 +363,6 @@
     wantedBy = [ "graphical-session.target" ];
     partOf = [ "graphical-session.target" ];
   };
-  # This value determines the NixOS release with which your system is to be
-  # compatible, in order to avoid breaking some software such as database
-  # servers. You should change this only after NixOS release notes say you
-  # should.
-  system.stateVersion = "21.03"; # Did you read the comment?
 
   # virtualisation.anbox.enable = true;
   virtualisation.docker.enable = true;

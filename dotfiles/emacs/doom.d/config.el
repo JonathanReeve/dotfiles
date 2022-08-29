@@ -24,15 +24,22 @@
 ;; Default spelling dictionary is English
 (setq ispell-dictionary "english")
 
+(after! spell-fu
+  (add-hook 'spell-fu-mode-hook
+            (lambda ()
+              (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "en"))
+              (spell-fu-dictionary-add
+               (spell-fu-get-personal-dictionary "en-personal" "/home/jon/Dotfiles/scripts/aspell.en.pws")))))
+
 ;; Bibliography
 
 ;; Citar
 ;; See https://github.com/hlissner/doom-emacs/blob/4612b39695405f7238dd3da0d4fd6d3a5cdd93d6/modules/tools/biblio/README.org
-(setq! citar-bibliography '("~/Dokumentujo/Papers/library.bib")
+(setq! citar-bibliography '("~/Dokumentujo/Papers/library.bib" "~/Dokumentujo/Papers/library2.bib")
        citar-library-paths '("~/Dokumentujo/Papers/")
        citar-notes-paths '("~/Dokumentujo/Org/Roam/"))
 
-(setq! bibtex-completion-bibliography "~/Dokumentujo/Papers/library.bib"
+(setq! bibtex-completion-bibliography '("~/Dokumentujo/Papers/library.bib" "~/Dokumentujo/Papers/library2.bib")
        bibtex-completion-notes-path "~/Dokumentujo/Org/Roam/"
        bibtex-completion-library-path "~/Dokumentujo/Papers/")
 
@@ -104,7 +111,17 @@
       '(("d" "default" entry
          "* %?"
          :target (file+head "%<%Y-%m-%d>.org"
-                            "#+title: %<%Y-%m-%d>\n\n#+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"%<%Y-%m-%d>\" :tend \"%<%Y-%m-%d>\"\n#+END:"))))
+                            ":PROPERTIES:
+:DRINKS:
+:PHONE:
+:KETO:
+:EXERCISE:
+:MOOD:
+:END:
+#+title: %<%Y-%m-%d>
+
+#+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"%<%Y-%m-%d>\" :tend \"%<%Y-%m-%d>\"
+#+END: "))))
 
   (setq org-roam-capture-templates
         '(("d" "default" plain "%?" :target
@@ -148,6 +165,7 @@
                    "%?
 - keywords :: %^{keywords}
 - related ::
+
 * %^{title}
 :PROPERTIES:
 :Custom_ID: %^{citekey}
@@ -482,7 +500,9 @@ If nil it defaults to `split-string-default-separators', normally
           ))
   ;; Only alert interesting emails
   (setq mu4e-alert-interesting-mail-query "maildir:/columbia/Inbox OR maildir:/gmail/Inbox OR maildir:/personal/Inbox OR maildir:/protonmail/Inbox NOT flag:trashed")
-
+  (setq mu4e-headers-list-mark       (cons "l" (+mu4e-normalised-icon "sitemap" :set "faicon"))
+        mu4e-headers-personal-mark   (cons "p" (+mu4e-normalised-icon "user"))
+        mu4e-headers-calendar-mark   (cons "c" (+mu4e-normalised-icon "calendar")))
 )
   ;; (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
   ;; (setq mu4e-html2text-command "w3m -T text/html")
@@ -598,7 +618,7 @@ If nil it defaults to `split-string-default-separators', normally
 (setq custom-safe-themes t)
 
 ;; Fancy splash image
-;; (setq fancy-splash-image "/home/jon/Bildujo/typewriter1.jpg")
+(setq fancy-splash-image "/home/jon/Bildujo/typewriter1.jpg")
 
 ;; Stop autocompleting parentheses and quotation marks
 (remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
@@ -634,12 +654,8 @@ If nil it defaults to `split-string-default-separators', normally
     (ansi-color-apply-on-region begin end t))
   )
 
-;; Fixes for mu45 icons, see https://github.com/doomemacs/doomemacs/issues/6609
-(setq mu4e-headers-list-mark       (cons "s" (+mu4e-normalised-icon "list"))
-      mu4e-headers-personal-mark   (cons "p" (+mu4e-normalised-icon "user"))
-      mu4e-headers-calendar-mark   (cons "c" (+mu4e-normalised-icon "calendar")))
+;; Encryption
+(require 'epa-file)
+(epa-file-enable)
 
-(add-hook 'spell-fu-mode-hook
-  (lambda ()
-    (spell-fu-dictionary-add
-      (spell-fu-get-personal-dictionary "en-personal" "/home/jon/Dotfiles/scripts/aspell.en.pws"))))
+;; (setq system-uses-terminfo nil)
