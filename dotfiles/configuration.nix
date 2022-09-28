@@ -11,14 +11,14 @@
       ./gnome.nix
       ./hardware-configuration.nix
       ./python.nix
-      #./R.nix
+      ./R.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
   boot = {
     # Enable magic sysrql (Alt+PrtSc) keys for recovery
     kernel.sysctl = { "kernel.sysrq" = 1; };
-    kernelPackages = pkgs.linuxPackages_5_18;
+    kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = [ "btqca" "hci_qca" "hci_uart" "bluetooth" ];
     blacklistedKernelModules = [ "psmouse" ];
     cleanTmpDir = true;
@@ -38,7 +38,7 @@
   };
 
   nix = {
-    package = pkgs.nixFlakes; # For flakes
+    # package = pkgs.nixFlakes; # For flakes
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-outputs = true
@@ -127,7 +127,7 @@
      cmake
      extra-cmake-modules
 
-     (emacsWithPackages (epkgs: with emacsPackages; [
+     (emacs.pkgs.withPackages (epkgs: with emacsPackages; [
        pdf-tools
      ]))
 
@@ -199,9 +199,9 @@
      ntfs3g ntfsprogs       # Windows drives compatibility
 
      # Sound
-     alsaTools
+     alsa-tools
      #alsaPlugins
-     alsaUtils
+     alsa-utils
      alsa-firmware
      pavucontrol
 
@@ -359,10 +359,15 @@
     enable = true;
     script =
       "${pkgs.protonmail-bridge}/bin/protonmail-bridge --log-level debug";
-    path = [ pkgs.gnome3.gnome-keyring ]; # HACK: https://github.com/ProtonMail/proton-bridge/issues/176
+    path = [ pkgs.gnome.gnome-keyring ]; # HACK: https://github.com/ProtonMail/proton-bridge/issues/176
     wantedBy = [ "graphical-session.target" ];
     partOf = [ "graphical-session.target" ];
   };
+  # This value determines the NixOS release with which your system is to be
+  # compatible, in order to avoid breaking some software such as database
+  # servers. You should change this only after NixOS release notes say you
+  # should.
+  system.stateVersion = "21.03"; # Did you read the comment?
 
   # virtualisation.anbox.enable = true;
   virtualisation.docker.enable = true;
