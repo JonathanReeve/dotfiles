@@ -110,9 +110,11 @@ in
     };
     bottom.enable = true;
     broot = {
-      enable = false;
+      enable = true;
       enableFishIntegration = true;
-      modal = true;
+      settings = {
+        modal = true;
+      };
     };
     gnome-terminal = {
       profile.default = {
@@ -467,7 +469,7 @@ in
         "mm" =  "https://muse-jhu-edu.ezproxy.cul.columbia.edu/search?action=search&query=content:{}:and&limit=journal_id:131&min=1&max=10&t=search_journal_header";
       };
       settings = {
-        content.headers.accept_language = "eo,fr,en-US,en";
+        content.headers.accept_language = "eo,en-US,en,fr";
         colors = {
           completion.category.bg = "#333333";
           tabs = {
@@ -654,6 +656,8 @@ in
     };
     # sessionVariables.LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
     # sessionVariables.LC_ALL = "eo.UTF-8";
+    username = "jon";
+    stateVersion = "22.05";
   };
 
   systemd.user = {

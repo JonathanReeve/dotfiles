@@ -11,7 +11,7 @@
        matplotlib
        # python-language-server # Spacemacs integration
        flake8 # Syntax checking for emacs
-       scikitlearn
+       scikit-learn
        altair
        vega
        vega_datasets

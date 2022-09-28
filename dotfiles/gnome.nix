@@ -4,8 +4,8 @@
   environment.systemPackages = with pkgs; [
      # deja-dup               # Backups
      gthumb                 # Photos
-     gnome3.gnome-tweaks
-     # gnome3.gnome-boxes
+     gnome.gnome-tweaks
+     # gnome.gnome-boxes
      #gnomeExtensions.appindicator
      #gnomeExtensions.caffeine
      #gnomeExtensions.dash-to-dock
