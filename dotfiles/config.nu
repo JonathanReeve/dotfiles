@@ -12,7 +12,7 @@ def wal-fav-set [] {
   let w = (open ~/.cache/wal/favs | lines | uniq | shuffle | first)
   echo $"Using ($w)"
   pkill swaybg
-  swaybg -o 'DP-6' -i $w -m fill
+  swaybg -o '*' -i $w -m fill
 }
 
 def wal-recent [] {wal -i (ls /run/media/jon/systemrestore/.systemrestore/Bildoj | sort-by modified -r | first 50 | shuffle | first | get name)}
