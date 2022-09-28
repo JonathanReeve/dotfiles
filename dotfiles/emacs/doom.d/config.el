@@ -157,6 +157,7 @@
     (orb-note-actions-interface 'default)
     :config
     (setq orb-insert-interface 'generic)
+    ;; (setq orb-roam-ref-format 'org-ref-v2)
     (setq orb-process-file-keyword t
           orb-file-field-extensions '("pdf"))
 
@@ -175,46 +176,11 @@
 :NOTER_PAGE:
 :END:\n\n"
                    :if-new (file+head "${citekey}.org" ":PROPERTIES:
-:ROAM_REFS: cite:${citekey}
 :END:
-#+TITLE: ${title}\n")
+#+TITLE: ${citekey}: ${title}\n")
                    :unnarrowed t))
     (require 'org-ref))
   (org-roam-bibtex-mode)
-
-;;   (setq org-roam-capture-templates
-;;         '(
-;;           ("d" "default" plain "%?" :if-new
-;;            (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-;;            :unnarrowed t)
-;;           ("m" "movie" plain "%?"
-;;            :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-;;                               "#+title: ${title}\n#+filetags: movie\n#+wikidata: ")
-;;            :unnarrowed t)
-;;           ;; bibliography note template
-;;           ("r" "bibliography reference" plain "%?"
-;;            :if-new (file+head "references/${citekey}.org"
-;;                               "#+title: ${title}
-
-;; * %^{title}
-;; :PROPERTIES:
-;; :Custom_ID: %^{citekey}
-;; :URL: %^{url}
-;; :AUTHOR: %^{author-or-editor}
-;; :NOTER_DOCUMENT: %^{file}
-;; :NOTER_PAGE:
-;; :END:
-;; ")
-;;           :unnarrowed t)))
-
-  ;; (add-to-list 'org-latex-classes
-  ;;              '("letter"
-  ;;                "\\documentclass{letter}"
-  ;;                ("\\section{%s}" . "\\section*{%s}")
-  ;;                ("\\subsection{%s}" . "\\subsection*{%s}")
-  ;;                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-  ;;                ("\\paragraph{%s}" . "\\paragraph*{%s}")
-  ;;                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
   (setq citar-templates
         '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
@@ -326,6 +292,7 @@ tasks."
 ;; (add-hook 'find-file-hook #'vulpea-project-update-tag)
 (add-hook 'before-save-hook #'vulpea-project-update-tag)
 (add-hook 'org-agenda-mode-hook #'vulpea-agenda-files-update)
+;; (remove-hook 'org-agenda-mode-hook #'vulpea-agenda-files-update)
 
 ;; functions borrowed from `vulpea' library
 ;; https://github.com/d12frosted/vulpea/blob/6a735c34f1f64e1f70da77989e9ce8da7864e5ff/vulpea-buffer.el
@@ -659,3 +626,5 @@ If nil it defaults to `split-string-default-separators', normally
 (epa-file-enable)
 
 ;; (setq system-uses-terminfo nil)
+
+(set-locale-environment "eo.utf-8")
