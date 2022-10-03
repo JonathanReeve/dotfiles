@@ -11,7 +11,8 @@ from sys import argv
 import subprocess
 import isbnlib
 
-destFile = "/home/jon/Dokumentujo/Papers/library.bib"
+destFile = "/home/jon/Dokumentujo/Papers/library2.bib"
+
 
 def findISBN(soup):
     allParas = soup.find_all("p")
@@ -21,6 +22,7 @@ def findISBN(soup):
             isbn = text.split(',')[0][5:].strip()
     return isbn
 
+
 def findBookLink(soup):
     allAs = soup.find_all("a")
     for a in allAs:
@@ -28,26 +30,32 @@ def findBookLink(soup):
             if a.attrs['href'].startswith('https://cloudflare-ipfs.com'):
                 return a.attrs['href']
 
+
 def isbnToBibtex(isbn):
     meta = isbnlib.meta(isbn)
     tobibtex = isbnlib.registry.bibformatters['bibtex']
     return tobibtex(meta)
+
 
 def appendBibtex(bibtex, destFile=destFile):
     bibtex = f"\n{bibtex}\n"
     with open(destFile, 'a') as f:
         f.write(bibtex)
 
+
 def downloadBook(url, dest):
     urlretrieve(url, dest)
     print(f"Wrote {dest}")
 
+
 def getKey(bibtex):
     return bibtex.split('{')[1].split(',')[0]
 
+
 def openNotes(key):
-   elisp = f'(bibtex-completion-edit-notes (list "{key}"))'
-   subprocess.call(["emacsclient", "--eval", elisp])
+    elisp = f'(bibtex-completion-edit-notes (list "{key}"))'
+    subprocess.call(["emacsclient", "--eval", elisp])
+
 
 def main():
     print(f"Getting book from {argv[1]}")
@@ -72,6 +80,7 @@ def main():
     else:
         exit(f"Can't download book with this extension.")
     openNotes(key)
+
 
 if __name__ == "__main__":
     main()
