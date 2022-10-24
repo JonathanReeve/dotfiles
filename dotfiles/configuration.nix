@@ -53,7 +53,7 @@
 
   # Select internationalisation properties.
   i18n = {
-    defaultLocale = "eo";
+    defaultLocale = "eo.UTF-8";
     supportedLocales = [ "eo/UTF-8" "en_US.UTF-8/UTF-8" ];
   };
 
@@ -171,6 +171,9 @@
      elmPackages.elm-format
      # Julia
      julia-stable-bin
+     # Scala
+     dotty
+     ammonite
      # Minimal computing
      ranger highlight       # File manager
      scrot                  # Screenshots

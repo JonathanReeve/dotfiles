@@ -136,6 +136,7 @@ let
             sf
             statebins
             stringr
+            stylo
             tidyverse
             tmap
             tmaptools

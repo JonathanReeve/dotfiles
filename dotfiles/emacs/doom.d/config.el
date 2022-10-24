@@ -383,7 +383,10 @@ If nil it defaults to `split-string-default-separators', normally
   ;; (global-set-key (kbd "C-c n p") 'org-projectile-project-todo-completing-read)
   (setq org-link-abbrev-alist
       '(("wikidata"        . "https://www.wikidata.org/wiki/")))
-)
+  ;; Disable editing source code in dedicated buffer
+  ;; https://emacs.stackexchange.com/questions/73986/how-do-i-stop-org-babel-from-trying-to-edit-a-source-block-in-a-dedicated-buffer/73988#73988
+  (defun org-edit-src-code nil)
+) ;; End of Org block
 
 ;; (use-package! org-clock-reminder
 ;;   :config
@@ -628,3 +631,6 @@ If nil it defaults to `split-string-default-separators', normally
 ;; (setq system-uses-terminfo nil)
 
 (set-locale-environment "eo.utf-8")
+
+;; Scala
+(add-to-list '+org-babel-mode-alist '(scala . ammonite))

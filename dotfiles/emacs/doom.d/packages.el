@@ -42,6 +42,9 @@
 (package! org-clock-reminder
   :recipe (:host github :repo "inickey/org-clock-reminder"))
 
+;; UI improvements for Org mode
+(package! org-modern)
+
 ;; (package! vulpea :recipe (:host github :repo "d12frosted/vulpea"))
 
 ;; (package! emacsql-sqlite)
@@ -63,3 +66,6 @@
 
 ;; ~/.doom.d/packages.el
 (package! evil-colemak-basics) ; colemak remaps
+
+;; Citar-org-roam
+;; (package! citar-org-roam)
