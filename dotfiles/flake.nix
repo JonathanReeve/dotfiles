@@ -14,17 +14,19 @@
     # jupyterWith.url = "github:tweag/jupyterWith";
     # nixos.url = "github:nixos/nixpkgs";
     # nixos.url = "/home/jon/Code/nixpkgs";
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixos";
+    };
+    # emacs-overlay.url = "github:nix-community/emacs-overlay";
   };
-  outputs = { self, nixos, nixos-hardware, home-manager }:
-    # let overlays = [
-    #   (final: prev: {mu = nixos-old.legacyPackages.${prev.system}.mu;})
-    # ];
-    # in {
+  outputs = { self, nixos, nixos-hardware, home-manager, hyprland }:
     {
     nixosConfigurations.jon-laptop = nixos.lib.nixosSystem {
        system = "x86_64-linux";
        modules = [ ./configuration.nix
-                   # ({...}: { nixpkgs.overlays = overlays;})
+                   hyprland.nixosModules.default
+                   # ({...}: { nixpkgs.overlays = [ (import self.inputs.emacs-overlay) ];})
                    # ./cachix.nix
                    # TODO. This makes the kernel rebuild, apparently
                    # nixos-hardware.nixosModules.dell-xps-13-9310

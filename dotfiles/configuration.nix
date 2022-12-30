@@ -11,7 +11,7 @@
       ./gnome.nix
       ./hardware-configuration.nix
       ./python.nix
-      ./R.nix
+      # ./R.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -44,12 +44,16 @@
       keep-outputs = true
       keep-derivations = true
     '';
+    settings = {
+      substituters = ["https://hyprland.cachix.org"];
+      trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+    };
   };
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;
 
-  # console.useXkbConfig = true;
+  console.useXkbConfig = true;
 
   # Select internationalisation properties.
   i18n = {
@@ -114,6 +118,8 @@
      gnutls                 # For mail auth
      protonvpn-cli          # VPN
      pandoc
+     zlib                   # For Pandoc development
+
      #direnv                 # Essential project management thingy
      graphviz               # Simple charts
      xclip                  # Clipboard on the command line
@@ -126,6 +132,14 @@
      # Building stuff
      cmake
      extra-cmake-modules
+
+     # (emacsWithPackagesFromUsePackage {
+     #   config = "";
+     #   package = pkgs.emacsPgtkNativeComp;
+     #    extraEmacsPackages = epkgs: [
+     #      epkgs.pdf-tools
+     #  ];
+     # })
 
      (emacs.pkgs.withPackages (epkgs: with emacsPackages; [
        pdf-tools
@@ -173,7 +187,9 @@
      julia-stable-bin
      # Scala
      dotty
-     ammonite
+     metals
+     coursier
+     # ammonite
      # Minimal computing
      ranger highlight       # File manager
      scrot                  # Screenshots
@@ -192,7 +208,7 @@
      neofetch               # Fancy system information
      # GUI
      #qutebrowser            # Web browser
-     #chromium               # Another web browser
+     chromium               # Another web browser
      firefox-wayland         # Yes, a third
 
      # Ugh
@@ -222,9 +238,12 @@
      wl-clipboard
      # autotiling
 
+     # Hyprland
+     hyprland
 
      # Web dev
      nodejs
+
    ];
 
   environment.variables = {
@@ -307,6 +326,9 @@
         { name = "newm";
           start = ''${pkgs.stdenv.shell} /home/jon/Aplikaĵoj/result/bin/start-newm & waitPID=$!'';
         }
+        # { name = "hyprland";
+        #   start = ''${pkgs.stdenv.shell} /run/current-system/sw/bin/Hyprland & waitPID=$!'';
+        # }
       ];
       # windowManager.exwm = {
       #   enable = true;
@@ -322,6 +344,7 @@
       enable = true;
     };
     gnupg.agent = { enable = true; enableSSHSupport = true; };
+    # hyprland.enable = true;
     sway = {
       enable = true;
       wrapperFeatures.gtk = true;

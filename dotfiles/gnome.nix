@@ -2,7 +2,7 @@
 
 {
   environment.systemPackages = with pkgs; [
-     # deja-dup               # Backups
+     deja-dup               # Backups
      gthumb                 # Photos
      gnome.gnome-tweaks
      # gnome.gnome-boxes

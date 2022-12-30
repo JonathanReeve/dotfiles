@@ -311,9 +311,10 @@ in
     };
     starship = {
       enable = true;
-      # settings = { add_newline = false;
-      #              character = { format = "$symbol "; };
-      #            };
+      enableFishIntegration = true;
+      # Don't enable nushell integration now, since it runs starship init nu,
+      # and that has an issue now: https://github.com/starship/starship/issues/4507
+      enableNushellIntegration = false;
     };
     zoxide = {
       enable = true;
@@ -501,7 +502,10 @@ in
   services = {
     # gnome-keyring.enable = true;
     gpg-agent.enable = true;
-    clipmenu.enable = true;
+    clipmenu = {
+      enable = true;
+      launcher = "rofi";
+    };
     dunst = {
       enable = true;
       settings = {
@@ -573,6 +577,9 @@ in
           ];
         };
       };
+    };
+    pueue = {
+      enable = true;
     };
     screen-locker = {
       enable = false;
@@ -750,6 +757,7 @@ in
           "Mod4+Shift+u" = "move container to workspace number 3";
           "Mod4+Shift+y" = "move container to workspace number 4";
           "Mod4+h" = "exec alacritty";
+          "Mod4+c" = "clipmenu";
           "Mod4+Shift+c" = "kill";
           "Mod4+space" = "exec ${pkgs.rofi}/bin/rofi -show drun";
           # "Mod4+y" = "output eDP-1 disable";

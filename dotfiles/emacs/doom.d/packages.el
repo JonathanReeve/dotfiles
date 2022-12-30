@@ -65,7 +65,4 @@
 ;; (package! notebook-mode :recipe (:host github :repo "rougier/notebook-mode" :files ("*.el")))
 
 ;; ~/.doom.d/packages.el
-(package! evil-colemak-basics) ; colemak remaps
-
-;; Citar-org-roam
-;; (package! citar-org-roam)
+;; (package! evil-colemak-basics) ; colemak remaps

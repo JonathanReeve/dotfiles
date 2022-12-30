@@ -106,7 +106,9 @@
   (setq org-roam-directory "~/Dokumentujo/Org/Roam")
   (setq org-roam-dailies-directory "Daily/")
   (setq org-roam-db-location "~/Dokumentujo/Org/Roam/org-roam.db")
-
+  ;; Get a timestamp for tomorrow
+  (defun my/tomorrow ()
+    (format-time-string "%Y-%m-%d" (time-add 86400 (current-time))))
   (setq org-roam-dailies-capture-templates
       '(("d" "default" entry
          "* %?"
@@ -120,7 +122,7 @@
 :END:
 #+title: %<%Y-%m-%d>
 
-#+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"%<%Y-%m-%d>\" :tend \"%<%Y-%m-%d>\"
+#+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"%<%Y-%m-%d>\" :tend \"%(my/tomorrow)\"
 #+END: "))))
 
   (setq org-roam-capture-templates
@@ -386,6 +388,15 @@ If nil it defaults to `split-string-default-separators', normally
   ;; Disable editing source code in dedicated buffer
   ;; https://emacs.stackexchange.com/questions/73986/how-do-i-stop-org-babel-from-trying-to-edit-a-source-block-in-a-dedicated-buffer/73988#73988
   (defun org-edit-src-code nil)
+
+  ;; Org-attach stuff
+  (setq org-attach-id-dir (concat org-directory "/.attach"))
+  (setq org-attach-method 'mv)
+
+  ;; Org-modern
+  (global-org-modern-mode)
+  (setq org-modern-label-border 1)
+
 ) ;; End of Org block
 
 ;; (use-package! org-clock-reminder
@@ -405,6 +416,10 @@ If nil it defaults to `split-string-default-separators', normally
 ;; Mail
 (after! mu4e
   (require 'org-mu4e)
+  (setq read-mail-command 'mu4e) ;; Why is this not already set?
+  ;; Respond to calendar invites. But is this even working?
+  (require 'mu4e-icalendar)
+  (mu4e-icalendar-setup)
   ;; Use password-store as authentication source
   (require 'auth-source-pass)
   (auth-source-pass-enable)
@@ -477,6 +492,28 @@ If nil it defaults to `split-string-default-separators', normally
   ;; (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
   ;; (setq mu4e-html2text-command "w3m -T text/html")
 
+(after! org-msg
+  (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t"
+	org-msg-startup "hidestars indent inlineimages"
+	org-msg-greeting-fmt "\nHi%s,\n\n"
+	org-msg-default-alternatives '((new		. (text html))
+				       (reply-to-html	. (text html))
+				       (reply-to-text	. (text html)))
+	org-msg-convert-citation t
+	org-msg-signature "
+
+Best,
+
+Jonathan
+
+#+begin_signature
+--
+Jonathan Reeve
+https://jonreeve.com
+#+end_signature")
+  (setq message-citation-line-format "Je %a, %b %d %Y, %N skribis:\n")
+  (setq org-msg-posting-style nil)
+)
 
 ;; Set browser
 (setq browse-url-browser-function 'browse-url-generic
@@ -615,7 +652,9 @@ If nil it defaults to `split-string-default-separators', normally
 ;; (use-package! evil-colemak-basics
 ;;   :after evil
 ;;   :config
+;;   (setq evil-colemak-basics-rotate-t-f-j nil)
 ;;   (global-evil-colemak-basics-mode) ; Enable colemak rebinds
+
 ;;   )
 
 ;; Workaround; see https://github.com/nnicandro/emacs-jupyter/issues/380#issuecomment-1014026589
