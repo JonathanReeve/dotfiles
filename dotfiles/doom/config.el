@@ -2,16 +2,45 @@
 
 ;; Place your private configuration here
 
+;; Some functionality uses this to identify you, e.g. GPG configuration, email
+;; clients, file templates and snippets. It is optional.
+(setq user-full-name "Jonathan Reeve"
+      user-mail-address "jonathan@jonreeve.com")
+
 ;; Enables Nixos-installed packages to be loaded
 (require 'package)
 (setq package-enable-at-startup nil)
 (package-initialize)
 
 ;; Set location of custom.el
-(setq custom-file "~/.emacs.d/custom.el")
+(setq custom-file "~/.config/emacs/custom.el")
 
-(setq doom-font (font-spec :family "Fantasque Sans Mono" :size 18))
+
+;; Doom exposes five (optional) variables for controlling fonts in Doom:
+;;
+;; - `doom-font' -- the primary font to use
+;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
+;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
+;;   presentations or streaming.
+;; - `doom-unicode-font' -- for unicode glyphs
+;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
+;;
+;; See 'C-h v doom-font' for documentation and more examples of what they
+;; accept. For example:
+;;
+;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
+;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
+;;
+;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
+;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
+;; refresh your font settings. If Emacs still can't find your font, it likely
+;; wasn't installed correctly. Font issues are rarely Doom issues!
+;; (setq doom-font (font-spec :family "Fantasque Sans Mono" :size 18))
 (setq doom-themes-treemacs-enable-variable-pitch 'nil)
+
+(setq doom-modeline-buffer-file-name-style 'truncate-with-project)
+;;(setq doom-font (font-spec :family "Fira Code Nerd Font" :size 12 :weight 'semi-light)
+;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
 
 (setq vc-follow-symlinks t) ;; Always follow symlinks.
 
@@ -21,6 +50,10 @@
 ;; Don't prompt when opening journal or other large files
 ;(setq large-file-warning-threshold 20000000)
 
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+(setq org-directory "~/Documents/Org/")
+
 ;; Default spelling dictionary is English
 (setq ispell-dictionary "english")
 
@@ -29,33 +62,31 @@
             (lambda ()
               (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "en"))
               (spell-fu-dictionary-add
-               (spell-fu-get-personal-dictionary "en-personal" "/home/jon/Dotfiles/scripts/aspell.en.pws")))))
+               (spell-fu-get-personal-dictionary "en-personal" "/Users/jon/Dotfiles/scripts/aspell.en.pws")))))
 
 ;; Bibliography
 
 ;; Citar
 ;; See https://github.com/hlissner/doom-emacs/blob/4612b39695405f7238dd3da0d4fd6d3a5cdd93d6/modules/tools/biblio/README.org
-(setq! citar-bibliography '("~/Dokumentujo/Papers/library.bib" "~/Dokumentujo/Papers/library2.bib")
-       citar-library-paths '("~/Dokumentujo/Papers/")
-       citar-notes-paths '("~/Dokumentujo/Org/Roam/"))
+(setq! citar-bibliography '("~/Documents/Papers/library.bib" "~/Documents/Papers/library2.bib")
+       citar-library-paths '("~/Documents/Papers/")
+       citar-notes-paths '("~/Documents/Org/Roam/"))
 
-(setq! bibtex-completion-bibliography '("~/Dokumentujo/Papers/library.bib" "~/Dokumentujo/Papers/library2.bib")
-       bibtex-completion-notes-path "~/Dokumentujo/Org/Roam/"
-       bibtex-completion-library-path "~/Dokumentujo/Papers/")
+(setq! bibtex-completion-bibliography '("~/Documents/Papers/library.bib" "~/Documents/Papers/library2.bib")
+       bibtex-completion-notes-path "~/Documents/Org/Roam/"
+       bibtex-completion-library-path "~/Documents/Papers/")
 
 ;; Org Mode
 (after! org
   (org-indent-mode)
-  (setq org-directory "~/Dokumentujo/Org"
+  (setq org-directory "~/Documents/Org"
         org-startup-indented t
         org-startup-folded t
         evil-org-key-theme '(textobjects navigation additional insert todo)
         org-default-priority ?C
         org-lowest-priority ?G
         org-duration-format 'h:mm
-        diary-file "~/Dokumentujo/Org/diary"
-        org-agenda-include-diary t
-        org-agenda-files (list "~/Dokumentujo/Org/Projects/")
+        org-agenda-files (list "~/Documents/Org")
         org-agenda-skip-scheduled-if-done t
         org-agenda-skip-deadline-if-done t
         org-todo-keywords '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
@@ -72,14 +103,18 @@
   ; (require 'org-protocol)
   (setq org-protocol-default-template-key "l")
   (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline "/home/jon/Dokumentujo/Org/notes.org" "Tasks")
+        '(("t" "Todo" entry (file+headline "/Users/jon/Documents/Org/inbox.org" "Tasks")
             "* TODO %?  %i\n  %a")
-          ("m" "Movie" entry (file+headline "/home/jon/Dokumentujo/Org/Roam/movies.org" "To Watch")
+          ("m" "Meeting" entry (file+headline "~/Documents/Org/meetings.org" "Meetings")
+            "** %? %T \n%a\n" :clock-in t)
+          ("r" "Radar" entry (file+headline "~/Documents/Org/todo.org" "Radars")
+            "** TODO %c\n%?")
+          ("c" "Code" entry (file+headline "~/Documents/Org/inbox.org" "Code")
+            "** %A\n%?")
+          ("o" "Contact" entry (file+headline "~/Documents/Org/contacts.org" "Contacts")
+            "** %? \n%a\n")
+          ("l" "Link" entry (file+olp "/Users/jon/Documents/Org/inbox.org" "Web Links")
             "* %a\n %?\n %i")
-          ("l" "Link" entry (file+olp "/home/jon/Dokumentujo/Org/notes.org" "Web Links")
-            "* %a\n %?\n %i")
-          ("s" "Schedule" entry (file "/home/jon/Dokumentujo/Org/Projects/schedule.org")
-            "* %?\n :PROPERTIES:\n :LOCATION:\n :END:\n %a\n %i")
           ))
   (setq org-modules '(org-habit org-protocol))
   ;; Disable holidays. Is there an easier way of doing this?
@@ -103,22 +138,15 @@
   (setq org-pomodoro-clock-break t)
   (add-hook 'org-mode-hook 'visual-line-mode)
 
-  (setq org-roam-directory "~/Dokumentujo/Org/Roam")
+  (setq org-roam-directory "~/Documents/Org/Roam")
   (setq org-roam-dailies-directory "Daily/")
-  (setq org-roam-db-location "~/Dokumentujo/Org/Roam/org-roam.db")
+  (setq org-roam-db-location "~/Documents/Org/Roam/org-roam.db")
 
   (setq org-roam-dailies-capture-templates
       '(("d" "default" entry
          "* %?"
          :target (file+head "%<%Y-%m-%d>.org"
-                            ":PROPERTIES:
-:DRINKS:
-:PHONE:
-:KETO:
-:EXERCISE:
-:MOOD:
-:END:
-#+title: %<%Y-%m-%d>
+"#+title: %<%Y-%m-%d>
 
 #+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"%<%Y-%m-%d>\" :tend \"%<%Y-%m-%d>\"
 #+END: "))))
@@ -127,9 +155,10 @@
         '(("d" "default" plain "%?" :target
            (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
            :unnarrowed t)
-          ("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%u\n"
-           :target (file+olp "movies.org" ("watched")
-           ))))
+          ("c" "contact" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :END:\n%u\n"
+           :target (file+olp "contacts.org" ("Contacts"))
+           :unnarrowed t)
+        ))
   (setq org-roam-capture-ref-templates
         '(("r" "ref" plain "%?" :target
            (file+head "${slug}.org" "#+title: ${title}") :unnarrowed t)
@@ -383,9 +412,27 @@ If nil it defaults to `split-string-default-separators', normally
   ;; (global-set-key (kbd "C-c n p") 'org-projectile-project-todo-completing-read)
   (setq org-link-abbrev-alist
       '(("wikidata"        . "https://www.wikidata.org/wiki/")))
+
+  (org-link-set-parameters "rdar" :follow #'rdar-open)
+  (org-link-set-parameters "phantom" :follow #'phantom-open)
+
+  (defun rdar-open (path _) ; "_" here is the universal prefix argument, you can define different behavior if you like
+    (browse-url (concat "rdar:" path)))
+
+  (defun phantom-open (path _) ; "_" here is the universal prefix argument, you can define different behavior if you like
+    (browse-url (concat "phantom:" path)))
+
   ;; Disable editing source code in dedicated buffer
   ;; https://emacs.stackexchange.com/questions/73986/how-do-i-stop-org-babel-from-trying-to-edit-a-source-block-in-a-dedicated-buffer/73988#73988
   (defun org-edit-src-code nil)
+
+  ;; Org-mac-protocol
+  ;; (require 'org-bibtex)
+  ;; (require 'org-mac-protocol)
+  ;; (setq org-remember-templates
+  ;;     '((("AppleScript remember" ?y "* %:shortdesc\n  %:initial\n   Source: %u, %c\n\n  %?" (concat org-directory "inbox.org") "Remember"))
+  ;;       (("AppleScript note" ?z "* %?\n\n  Date: %u\n" (concat org-directory "inbox.org") "Notes")))
+  ;; )
 ) ;; End of Org block
 
 ;; (use-package! org-clock-reminder
@@ -402,106 +449,9 @@ If nil it defaults to `split-string-default-separators', normally
 ;; Markdown
 (add-hook 'markdown-mode 'visual-line-mode)
 
-;; Mail
-(after! mu4e
-  (require 'org-mu4e)
-  ;; Use password-store as authentication source
-  (require 'auth-source-pass)
-  (auth-source-pass-enable)
-  (setq auth-sources '(password-store))
-  (set-email-account! "gmail"
-                      '((mu4e-sent-folder   . "/gmail/[Gmail]/Sent Mail")
-                        (mu4e-drafts-folder . "/gmail/[Gmail]/Drafts")
-                        (smtpmail-smtp-user . "jon.reeve")
-                        (smtpmail-smtp-server . "smtp.gmail.com")
-                        (smtpmail-smtp-service . 587)
-                        (smtpmail-stream-type . starttls)
-                        (user-mail-address  . "jon.reeve@gmail.com")
-                        (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
-                      t)
-  (set-email-account! "columbia"
-                      '((mu4e-sent-folder   . "/columbia/[Gmail]/Sent Mail")
-                        (mu4e-drafts-folder . "/columbia/[Gmail]/Drafts")
-                        (smtpmail-smtp-user . "jpr2152@columbia.edu")
-                        (user-mail-address  . "jpr2152@columbia.edu")
-                        (smtpmail-smtp-server . "smtp.gmail.com")
-                        (smtpmail-smtp-service . 587)
-                        (smtpmail-stream-type . starttls)
-                        (mu4e-compose-signature . "--\nJonathan Reeve\nPhD Candidate, Department of English and Comparative Literature\nhttps://jonreeve.com"))
-                      t)
-  (set-email-account! "personal"
-                      '((mu4e-sent-folder   . "/personal/Sent")
-                        (mu4e-drafts-folder . "/personal/Drafts")
-                        (smtpmail-smtp-user . "jonathan@jonreeve.com")
-                        (user-mail-address  . "jonathan@jonreeve.com")
-                        (smtpmail-smtp-server . "mail.privateemail.com")
-                        (smtpmail-smtp-service . 587)
-                        (smtpmail-stream-type . starttls)
-                        (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
-                      t)
-  (set-email-account! "protonmail"
-                      '((mu4e-sent-folder   . "/protonmail/Sent")
-                        (mu4e-drafts-folder . "/protonmail/Drafts")
-                        (smtpmail-smtp-user . "jonathan@jonreeve.com")
-                        (user-mail-address  . "jonathan@jonreeve.com")
-                        (smtpmail-smtp-server . "127.0.0.1")
-                        (smtpmail-smtp-service . 1025)
-                        (smtpmail-stream-type . starttls)
-                        (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
-                      t)
-  (setq message-send-mail-function 'smtpmail-send-it)
-  ;;(add-to-list 'gnutls-trustfiles "~/.config/protonmail/bridge/cert.pem")
-  (setq mu4e-maildir "~/Mail"
-        mu4e-trash-folder "/Trash"
-        mu4e-refile-folder "/Archive"
-        mu4e-view-show-addresses t
-        mu4e-attachment-dir "~/Elŝutoj"
-        mu4e-compose-dont-reply-to-self t
-        mu4e-user-mail-address-list '("jon.reeve@gmail.com" "jonathan.reeve@columbia.edu" "jpr2152@columbia.edu"))
-  (setq mu4e-bookmarks
-        `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
-          ("date:7d..now NOT flag:trashed AND NOT flag:replied" "Last 7 days unreplied" ?w)
-          ("maildir:/columbia/Inbox NOT flag:trashed AND NOT flag:replied" "Columbia" ?c)
-          ("maildir:/columbia/Inbox OR maildir:/gmail/Inbox OR maildir:/personal/Inbox OR maildir:/protonmail/Inbox NOT flag:trashed" "All" ?a)
-          ("maildir:/gmail/Inbox NOT flag:trashed AND NOT flag:replied" "Gmail" ?g)
-          ("maildir:/gmail/Lists OR maildir:/protonmail/Lists NOT flag:trashed AND NOT flag:replied" "Lists" ?l)
-          ("maildir:/personal/Inbox NOT flag:trashed AND NOT flag:replied" "Personal" ?p)
-          ("maildir:/columbia/Homework NOT flag:trashed" "Homework" ?h)
-          ))
-  ;; Only alert interesting emails
-  (setq mu4e-alert-interesting-mail-query "maildir:/columbia/Inbox OR maildir:/gmail/Inbox OR maildir:/personal/Inbox OR maildir:/protonmail/Inbox NOT flag:trashed")
-  (setq mu4e-headers-list-mark       (cons "l" (+mu4e-normalised-icon "sitemap" :set "faicon"))
-        mu4e-headers-personal-mark   (cons "p" (+mu4e-normalised-icon "user"))
-        mu4e-headers-calendar-mark   (cons "c" (+mu4e-normalised-icon "calendar")))
-)
-  ;; (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
-  ;; (setq mu4e-html2text-command "w3m -T text/html")
-
-
 ;; Set browser
 (setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "qutebrowser")
-
-;; Better looking HTML mail
-(after! shr
-  (setq shr-color-visible-luminance-min 80)
-  (setq shr-use-colors nil)
-  (setq shr-use-fonts nil)
-  (define-advice mm-shr (:around (oldfn &rest handle) delete-trailing-whitespace)
-    "Delete leading and trailing whitespace in Gnus article buffer."
-    (if (derived-mode-p 'gnus-article-mode)
-        (save-restriction
-          (narrow-to-region (point) (point))
-          (apply oldfn handle)
-          (delete-trailing-whitespace))
-      (apply oldfn handle)))
-  '(progn (setq shr-width -1)
-          (defun shr-fill-text (text) text)
-          (defun shr-fill-lines (start end) nil)
-          (defun shr-fill-line () nil)))
-
-(add-hook 'elfeed-show-mode-hook 'visual-line-mode)
-(setq rmh-elfeed-org-files '("/home/jon/Dokumentujo/Org/RSS.org"))
+      browse-url-generic-program "open")
 
 ;; Unbind QWERTY, bind Colemak
 (map! :n "l" #'evil-insert
@@ -588,7 +538,7 @@ If nil it defaults to `split-string-default-separators', normally
 (setq custom-safe-themes t)
 
 ;; Fancy splash image
-(setq fancy-splash-image "/home/jon/Bildujo/typewriter1.jpg")
+;; (setq fancy-splash-image "/Users/jon/Bildujo/typewriter1.jpg")
 
 ;; Stop autocompleting parentheses and quotation marks
 (remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
@@ -633,4 +583,8 @@ If nil it defaults to `split-string-default-separators', normally
 (set-locale-environment "eo.utf-8")
 
 ;; Scala
-(add-to-list '+org-babel-mode-alist '(scala . ammonite))
+;; (add-to-list '+org-babel-mode-alist '(scala . ammonite))
+
+;; Workaround for Treemacs issue; see https://github.com/doomemacs/doomemacs/issues/7126
+;; Can remove when this PR is merged: https://github.com/doomemacs/doomemacs/pull/7134
+(set-popup-rule! "^ ?\\*Treemacs" :ignore t)
