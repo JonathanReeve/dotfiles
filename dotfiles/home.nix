@@ -10,6 +10,10 @@
     file.".inputrc".text = ''
         set editing-mode vi
     '';
+    file."/Users/jon/Library/Application Support/xbar/plugins/org-clock.1m.sh" = {
+      source = ../scripts/org-clock.sh;
+      executable = true;
+    };
     # homeDirectory = "/Users/jon";
 
     # This value determines the Home Manager release that your
@@ -22,6 +26,11 @@
     # changes in each release.
     stateVersion = "22.11";
     packages = with pkgs; [
+      # Basic necessities
+      coreutils
+      curl
+      wget
+
       # Minimal computing
       pass
       fd
@@ -34,17 +43,22 @@
       dotty
       ammonite
       metals
-      spark
+      # spark
       scalafmt
       scalafix
 
+      # Dev
+      direnv
+
       # Spark
-      hadoop
 
       # Python
       pipenv
+      poetry
+      asdf
      (python3.withPackages(ps: with ps; [
        pandas
+       plotly
        matplotlib
        python-lsp-server # Spacemacs integration
        flake8 # Syntax checking for emacs
@@ -58,6 +72,7 @@
        # tensorflow
        nltk
        pip
+       pyarrow
        pytest
        pytest-cov
        pytest-watch
@@ -73,6 +88,8 @@
       yabai  # Window manager
       skhd   # Hotkeys for window manager
 
+      # Virtualization
+      # utm # Doesn't work?
       # firefox
     ];
     # Hack for getting apps to show up in Spotlight, etc.
@@ -115,6 +132,10 @@
           normal.family = "Monaco";
         };
       };
+    };
+    direnv = {
+      enable = true;
+      enableZshIntegration = true;
     };
     home-manager.enable = true;
     emacs.enable = true;
@@ -251,11 +272,12 @@
         export PATH="$HOME/.config/emacs/bin:$JAVA_HOME/bin:/opt/homebrew/bin:$PATH"
         export PATH="$PATH:/Users/jon/Library/Application Support/Coursier/bin"
         # This should automatically work, except it is disabled for emacs
-        eval "$(/Users/jon/.nix-profile/bin/starship init zsh)"
+        eval "$(/etc/profiles/per-user/jon/bin/starship init zsh)"
         export PATH="$JAVA_HOME/bin:/opt/homebrew/bin:$PATH"
         alias ls="ls --color"
         alias git-root='cd $(git rev-parse --show-cdup)'
         alias proxy='ssh -vND localhost:7999 pvgateway'
+	alias upgrade='darwin-rebuild switch --flake ~/Dotfiles/dotfiles'
       '';
     };
     zoxide = {
@@ -266,6 +288,7 @@
   xdg = {
     enable = true;
     configFile."skhd/skhdrc".text = ''
+      lalt - t : yabai -m window --toggle float
       lalt - h : yabai -m window --focus west
       lalt - n : yabai -m window --focus south
       lalt - e : yabai -m window --focus north
@@ -278,7 +301,7 @@
     '';
     configFile."yabai/yabairc" = {
       text = ''
-        yabai -m config layout bsp
+        yabai -m config layout float
 
         yabai -m config top_padding    20
         yabai -m config bottom_padding 20
@@ -307,5 +330,6 @@
         recursive = true;
         onChange = "$HOME/.config/emacs/bin/doom sync";
     };
+
   };
 }

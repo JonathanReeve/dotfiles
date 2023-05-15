@@ -14,7 +14,7 @@
 
   outputs = { self, darwin, nixpkgs, home-manager }: {
     darwinConfigurations."Jonathans-MacBook-Pro" = darwin.lib.darwinSystem {
-      system = "x86_64-darwin";
+      system = "aarch64-darwin";
       modules = [ ./configuration.nix
                   home-manager.darwinModules.home-manager {
                     home-manager.useGlobalPkgs = true;

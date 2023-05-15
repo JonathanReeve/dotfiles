@@ -1,6 +1,18 @@
 #!/run/current-system/sw/bin/bash
 
-export CLOCKSTRING=$(/run/current-system/sw/bin/emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)' 2>&1 )
+#
+# Include BitBar metadata like this at the top of the file
+# (commented out, of course):
+#
+# <xbar.title>Org-mode clock display</xbar.title>
+# <xbar.version>v1.0</xbar.version>
+# <xbar.author>Jonathan Reeve</xbar.author>
+# <xbar.author.github>jonathanreeve</xbar.author.github>
+# <xbar.desc>Show the currently clocked-in task from the org-mode clock.</xbar.desc>
+# <xbar.image></xbar.image>
+# <xbar.abouturl></xbar.abouturl>
+
+export CLOCKSTRING=$(/etc/profiles/per-user/jon/bin/emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)' 2>&1)
 
 off=" Emacs off!"
 #noclock='<span color="#f00"> Off-clock!</span>'
@@ -18,9 +30,9 @@ case "$CLOCKSTRING" in
     *"function definition"*)
         echo $noclock ;;
     *)
-        echo ${CLOCKSTRING} > /tmp/errors ;
+        echo $CLOCKSTRING | cut -d '"' -f 2 | xargs;
 esac
 
-# echo "---"
-# echo "Clock in last | bash='emacsclient --eval (org-clock-in-last)'"
-# echo "Stop clock | bash='emacsclient --eval (org-clock-out)'"
+echo "---"
+echo "Clock in last | bash='/etc/profiles/per-user/jon/bin/emacsclient --eval (org-clock-in-last)'"
+echo "Stop clock | bash='/etc/profiles/per-user/jon/bin/emacsclient --eval (org-clock-out)'"
