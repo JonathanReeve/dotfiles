@@ -1,0 +1,7 @@
+/* Try to fix overscroll behavior in Qutebrowser.
+ * See https://github.com/qutebrowser/qutebrowser/issues/4500
+ */
+html, body {
+    overscroll-behavior-x: none; !important
+    overscroll-behavior-y: none; !important
+}
