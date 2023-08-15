@@ -7,3 +7,4 @@ dotfiles/.vim/init.vim
 dotfiles/.vim/.netrwhist
 dotfiles/.vim/swap/
 dotfiles/.vim/backup/
+/.DS_Store
