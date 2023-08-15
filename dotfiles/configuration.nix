@@ -6,8 +6,15 @@
   environment.systemPackages =
     [ pkgs.vim
     ];
+  fonts = {
+    fontDir.enable = true;
+    fonts = [
+      pkgs.fira-code
+      pkgs.roboto
+    ];
+  };
   homebrew = {
-    enable = true;
+    enable = false;
     onActivation = {
       autoUpdate = true;
       upgrade = true;
@@ -15,20 +22,23 @@
     brews = [
       "maven"
       "gradle"
-      "openjdk"
+      # "openjdk"
       "npm"
-      "gcc"
-      "libgccjit"
+      # "gcc"
+      # "libgccjit"
       # "emacs-plus"
+      # "zotero"
+      "docker"
     ];
     casks = [
       "utm"
       "miniconda"
+      # "emacsclient"
       # "google-chrome"
     ];
-    # taps = [ # "railwaycat/emacsmacport" 
-    #         # "d12frosted/emacs-plus"
-    # ]; 
+    taps = [ # "railwaycat/emacsmacport" 
+             # "d12frosted/emacs-plus"
+    ]; 
   };
   # Use a custom configuration.nix location.
   # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
@@ -36,7 +46,12 @@
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
-  nix.package = pkgs.nixFlakes;
+  nix = {
+    package = pkgs.nixFlakes;
+    settings.experimental-features = [ "nix-command" "flakes" ];
+  };
+
+  nixpkgs.config.allowUnfree = true;
 
   # Create /etc/zshrc that loads the nix-darwin environment.
   programs.zsh.enable = true;  # default shell on catalina

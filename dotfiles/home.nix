@@ -28,8 +28,9 @@
     packages = with pkgs; [
       # Basic necessities
       coreutils
-      curl
+      # curl
       wget
+      lftp
 
       # Minimal computing
       pass
@@ -37,6 +38,7 @@
       ripgrep
       bat
       tree
+      jq
 
       # Scala
       sbt
@@ -56,30 +58,31 @@
       pipenv
       poetry
       asdf
-     (python3.withPackages(ps: with ps; [
-       pandas
-       plotly
-       matplotlib
-       python-lsp-server # Spacemacs integration
-       flake8 # Syntax checking for emacs
-       # scikit-learn
-       altair
-       # vega
-       # vega_datasets
-       jupyter
-       jupyterlab
-       # jupytext
-       # tensorflow
-       nltk
-       pip
-       pyarrow
-       pytest
-       pytest-cov
-       pytest-watch
-       numpy
-       nose
-       tldextract # required by qute-pass
-     ]))
+      poppler
+     # (python39.withPackages(ps: with ps; [
+     #   # pandas
+     #   # plotly
+     #   # matplotlib
+     #   # python-lsp-server # Spacemacs integration
+     #   # flake8 # Syntax checking for emacs
+     #   # # scikit-learn
+     #   # altair
+     #   # # vega
+     #   # # vega_datasets
+     #   # jupyter
+     #   # jupyterlab
+     #   # # jupytext
+     #   # # tensorflow
+     #   # nltk
+     #   pip
+     #   # pyarrow
+     #   # pytest
+     #   # pytest-cov
+     #   # pytest-watch
+     #   # numpy
+     #   # nose
+     #   # tldextract # required by qute-pass
+     # ]))
 
       # Fancy MacOS terminal
       # iterm2
@@ -115,7 +118,6 @@
     #   '';
     # };
   };
-  # Let Home Manager install and manage itself.
   programs = {
     alacritty = {
       enable = true;
@@ -259,6 +261,9 @@
       enableNushellIntegration = true;
       enableZshIntegration = true;
     };
+    vscode = {
+      enable = true;
+    };
     zsh = {
       enable = true;
       enableAutosuggestions = true;
@@ -268,16 +273,31 @@
       autocd = true;
       defaultKeymap = "viins";
       initExtra = ''
-        export JAVA_HOME=`/usr/libexec/java_home -v11`
-        export PATH="$HOME/.config/emacs/bin:$JAVA_HOME/bin:/opt/homebrew/bin:$PATH"
-        export PATH="$PATH:/Users/jon/Library/Application Support/Coursier/bin"
-        # This should automatically work, except it is disabled for emacs
-        eval "$(/etc/profiles/per-user/jon/bin/starship init zsh)"
-        export PATH="$JAVA_HOME/bin:/opt/homebrew/bin:$PATH"
-        alias ls="ls --color"
-        alias git-root='cd $(git rev-parse --show-cdup)'
-        alias proxy='ssh -vND localhost:7999 pvgateway'
-	alias upgrade='darwin-rebuild switch --flake ~/Dotfiles/dotfiles'
+export JAVA_HOME=`/usr/libexec/java_home -v11`
+export PATH="$HOME/.config/emacs/bin:$JAVA_HOME/bin:/opt/homebrew/bin:$PATH"
+export PATH="$PATH:/Users/jon/Library/Application Support/Coursier/bin"
+# This should automatically work, except it is disabled for emacs
+eval "$(/etc/profiles/per-user/jon/bin/starship init zsh)"
+export PATH="$JAVA_HOME/bin:/opt/homebrew/bin:$PATH"
+alias ls="ls --color"
+alias git-root='cd $(git rev-parse --show-cdup)'
+alias proxy='ssh -vND localhost:7999 pvgateway'
+alias upgrade='darwin-rebuild switch --flake ~/Dotfiles/dotfiles'
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+        . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+    else
+        export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
       '';
     };
     zoxide = {
@@ -328,7 +348,7 @@
     configFile."doom" = {
         source = ./doom;
         recursive = true;
-        onChange = "$HOME/.config/emacs/bin/doom sync";
+        # onChange = "$HOME/.config/emacs/bin/doom sync";
     };
 
   };

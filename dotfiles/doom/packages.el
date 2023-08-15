@@ -93,8 +93,12 @@
 ;;
 (package! org-mac-link)
 ;; Citar-org-roam
-;; (package! citar-org-roam)
+(package! citar-org-roam)
 
 (package! radar
   :recipe (:type git
            :repo "git@github.pie.apple.com:emacs/emacs-radar.git"))
+
+;; Workaround to an org/org-roam bug;
+;; see https://github.com/org-roam/org-roam/issues/2361
+(package! org :pin "ca873f7")

@@ -28,7 +28,7 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-(setq doom-font (font-spec :family "Monaco" :size 12 :weight 'semi-light)
+(setq doom-font (font-spec :family "Monaco" :size 12)
       doom-variable-pitch-font (font-spec :family "Helvetica" :size 13))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
@@ -252,6 +252,12 @@
           org-roam-ui-open-on-start nil)
     )
 
+   (use-package! citar-org-roam
+        :after (citar org-roam)
+        :config (citar-org-roam-mode)
+                (setq citar-org-roam-capture-template-key "b")
+        )
+
   ;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
   ;; makes it easier to distinguish from other org buffers.
   ;; (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
@@ -413,13 +419,13 @@ If nil it defaults to `split-string-default-separators', normally
   (setq org-link-abbrev-alist
       '(("wikidata"        . "https://www.wikidata.org/wiki/")))
 
-  (org-link-set-parameters "rdar" :follow #'rdar-open)
   (org-link-set-parameters "phantom" :follow #'phantom-open)
+  (org-link-set-parameters "rdar" :follow #'rdar-open)
 
-  (defun rdar-open (path _) ; "_" here is the universal prefix argument, you can define different behavior if you like
+  (defun rdar-open (path _)
     (browse-url (concat "rdar:" path)))
 
-  (defun phantom-open (path _) ; "_" here is the universal prefix argument, you can define different behavior if you like
+  (defun phantom-open (path _)
     (browse-url (concat "phantom:" path)))
 
   ;; Disable editing source code in dedicated buffer
@@ -588,3 +594,33 @@ If nil it defaults to `split-string-default-separators', normally
 ;; Workaround for Treemacs issue; see https://github.com/doomemacs/doomemacs/issues/7126
 ;; Can remove when this PR is merged: https://github.com/doomemacs/doomemacs/pull/7134
 (set-popup-rule! "^ ?\\*Treemacs" :ignore t)
+
+(delete-file "~/Library/Colors/Emacs.clr")
+
+(defun org-mac-link-applescript-calendar-current-event()
+  "AppleScript to get the current event from Calendar."
+  (let ((result
+	 (org-mac-link-do-applescript
+	  (concat "
+tell application \"Calendar\"
+    set nowDate to current date
+    set calendarEvents to (every event of every calendar whose start date = nowDate) -- Retrieves all future events
+    set sortedEvents to (sort calendarEvents by start date) -- Sorts events by start date
+    repeat with theEvent in sortedEvents
+        if start date of theEvent ≥ nowDate then -- Checks if the event occurs now or in the future
+            set eventName to summary of theEvent
+            set eventStartDate to start date of theEvent
+            set eventEndDate to end date of theEvent
+            display dialog \"Next Event: \" & eventName & return & \"Starts: \" & eventStartDate & return & \"Ends: \" & eventEndDate
+            exit repeat
+        end if
+    end repeat
+end tell
+"))))
+      (car (split-string result "[\r\n]+" t))))
+
+(defun org-mac-link-calendar-current-event()
+  "Get the link to the frontmost window of the Firefox.app."
+  (interactive)
+  (message "Applescript: Getting Calendar event...")
+  (org-mac-link-paste-applescript-links (org-mac-link-applescript-calendar-current-event)))
