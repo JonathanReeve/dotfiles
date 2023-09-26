@@ -5,6 +5,9 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
+# Use vi mode
+set -o vi
+
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
 
@@ -13,6 +16,11 @@ alias hk='hadoop_kinit --no-prompt amp_recommendations'
 alias hls='hadoop fs -ls $1'
 alias hlst='hadoop fs -ls -t $1'
 alias hfs='hadoop fs $1'
+
+export BPROD=/group/amp_recommendations/prod/books
+export BDEV=/group/amp_recommendations/dev/books
+export APROD=/group/amp_recommendations/prod/audiobooks
+export ADEV=/group/amp_recommendations/dev/audiobooks
 
 # Common Hadoop File System Aliases
 alias hf="hadoop fs"                                         # Base Hadoop fs command
@@ -24,8 +32,8 @@ alias hfcfl="hf -copyFromLocal"                              # Copy a local file
 alias hfctl="hf -copyToLocal"                                # Copy a HDFS file reference to local
 alias hfcp="hf -cp"                                          # Copy files from source to destination
 alias hfdu="hf -du"                                          # Display aggregate length of files
-alias hfdush="hf -du -s -h"                                        # Display a summary of file lengths
-alias hfduh="hf -du -h"                                        # Display a summary of file lengths
+alias hfdush="hf -du -s -h"                                  # Display a summary of file lengths
+alias hfduh="hf -du -h"                                      # Display a summary of file lengths
 alias hfdus="hf -dus"                                        # Display a summary of file lengths
 alias hfget="hf -get"                                        # Get a file from hadoop to local
 alias hfgetm="hf -getmerge"                                  # Get files from hadoop to a local file
@@ -35,7 +43,7 @@ alias hfmkdir="hf -mkdir"                                    # Make a directory
 alias hfmv="hf -mv"                                          # Move a file
 alias hfput="hf -put"                                        # Put a file from local to hadoop
 alias hfrm="hf -rm"                                          # Remove a file
-alias hfrmr="hf -rmr"                                        # Remove a file recursivly
+alias hfrmr="hf -rm -r"                                        # Remove a file recursivly
 alias hfsr="hf -setrep"                                      # Set the replication factor of a file
 alias hfstat="hf -stat"                                      # Returns the stat information on the path
 alias hftail="hf -tail"                                      # Tail a file
@@ -139,9 +147,9 @@ hlts() {
 sparkshell2() { 
   spark-shell --queue root.scheduled.amp_recommendations --master yarn --deploy-mode client --conf spark.dynamicAllocation.maxExecutors=100
 }
+
 sparkshell() {
   spark-shell --queue root.adhoc.amp_recommendations --num-executors 10 --driver-memory 12G --executor-memory 4G --executor-cores 2 --deploy-mode client
 }
 
-# hadoop_kinit --no-prompt amp_recommendations
-
+hadoop_kinit --no-prompt amp_recommendations

@@ -28,6 +28,7 @@
     packages = with pkgs; [
       # Basic necessities
       coreutils
+      cmake
       # curl
       wget
       lftp
@@ -39,6 +40,7 @@
       bat
       tree
       jq
+      jc
 
       # Scala
       sbt
@@ -97,30 +99,35 @@
     ];
     # Hack for getting apps to show up in Spotlight, etc.
     # See https://github.com/nix-community/home-manager/issues/1341
-    # activation = lib.mkIf pkgs.stdenv.isDarwin {
-    #   copyApplications = let
+    # And https://github.com/nix-community/home-manager/issues/1341#issuecomment-1714800288
+    # activation = {
+    #   trampolineApps = let
     #     apps = pkgs.buildEnv {
     #       name = "home-manager-applications";
     #       paths = config.home.packages;
     #       pathsToLink = "/Applications";
     #     };
-    #   in lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    #       baseDir="$HOME/Applications/Home Manager Apps"
-    #       if [ -d "$baseDir" ]; then
-    #         rm -rf "$baseDir"
-    #       fi
-    #       mkdir -p "$baseDir"
-    #       for appFile in ${apps}/Applications/*; do
-    #         target="$baseDir/$(basename "$appFile")"
-    #         $DRY_RUN_CMD cp ''${VERBOSE_ARG:+-v} -fHRL "$appFile" "$baseDir"
-    #         $DRY_RUN_CMD chmod ''${VERBOSE_ARG:+-v} -R +w "$target"
-    #       done
-    #   '';
+    #   in
+    #     lib.hm.dag.entryAfter ["writeBoundary"] ''
+    #       toDir="$HOME/Applications/Home Manager Trampolines"
+    #       fromDir="${apps}/Applications"
+    #       rm -rf "$toDir"
+    #       mkdir "$toDir"
+    #       (
+    #         cd "$fromDir"
+    #         for app in *.app; do
+    #           /usr/bin/osacompile -o "$toDir/$app" -e 'do shell script "open \"$fromDir/$app\""'
+    #           icon="$(/usr/bin/plutil -extract CFBundleIconFile raw "$fromDir/$app/Contents/Info.plist")"
+    #           mkdir -p "$toDir/$app/Contents/Resources"
+    #           cp -f "$fromDir/$app/Contents/Resources/$icon" "$toDir/$app/Contents/Resources/applet.icns"
+    #         done
+    #       )
+    #     '';
     # };
   };
   programs = {
     alacritty = {
-      enable = true;
+      enable = false;
       settings = {
         window = {
           opacity = 0.9;
@@ -135,12 +142,23 @@
         };
       };
     };
+    atuin = {
+      enable = true;
+      enableNushellIntegration = true;
+      enableZshIntegration = true;
+    };
+    carapace = {
+      enable = true;
+      enableNushellIntegration = true;
+      enableZshIntegration = true;
+    };
     direnv = {
       enable = true;
       enableZshIntegration = true;
+      enableNushellIntegration = true;
     };
     home-manager.enable = true;
-    emacs.enable = true;
+    emacs.enable = false;
     git = {
       enable = true;
       userName = "Jonathan Reeve";
@@ -150,6 +168,7 @@
         pull.rebase = false;
       };
     };
+    gpg.enable = true;
     neovim = {
       enable = true;
       # package = pkgs.neovim;
@@ -171,15 +190,37 @@
     };
     nushell = {
       enable = true;
-      configFile.text = '''';
-      envFile.text = ''
-        let-env STARSHIP_SHELL = "nushell"
-        let-env PATH = ($env.PATH | split row (char esep) | prepend '/usr/local/bin')
+      configFile.text = ''
+        $env.config = {
+          hooks: {
+            pre_prompt: [{ ||
+              let direnv = (direnv export json | from json)
+              let direnv = if ($direnv | length) == 1 { $direnv } else { {} }
+              $direnv | load-env
+            }]
+          }
+        }
+        def glg [] {
+          git log --pretty=%h»¦«%s»¦«%aN»¦«%aE»¦«%aD
+            | lines
+            | do -i { split column "»¦«" commit subject name email date }
+            | upsert date {|d| $d.date | into datetime}
+        }
       '';
       # let-env PATH = ($env.PATH | prepend '/opt/homebrew/bin')
       # let-env PATH = ($env.PATH | prepend '/Users/jon/.nix-profile/bin')
       # let-env PATH = ($env.PATH | prepend '/nix/var/nix/profiles/default/bin')
       # let-env PATH = ($env.PATH | prepend '/System/Cryptexes/App/usr/bin')
+      environmentVariables = {
+        PATH = "($env.PATH | split row (char esep) | prepend '/usr/local/bin')";
+      };
+      shellAliases = {
+        upgrade = "darwin-rebuild switch --flake ~/Dotfiles/dotfiles";
+        git-root = "cd (git rev-parse --show-cdup)";
+        proxy = "ssh -vND localhost:7999 pvgateway";
+        gst = "git status";
+        gcm = "git commit -m";
+      };
     };
     qutebrowser = {
       enable = true;
@@ -263,12 +304,23 @@
     };
     vscode = {
       enable = true;
+      extensions = with pkgs.vscode-extensions; [
+        foam.foam-vscode
+        asvetliakov.vscode-neovim
+        ms-python.python
+        scala-lang.scala
+        scalameta.metals
+        vscjava.vscode-gradle
+        # vscjava.vscode-java-pack
+      ];
     };
     zsh = {
       enable = true;
       enableAutosuggestions = true;
       enableCompletion = true;
-      enableSyntaxHighlighting = true;
+      syntaxHighlighting = {
+        enable = true;
+      };
       enableVteIntegration = true;
       autocd = true;
       defaultKeymap = "viins";
@@ -303,6 +355,7 @@ unset __conda_setup
     zoxide = {
       enable = true;
       enableZshIntegration = true;
+      enableNushellIntegration = true;
     };
   };
   xdg = {

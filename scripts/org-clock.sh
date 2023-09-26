@@ -12,7 +12,7 @@
 # <xbar.image></xbar.image>
 # <xbar.abouturl></xbar.abouturl>
 
-export CLOCKSTRING=$(/etc/profiles/per-user/jon/bin/emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)' 2>&1)
+export CLOCKSTRING=$(/opt/homebrew/bin/emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)' 2>&1)
 
 off=" Emacs off!"
 #noclock='<span color="#f00"> Off-clock!</span>'

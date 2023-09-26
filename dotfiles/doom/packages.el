@@ -102,3 +102,5 @@
 ;; Workaround to an org/org-roam bug;
 ;; see https://github.com/org-roam/org-roam/issues/2361
 (package! org :pin "ca873f7")
+
+(package! nushell-mode)

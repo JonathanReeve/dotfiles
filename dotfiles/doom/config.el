@@ -89,6 +89,7 @@
         org-agenda-files (list "~/Documents/Org")
         org-agenda-skip-scheduled-if-done t
         org-agenda-skip-deadline-if-done t
+        org-agenda-dim-blocked-tasks nil
         org-todo-keywords '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
         org-todo-keywords-for-agenda '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
         ;; Put state changes into the LOGBOOK drawer, to clean up a bit
@@ -439,6 +440,7 @@ If nil it defaults to `split-string-default-separators', normally
   ;;     '((("AppleScript remember" ?y "* %:shortdesc\n  %:initial\n   Source: %u, %c\n\n  %?" (concat org-directory "inbox.org") "Remember"))
   ;;       (("AppleScript note" ?z "* %?\n\n  Date: %u\n" (concat org-directory "inbox.org") "Notes")))
   ;; )
+  (with-eval-after-load 'org (global-org-modern-mode))
 ) ;; End of Org block
 
 ;; (use-package! org-clock-reminder
@@ -585,8 +587,9 @@ If nil it defaults to `split-string-default-separators', normally
 (epa-file-enable)
 
 ;; (setq system-uses-terminfo nil)
+(setq vterm-shell "/etc/profiles/per-user/jon/bin/nu")
 
-(set-locale-environment "eo.utf-8")
+;; (set-locale-environment "eo.utf-8")
 
 ;; Scala
 ;; (add-to-list '+org-babel-mode-alist '(scala . ammonite))
@@ -604,7 +607,7 @@ If nil it defaults to `split-string-default-separators', normally
 	  (concat "
 tell application \"Calendar\"
     set nowDate to current date
-    set calendarEvents to (every event of every calendar whose start date = nowDate) -- Retrieves all future events
+    set calendarEvents to (every event of every calendar whose start date ≥ nowDate) -- Retrieves all future events
     set sortedEvents to (sort calendarEvents by start date) -- Sorts events by start date
     repeat with theEvent in sortedEvents
         if start date of theEvent ≥ nowDate then -- Checks if the event occurs now or in the future
@@ -624,3 +627,16 @@ end tell
   (interactive)
   (message "Applescript: Getting Calendar event...")
   (org-mac-link-paste-applescript-links (org-mac-link-applescript-calendar-current-event)))
+
+(defun insert-first-rdar-string ()
+  "Insert the first 'rdar' string (e.g., 'rdar://...') from the latest git log entry at point."
+  (interactive)
+  (let* ((git-log-output (shell-command-to-string "git log --oneline"))
+         (first-line (car (split-string git-log-output "\n")))
+         (rdar-string (when (string-match "\\(rdar://[0-9]+\\)" first-line)
+                        (match-string 1 first-line))))
+    (when rdar-string
+      (insert rdar-string))))
+
+;; Treemacs error. See https://github.com/emacs-lsp/lsp-mode/issues/4054
+(add-to-list 'image-types 'svg)
