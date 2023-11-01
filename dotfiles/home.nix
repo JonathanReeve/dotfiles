@@ -10,9 +10,9 @@ let
   scripts = "/home/jon/Dotfiles/scripts";
   maildir = "/home/jon/Mail";
   # Preferences
-  # font = "Monoid";
+  font = "Victor Mono";
   # font = "Nova Mono";
-  font = "Fantasque Sans Mono";
+  # font = "Fantasque Sans Mono";
   backgroundColor = "#243442"; # Blue steel
   foregroundColor = "#deedf9"; # Light blue
   warningColor = "#e23131"; # Reddish
@@ -20,7 +20,7 @@ let
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
 in
 {
-  # imports = [ ./sway.nix ];
+  imports = [ ./nix-doom-emacs.nix ];
 
   accounts.email = {
     maildirBasePath = "${maildir}";
@@ -146,9 +146,9 @@ in
     mbsync = {
       enable = true;
     };
-    mu = {
-      enable = true;
-    };
+    # mu = {
+    #   enable = true;
+    # };
     neovim = {
       enable = true;
       # package = pkgs.neovim;
@@ -307,17 +307,15 @@ in
     nushell = {
       enable = true;
       configFile.source = ./config.nu;
-      envFile.text = ''let-env STARSHIP_SHELL = "nushell"'';
     };
     starship = {
       enable = true;
       enableFishIntegration = true;
-      # Don't enable nushell integration now, since it runs starship init nu,
-      # and that has an issue now: https://github.com/starship/starship/issues/4507
-      enableNushellIntegration = false;
+      enableNushellIntegration = true;
     };
     zoxide = {
       enable = true;
+      enableNushellIntegration = true;
     };
     termite = {
       enable = true;
@@ -482,7 +480,7 @@ in
         };
         fonts = {
           completion.category = "11pt monospace";
-          default_family = "${font}, Terminus, Monospace, monospace, Fixed";
+          default_family = "${font}";
           default_size = "12pt";
         };
         hints.chars = "arstdhneio";
@@ -580,6 +578,15 @@ in
     };
     pueue = {
       enable = true;
+      settings = {
+        shared = {
+          pueue_directory = "~/.local/share/pueue";
+        };
+        client = {};
+        daemon = {
+          default_parallel_tasks = 2;
+        };
+      };
     };
     screen-locker = {
       enable = false;
@@ -622,20 +629,23 @@ in
       pkgs.gnome.gnome-keyring # Same
     ];
     file = {
-      ".doom.d/" = {
-        source = ./emacs/doom.d;
-        recursive = true;
-        onChange = "$HOME/.emacs.d/bin/doom sync";
-      };
+      # ".doom.d/" = {
+      #   source = ./emacs/doom.d;
+      #   recursive = true;
+      #   onChange = "$HOME/.emacs.d/bin/doom sync";
+      # };
       ".local/share/applications/org-protocol.desktop".text = ''
-          [Desktop Entry]
-          Name=Org-Protocol
-          Exec=emacsclient %u
-          Icon=emacs-icon
-          Type=Application
-          Terminal=false
-          MimeType=x-scheme-handler/org-protocol
-        '';
+[Desktop Entry]
+Name=org-protocol
+Comment=Intercept calls from emacsclient to trigger custom actions
+Categories=Other;
+Keywords=org-protocol;
+Icon=emacs
+Type=Application
+Exec=emacsclient -- %u
+Terminal=false
+StartupWMClass=Emacs
+MimeType=x-scheme-handler/org-protocol;'';
       #".emacs.d/init.el".text = ''
       #    (load "default.el")
       #'';
@@ -669,11 +679,12 @@ in
 
   systemd.user = {
     services = {
-      # protonmail = {
-      #   Unit = { Description = "Protonmail Bridge"; };
-      #   Service.ExecStart = "${pkgs.protonmail-bridge}/bin/protonmail-bridge --noninteractive";
-      #   Install.WantedBy = [ "default.target" ];
-      # };
+      # Disabling this in favor of system-wide service?
+      protonmail = {
+        Unit = { Description = "Protonmail Bridge"; };
+        Service.ExecStart = "${pkgs.protonmail-bridge}/bin/protonmail-bridge --noninteractive";
+        Install.WantedBy = [ "default.target" ];
+      };
       dwall = {
         Unit = {
           Description = "Set dynamic wallpaper using Dwall";
@@ -810,6 +821,9 @@ in
         };
       };
       startup = [
+        # Fix for slow GTK applications; see https://github.com/swaywm/sway/wiki#gtk-applications-take-20-seconds-to-start
+        { command = "exec systemctl --user import-environment"; }
+        # { command = "exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK"; }
         { command = "exec swaybg -i ~/Bildujo/Ekranfonoj/yz6ggt7m18l41.png -o '*' -m fill"; }
         { command = "exec ${pkgs.pywal}/bin/wal --theme base16-nord"; }
         { command = "exec megasync"; }

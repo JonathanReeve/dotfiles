@@ -12,11 +12,11 @@
        # python-language-server # Spacemacs integration
        flake8 # Syntax checking for emacs
        scikit-learn
-       altair
-       vega
-       vega_datasets
+       # altair
+       # vega
+       # vega_datasets
        jupyter
-       # jupyterlab
+       jupyterlab
        # jupytext
        # tensorflow
        nltk

@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, options, ... }:
+{ config, pkgs, options, lib, ... }:
 
 {
   imports =
@@ -21,7 +21,7 @@
     kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = [ "btqca" "hci_qca" "hci_uart" "bluetooth" ];
     blacklistedKernelModules = [ "psmouse" ];
-    cleanTmpDir = true;
+    tmp.cleanOnBoot = true;
     plymouth.enable = true;
     resumeDevice = "/dev/nvme0n1p4";
     loader.systemd-boot.enable = true;
@@ -50,8 +50,19 @@
     };
   };
 
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.allowBroken = true;
+  nixpkgs = {
+    config = { allowUnfree = true;
+               allowBroken = true;
+    };
+    overlays = [
+      # (import (builtins.fetchTarball {
+      #   url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+      #   sha256 = "0i74f97f3ljr49jlhh60pglqsfj6vbwigyrl5q76sclirkzfyvr0";
+      # }
+      # ))
+    ];
+  };
+
 
   console.useXkbConfig = true;
 
@@ -62,7 +73,7 @@
   };
 
   # Fonts!
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     fantasque-sans-mono
     font-awesome_5
     fira-code
@@ -80,7 +91,7 @@
     kochi-substitute # Japanese
   ];
   # Set your time zone.
-  time.timeZone = "America/New_York";
+  time.timeZone = "America/Los_Angeles";
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -100,7 +111,7 @@
      megasync             # Backups
      megacmd
      keybase-gui          # Also backups
-     logseq               # Fancy notes
+     #logseq               # Fancy notes
 
      # CLI
      fish                   # Shell
@@ -113,7 +124,7 @@
      gcc gnumake
      gnupg
      wget
-     isync mu w3m           # Mail
+     isync w3m           # Mail
      protonmail-bridge
      gnutls                 # For mail auth
      protonvpn-cli          # VPN
@@ -127,6 +138,7 @@
      dict                   # Dictionary
 
      pywal
+     wallust
      ranger
 
      # Building stuff
@@ -380,15 +392,15 @@
     # };
     };
 
-  systemd.user.services.protonmail = {
-    description = "Protonmail Bridge";
-    enable = true;
-    script =
-      "${pkgs.protonmail-bridge}/bin/protonmail-bridge --log-level debug";
-    path = [ pkgs.gnome.gnome-keyring ]; # HACK: https://github.com/ProtonMail/proton-bridge/issues/176
-    wantedBy = [ "graphical-session.target" ];
-    partOf = [ "graphical-session.target" ];
-  };
+  # systemd.user.services.protonmail = {
+  #   description = "Protonmail Bridge";
+  #   enable = true;
+  #   script =
+  #     "${pkgs.protonmail-bridge}/bin/protonmail-bridge --log-level debug";
+  #   path = [ pkgs.gnome.gnome-keyring ]; # HACK: https://github.com/ProtonMail/proton-bridge/issues/176
+  #   wantedBy = [ "graphical-session.target" ];
+  #   partOf = [ "graphical-session.target" ];
+  # };
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you

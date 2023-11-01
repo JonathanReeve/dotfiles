@@ -84,4 +84,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-    destFile = "/home/jon/Dokumentujo/Papers/library.bib"
+    # destFile = "/home/jon/Dokumentujo/Papers/library.bib"

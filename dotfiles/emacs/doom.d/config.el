@@ -8,9 +8,9 @@
 (package-initialize)
 
 ;; Set location of custom.el
-(setq custom-file "~/.emacs.d/custom.el")
+(setq custom-file "~/.config/emacs/custom.el")
 
-(setq doom-font (font-spec :family "Fantasque Sans Mono" :size 18))
+(setq doom-font (font-spec :family "Victor Mono" :size 18))
 (setq doom-themes-treemacs-enable-variable-pitch 'nil)
 
 (setq vc-follow-symlinks t) ;; Always follow symlinks.
@@ -74,7 +74,7 @@
   (setq org-capture-templates
         '(("t" "Todo" entry (file+headline "/home/jon/Dokumentujo/Org/notes.org" "Tasks")
             "* TODO %?  %i\n  %a")
-          ("m" "Movie" entry (file+headline "/home/jon/Dokumentujo/Org/Roam/movies.org" "To Watch")
+          ("m" "Movie" entry (file+headline "/home/jon/Dokumentujo/Org/Roam/movies.org" "to watch")
             "* %a\n %?\n %i")
           ("l" "Link" entry (file+olp "/home/jon/Dokumentujo/Org/notes.org" "Web Links")
             "* %a\n %?\n %i")
@@ -397,6 +397,10 @@ If nil it defaults to `split-string-default-separators', normally
   (global-org-modern-mode)
   (setq org-modern-label-border 1)
 
+  (defun org-procrastinate ()
+    "Set the scheduled date on an Org agenda item to tomorrow."
+    (interactive)
+    (org-agenda-schedule nil "+1d"))
 ) ;; End of Org block
 
 ;; (use-package! org-clock-reminder
@@ -415,7 +419,7 @@ If nil it defaults to `split-string-default-separators', normally
 
 ;; Mail
 (after! mu4e
-  (require 'org-mu4e)
+  ;; (require 'org-mu4e)
   (setq read-mail-command 'mu4e) ;; Why is this not already set?
   ;; Respond to calendar invites. But is this even working?
   (require 'mu4e-icalendar)
@@ -494,25 +498,25 @@ If nil it defaults to `split-string-default-separators', normally
 
 (after! org-msg
   (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t"
-	org-msg-startup "hidestars indent inlineimages"
-	org-msg-greeting-fmt "\nHi%s,\n\n"
-	org-msg-default-alternatives '((new		. (text html))
-				       (reply-to-html	. (text html))
-				       (reply-to-text	. (text html)))
-	org-msg-convert-citation t
-	org-msg-signature "
+        org-msg-startup "hidestars indent inlineimages"
+        org-msg-greeting-fmt "\nHi%s,\n\n"
+        org-msg-default-alternatives '((new        . (text html))
+                                       (reply-to-html    . (text html))
+                                       (reply-to-text    . (text   html))))
+;;   (setq org-msg-convert-citation t
+;; 	org-msg-signature "
 
-Best,
+;; Best,
 
-Jonathan
+;; Jonathan
 
-#+begin_signature
---
-Jonathan Reeve
-https://jonreeve.com
-#+end_signature")
-  (setq message-citation-line-format "Je %a, %b %d %Y, %N skribis:\n")
-  (setq org-msg-posting-style nil)
+;; #+begin_signature
+;; --
+;; Jonathan Reeve
+;; https://jonreeve.com
+;; #+end_signature")
+  ;; (setq message-citation-line-format "Je %a, %b %d %Y, %N skribis:\n")
+  ;; (setq org-msg-posting-style nil)      ;
 )
 
 ;; Set browser
@@ -571,6 +575,8 @@ https://jonreeve.com
       :g "<f2>" #'org-agenda-list
       :g "<f3>" #'org-todo-list
       )
+
+(map! :map evil-org-agenda-mode-map "P" 'org-procrastinate)
 
 (map! :map evil-treemacs-state-map "n" 'treemacs-next-line
                                    "e" 'treemacs-previous-line)
@@ -647,6 +653,15 @@ https://jonreeve.com
   (message "Aborted.")
   ))
 
+(defun rename-epub ()
+  " Rename the most recently modified Epub in the /tmp dir with the latest bibtex key. "
+  (interactive)
+  (setq most-recent-epub (string-trim-right (shell-command-to-string "ls -t /tmp/*.epub | head -1")))
+  (setq dest-epub-filename (string-trim-right (concat bibtex-completion-library-path (bibtex-completion-get-key-bibtex) ".epub")))
+  (if (yes-or-no-p (concat "Rename " most-recent-epub " to " dest-epub-filename "?"))
+  (rename-file most-recent-epub dest-epub-filename)
+  (message "Aborted.")
+  ))
 ;; (use-package! notebook-mode)
 
 ;; (use-package! evil-colemak-basics
@@ -672,4 +687,8 @@ https://jonreeve.com
 (set-locale-environment "eo.utf-8")
 
 ;; Scala
-(add-to-list '+org-babel-mode-alist '(scala . ammonite))
+;; (add-to-list '+org-babel-mode-alist '(scala . ammonite))
+
+;; Word wrap issues; possible fix for https://github.com/doomemacs/doomemacs/issues/7133
+(setq +global-word-wrap-mode 'nil)
+(setq font-lock-global-modes '(not mu4e-compose-mode))
