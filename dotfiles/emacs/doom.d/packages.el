@@ -66,3 +66,5 @@
 
 ;; ~/.doom.d/packages.el
 ;; (package! evil-colemak-basics) ; colemak remaps
+
+(package! quarto-mode :recipe (:host github :repo "quarto-dev/quarto-emacs" ))

@@ -31,6 +31,7 @@
   networking = {
     hostName = "jon-laptop"; # Define your hostname .
     networkmanager.enable = true;
+    firewall.checkReversePath = "loose";
     useDHCP = false;
     # interfaces.wlp0s20f3.useDHCP = true;
     interfaces.enp0s13f0u1u3u1.useDHCP = true;
@@ -108,8 +109,8 @@
      # yubikey-manager # Provides ykman
      # yubikey-personalization-gui
 
-     megasync             # Backups
-     megacmd
+     #megasync             # Backups
+     #megacmd
      keybase-gui          # Also backups
      #logseq               # Fancy notes
 
@@ -117,21 +118,23 @@
      fish                   # Shell
      vim                    # Text editors
      vale                   # Prose linting
-     aspell aspellDicts.en  # Spell checker
+     # aspell aspellDicts.en  # Spell checker
+     (aspellWithDicts (dicts: with dicts; [ en en-computers en-science eo fr ]))
      pass encfs             # Passwords and encryption
      light                  # Brightness control
      networkmanager
+     tailscale
      gcc gnumake
      gnupg
      wget
-     isync w3m           # Mail
+     isync w3m              # Mail
      protonmail-bridge
      gnutls                 # For mail auth
      protonvpn-cli          # VPN
      pandoc
      zlib                   # For Pandoc development
 
-     #direnv                 # Essential project management thingy
+     #direnv                # Essential project management thingy
      graphviz               # Simple charts
      xclip                  # Clipboard on the command line
      x11idle
@@ -181,7 +184,7 @@
      texlive.combined.scheme-full
      git                    # Version control
      github-cli
-     unzip                  # Archives
+     zip unzip                  # Archives
 
      texlive.combined.scheme-full
      git git-lfs            # Version control
@@ -221,7 +224,8 @@
      # GUI
      #qutebrowser            # Web browser
      chromium               # Another web browser
-     firefox-wayland         # Yes, a third
+     firefox-wayland        # Yes, a third
+     nyxt                   # Why stop now?
 
      # Ugh
      zoom-us
@@ -256,6 +260,17 @@
      # Web dev
      nodejs
 
+     # Notetaking
+     anytype
+
+     # Editor
+     vscode
+
+     # Write books
+     quarto
+     #jupyter-book
+
+     
    ];
 
   environment.variables = {
@@ -296,6 +311,14 @@
 
     # localtime.enable = true;
 
+    libinput = {
+      enable = true;
+      touchpad = {
+        clickMethod = "clickfinger";
+        disableWhileTyping = true;
+      };
+    };
+
     # Power button invokes suspend, not shutdown.
     logind = {
       extraConfig = "HandlePowerKey=suspend";
@@ -306,30 +329,30 @@
     upower.enable = true;
 
     # Plex media server
-    # plex = {
-    #   user = "systemrestore";
-    #   group = "users";
-    #   enable = true;
-    #   openFirewall = true;
-    # };
+    plex = {
+      user = "systemrestore";
+      group = "users";
+      enable = false;
+      openFirewall = true;
+    };
+
+    # VPN
+    tailscale.enable = true;
+
     # Security
     udev.packages = [ pkgs.yubikey-personalization pkgs.libu2f-host ];
     pcscd.enable = true;
+    mozillavpn = {
+      enable = true;
+    };
 
     # X
     xserver = {
       enable = true;
       # Enable touchpad support.
-      libinput = {
-        enable = true;
-        touchpad = {
-          clickMethod = "clickfinger";
-          disableWhileTyping = true;
-        };
-      };
       # Keyboard settings
       layout = "us";
-      xkbVariant = "colemak";
+      xkb.variant = "colemak";
       desktopManager.session = [
         { name = "home-manager";
           start = ''${pkgs.stdenv.shell} $HOME/.xsession-hm 

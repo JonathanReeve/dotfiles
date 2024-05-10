@@ -190,11 +190,11 @@
          (preview . "${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
          (note . "#+title: ${author editor}, ${title}")))
 
-  (setq citar-symbols
-        `((file ,(all-the-icons-faicon "file-o" :face 'all-the-icons-green :v-adjust -0.1) . " ")
-          (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
-          (link ,(all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01) . " ")))
-  (setq citar-symbol-separator "  ")
+  ;; (setq citar-symbols
+  ;;       `((file ,(all-the-icons-faicon "file-o" :face 'all-the-icons-green :v-adjust -0.1) . " ")
+  ;;         (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
+  ;;         (link ,(all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01) . " ")))
+  ;; (setq citar-symbol-separator "  ")
 
   (setq citar-file-open-note-function 'orb-citar-edit-note)
   ;; (setq citar-file-open-note-function 'citar-file-open-notes-default-org)
@@ -401,6 +401,15 @@ If nil it defaults to `split-string-default-separators', normally
     "Set the scheduled date on an Org agenda item to tomorrow."
     (interactive)
     (org-agenda-schedule nil "+1d"))
+
+  (setq org-attach-store-link-p 'attached)
+
+  (add-to-list 'org-latex-classes
+      '("letter"
+      "\\documentclass{letter}"
+      ("\\section{%s}" . "\\section*{%s}")
+      ("\\subsection{%s}" . "\\subsection*{%s}")
+      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
 ) ;; End of Org block
 
 ;; (use-package! org-clock-reminder

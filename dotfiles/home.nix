@@ -20,7 +20,16 @@ let
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
 in
 {
-  imports = [ ./nix-doom-emacs.nix ];
+  imports = [
+    # ./nix-doom-emacs.nix
+  ];
+  # modules = [
+  #   niri.homeModules.config {
+  #     programs.niri.settings = {
+  #       outputs."eDP-1".scale = 2.0;
+  #     };
+  #   }
+  # ];
 
   accounts.email = {
     maildirBasePath = "${maildir}";
@@ -95,6 +104,7 @@ in
             ExpireUnread = "yes";
           };
         };
+        realName = "${name}";
       };
     };
   };
@@ -115,6 +125,11 @@ in
       settings = {
         modal = true;
       };
+    };
+    emacs = {
+      extraPackages = epkgs: [
+        pkgs.mu
+      ];
     };
     gnome-terminal = {
       profile.default = {
@@ -146,9 +161,9 @@ in
     mbsync = {
       enable = true;
     };
-    # mu = {
-    #   enable = true;
-    # };
+    mu = {
+      enable = true;
+    };
     neovim = {
       enable = true;
       # package = pkgs.neovim;
@@ -468,6 +483,7 @@ in
         "mm" =  "https://muse-jhu-edu.ezproxy.cul.columbia.edu/search?action=search&query=content:{}:and&limit=journal_id:131&min=1&max=10&t=search_journal_header";
       };
       settings = {
+        content.local_content_can_access_remote_urls = true;
         content.headers.accept_language = "eo,en-US,en,fr";
         colors = {
           completion.category.bg = "#333333";
@@ -607,7 +623,7 @@ in
       name = "adwaita-dark";
       package = pkgs.adwaita-qt;
     };
-    platformTheme = "gnome";
+    platformTheme.name = "adwaita";
   };
 
   # Dotfiles for the home root, ~/
@@ -629,11 +645,11 @@ in
       pkgs.gnome.gnome-keyring # Same
     ];
     file = {
-      # ".doom.d/" = {
-      #   source = ./emacs/doom.d;
-      #   recursive = true;
-      #   onChange = "$HOME/.emacs.d/bin/doom sync";
-      # };
+      ".config/doom" = {
+      source = ./emacs/doom.d;
+      recursive = true;
+      onChange = "$HOME/.emacs.d/bin/doom sync";
+    };
       ".local/share/applications/org-protocol.desktop".text = ''
 [Desktop Entry]
 Name=org-protocol
@@ -719,38 +735,43 @@ MimeType=x-scheme-handler/org-protocol;'';
     extraConfigEarly = ''include "${dots}/colors-sway"'';
     config = {
       bars = [];
-      colors = {
-        focused = {
-          background = "$color2";
-          border = "$color2";
-          text = "$foreground";
-          indicator = "$color2";
-          childBorder = "$color2";
-        };
-        focusedInactive = {
-          background = "$color1";
-          text = "$foreground";
-          border = "$color1";
-          indicator = "$color1";
-          childBorder = "$color1";
-        };
-        unfocused = {
-          background = "$color1";
-          border = "$color2";
-          text = "$foreground";
-          indicator = "$color1";
-          childBorder = "$color1";
-        };
-      };
+      # colors = {
+      #   focused = {
+      #     background = "$color2";
+      #     border = "$color2";
+      #     text = "$foreground";
+      #     indicator = "$color2";
+      #     childBorder = "$color2";
+      #   };
+      #   focusedInactive = {
+      #     background = "$color1";
+      #     text = "$foreground";
+      #     border = "$color1";
+      #     indicator = "$color1";
+      #     childBorder = "$color1";
+      #   };
+      #   unfocused = {
+      #     background = "$color1";
+      #     border = "$color2";
+      #     text = "$foreground";
+      #     indicator = "$color1";
+      #     childBorder = "$color1";
+      #   };
+      # };
       fonts = { names = [ "Font Awesome" "${font}"]; size = 14.0;};
       gaps = { outer = 10; inner = 10; };
-      input = { "*" = {
-        xkb_layout = "us";
-        xkb_variant = "colemak";
-        xkb_options = "caps:escape,esperanto:colemak";
-      }; };
+      input = {
+        "type:keyboard" = {
+          xkb_layout = "us";
+          xkb_variant = "colemak";
+          xkb_options = "caps:escape,esperanto:colemak";
+        };
+        "type:touchpad" = {
+          click_method = "clickfinger";
+        };
+      };
       output = { "eDP-1" = {
-        background = "$wallpaper fill";
+        # background = "$wallpaper fill";
       }; };
       left = "h";
       down = "n";
@@ -839,6 +860,13 @@ MimeType=x-scheme-handler/org-protocol;'';
       bindswitch --reload --locked lid:on output $laptop disable
       bindswitch --reload --locked lid:off output $laptop enable
       exec_always ${scripts}/sway-reload.sh
+      # Touchpad gestures
+      bindgesture swipe:right workspace prev
+      bindgesture swipe:left workspace next
+      bindgesture pinch:inward+up move up
+      bindgesture pinch:inward+down move down
+      bindgesture pinch:inward+left move left
+      bindgesture pinch:inward+right move right
     '';
   };
   # Dotfiles for ~/.config, ~/.local/share, etc.

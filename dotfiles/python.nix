@@ -9,7 +9,8 @@
      (python3.withPackages(ps: with ps; [
        pandas
        matplotlib
-       # python-language-server # Spacemacs integration
+       python-lsp-server # Emacs integration
+       plotly
        flake8 # Syntax checking for emacs
        scikit-learn
        # altair
@@ -17,10 +18,12 @@
        # vega_datasets
        jupyter
        jupyterlab
+       # jupyter-book
        # jupytext
        # tensorflow
        nltk
        pip
+       # poetry-dynamic-versioning
        numpy
        nose
        tldextract # required by qute-pass
