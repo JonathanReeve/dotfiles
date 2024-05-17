@@ -10,3 +10,6 @@
 [submodule "dynamic-wallpaper"]
 	path = dynamic-wallpaper
 	url = https://github.com/adi1090x/dynamic-wallpaper.git
+[submodule "scripts/nu_scripts"]
+	path = scripts/nu_scripts
+	url = https://github.com/nushell/nu_scripts
