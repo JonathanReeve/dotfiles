@@ -550,6 +550,9 @@ If nil it defaults to `split-string-default-separators', normally
           (defun shr-fill-lines (start end) nil)
           (defun shr-fill-line () nil)))
 
+;; Some bug?
+;; (defun gnus-icalendar-event:opt-participants nil)
+
 (add-hook 'elfeed-show-mode-hook 'visual-line-mode)
 (setq rmh-elfeed-org-files '("/home/jon/Dokumentujo/Org/RSS.org"))
 

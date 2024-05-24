@@ -11,6 +11,7 @@
       ./gnome.nix
       ./hardware-configuration.nix
       ./python.nix
+      ./protonvpn.nix
       # ./R.nix
     ];
 
@@ -109,7 +110,7 @@
      # yubikey-manager # Provides ykman
      # yubikey-personalization-gui
 
-     #megasync             # Backups
+     megasync             # Backups
      #megacmd
      keybase-gui          # Also backups
      #logseq               # Fancy notes
@@ -156,9 +157,9 @@
      #  ];
      # })
 
-     (emacs.pkgs.withPackages (epkgs: with emacsPackages; [
-       pdf-tools
-     ]))
+     # (emacs.pkgs.withPackages (epkgs: with emacsPackages; [
+     #   pdf-tools
+     # ]))
 
      stack
      (haskellPackages.ghcWithPackages (ps: with ps; [
@@ -199,7 +200,7 @@
      # elmPackages.elm-review
      elmPackages.elm-format
      # Julia
-     julia-stable-bin
+     # julia-stable-bin
      # Scala
      dotty
      metals
@@ -337,6 +338,13 @@
     };
 
     # VPN
+    protonvpn = {
+      enable = true;
+      endpoint = {
+        publicKey = "11ScmFnWCAFMI6tdc6/wO+P7biBc/5foA7WayNXxSG0=";
+        ip = "146.70.147.98";
+      };
+    };
     tailscale.enable = true;
 
     # Security

@@ -127,8 +127,9 @@ in
       };
     };
     emacs = {
+      enable = true;
       extraPackages = epkgs: [
-        pkgs.mu
+        epkgs.mu4e
       ];
     };
     gnome-terminal = {
@@ -648,7 +649,7 @@ in
       ".config/doom" = {
       source = ./emacs/doom.d;
       recursive = true;
-      onChange = "$HOME/.emacs.d/bin/doom sync";
+      onChange = "$HOME/.config/emacs/bin/doom sync";
     };
       ".local/share/applications/org-protocol.desktop".text = ''
 [Desktop Entry]

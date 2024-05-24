@@ -31,7 +31,7 @@
   outputs = { self, nixos, nixos-hardware,
               home-manager, nix-straight, nix-doom-emacs, nixos-old, niri }:
     let overlays = [
-      (final: prev: {mu = nixos-old.legacyPackages.${prev.system}.mu;})
+      # (final: prev: {mu = nixos-old.legacyPackages.${prev.system}.mu;})
     ];
     in {
     nixosConfigurations.jon-laptop = nixos.lib.nixosSystem {
@@ -49,6 +49,7 @@
                    home-manager.nixosModules.home-manager {
                      home-manager.useGlobalPkgs = true;
                      home-manager.useUserPackages = true;
+                     home-manager.backupFileExtension = "backup";
                      home-manager.users.jon = { pkgs, ... }: {
                        imports = [ ./home.nix
                                  #  ./nix-doom-emacs.nix
