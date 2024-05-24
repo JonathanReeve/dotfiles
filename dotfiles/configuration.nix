@@ -23,7 +23,7 @@
     blacklistedKernelModules = [ "psmouse" ];
     tmp.cleanOnBoot = true;
     plymouth.enable = true;
-    resumeDevice = "/dev/nvme0n1p4";
+    resumeDevice = "/dev/nvme0n1p3";
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
   };
@@ -45,10 +45,6 @@
       keep-outputs = true
       keep-derivations = true
     '';
-    settings = {
-      substituters = ["https://hyprland.cachix.org"];
-      trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
-    };
   };
 
   nixpkgs = {
@@ -90,6 +86,7 @@
     # font-fonts
     # monoid
     kochi-substitute # Japanese
+    iosevka-comfy.comfy
   ];
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
@@ -109,7 +106,7 @@
      # yubikey-manager # Provides ykman
      # yubikey-personalization-gui
 
-     #megasync             # Backups
+     megasync             # Backups
      #megacmd
      keybase-gui          # Also backups
      #logseq               # Fancy notes
@@ -124,11 +121,12 @@
      light                  # Brightness control
      networkmanager
      tailscale
-     gcc gnumake
+     gcc gnumake libtool
      gnupg
      wget
      isync w3m              # Mail
      protonmail-bridge
+
      gnutls                 # For mail auth
      protonvpn-cli          # VPN
      pandoc
@@ -156,9 +154,9 @@
      #  ];
      # })
 
-     (emacs.pkgs.withPackages (epkgs: with emacsPackages; [
-       pdf-tools
-     ]))
+     # (emacs.pkgs.withPackages (epkgs: with emacsPackages; [
+     #   pdf-tools
+     # ]))
 
      stack
      (haskellPackages.ghcWithPackages (ps: with ps; [
@@ -302,6 +300,7 @@
       DBs = with pkgs.dictdDBs; [ wiktionary wordnet ];
     };
     flatpak.enable = true;
+    fwupd.enable = true; # Firmware updates
 
     keybase.enable = true;
     kbfs = {
@@ -312,11 +311,11 @@
     # localtime.enable = true;
 
     libinput = {
-      enable = true;
-      touchpad = {
-        clickMethod = "clickfinger";
-        disableWhileTyping = true;
-      };
+     enable = true;
+     touchpad = {
+       clickMethod = "clickfinger";
+       disableWhileTyping = true;
+     };
     };
 
     # Power button invokes suspend, not shutdown.
@@ -351,19 +350,15 @@
       enable = true;
       # Enable touchpad support.
       # Keyboard settings
-      layout = "us";
-      xkb.variant = "colemak";
+      xkb = { 
+        layout = "us";
+        variant = "colemak";
+      };
       desktopManager.session = [
         { name = "home-manager";
           start = ''${pkgs.stdenv.shell} $HOME/.xsession-hm 
-	            & waitPID=$!''; }
-        # { name = "sway"; start = ''${pkgs.sway}/bin/sway''; }
-        { name = "newm";
-          start = ''${pkgs.stdenv.shell} /home/jon/Aplikaĵoj/result/bin/start-newm & waitPID=$!'';
+	            & waitPID=$!''; 
         }
-        # { name = "hyprland";
-        #   start = ''${pkgs.stdenv.shell} /run/current-system/sw/bin/Hyprland & waitPID=$!'';
-        # }
       ];
       # windowManager.exwm = {
       #   enable = true;
@@ -384,13 +379,14 @@
       enable = true;
       wrapperFeatures.gtk = true;
     };
+    zsh.enable = true;
   };
 
   users.users = {
     jon =
       { isNormalUser = true;
         home = "/home/jon";
-        shell = pkgs.fish;
+        shell = pkgs.zsh;
         description = "Jonathan Reeve";
         extraGroups = [ "audio" "wheel" "networkmanager" "tty" "dialout" "input" "docker" "video"];
       };
@@ -428,7 +424,7 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "21.03"; # Did you read the comment?
+  system.stateVersion = "23.11"; # Did you read the comment?
 
   # virtualisation.anbox.enable = true;
   virtualisation.docker.enable = true;

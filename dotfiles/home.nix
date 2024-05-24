@@ -6,9 +6,10 @@ let
   email = "jon.reeve@gmail.com";
   githubUsername = "JonathanReeve";
   # Paths
-  dots = "/home/jon/Dotfiles/dotfiles";
-  scripts = "/home/jon/Dotfiles/scripts";
-  maildir = "/home/jon/Mail";
+  dots = "/home/jon/Agordoj/dotfiles";
+  dokumentoj = "/home/jon/Dokumentoj";
+  scripts = "/home/jon/Agordoj/scripts";
+  maildir = "/home/jon/Retpoŝto";
   # Preferences
   font = "Victor Mono";
   # font = "Nova Mono";
@@ -116,6 +117,7 @@ in
         font.size = 14;
         window.opacity = 0.9;
         colors.transparent_background_colors = true;
+        shell = "nu";
       };
     };
     bottom.enable = true;
@@ -127,8 +129,9 @@ in
       };
     };
     emacs = {
+      enable = true;
       extraPackages = epkgs: [
-        pkgs.mu
+        epkgs.mu4e
       ];
     };
     gnome-terminal = {
@@ -148,6 +151,8 @@ in
     direnv = {
       nix-direnv.enable = true;
       enable = true;
+      enableZshIntegration = true;
+      enableNushellIntegration = true;
     };
     git = {
       enable = true;
@@ -183,9 +188,13 @@ in
         nnoremap l i
       '';
     };
+    # niri = {
+    #   enable = true;
+    # };
     nix-index = {
       enable = true;
       enableFishIntegration = true;
+      enableZshIntegration = true;
     };
     fish = {
       enable = true;
@@ -209,7 +218,6 @@ in
         "gst" = "git status";
         # Other abbreviations
         "em" = "emacsclient -c";
-        # "pw" = "vim ~/Dokumentujo/Personal/.p10.txt";
         # "lock" = "${lockCmd}";
         "new-session" = "dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.DisplayManager $XDG_SEAT_PATH org.freedesktop.DisplayManager.Seat.SwitchToGreeter";
         "portrait-monitor" = "xrandr --output DP-1 --rotate left --auto --right-of eDP-1";
@@ -230,7 +238,7 @@ in
             '';
         clean = "nix-store --gc --print-roots; and sudo nix-collect-garbage --delete-older-than 5d";
         # A function for renaming the most recent PDF, and putting it in my Papers dir.
-        rename-pdf="mv (ls -t /tmp/*.pdf | head -n 1) ~/Dokumentujo/Papers/$argv.pdf";
+        rename-pdf="mv (ls -t /tmp/*.pdf | head -n 1) ${dokumentoj}/Papers/$argv.pdf";
         find-book="for engine in b c libgen ia; qutebrowser \":open -t $engine $argv\"; end";
         # Search several search engines at once. `search b g l "search query"`
         search="for engine in $argv[1..-2]; qutebrowser \":open -t $engine $argv[-1]\"; end";
@@ -257,7 +265,7 @@ in
             end
 
             set -U vaultmount ~/.private-mount
-            set -U vaultloc ~/Dokumentujo/Personal/.Vault_encfs
+            set -U vaultloc ${dokumentoj}/Personal/.Vault_encfs
 
             # Disable the vim-mode indicator [I] and [N].
             # Let the theme handle it instead.
@@ -318,6 +326,7 @@ in
     fzf = {
       enable = true;
       enableFishIntegration = true;
+      enableZshIntegration = true;
     };
     nushell = {
       enable = true;
@@ -327,10 +336,19 @@ in
       enable = true;
       enableFishIntegration = true;
       enableNushellIntegration = true;
+      enableZshIntegration = true;
+    };
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+      enableVteIntegration = true;
+      autosuggestion.enable = true;
+
     };
     zoxide = {
       enable = true;
       enableNushellIntegration = true;
+      enableZshIntegration = true;
     };
     termite = {
       enable = true;
@@ -423,7 +441,7 @@ in
     password-store = {
       enable = true;
       settings = {
-        PASSWORD_STORE_DIR = "/home/jon/Dokumentujo/Personal/.password-store";
+        PASSWORD_STORE_DIR = "${dokumentoj}/Personal/.password-store";
       };
     };
     qutebrowser = {
@@ -446,7 +464,7 @@ in
           "gL" =  "open javascript:location.href='org-protocol://capture?template=l&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
           "gM" =  "open javascript:location.href='org-protocol://roam-ref?template=m&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
           "gR" = "open javascript:location.href='org-protocol://roam-ref?template=r&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
-          "gB" = "spawn -m ~/Dotfiles/scripts/downloadBook.py {url}";
+          "gB" = "spawn -m ${scripts}/downloadBook.py {url}";
           "pf" =  "spawn --userscript qute-pass";
           "gz" =  "jseval var d=document,s=d.createElement('script';;s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement;.appendChild(s;;void(0;;";
           "t" =  "set-cmd-text -s :open -t";
@@ -648,7 +666,7 @@ in
       ".config/doom" = {
       source = ./emacs/doom.d;
       recursive = true;
-      onChange = "$HOME/.emacs.d/bin/doom sync";
+      onChange = "$HOME/.config/emacs/bin/doom sync";
     };
       ".local/share/applications/org-protocol.desktop".text = ''
 [Desktop Entry]

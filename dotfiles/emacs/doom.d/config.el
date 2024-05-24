@@ -35,27 +35,28 @@
 
 ;; Citar
 ;; See https://github.com/hlissner/doom-emacs/blob/4612b39695405f7238dd3da0d4fd6d3a5cdd93d6/modules/tools/biblio/README.org
-(setq! citar-bibliography '("~/Dokumentujo/Papers/library.bib" "~/Dokumentujo/Papers/library2.bib")
-       citar-library-paths '("~/Dokumentujo/Papers/")
-       citar-notes-paths '("~/Dokumentujo/Org/Roam/"))
+(setq! citar-bibliography '("~/Dokumentoj/Papers/library.bib" "~/Dokumentoj/Papers/library2.bib")
+       citar-library-paths '("~/Dokumentoj/Papers/")
+       citar-notes-paths '("~/Dokumentoj/Org/Roam/"))
 
-(setq! bibtex-completion-bibliography '("~/Dokumentujo/Papers/library.bib" "~/Dokumentujo/Papers/library2.bib")
-       bibtex-completion-notes-path "~/Dokumentujo/Org/Roam/"
-       bibtex-completion-library-path "~/Dokumentujo/Papers/")
+(setq! bibtex-completion-bibliography '("~/Dokumentoj/Papers/library.bib" "~/Dokumentoj/Papers/library2.bib")
+       bibtex-completion-notes-path "~/Dokumentoj/Org/Roam/"
+       bibtex-completion-library-path "~/Dokumentoj/Papers/")
 
 ;; Org Mode
 (after! org
   (org-indent-mode)
-  (setq org-directory "~/Dokumentujo/Org"
+  (setq org-directory "~/Dokumentoj/Org"
+        org-id-locations-file "~/Dokumentoj/Org/.orgids"
         org-startup-indented t
         org-startup-folded t
         evil-org-key-theme '(textobjects navigation additional insert todo)
         org-default-priority ?C
         org-lowest-priority ?G
         org-duration-format 'h:mm
-        diary-file "~/Dokumentujo/Org/diary"
+        diary-file "~/Dokumentoj/Org/diary"
         org-agenda-include-diary t
-        org-agenda-files (list "~/Dokumentujo/Org/Projects/")
+        org-agenda-files (list "~/Dokumentoj/Org/Projects/")
         org-agenda-skip-scheduled-if-done t
         org-agenda-skip-deadline-if-done t
         org-todo-keywords '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
@@ -72,13 +73,13 @@
   ; (require 'org-protocol)
   (setq org-protocol-default-template-key "l")
   (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline "/home/jon/Dokumentujo/Org/notes.org" "Tasks")
+        '(("t" "Todo" entry (file+headline "/home/jon/Dokumentoj/Org/notes.org" "Tasks")
             "* TODO %?  %i\n  %a")
-          ("m" "Movie" entry (file+headline "/home/jon/Dokumentujo/Org/Roam/movies.org" "to watch")
+          ("m" "Movie" entry (file+headline "/home/jon/Dokumentoj/Org/Roam/movies.org" "to watch")
             "* %a\n %?\n %i")
-          ("l" "Link" entry (file+olp "/home/jon/Dokumentujo/Org/notes.org" "Web Links")
+          ("l" "Link" entry (file+olp "/home/jon/Dokumentoj/Org/notes.org" "Web Links")
             "* %a\n %?\n %i")
-          ("s" "Schedule" entry (file "/home/jon/Dokumentujo/Org/Projects/schedule.org")
+          ("s" "Schedule" entry (file "/home/jon/Dokumentoj/Org/Projects/schedule.org")
             "* %?\n :PROPERTIES:\n :LOCATION:\n :END:\n %a\n %i")
           ))
   (setq org-modules '(org-habit org-protocol))
@@ -103,9 +104,9 @@
   (setq org-pomodoro-clock-break t)
   (add-hook 'org-mode-hook 'visual-line-mode)
 
-  (setq org-roam-directory "~/Dokumentujo/Org/Roam")
+  (setq org-roam-directory "~/Dokumentoj/Org/Roam")
   (setq org-roam-dailies-directory "Daily/")
-  (setq org-roam-db-location "~/Dokumentujo/Org/Roam/org-roam.db")
+  (setq org-roam-db-location "~/Dokumentoj/Org/Roam/org-roam.db")
   ;; Get a timestamp for tomorrow
   (defun my/tomorrow ()
     (format-time-string "%Y-%m-%d" (time-add 86400 (current-time))))
@@ -457,16 +458,6 @@ If nil it defaults to `split-string-default-separators', normally
                         (smtpmail-stream-type . starttls)
                         (mu4e-compose-signature . "--\nJonathan Reeve\nPhD Candidate, Department of English and Comparative Literature\nhttps://jonreeve.com"))
                       t)
-  (set-email-account! "personal"
-                      '((mu4e-sent-folder   . "/personal/Sent")
-                        (mu4e-drafts-folder . "/personal/Drafts")
-                        (smtpmail-smtp-user . "jonathan@jonreeve.com")
-                        (user-mail-address  . "jonathan@jonreeve.com")
-                        (smtpmail-smtp-server . "mail.privateemail.com")
-                        (smtpmail-smtp-service . 587)
-                        (smtpmail-stream-type . starttls)
-                        (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
-                      t)
   (set-email-account! "protonmail"
                       '((mu4e-sent-folder   . "/protonmail/Sent")
                         (mu4e-drafts-folder . "/protonmail/Drafts")
@@ -479,7 +470,7 @@ If nil it defaults to `split-string-default-separators', normally
                       t)
   (setq message-send-mail-function 'smtpmail-send-it)
   ;;(add-to-list 'gnutls-trustfiles "~/.config/protonmail/bridge/cert.pem")
-  (setq mu4e-maildir "~/Mail"
+  (setq mu4e-maildir "~/Retpoŝto"
         mu4e-trash-folder "/Trash"
         mu4e-refile-folder "/Archive"
         mu4e-view-show-addresses t
@@ -498,9 +489,9 @@ If nil it defaults to `split-string-default-separators', normally
           ))
   ;; Only alert interesting emails
   (setq mu4e-alert-interesting-mail-query "maildir:/columbia/Inbox OR maildir:/gmail/Inbox OR maildir:/personal/Inbox OR maildir:/protonmail/Inbox NOT flag:trashed")
-  (setq mu4e-headers-list-mark       (cons "l" (+mu4e-normalised-icon "sitemap" :set "faicon"))
-        mu4e-headers-personal-mark   (cons "p" (+mu4e-normalised-icon "user"))
-        mu4e-headers-calendar-mark   (cons "c" (+mu4e-normalised-icon "calendar")))
+  ;; (setq mu4e-headers-list-mark       (cons "l" (+mu4e-normalised-icon "sitemap" :set "faicon"))
+  ;;       mu4e-headers-personal-mark   (cons "p" (+mu4e-normalised-icon "user"))
+  ;;       mu4e-headers-calendar-mark   (cons "c" (+mu4e-normalised-icon "calendar")))
 )
   ;; (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
   ;; (setq mu4e-html2text-command "w3m -T text/html")
@@ -551,7 +542,7 @@ If nil it defaults to `split-string-default-separators', normally
           (defun shr-fill-line () nil)))
 
 (add-hook 'elfeed-show-mode-hook 'visual-line-mode)
-(setq rmh-elfeed-org-files '("/home/jon/Dokumentujo/Org/RSS.org"))
+(setq rmh-elfeed-org-files '("/home/jon/Dokumentoj/Org/RSS.org"))
 
 ;; Unbind QWERTY, bind Colemak
 (map! :n "l" #'evil-insert
@@ -692,6 +683,9 @@ If nil it defaults to `split-string-default-separators', normally
 (epa-file-enable)
 
 ;; (setq system-uses-terminfo nil)
+(after! vterm
+        (setq vterm-shell "nu")
+        )
 
 (set-locale-environment "eo.utf-8")
 

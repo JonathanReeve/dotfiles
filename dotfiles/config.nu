@@ -1,6 +1,6 @@
 
 # spawn task to run in the background
-use ~/Dotfiles/scripts/nu_scripts/modules/background_task/task.nu
+use ~/Agordoj/scripts/nu_scripts/modules/background_task/task.nu
 
 # Wallpaper management
 def wal-fav [] {

@@ -10,49 +10,55 @@
       url = "github:codingkoi/nix-straight.el?ref=codingkoi/apply-librephoenixs-fix";
       flake = false;
     };
-    nix-doom-emacs = {
-      url = "github:nix-community/nix-doom-emacs";
-      inputs = {
-        nix-straight.follows = "nix-straight";
-      };
-    };
+    # nix-doom-emacs = {
+    #   url = "github:nix-community/nix-doom-emacs";
+    #   inputs = {
+    #     nix-straight.follows = "nix-straight";
+    #   };
+    # };
     niri.url = "github:sodiboo/niri-flake";
     # Re-enable this after https://github.com/nix-community/nix-doom-emacs/issues/409 is fixed
     # nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
-    # nixos-hardware.url = github:NixOS/nixos-hardware/master;
     nixos.url = "nixpkgs/nixos-unstable";
-    # Old Nixpkgs for mu
-    nixos-old.url = "nixpkgs/8af8e36";
-    # jupyterWith.url = "github:tweag/jupyterWith";
-    # nixos.url = "github:nixos/nixpkgs";
     # nixos.url = "/home/jon/Code/nixpkgs";
     # emacs-overlay.url = "github:nix-community/emacs-overlay";
+    nixos-old.url = "github:nixos/nixpkgs/nixos-23.11";
+    stylix.url = "github:danth/stylix";
+
   };
-  outputs = { self, nixos, nixos-hardware,
-              home-manager, nix-straight, nix-doom-emacs, nixos-old, niri }:
+  outputs = { self, 
+              nixos, 
+              nixos-hardware,
+              nixos-old,
+              home-manager, 
+              nix-straight,
+              # nix-doom-emacs,
+              niri,
+              stylix
+            }:
     let overlays = [
-      (final: prev: {mu = nixos-old.legacyPackages.${prev.system}.mu;})
+      # (final: prev: {mu = nixos-old.legacyPackages.${prev.system}.mu;})
     ];
     in {
     nixosConfigurations.jon-laptop = nixos.lib.nixosSystem {
        system = "x86_64-linux";
        modules = [ ./configuration.nix
+                   stylix.nixosModules.stylix
+                   # ./niri.nix
                    # ({...}: { nixpkgs.overlays = [ (import self.inputs.emacs-overlay) ];})
                    ({...}: { nixpkgs.overlays = overlays;})
                    # ./cachix.nix
-                   # TODO. This makes the kernel rebuild, apparently
-                   # nixos-hardware.nixosModules.dell-xps-13-9310
-                   nixos-hardware.nixosModules.common-cpu-intel
-                   nixos-hardware.nixosModules.common-pc-laptop
-                   nixos-hardware.nixosModules.common-pc-laptop-ssd
+                   nixos-hardware.nixosModules.framework-16-7040-amd
 
                    home-manager.nixosModules.home-manager {
                      home-manager.useGlobalPkgs = true;
                      home-manager.useUserPackages = true;
+                     home-manager.backupFileExtension = "backup";
                      home-manager.users.jon = { pkgs, ... }: {
                        imports = [ ./home.nix
+                                   # ./niri.nix
                                  #  ./nix-doom-emacs.nix
-                                  nix-doom-emacs.hmModule
+                                 # nix-doom-emacs.hmModule
                                  ];
                      };
                    }
@@ -66,7 +72,7 @@
                   #       };
                   #     }
                   #   ];
-                  # };
+                 # };
                  ];
      };
   };

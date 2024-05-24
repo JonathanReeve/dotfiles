@@ -11,7 +11,8 @@ from sys import argv
 import subprocess
 import isbnlib
 
-destFile = "/home/jon/Dokumentujo/Papers/library2.bib"
+papersDir = "/home/jon/Dokumentoj/Papers"
+destFile = f"{papersDir}/library2.bib"
 
 
 def findISBN(soup):
@@ -70,12 +71,12 @@ def main():
     print(f"Key: {key}")
     appendBibtex(bibtex)
     bookLink = findBookLink(soup)
-    pdfDest = f"/home/jon/Dokumentujo/Papers/{key}.pdf"
+    pdfDest = f"{papersDir}/{key}.pdf"
     if bookLink.strip().endswith('pdf'):
-        dest = f"/home/jon/Dokumentujo/Papers/{key}.pdf"
+        dest = f"{papersDir}/{key}.pdf"
         downloadBook(bookLink, dest)
     elif bookLink.strip().endswith('epub'):
-        dest = f"/home/jon/Dokumentujo/Papers/{key}.epub"
+        dest = f"{papersDir}/{key}.epub"
         downloadBook(bookLink, dest)
     else:
         exit(f"Can't download book with this extension.")
@@ -84,4 +85,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # destFile = "/home/jon/Dokumentujo/Papers/library.bib"
+    # destFile = "/home/jon/Dokumentoj/Papers/library.bib"
