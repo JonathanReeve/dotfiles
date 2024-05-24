@@ -43,7 +43,7 @@
     nixosConfigurations.jon-laptop = nixos.lib.nixosSystem {
        system = "x86_64-linux";
        modules = [ ./configuration.nix
-                   stylix.nixosModules.stylix
+                   # stylix.nixosModules.stylix
                    # ./niri.nix
                    # ({...}: { nixpkgs.overlays = [ (import self.inputs.emacs-overlay) ];})
                    ({...}: { nixpkgs.overlays = overlays;})
