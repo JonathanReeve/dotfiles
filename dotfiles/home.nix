@@ -331,6 +331,12 @@ in
     nushell = {
       enable = true;
       configFile.source = ./config.nu;
+      environmentVariables = {
+        PASSWORD_STORE_DIR = "${dokumentoj}/Personal/.password-store";
+      };
+      shellAliases = {
+        upgrade = "nix flake update ${dots}; sudo nixos-rebuild switch --flake ${dots}";
+      };
     };
     starship = {
       enable = true;
@@ -343,7 +349,7 @@ in
       enableCompletion = true;
       enableVteIntegration = true;
       autosuggestion.enable = true;
-
+      syntaxHighlighting.enable = true;
     };
     zoxide = {
       enable = true;
