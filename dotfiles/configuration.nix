@@ -100,6 +100,7 @@
      nix-prefetch-git nix-prefetch-scripts # Help writing .nix files
      cabal2nix # pypi2nix
      nixfmt
+     cachix
 
      # Security
      # yubico-pam yubioath-desktop yubikey-personalization
@@ -126,6 +127,8 @@
      wget
      isync w3m              # Mail
      protonmail-bridge
+     pass # Required by protonmail-bridge
+     protonmail-bridge-gui
 
      gnutls                 # For mail auth
      protonvpn-cli          # VPN
@@ -281,7 +284,8 @@
   # Enable sound.
   sound.enable = true;
   hardware = {
-    firmware = with pkgs; [ firmwareLinuxNonfree ]; 
+    firmware = with pkgs; [ firmwareLinuxNonfree ];
+    keyboard.qmk.enable = true;
     pulseaudio = {
       enable = true;
     };

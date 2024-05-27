@@ -24,14 +24,6 @@ in
   imports = [
     # ./nix-doom-emacs.nix
   ];
-  # modules = [
-  #   niri.homeModules.config {
-  #     programs.niri.settings = {
-  #       outputs."eDP-1".scale = 2.0;
-  #     };
-  #   }
-  # ];
-
   accounts.email = {
     maildirBasePath = "${maildir}";
     accounts = {
@@ -188,9 +180,10 @@ in
         nnoremap l i
       '';
     };
-    # niri = {
-    #   enable = true;
-    # };
+    niri = {
+      enable = true;
+      package = pkgs.niri;
+    };
     nix-index = {
       enable = true;
       enableFishIntegration = true;
@@ -335,7 +328,7 @@ in
         PASSWORD_STORE_DIR = "${dokumentoj}/Personal/.password-store";
       };
       shellAliases = {
-        upgrade = "nix flake update ${dots}; sudo nixos-rebuild switch --flake ${dots}";
+        # upgrade = "nix flake update ${dots}; sudo nixos-rebuild switch --flake ${dots}";
       };
     };
     starship = {
@@ -719,12 +712,11 @@ MimeType=x-scheme-handler/org-protocol;'';
 
   systemd.user = {
     services = {
-      # Disabling this in favor of system-wide service?
-      protonmail = {
-        Unit = { Description = "Protonmail Bridge"; };
-        Service.ExecStart = "${pkgs.protonmail-bridge}/bin/protonmail-bridge --noninteractive";
-        Install.WantedBy = [ "default.target" ];
-      };
+      # protonmail = {
+      #   Unit = { Description = "Protonmail Bridge"; };
+      #   Service.ExecStart = "${pkgs.protonmail-bridge}/bin/protonmail-bridge --noninteractive";
+      #   Install.WantedBy = [ "default.target" ];
+      # };
       dwall = {
         Unit = {
           Description = "Set dynamic wallpaper using Dwall";

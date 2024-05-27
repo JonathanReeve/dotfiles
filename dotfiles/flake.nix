@@ -44,7 +44,6 @@
        system = "x86_64-linux";
        modules = [ ./configuration.nix
                    # stylix.nixosModules.stylix
-                   # ./niri.nix
                    # ({...}: { nixpkgs.overlays = [ (import self.inputs.emacs-overlay) ];})
                    ({...}: { nixpkgs.overlays = overlays;})
                    # ./cachix.nix
@@ -56,23 +55,12 @@
                      home-manager.backupFileExtension = "backup";
                      home-manager.users.jon = { pkgs, ... }: {
                        imports = [ ./home.nix
-                                   # ./niri.nix
+                                   niri.homeModules.niri
                                  #  ./nix-doom-emacs.nix
                                  # nix-doom-emacs.hmModule
                                  ];
                      };
                    }
-                  # homeConfigurations.jon = home-manager.lib.homeManagerConfiguration {
-                  #   inherit pkgs;
-                  #   modules = [
-                  #     niri.homeModules.config
-                  #     {
-                  #       programs.niri.settings = {
-                  #         outputs."eDP-1".scale = 2.0;
-                  #       };
-                  #     }
-                  #   ];
-                 # };
                  ];
      };
   };
