@@ -775,7 +775,7 @@ MimeType=x-scheme-handler/org-protocol;'';
       #   };
       # };
       fonts = { names = [ "Font Awesome" "${font}"]; size = 14.0;};
-      gaps = { outer = 10; inner = 10; };
+      gaps = { outer = 0; inner = 10; };
       input = {
         "type:keyboard" = {
           xkb_layout = "us";
@@ -821,6 +821,7 @@ MimeType=x-scheme-handler/org-protocol;'';
           "Mod1+e" = "focus up";
           "Mod1+i" = "focus right";
           "Mod4+r" = "mode resize";
+          "Mod4+g" = "mode gaps";
           "Mod4+o" = "exec emacsclient --eval '(org-clock-in-last)'";
           "Mod4+Shift+o" = "exec emacsclient --eval '(org-clock-out)'";
           "Mod4+Shift+e" = "exec emacsclient -c";
@@ -830,6 +831,7 @@ MimeType=x-scheme-handler/org-protocol;'';
           "Mod1+Shift+i" = "move right";
           "Mod4+s" = "move scratchpad";
           "Mod4+Shift+s" = "scratchpad show";
+          "Mod4+f" = "fullscreen toggle";
           "Mod4+t" = "floating toggle";
           "Mod4+x" = "layout toggle all";
           "Mod4+v" = "split v";
@@ -845,15 +847,22 @@ MimeType=x-scheme-handler/org-protocol;'';
           # lock screen with Super + L
           # "Mod4+l" = "exec ${lockCmd}";
           # Change wallpaper
-          "Mod4+w" = "exec ${pkgs.pywal}/bin/wal -e -t -i /home/jon/Bildujo/Ekranfonoj -o ${../scripts/pywal-reload.sh}";
+          "Mod4+w" = "exec ${pkgs.pywal}/bin/wal -e -t -i /home/jon/Bildoj/Ekranfonoj -o ${../scripts/pywal-reload.sh}";
           "Mod4+Shift+w" = "exec ${pkgs.pywal}/bin/wal -e -t -i /run/media/jon/systemrestore/.systemrestore/Bildoj/ -o ${../scripts/pywal-reload.sh}";
         };
       modes = {
         resize = {
-          h = "resize shrink width 10 px or 10 ppt";
-          n = "resize grow height 10 px or 10 ppt";
-          e = "resize shrink height 10 px or 10 ppt";
-          i = "resize grow width 10 px or 10 ppt";
+          h = "resize shrink width 2";
+          n = "resize grow height 2";
+          e = "resize shrink height 2";
+          i = "resize grow width 2";
+          Escape = "mode default";
+        };
+        gaps = {
+          h = "gaps inner current set 0";
+          n = "gaps inner current minus 5";
+          e = "gaps inner current plus 5";
+          i = "gaps inner current set 50";
           Escape = "mode default";
         };
       };

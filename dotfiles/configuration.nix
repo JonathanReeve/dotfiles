@@ -293,10 +293,10 @@
     bluetooth.enable = true;
   };
   # home-manager.users.jon = import ./home.nix;
-  powerManagement = {
-    enable = true;
-    powertop.enable = true;
-  };
+  # powerManagement = {
+  #   enable = false;
+  #   powertop.enable = false;
+  # };
 
   services = {
     dictd = {
@@ -329,7 +329,7 @@
     };
 
     # Power management
-    upower.enable = true;
+    # upower.enable = true;
 
     # Plex media server
     plex = {

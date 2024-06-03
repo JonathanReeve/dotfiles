@@ -132,7 +132,12 @@
            :unnarrowed t)
           ("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%u\n"
            :target (file+olp "movies.org" ("watched")
-           ))))
+           ))
+          ("l" "literature note" plain "%?" :target
+           (file+head "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
+            "#+title: ${citar-citekey} (${citar-date}). ${note-title}.\n#+created: %U\n#+last_modified: %U\n\n")
+           :unnarrowed t))
+          )
   (setq org-roam-capture-ref-templates
         '(("r" "ref" plain "%?" :target
            (file+head "${slug}.org" "#+title: ${title}") :unnarrowed t)
@@ -140,7 +145,6 @@
            :target (file+olp "movies.org" ("watched")))
           )
         )
-
 
   (setq org-clock-idle-time 15)
   (setq org-clock-auto-clockout t)
