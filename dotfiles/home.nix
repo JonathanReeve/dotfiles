@@ -120,12 +120,16 @@ in
         modal = true;
       };
     };
-    emacs = {
+    doom-emacs = {
       enable = true;
-      extraPackages = epkgs: [
-        epkgs.mu4e
-      ];
+      doomDir = ./emacs/doom.d;
     };
+    # emacs = {
+    #   enable = true;
+    #   extraPackages = epkgs: [
+    #     epkgs.mu4e
+    #   ];
+    # };
     gnome-terminal = {
       profile.default = {
         allowBold = false;
@@ -662,11 +666,11 @@ in
       pkgs.gnome.gnome-keyring # Same
     ];
     file = {
-      ".config/doom" = {
-      source = ./emacs/doom.d;
-      recursive = true;
-      onChange = "$HOME/.config/emacs/bin/doom sync";
-    };
+      # ".config/doom" = {
+      #   source = ./emacs/doom.d;
+      #   recursive = true;
+      #   onChange = "$HOME/.config/emacs/bin/doom sync";
+      # };
       ".local/share/applications/org-protocol.desktop".text = ''
 [Desktop Entry]
 Name=org-protocol

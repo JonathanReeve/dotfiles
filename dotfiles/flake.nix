@@ -24,7 +24,7 @@
     # emacs-overlay.url = "github:nix-community/emacs-overlay";
     nixos-old.url = "github:nixos/nixpkgs/nixos-23.11";
     stylix.url = "github:danth/stylix";
-
+    nix-doom-emacs-unstraightened.url = "github:marienz/nix-doom-emacs-unstraightened";
   };
   outputs = { self, 
               nixos, 
@@ -32,6 +32,7 @@
               nixos-old,
               home-manager, 
               nix-straight,
+              nix-doom-emacs-unstraightened,
               # nix-doom-emacs,
               niri,
               stylix
@@ -56,6 +57,7 @@
                      home-manager.users.jon = { pkgs, ... }: {
                        imports = [ ./home.nix
                                    niri.homeModules.niri
+                                   nix-doom-emacs-unstraightened.hmModule
                                  #  ./nix-doom-emacs.nix
                                  # nix-doom-emacs.hmModule
                                  ];
