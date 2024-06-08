@@ -45,6 +45,7 @@ in
           };
         };
         realName = "${name}";
+        thunderbird.enable = true;
       };
       columbia = {
         address = "jonathan.reeve@columbia.edu";
@@ -63,6 +64,7 @@ in
           };
         };
         realName = "${name}";
+        thunderbird.enable = true;
       };
       protonmail = {
         address = "jonathan@jonreeve.com";
@@ -97,8 +99,18 @@ in
             ExpireUnread = "yes";
           };
         };
+        thunderbird.enable = true;
         realName = "${name}";
       };
+    };
+  };
+  fonts.fontconfig = {
+    enable = true;
+    defaultFonts = {
+      emoji = [ "Noto Color Emoji" ];
+      monospace = [ font ] ;
+      sansSerif = [ "Liberation Sans" ];
+      serif = [ "Liberation Serif" ];
     };
   };
   programs = {
@@ -337,6 +349,12 @@ in
       enableNushellIntegration = true;
       enableZshIntegration = true;
     };
+    thunderbird = {
+      enable = true;
+      profiles.default = {
+        isDefault = true;
+      };
+    };
     zsh = {
       enable = true;
       enableCompletion = true;
@@ -347,6 +365,7 @@ in
     zoxide = {
       enable = true;
       enableNushellIntegration = true;
+
       enableZshIntegration = true;
     };
     termite = {
@@ -665,7 +684,7 @@ in
       ".config/doom" = {
       source = ./emacs/doom.d;
       recursive = true;
-      onChange = "$HOME/.config/emacs/bin/doom sync";
+      # onChange = "$HOME/.config/emacs/bin/doom sync";
     };
       ".local/share/applications/org-protocol.desktop".text = ''
 [Desktop Entry]
@@ -707,7 +726,7 @@ MimeType=x-scheme-handler/org-protocol;'';
     # sessionVariables.LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
     # sessionVariables.LC_ALL = "eo.UTF-8";
     username = "jon";
-    stateVersion = "22.05";
+    stateVersion = "24.05";
   };
 
   systemd.user = {
@@ -748,32 +767,12 @@ MimeType=x-scheme-handler/org-protocol;'';
   };
   wayland.windowManager.sway = {
     enable = true;
-    extraConfigEarly = ''include "${dots}/colors-sway"'';
+    extraConfigEarly = ''
+      include "${dots}/colors-sway"
+      include "/home/jon/.cache/wal/colors-sway"
+    '';
     config = {
       bars = [];
-      # colors = {
-      #   focused = {
-      #     background = "$color2";
-      #     border = "$color2";
-      #     text = "$foreground";
-      #     indicator = "$color2";
-      #     childBorder = "$color2";
-      #   };
-      #   focusedInactive = {
-      #     background = "$color1";
-      #     text = "$foreground";
-      #     border = "$color1";
-      #     indicator = "$color1";
-      #     childBorder = "$color1";
-      #   };
-      #   unfocused = {
-      #     background = "$color1";
-      #     border = "$color2";
-      #     text = "$foreground";
-      #     indicator = "$color1";
-      #     childBorder = "$color1";
-      #   };
-      # };
       fonts = { names = [ "Font Awesome" "${font}"]; size = 14.0;};
       gaps = { outer = 0; inner = 10; };
       input = {
@@ -870,7 +869,7 @@ MimeType=x-scheme-handler/org-protocol;'';
         # Fix for slow GTK applications; see https://github.com/swaywm/sway/wiki#gtk-applications-take-20-seconds-to-start
         { command = "exec systemctl --user import-environment"; }
         # { command = "exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK"; }
-        { command = "exec swaybg -i ~/Bildujo/Ekranfonoj/yz6ggt7m18l41.png -o '*' -m fill"; }
+        { command = "exec swaybg -i ~/Bildujo/Ekranfonoj/nixos-wallpaper.png -o '*' -m fill"; }
         { command = "exec ${pkgs.pywal}/bin/wal --theme base16-nord"; }
         { command = "exec megasync"; }
         { command = "exec waybar"; }
@@ -880,6 +879,31 @@ MimeType=x-scheme-handler/org-protocol;'';
       window.border = 10;
     };
     extraConfig = ''
+      set $wallpaper /home/jon/Bildujo/Ekranfonoj/nixos-wallpaper.png
+
+      set $background #2E3440
+      set $foreground #E5E9F0
+
+      set $color0 #2E3440
+      set $color1 #88C0D0
+      set $color2 #BF616A
+      set $color3 #5E81AC
+      set $color4 #EBCB8B
+      set $color5 #A3BE8C
+      set $color6 #D08770
+      set $color7 #E5E9F0
+      set $color8 #4C566A
+      set $color9 #88C0D0
+      set $color10 #BF616A
+      set $color11 #5E81AC
+      set $color12 #EBCB8B
+      set $color13 #A3BE8C
+      set $color14 #D08770
+      set $color15 #8FBCBB
+
+      client.focused $color0 $background $foreground $color7 $background
+      include "/home/jon/.cache/wal/colors-sway"
+
       # Clamshell mode
       set $laptop eDP-1
       bindswitch --reload --locked lid:on output $laptop disable

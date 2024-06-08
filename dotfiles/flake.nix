@@ -37,7 +37,7 @@
               stylix
             }:
     let overlays = [
-      # (final: prev: {mu = nixos-old.legacyPackages.${prev.system}.mu;})
+      (final: prev: {mu = nixos-old.legacyPackages.${prev.system}.mu;})
     ];
     in {
     nixosConfigurations.jon-laptop = nixos.lib.nixosSystem {

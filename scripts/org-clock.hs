@@ -9,7 +9,7 @@ import System.Posix.Env
 import Data.Maybe
 
 getClock :: Text
-getClock = "/run/current-system/sw/bin/emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)'"
+getClock = "emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)'"
 
 out :: Shell Line
 out = inshell getClock empty
@@ -29,7 +29,7 @@ main = do
     (ExitSuccess, "-1\n") -> TIO.putStrLn $ "Protocolu!\nProtocolu!\nprotocolu"
     -- Emacs is on and clocking. Print the clock value.
     (ExitSuccess, out) -> TIO.putStrLn $ clockstr <> "\n" <> clockstr <> "\nclock" where
-      clockstr = T.drop 1 $ T.splitOn "\"" out !! 1
+      clockstr = T.splitOn "\"" out !! 1
     -- Emacs is not on.
     (ExitFailure err, _) -> do
       TIO.putStrLn $ "Ensalutu!\nEnsalutu\nensalutu" -- <> repr err
