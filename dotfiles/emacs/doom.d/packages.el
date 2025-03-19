@@ -34,8 +34,8 @@
 (package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
 
 (package! org-ref)
-(package! org-roam-bibtex
- :recipe (:host github :repo "org-roam/org-roam-bibtex"))
+;; (package! org-roam-bibtex
+;;  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
 
 ;; (package! org-cite-csl-activate :recipe (:host github :repo "andras-simonyi/org-cite-csl-activate" :files ("*.el")))
 
@@ -68,3 +68,7 @@
 ;; (package! evil-colemak-basics) ; colemak remaps
 
 (package! quarto-mode :recipe (:host github :repo "quarto-dev/quarto-emacs" ))
+
+;; (package! mu4e-compat :recipe (:host github :repo "tecosaur/mu4e-compat"))
+
+;; (package! org-msg :recipe (:host github :repo "emacsomancer/org-msg"))

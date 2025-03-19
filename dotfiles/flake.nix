@@ -16,7 +16,7 @@
         nix-straight.follows = "nix-straight";
       };
     };
-    niri.url = "github:sodiboo/niri-flake";
+    # niri.url = "github:sodiboo/niri-flake";
     # Re-enable this after https://github.com/nix-community/nix-doom-emacs/issues/409 is fixed
     # nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
     # nixos-hardware.url = github:NixOS/nixos-hardware/master;
@@ -29,7 +29,7 @@
     # emacs-overlay.url = "github:nix-community/emacs-overlay";
   };
   outputs = { self, nixos, nixos-hardware,
-              home-manager, nix-straight, nix-doom-emacs, nixos-old, niri }:
+              home-manager, nix-straight, nix-doom-emacs, nixos-old }:
     let overlays = [
       # (final: prev: {mu = nixos-old.legacyPackages.${prev.system}.mu;})
     ];
@@ -57,17 +57,6 @@
                                  ];
                      };
                    }
-                  # homeConfigurations.jon = home-manager.lib.homeManagerConfiguration {
-                  #   inherit pkgs;
-                  #   modules = [
-                  #     niri.homeModules.config
-                  #     {
-                  #       programs.niri.settings = {
-                  #         outputs."eDP-1".scale = 2.0;
-                  #       };
-                  #     }
-                  #   ];
-                  # };
                  ];
      };
   };

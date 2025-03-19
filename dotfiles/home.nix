@@ -114,6 +114,7 @@ in
       settings = {
         font.normal.family = "${font}";
         font.size = 14;
+        terminal.shell = "${pkgs.nushell}/bin/nu";
         window.opacity = 0.9;
         colors.transparent_background_colors = true;
       };
@@ -168,7 +169,7 @@ in
     neovim = {
       enable = true;
       # package = pkgs.neovim;
-      plugins = with pkgs.vimPlugins; [ spacevim ];
+      plugins = with pkgs.vimPlugins; [ ];
       vimAlias = true;
       extraConfig =
         ''
@@ -643,7 +644,6 @@ in
       # neovim-nightly
       #
       pkgs.pass # This is necessary for protonmail-bridge
-      pkgs.gnome.gnome-keyring # Same
     ];
     file = {
       ".config/doom" = {

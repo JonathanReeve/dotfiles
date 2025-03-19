@@ -25,7 +25,6 @@
        pip
        # poetry-dynamic-versioning
        numpy
-       nose
        tldextract # required by qute-pass
      ]))
   ];

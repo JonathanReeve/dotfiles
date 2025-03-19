@@ -4,7 +4,7 @@
   environment.systemPackages = with pkgs; [
      deja-dup               # Backups
      gthumb                 # Photos
-     gnome.gnome-tweaks
+     gnome-tweaks
      # gnome.gnome-boxes
      #gnomeExtensions.appindicator
      #gnomeExtensions.caffeine
@@ -23,7 +23,7 @@
      materia-theme
      equilux-theme
      numix-gtk-theme
-     gnome.gnome-themes-extra
+     gnome-themes-extra
      arc-icon-theme
      tela-icon-theme
      faba-icon-theme
@@ -34,9 +34,8 @@
   services.gnome = {
       gnome-keyring.enable = true;
       gnome-online-accounts.enable = true;
-      gnome-online-miners.enable = true;
-      tracker.enable = true;
-      tracker-miners.enable = true;
+      tinysparql.enable = true;
+      localsearch.enable = true;
     };
   services.xserver = {
       displayManager.gdm.enable = true;

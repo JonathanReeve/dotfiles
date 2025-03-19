@@ -24,28 +24,36 @@
 ;; Default spelling dictionary is English
 (setq ispell-dictionary "english")
 
-(after! spell-fu
-  (add-hook 'spell-fu-mode-hook
-            (lambda ()
-              (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "en"))
-              (spell-fu-dictionary-add
-               (spell-fu-get-personal-dictionary "en-personal" "/home/jon/Dotfiles/scripts/aspell.en.pws")))))
+;; (after! spell-fu
+;;   (add-hook 'spell-fu-mode-hook
+;;             (lambda ()
+;;               (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "en"))
+;;               (spell-fu-dictionary-add
+;;                (spell-fu-get-personal-dictionary "en-personal" "/home/jon/Dotfiles/scripts/aspell.en.pws")))))
 
 ;; Bibliography
 
 ;; Citar
 ;; See https://github.com/hlissner/doom-emacs/blob/4612b39695405f7238dd3da0d4fd6d3a5cdd93d6/modules/tools/biblio/README.org
-(setq! citar-bibliography '("~/Dokumentujo/Papers/library.bib" "~/Dokumentujo/Papers/library2.bib")
-       citar-library-paths '("~/Dokumentujo/Papers/")
-       citar-notes-paths '("~/Dokumentujo/Org/Roam/"))
+;; (setq! citar-bibliography '("~/Dokumentujo/Papers/library.bib" "~/Dokumentujo/Papers/library2.bib" "~/Dokumentujo/Org/Roam/shared/library.bib")
+;;        citar-library-paths '("~/Dokumentujo/Papers/" "~/Dokumentujo/Org/Roam/shared/papers")
+;;        citar-notes-paths '("~/Dokumentujo/Org/Roam/" "~/Dokumentujo/Org/Roam/shared"))
 
-(setq! bibtex-completion-bibliography '("~/Dokumentujo/Papers/library.bib" "~/Dokumentujo/Papers/library2.bib")
+(setq! citar-bibliography '("~/Dokumentujo/Papers/library2.bib" "~/Dokumentujo/Org/Roam/shared/library.bib")
+       citar-library-paths '("~/Dokumentujo/Papers/" "~/Dokumentujo/Org/Roam/shared/papers")
+       citar-notes-paths '("~/Dokumentujo/Org/Roam/" "~/Dokumentujo/Org/Roam/shared"))
+
+;; (setq! bibtex-completion-bibliography '("~/Dokumentujo/Papers/library.bib" "~/Dokumentujo/Papers/library2.bib" "~/Dokumentujo/Org/Roam/shared/library.bib")
+;;        bibtex-completion-notes-path "~/Dokumentujo/Org/Roam/"
+;;        bibtex-completion-library-path "~/Dokumentujo/Papers/")
+
+(setq! bibtex-completion-bibliography '("~/Dokumentujo/Papers/library2.bib" "~/Dokumentujo/Org/Roam/shared/library.bib")
        bibtex-completion-notes-path "~/Dokumentujo/Org/Roam/"
        bibtex-completion-library-path "~/Dokumentujo/Papers/")
 
 ;; Org Mode
 (after! org
-  (org-indent-mode)
+  ;; (org-indent-mode)
   (setq org-directory "~/Dokumentujo/Org"
         org-startup-indented t
         org-startup-folded t
@@ -131,7 +139,40 @@
            :unnarrowed t)
           ("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%u\n"
            :target (file+olp "movies.org" ("watched")
-           ))))
+           ))
+          ("b" "literature note" plain "%?" :target (file+head
+            "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
+            "#+title: ${citar-citekey} (${citar-date}). ${note-title}.
+#+created: %U
+#+last-modified: %U
+
+- keywords ::
+- related ::
+
+* ${note-title}
+ :PROPERTIES:
+ :Custom_ID: ${citar-citekey}
+ :URL: ${citar-url}
+ :AUTHOR: ${citar-author}
+ :NOTER_DOCUMENT: ${citar-file}
+ :NOTER_PAGE:
+ :END:\n
+"
+            )
+           :unarrowed t)
+          ))
+
+  (setq citar-org-roam-template-fields
+        '((:citar-title "title")
+          (:citar-author "author" "editor")
+          (:citar-date "date" "year" "issued")
+          (:citar-pages "pages")
+          (:citar-file "file")
+          (:citar-keywords "keywords")
+          (:citar-url "url")
+          (:citar-type "=type=")
+          ))
+
   (setq org-roam-capture-ref-templates
         '(("r" "ref" plain "%?" :target
            (file+head "${slug}.org" "#+title: ${title}") :unnarrowed t)
@@ -145,45 +186,6 @@
   (setq org-clock-auto-clockout t)
   (setq org-clock-auto-clockout-timer 20)
 
-  (require 'org-roam-bibtex)
-  (use-package! org-roam-bibtex
-    :when (featurep! :lang org +roam2)
-    :after org
-    :preface
-    ;; if the user has not set a template mechanism set a reasonable one of them
-    ;; The package already tests for nil itself so we define a dummy tester
-    (defvar orb-preformat-keywords
-      '("title" "url" "file" "author-or-editor" "keywords" "citekey" "pdf"))
-    ;;:hook (org-roam-mode . org-roam-bibtex-mode)
-    :custom
-    (orb-note-actions-interface 'default)
-    :config
-    (setq orb-insert-interface 'generic)
-    ;; (setq orb-roam-ref-format 'org-ref-v2)
-    (setq orb-process-file-keyword t
-          orb-file-field-extensions '("pdf"))
-
-    (add-to-list 'org-roam-capture-templates
-                 '("b" "Bibliography note" plain
-                   "%?
-- keywords :: %^{keywords}
-- related ::
-
-* %^{title}
-:PROPERTIES:
-:Custom_ID: %^{citekey}
-:URL: %^{url}
-:AUTHOR: %^{author-or-editor}
-:NOTER_DOCUMENT: %^{file}
-:NOTER_PAGE:
-:END:\n\n"
-                   :if-new (file+head "${citekey}.org" ":PROPERTIES:
-:END:
-#+TITLE: ${citekey}: ${title}\n")
-                   :unnarrowed t))
-    (require 'org-ref))
-  (org-roam-bibtex-mode)
-
   (setq citar-templates
         '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
          (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords keywords:*}")
@@ -196,9 +198,6 @@
   ;;         (link ,(all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01) . " ")))
   ;; (setq citar-symbol-separator "  ")
 
-  (setq citar-file-open-note-function 'orb-citar-edit-note)
-  ;; (setq citar-file-open-note-function 'citar-file-open-notes-default-org)
-
   ;; Configure org-roam buffer display.
   ;; See https://www.orgroam.com/manual.html#Navigating-the-Org_002droam-Buffer
   (add-to-list 'display-buffer-alist
@@ -207,9 +206,6 @@
                  (direction . right)
                  (window-width . 0.33)
                  (window-height . fit-window-to-buffer)))
-
-  (use-package! websocket
-    :after org-roam)
 
   (use-package! org-roam-ui
     :after org-roam ;; or :after org
@@ -225,6 +221,12 @@
           org-roam-ui-open-on-start nil)
     )
 
+  (use-package! citar-org-roam
+    :after (citar org-roam)
+    :config (citar-org-roam-mode)
+      (setq citar-org-roam-capture-template-key "b")
+      )
+
   ;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
   ;; makes it easier to distinguish from other org buffers.
   ;; (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
@@ -233,145 +235,145 @@
   ;; Code: https://gist.github.com/d12frosted/a60e8ccb9aceba031af243dff0d19b2e
   ;; Original blog post: https://d12frosted.io/posts/2021-01-16-task-management-with-roam-vol5.html
 
-(defun vulpea-project-p ()
-  "Return non-nil if current buffer has any todo entry.
+;; (defun vulpea-project-p ()
+;;   "Return non-nil if current buffer has any todo entry.
 
-TODO entries marked as done are ignored, meaning the this
-function returns nil if current buffer contains only completed
-tasks."
-  (seq-find                                 ; (3)
-   (lambda (type)
-     (eq type 'todo))
-   (org-element-map                         ; (2)
-       (org-element-parse-buffer 'headline) ; (1)
-       'headline
-     (lambda (h)
-       (org-element-property :todo-type h)))))
+;; TODO entries marked as done are ignored, meaning the this
+;; function returns nil if current buffer contains only completed
+;; tasks."
+;;   (seq-find                                 ; (3)
+;;    (lambda (type)
+;;      (eq type 'todo))
+;;    (org-element-map                         ; (2)
+;;        (org-element-parse-buffer 'headline) ; (1)
+;;        'headline
+;;      (lambda (h)
+;;        (org-element-property :todo-type h)))))
 
-(defun vulpea-project-update-tag ()
-    "Update PROJECT tag in the current buffer."
-    (when (and (not (active-minibuffer-window))
-               (vulpea-buffer-p))
-      (save-excursion
-        (goto-char (point-min))
-        (let* ((tags (vulpea-buffer-tags-get))
-               (original-tags tags))
-          (if (vulpea-project-p)
-              (setq tags (cons "project" tags))
-            (setq tags (remove "project" tags)))
+;; (defun vulpea-project-update-tag ()
+;;     "Update PROJECT tag in the current buffer."
+;;     (when (and (not (active-minibuffer-window))
+;;                (vulpea-buffer-p))
+;;       (save-excursion
+;;         (goto-char (point-min))
+;;         (let* ((tags (vulpea-buffer-tags-get))
+;;                (original-tags tags))
+;;           (if (vulpea-project-p)
+;;               (setq tags (cons "project" tags))
+;;             (setq tags (remove "project" tags)))
 
-          ;; cleanup duplicates
-          (setq tags (seq-uniq tags))
+;;           ;; cleanup duplicates
+;;           (setq tags (seq-uniq tags))
 
-          ;; update tags if changed
-          (when (or (seq-difference tags original-tags)
-                    (seq-difference original-tags tags))
-            (apply #'vulpea-buffer-tags-set tags))))))
+;;           ;; update tags if changed
+;;           (when (or (seq-difference tags original-tags)
+;;                     (seq-difference original-tags tags))
+;;             (apply #'vulpea-buffer-tags-set tags))))))
 
-(defun vulpea-buffer-p ()
-  "Return non-nil if the currently visited buffer is a note."
-  (and buffer-file-name
-       (string-prefix-p
-        (expand-file-name (file-name-as-directory org-roam-directory))
-        (file-name-directory buffer-file-name))))
+;; (defun vulpea-buffer-p ()
+;;   "Return non-nil if the currently visited buffer is a note."
+;;   (and buffer-file-name
+;;        (string-prefix-p
+;;         (expand-file-name (file-name-as-directory org-roam-directory))
+;;         (file-name-directory buffer-file-name))))
 
-(defun vulpea-project-files ()
-    "Return a list of note files containing 'project' tag." ;
-    (seq-uniq
-     (seq-map
-      #'car
-      (org-roam-db-query
-       [:select [nodes:file]
-        :from tags
-        :left-join nodes
-        :on (= tags:node-id nodes:id)
-        :where (like tag (quote "%\"project\"%"))]))))
+;; (defun vulpea-project-files ()
+;;     "Return a list of note files containing 'project' tag." ;
+;;     (seq-uniq
+;;      (seq-map
+;;       #'car
+;;       (org-roam-db-query
+;;        [:select [nodes:file]
+;;         :from tags
+;;         :left-join nodes
+;;         :on (= tags:node-id nodes:id)
+;;         :where (like tag (quote "%\"project\"%"))]))))
 
-(defun vulpea-agenda-files-update (&rest _)
-  "Update the value of `org-agenda-files'."
-  (setq org-agenda-files (delete-dups (append org-agenda-files (vulpea-project-files)))))
+;; (defun vulpea-agenda-files-update (&rest _)
+;;   "Update the value of `org-agenda-files'."
+;;   (setq org-agenda-files (delete-dups (append org-agenda-files (vulpea-project-files)))))
 
-;; (add-hook 'find-file-hook #'vulpea-project-update-tag)
-(add-hook 'before-save-hook #'vulpea-project-update-tag)
-(add-hook 'org-agenda-mode-hook #'vulpea-agenda-files-update)
-;; (remove-hook 'org-agenda-mode-hook #'vulpea-agenda-files-update)
+;; ;; (add-hook 'find-file-hook #'vulpea-project-update-tag)
+;; (add-hook 'before-save-hook #'vulpea-project-update-tag)
+;; (add-hook 'org-agenda-mode-hook #'vulpea-agenda-files-update)
+;; ;; (remove-hook 'org-agenda-mode-hook #'vulpea-agenda-files-update)
 
-;; functions borrowed from `vulpea' library
-;; https://github.com/d12frosted/vulpea/blob/6a735c34f1f64e1f70da77989e9ce8da7864e5ff/vulpea-buffer.el
+;; ;; functions borrowed from `vulpea' library
+;; ;; https://github.com/d12frosted/vulpea/blob/6a735c34f1f64e1f70da77989e9ce8da7864e5ff/vulpea-buffer.el
 
-(defun vulpea-buffer-tags-get ()
-  "Return filetags value in current buffer."
-  (vulpea-buffer-prop-get-list "filetags" "[ :]"))
+;; (defun vulpea-buffer-tags-get ()
+;;   "Return filetags value in current buffer."
+;;   (vulpea-buffer-prop-get-list "filetags" "[ :]"))
 
-(defun vulpea-buffer-tags-set (&rest tags)
-  "Set TAGS in current buffer.
-If filetags value is already set, replace it."
-  (if tags
-      (vulpea-buffer-prop-set
-       "filetags" (concat ":" (string-join tags ":") ":"))
-    (vulpea-buffer-prop-remove "filetags")))
+;; (defun vulpea-buffer-tags-set (&rest tags)
+;;   "Set TAGS in current buffer.
+;; If filetags value is already set, replace it."
+;;   (if tags
+;;       (vulpea-buffer-prop-set
+;;        "filetags" (concat ":" (string-join tags ":") ":"))
+;;     (vulpea-buffer-prop-remove "filetags")))
 
-(defun vulpea-buffer-tags-add (tag)
-  "Add a TAG to filetags in current buffer."
-  (let* ((tags (vulpea-buffer-tags-get))
-         (tags (append tags (list tag))))
-    (apply #'vulpea-buffer-tags-set tags)))
+;; (defun vulpea-buffer-tags-add (tag)
+;;   "Add a TAG to filetags in current buffer."
+;;   (let* ((tags (vulpea-buffer-tags-get))
+;;          (tags (append tags (list tag))))
+;;     (apply #'vulpea-buffer-tags-set tags)))
 
-(defun vulpea-buffer-tags-remove (tag)
-  "Remove a TAG from filetags in current buffer."
-  (let* ((tags (vulpea-buffer-tags-get))
-         (tags (delete tag tags)))
-    (apply #'vulpea-buffer-tags-set tags)))
+;; (defun vulpea-buffer-tags-remove (tag)
+;;   "Remove a TAG from filetags in current buffer."
+;;   (let* ((tags (vulpea-buffer-tags-get))
+;;          (tags (delete tag tags)))
+;;     (apply #'vulpea-buffer-tags-set tags)))
 
-(defun vulpea-buffer-prop-set (name value)
-  "Set a file property called NAME to VALUE in buffer file.
-If the property is already set, replace its value."
-  (setq name (downcase name))
-  (org-with-point-at 1
-    (let ((case-fold-search t))
-      (if (re-search-forward (concat "^#\\+" name ":\\(.*\\)")
-                             (point-max) t)
-          (replace-match (concat "#+" name ": " value) 'fixedcase)
-        (while (and (not (eobp))
-                    (looking-at "^[#:]"))
-          (if (save-excursion (end-of-line) (eobp))
-              (progn
-                (end-of-line)
-                (insert "\n"))
-            (forward-line)
-            (beginning-of-line)))
-        (insert "#+" name ": " value "\n")))))
+;; (defun vulpea-buffer-prop-set (name value)
+;;   "Set a file property called NAME to VALUE in buffer file.
+;; If the property is already set, replace its value."
+;;   (setq name (downcase name))
+;;   (org-with-point-at 1
+;;     (let ((case-fold-search t))
+;;       (if (re-search-forward (concat "^#\\+" name ":\\(.*\\)")
+;;                              (point-max) t)
+;;           (replace-match (concat "#+" name ": " value) 'fixedcase)
+;;         (while (and (not (eobp))
+;;                     (looking-at "^[#:]"))
+;;           (if (save-excursion (end-of-line) (eobp))
+;;               (progn
+;;                 (end-of-line)
+;;                 (insert "\n"))
+;;             (forward-line)
+;;             (beginning-of-line)))
+;;         (insert "#+" name ": " value "\n")))))
 
-(defun vulpea-buffer-prop-set-list (name values &optional separators)
-  "Set a file property called NAME to VALUES in current buffer.
-VALUES are quoted and combined into single string using
-`combine-and-quote-strings'.
-If SEPARATORS is non-nil, it should be a regular expression
-matching text that separates, but is not part of, the substrings.
-If nil it defaults to `split-string-default-separators', normally
-\"[ \f\t\n\r\v]+\", and OMIT-NULLS is forced to t.
-If the property is already set, replace its value."
-  (vulpea-buffer-prop-set
-   name (combine-and-quote-strings values separators)))
+;; (defun vulpea-buffer-prop-set-list (name values &optional separators)
+;;   "Set a file property called NAME to VALUES in current buffer.
+;; VALUES are quoted and combined into single string using
+;; `combine-and-quote-strings'.
+;; If SEPARATORS is non-nil, it should be a regular expression
+;; matching text that separates, but is not part of, the substrings.
+;; If nil it defaults to `split-string-default-separators', normally
+;; \"[ \f\t\n\r\v]+\", and OMIT-NULLS is forced to t.
+;; If the property is already set, replace its value."
+;;   (vulpea-buffer-prop-set
+;;    name (combine-and-quote-strings values separators)))
 
-(defun vulpea-buffer-prop-get (name)
-  "Get a buffer property called NAME as a string."
-  (org-with-point-at 1
-    (when (re-search-forward (concat "^#\\+" name ": \\(.*\\)")
-                             (point-max) t)
-      (buffer-substring-no-properties
-       (match-beginning 1)
-       (match-end 1)))))
+;; (defun vulpea-buffer-prop-get (name)
+;;   "Get a buffer property called NAME as a string."
+;;   (org-with-point-at 1
+;;     (when (re-search-forward (concat "^#\\+" name ": \\(.*\\)")
+;;                              (point-max) t)
+;;       (buffer-substring-no-properties
+;;        (match-beginning 1)
+;;        (match-end 1)))))
 
-(defun vulpea-buffer-prop-get-list (name &optional separators)
-  "Get a buffer property NAME as a list using SEPARATORS.
-If SEPARATORS is non-nil, it should be a regular expression
-matching text that separates, but is not part of, the substrings.
-If nil it defaults to `split-string-default-separators', normally
-\"[ \f\t\n\r\v]+\", and OMIT-NULLS is forced to t."
-  (let ((value (vulpea-buffer-prop-get name)))
-    (when (and value (not (string-empty-p value)))
-      (split-string-and-unquote value separators))))
+;; (defun vulpea-buffer-prop-get-list (name &optional separators)
+;;   "Get a buffer property NAME as a list using SEPARATORS.
+;; If SEPARATORS is non-nil, it should be a regular expression
+;; matching text that separates, but is not part of, the substrings.
+;; If nil it defaults to `split-string-default-separators', normally
+;; \"[ \f\t\n\r\v]+\", and OMIT-NULLS is forced to t."
+;;   (let ((value (vulpea-buffer-prop-get name)))
+;;     (when (and value (not (string-empty-p value)))
+;;       (split-string-and-unquote value separators))))
 
   ;; (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
 
@@ -404,12 +406,15 @@ If nil it defaults to `split-string-default-separators', normally
 
   (setq org-attach-store-link-p 'attached)
 
-  (add-to-list 'org-latex-classes
-      '("letter"
-      "\\documentclass{letter}"
-      ("\\section{%s}" . "\\section*{%s}")
-      ("\\subsection{%s}" . "\\subsection*{%s}")
-      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+  ;; (add-to-list 'org-latex-classes
+  ;;     '("letter"
+  ;;     "\\documentclass{letter}"
+  ;;     ("\\section{%s}" . "\\section*{%s}")
+  ;;     ("\\subsection{%s}" . "\\subsection*{%s}")
+  ;;     ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+
+  (setq search-invisible nil)
+  (setq isearch-invisible nil)
 ) ;; End of Org block
 
 ;; (use-package! org-clock-reminder
@@ -492,15 +497,15 @@ If nil it defaults to `split-string-default-separators', normally
           ("maildir:/columbia/Inbox NOT flag:trashed AND NOT flag:replied" "Columbia" ?c)
           ("maildir:/columbia/Inbox OR maildir:/gmail/Inbox OR maildir:/personal/Inbox OR maildir:/protonmail/Inbox NOT flag:trashed" "All" ?a)
           ("maildir:/gmail/Inbox NOT flag:trashed AND NOT flag:replied" "Gmail" ?g)
-          ("maildir:/gmail/Lists OR maildir:/protonmail/Lists NOT flag:trashed AND NOT flag:replied" "Lists" ?l)
+          ("maildir:/gmail/Lists OR maildir:/protonmail/Lists OR flag:Lists NOT flag:trashed AND NOT flag:replied" "Lists" ?l)
           ("maildir:/personal/Inbox NOT flag:trashed AND NOT flag:replied" "Personal" ?p)
           ("maildir:/columbia/Homework NOT flag:trashed" "Homework" ?h)
           ))
   ;; Only alert interesting emails
   (setq mu4e-alert-interesting-mail-query "maildir:/columbia/Inbox OR maildir:/gmail/Inbox OR maildir:/personal/Inbox OR maildir:/protonmail/Inbox NOT flag:trashed")
-  (setq mu4e-headers-list-mark       (cons "l" (+mu4e-normalised-icon "sitemap" :set "faicon"))
-        mu4e-headers-personal-mark   (cons "p" (+mu4e-normalised-icon "user"))
-        mu4e-headers-calendar-mark   (cons "c" (+mu4e-normalised-icon "calendar")))
+  ;; (setq mu4e-headers-list-mark       (cons "l" (+mu4e-normalised-icon "sitemap" :set "faicon"))
+  ;;       mu4e-headers-personal-mark   (cons "p" (+mu4e-normalised-icon "user"))
+  ;;       mu4e-headers-calendar-mark   (cons "c" (+mu4e-normalised-icon "calendar")))
 )
   ;; (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
   ;; (setq mu4e-html2text-command "w3m -T text/html")
@@ -704,3 +709,7 @@ If nil it defaults to `split-string-default-separators', normally
 ;; Word wrap issues; possible fix for https://github.com/doomemacs/doomemacs/issues/7133
 (setq +global-word-wrap-mode 'nil)
 (setq font-lock-global-modes '(not mu4e-compose-mode))
+
+;; (require 'mu4e-compat)
+;; (mu4e-compat-define-aliases-backwards)
+(setq +mu4e-compose-org-msg-toggle-next 1)

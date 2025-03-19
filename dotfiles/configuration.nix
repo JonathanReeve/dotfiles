@@ -11,8 +11,9 @@
       ./gnome.nix
       ./hardware-configuration.nix
       ./python.nix
-      ./protonvpn.nix
+      # ./protonvpn.nix
       # ./R.nix
+      #
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -80,7 +81,7 @@
     font-awesome_5
     fira-code
     noto-fonts
-    noto-fonts-cjk
+    noto-fonts-cjk-sans
     noto-fonts-emoji
     fira-code
     fira-code-symbols
@@ -103,7 +104,7 @@
      nix-index              # Indexing files for nix-locate
      nix-prefetch-git nix-prefetch-scripts # Help writing .nix files
      cabal2nix # pypi2nix
-     nixfmt
+     devenv
 
      # Security
      # yubico-pam yubioath-desktop yubikey-personalization
@@ -138,7 +139,7 @@
      #direnv                # Essential project management thingy
      graphviz               # Simple charts
      xclip                  # Clipboard on the command line
-     x11idle
+     #x11idle
      dict                   # Dictionary
 
      pywal
@@ -226,7 +227,7 @@
      #qutebrowser            # Web browser
      chromium               # Another web browser
      firefox-wayland        # Yes, a third
-     nyxt                   # Why stop now?
+     # nyxt                   # Why stop now?
 
      # Ugh
      zoom-us
@@ -282,14 +283,11 @@
   };
 
   # Enable sound.
-  sound.enable = true;
   hardware = {
     firmware = with pkgs; [ firmwareLinuxNonfree ]; 
-    pulseaudio = {
-      enable = true;
-    };
     sensor.iio.enable = true;
     bluetooth.enable = true;
+    pulseaudio.enable = false;
   };
   # home-manager.users.jon = import ./home.nix;
   powerManagement = {
@@ -338,13 +336,13 @@
     };
 
     # VPN
-    protonvpn = {
-      enable = true;
-      endpoint = {
-        publicKey = "11ScmFnWCAFMI6tdc6/wO+P7biBc/5foA7WayNXxSG0=";
-        ip = "146.70.147.98";
-      };
-    };
+    # protonvpn = {
+    #   enable = true;
+    #   endpoint = {
+    #     publicKey = "11ScmFnWCAFMI6tdc6/wO+P7biBc/5foA7WayNXxSG0=";
+    #     ip = "146.70.147.98";
+    #   };
+    # };
     tailscale.enable = true;
 
     # Security
@@ -359,7 +357,7 @@
       enable = true;
       # Enable touchpad support.
       # Keyboard settings
-      layout = "us";
+      xkb.layout = "us";
       xkb.variant = "colemak";
       desktopManager.session = [
         { name = "home-manager";
@@ -383,9 +381,8 @@
   # Shell
   programs = {
     fish.enable = true;
-    chromium = {
-      enable = true;
-    };
+    zsh.enable = true;
+    chromium.enable = true;
     gnupg.agent = { enable = true; enableSSHSupport = true; };
     # hyprland.enable = true;
     sway = {
@@ -398,14 +395,14 @@
     jon =
       { isNormalUser = true;
         home = "/home/jon";
-        shell = pkgs.fish;
+        shell = pkgs.zsh;
         description = "Jonathan Reeve";
         extraGroups = [ "audio" "wheel" "networkmanager" "tty" "dialout" "input" "docker" "video"];
       };
     systemrestore =
       { isNormalUser = true;
         home = "/home/systemrestore";
-        shell = pkgs.fish;
+        shell = pkgs.zsh;
         description = "System Restore";
         extraGroups = [ "wheel" "networkmanager" ];
       };
@@ -422,7 +419,6 @@
     #   # interactive = true;
     # };
     };
-
   # systemd.user.services.protonmail = {
   #   description = "Protonmail Bridge";
   #   enable = true;
@@ -436,7 +432,7 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "21.03"; # Did you read the comment?
+  system.stateVersion = "24.11"; # Did you read the comment?
 
   # virtualisation.anbox.enable = true;
   virtualisation.docker.enable = true;
