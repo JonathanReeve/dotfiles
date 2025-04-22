@@ -5,6 +5,7 @@
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   # disabledModules = [ "targets/darwin/linkapps.nix" ];
+  imports = [ ./copy-apps.nix ];
   home = {
     username = "jon";
     file.".inputrc".text = ''
@@ -32,6 +33,8 @@
       # curl
       wget
       lftp
+      gh
+      bzip3
 
       # Minimal computing
       pass
@@ -41,6 +44,10 @@
       tree
       jq
       jc
+      pandoc
+
+      # Julia
+      julia-bin
 
       # Scala
       sbt
@@ -51,51 +58,91 @@
       scalafmt
       scalafix
 
+      # Java
+      ant
+      neo4j
+
+      # Clojure
+      clojure
+      clojure-lsp
+      leiningen
+      babashka
+      exercism
+
       # Dev
       direnv
+      devenv
+
+      # Rust
+      rustup
 
       # Spark
 
       # Python
       pipenv
       poetry
+
       asdf
       poppler
-     # (python39.withPackages(ps: with ps; [
+      rye
+     (python39.withPackages(ps: with ps; [
+     #   # LSP Integration
+     #   # python-lsp-server
+     #   # pylsp-mypy
+     #   # flake8
+     #   # For like, you know, science
      #   # pandas
      #   # plotly
+     #   # numpy
+     #   # scikit-learn
      #   # matplotlib
-     #   # python-lsp-server # Spacemacs integration
-     #   # flake8 # Syntax checking for emacs
-     #   # # scikit-learn
-     #   # altair
-     #   # # vega
-     #   # # vega_datasets
      #   # jupyter
      #   # jupyterlab
-     #   # # jupytext
      #   # # tensorflow
      #   # nltk
-     #   pip
-     #   # pyarrow
-     #   # pytest
-     #   # pytest-cov
-     #   # pytest-watch
-     #   # numpy
-     #   # nose
-     #   # tldextract # required by qute-pass
-     # ]))
+       # pip
+       awscli
+     ]))
+      graphviz
+
+      # Haskell
+      cabal2nix
+      awscli
+
+      (haskellPackages.ghcWithPackages (ps: with ps; [
+        swish
+      ]))
 
       # Fancy MacOS terminal
       # iterm2
       alacritty
 
+      #
+      # nyxt
       yabai  # Window manager
       skhd   # Hotkeys for window manager
+
+      #elixir
 
       # Virtualization
       # utm # Doesn't work?
       # firefox
+
+      # elm stuff
+      #elm
+      # elmPackages.elm
+      # elmPackages.lamdera
+
+      nodejs
+
+      # Latex etc
+      texlive.combined.scheme-full
+      ispell
+
+      #aider-chat
+
+      # Oracle DB
+      # oracle-instantclient
     ];
     # Hack for getting apps to show up in Spotlight, etc.
     # See https://github.com/nix-community/home-manager/issues/1341
@@ -143,7 +190,7 @@
       };
     };
     atuin = {
-      enable = true;
+      enable = false;
       enableNushellIntegration = true;
       enableZshIntegration = true;
     };
@@ -158,21 +205,29 @@
       enableNushellIntegration = true;
     };
     home-manager.enable = true;
-    emacs.enable = false;
+    emacs = {
+      enable = true;
+      extraPackages = epkgs: [ epkgs.pdf-tools ];
+    };
     git = {
       enable = true;
+      lfs.enable = true;
       userName = "Jonathan Reeve";
       userEmail = "j_reeve@apple.com";
       extraConfig = {
         core.editor = "emacsclient -c";
         pull.rebase = false;
+        http.postBuffer = 157286400;
       };
+    };
+    go = {
+      enable = true;
     };
     gpg.enable = true;
     neovim = {
       enable = true;
       # package = pkgs.neovim;
-      plugins = with pkgs.vimPlugins; [ spacevim ];
+      # plugins = with pkgs.vimPlugins; [ ];
       vimAlias = true;
       extraConfig =
         ''
@@ -192,28 +247,21 @@
       enable = true;
       configFile.text = ''
         $env.config = {
-          hooks: {
-            pre_prompt: [{ ||
-              let direnv = (direnv export json | from json)
-              let direnv = if ($direnv | length) == 1 { $direnv } else { {} }
-              $direnv | load-env
-            }]
-          }
+          edit_mode: vi
+          keybindings: [
+            {
+              name: enter_normal_mode
+              modifier: control
+              keycode: char_q
+              mode: vi_insert
+              event: { send: esc }
+            }
+          ]
         }
-        def glg [] {
-          git log --pretty=%h»¦«%s»¦«%aN»¦«%aE»¦«%aD
-            | lines
-            | do -i { split column "»¦«" commit subject name email date }
-            | upsert date {|d| $d.date | into datetime}
-        }
+        use std/util "path add"
+        path add "~/.local/bin"
+        path add "/usr/local/bin"
       '';
-      # let-env PATH = ($env.PATH | prepend '/opt/homebrew/bin')
-      # let-env PATH = ($env.PATH | prepend '/Users/jon/.nix-profile/bin')
-      # let-env PATH = ($env.PATH | prepend '/nix/var/nix/profiles/default/bin')
-      # let-env PATH = ($env.PATH | prepend '/System/Cryptexes/App/usr/bin')
-      environmentVariables = {
-        PATH = "($env.PATH | split row (char esep) | prepend '/usr/local/bin')";
-      };
       shellAliases = {
         upgrade = "darwin-rebuild switch --flake ~/Dotfiles/dotfiles";
         git-root = "cd (git rev-parse --show-cdup)";
@@ -303,20 +351,20 @@
       enableZshIntegration = true;
     };
     vscode = {
-      enable = true;
-      extensions = with pkgs.vscode-extensions; [
-        foam.foam-vscode
-        asvetliakov.vscode-neovim
-        ms-python.python
-        scala-lang.scala
-        scalameta.metals
-        vscjava.vscode-gradle
-        # vscjava.vscode-java-pack
-      ];
+      enable = false;
+      # extensions = with pkgs.vscode-extensions; [
+      #   # foam.foam-vscode
+      #   asvetliakov.vscode-neovim
+      #   ms-python.python
+      #   scala-lang.scala
+      #   scalameta.metals
+      #   vscjava.vscode-gradle
+      #   # vscjava.vscode-java-pack
+      # ];
     };
     zsh = {
       enable = true;
-      enableAutosuggestions = true;
+      autosuggestion.enable = true;
       enableCompletion = true;
       syntaxHighlighting = {
         enable = true;
@@ -326,7 +374,7 @@
       defaultKeymap = "viins";
       initExtra = ''
 export JAVA_HOME=`/usr/libexec/java_home -v11`
-export PATH="$HOME/.config/emacs/bin:$JAVA_HOME/bin:/opt/homebrew/bin:$PATH"
+export PATH="$HOME/.config/emacs/bin:$HOME/.local/bin:$JAVA_HOME/bin:/opt/homebrew/bin:$PATH"
 export PATH="$PATH:/Users/jon/Library/Application Support/Coursier/bin"
 # This should automatically work, except it is disabled for emacs
 eval "$(/etc/profiles/per-user/jon/bin/starship init zsh)"
@@ -335,6 +383,8 @@ alias ls="ls --color"
 alias git-root='cd $(git rev-parse --show-cdup)'
 alias proxy='ssh -vND localhost:7999 pvgateway'
 alias upgrade='darwin-rebuild switch --flake ~/Dotfiles/dotfiles'
+
+source ~/Dotfiles/scripts/vterm.zsh
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -360,6 +410,10 @@ unset __conda_setup
   };
   xdg = {
     enable = true;
+    configFile."nushell/emacs-config.nu".text = ''
+      source ~/.config/nushell/config.nu
+      source ~/Dotfiles/scripts/vterm.nu
+    '';
     configFile."skhd/skhdrc".text = ''
       lalt - t : yabai -m window --toggle float
       lalt - h : yabai -m window --focus west

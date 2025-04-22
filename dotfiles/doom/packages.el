@@ -76,8 +76,6 @@
 (package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
 
 (package! org-ref)
-(package! org-roam-bibtex
- :recipe (:host github :repo "org-roam/org-roam-bibtex"))
 
 ;; (package! org-cite-csl-activate :recipe (:host github :repo "andras-simonyi/org-cite-csl-activate" :files ("*.el")))
 
@@ -90,8 +88,9 @@
 ;; ~/.doom.d/packages.el
 (package! evil-colemak-basics) ; colemak remaps
 
-;;
+;; Link stuff for macs
 (package! org-mac-link)
+
 ;; Citar-org-roam
 (package! citar-org-roam)
 
@@ -103,4 +102,34 @@
 ;; see https://github.com/org-roam/org-roam/issues/2361
 (package! org :pin "ca873f7")
 
+(package! ob-mermaid)
+
 (package! nushell-mode)
+
+;; Workaround for icon issue
+;;See https://github.com/doomemacs/doomemacs/issues/7519
+;; (package! treemacs :pin "7c6628a241845cd8f626d2603f747f777de4eefb")
+;; (package! lsp-treemacs :disable)
+
+(package! jsonnet-mode)
+
+(package! svg-tag-mode)
+
+(package! ob-nushell
+  :recipe (:type git
+           :repo "https://github.com/ln-nl/ob-nushell.git"))
+
+;; Needed by scimax- hacks for org-babel
+(package! lispy)
+
+(package! org-node)
+
+(package! org-node-fakeroam)
+
+(package! ellama)
+
+(package! json-navigator)
+
+(package! turtle-mode
+  :recipe (:type git
+           :repo "https://github.com/drobilla/turtle-mode"))

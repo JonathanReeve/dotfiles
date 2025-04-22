@@ -28,15 +28,21 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-(setq doom-font (font-spec :family "Monaco" :size 12)
-      doom-variable-pitch-font (font-spec :family "Helvetica" :size 13))
+;; (setq doom-font (font-spec :family "Monaspace Argon" :size 12)
+;;       doom-variable-pitch-font (font-spec :family "Helvetica" :size 13))
 ;;
+;; (setq doom-font (font-spec :family "Iosevka Comfy" :size 12)
+;;       doom-variable-pitch-font (font-spec :family "Helvetica" :size 13))
+
+(setq doom-font (font-spec :family "Agave" :size 14)
+      doom-variable-pitch-font (font-spec :family "Helvetica" :size 14))
+
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
 ;; refresh your font settings. If Emacs still can't find your font, it likely
 ;; wasn't installed correctly. Font issues are rarely Doom issues!
 ;; (setq doom-font (font-spec :family "Fantasque Sans Mono" :size 18))
-(setq doom-themes-treemacs-enable-variable-pitch 'nil)
+;; (setq doom-themes-treemacs-enable-variable-pitch 'nil)
 
 (setq doom-modeline-buffer-file-name-style 'truncate-with-project)
 ;;(setq doom-font (font-spec :family "Fira Code Nerd Font" :size 12 :weight 'semi-light)
@@ -70,11 +76,11 @@
 ;; See https://github.com/hlissner/doom-emacs/blob/4612b39695405f7238dd3da0d4fd6d3a5cdd93d6/modules/tools/biblio/README.org
 (setq! citar-bibliography '("~/Documents/Papers/library.bib" "~/Documents/Papers/library2.bib")
        citar-library-paths '("~/Documents/Papers/")
-       citar-notes-paths '("~/Documents/Org/Roam/"))
+       citar-notes-paths '("~/Documents/Org/Roam/shared"))
 
 (setq! bibtex-completion-bibliography '("~/Documents/Papers/library.bib" "~/Documents/Papers/library2.bib")
        bibtex-completion-notes-path "~/Documents/Org/Roam/"
-       bibtex-completion-library-path "~/Documents/Papers/")
+       bibtex-completion-library-path '("~/Documents/Papers/" "~/Documents/Org/Roam/shared/papers/"))
 
 ;; Org Mode
 (after! org
@@ -90,8 +96,8 @@
         org-agenda-skip-scheduled-if-done t
         org-agenda-skip-deadline-if-done t
         org-agenda-dim-blocked-tasks nil
-        org-todo-keywords '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
-        org-todo-keywords-for-agenda '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
+        org-todo-keywords '((sequence "TODO" "WAITING" "|" "DONE(!)" "CANCELED"))
+        org-todo-keywords-for-agenda '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d!)" "CANCELED(c)"))
         ;; Put state changes into the LOGBOOK drawer, to clean up a bit
         org-log-into-drawer t
         )
@@ -112,10 +118,10 @@
             "** TODO %c\n%?")
           ("c" "Code" entry (file+headline "~/Documents/Org/inbox.org" "Code")
             "** %A\n%?")
-          ("o" "Contact" entry (file+headline "~/Documents/Org/contacts.org" "Contacts")
-            "** %? \n%a\n")
           ("l" "Link" entry (file+olp "/Users/jon/Documents/Org/inbox.org" "Web Links")
             "* %a\n %?\n %i")
+          ("j" "Journal" entry (file+olp+datetree "/Users/jon/Documents/Org/journal.org")
+           "* %?" :tree-type week)
           ))
   (setq org-modules '(org-habit org-protocol))
   ;; Disable holidays. Is there an easier way of doing this?
@@ -156,10 +162,66 @@
         '(("d" "default" plain "%?" :target
            (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
            :unnarrowed t)
-          ("c" "contact" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :END:\n%u\n"
+          ("a" "shared" plain "%?" :target
+           (file+head "shared/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+           :unnarrowed t)
+          ("c" "contact" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :ADIR: \n :END:\n%u\n"
            :target (file+olp "contacts.org" ("Contacts"))
            :unnarrowed t)
+          ("s" "dataset" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :LOCATION: \n :END:\n%u\n*** Schema"
+           :target (file+head "datasets.org" "")
+           :unnarrowed t
+           )
+          ("j" "job" plain "* ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :CODE: \n :END:\n%u\ninputs:\noutputs:"
+           :target (file+head "jobs.org" "")
+           :unnarrowed t
+           )
+          ("r" "cluster" plain "* ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :ADDRESS:\n :END:\n%u"
+           :target (file+head "servers.org" "")
+           :unnarrowed t
+           )
+          ("e" "service" plain "* ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :CODE:\n :END:\ninputs:\noutputs: \n%u"
+           :target (file+head "services.org" "")
+           :unnarrowed t
+           )
+          ("p" "repo" plain "* ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :LOCAL:\n :REMOTE:\n :END:\n%u"
+           :target (file+head "repos.org" "")
+           :unnarrowed t
+           )
+          ("b" "literature note" plain
+           "%?"
+           :target
+           (file+head
+            "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/shared/${citar-citekey}.org"
+            "#+title: ${citar-citekey} (${citar-date}). ${note-title}.
+#+created: %U
+#+last_modified: %U
+
+ - keywords ::
+ - related ::
+
+* ${note-title}
+  :PROPERTIES:
+  :Custom_ID: ${citar-citekey}
+  :URL: ${citar-url}
+  :AUTHOR: ${citar-author}
+  :NOTER_DOCUMENT: ${citar-file}
+  :NOTER_PAGE:
+  :END:\n
+"
+            )
+           :unnarrowed t)
         ))
+  (setq citar-org-roam-template-fields
+      '((:citar-title "title")
+        (:citar-author "author" "editor")
+        (:citar-date "date" "year" "issued")
+        (:citar-pages "pages")
+        (:citar-file "file")
+        (:citar-keywords "keywords")
+        (:citar-url "url")
+        (:citar-type "=type="))
+        )
   (setq org-roam-capture-ref-templates
         '(("r" "ref" plain "%?" :target
            (file+head "${slug}.org" "#+title: ${title}") :unnarrowed t)
@@ -167,50 +229,12 @@
            :target (file+olp "movies.org" ("watched")))
           )
         )
+  (setq citar-org-roam-note-title-template "${author editor} : ${title}")
 
 
   (setq org-clock-idle-time 15)
   (setq org-clock-auto-clockout t)
   (setq org-clock-auto-clockout-timer 20)
-
-  (require 'org-roam-bibtex)
-  (use-package! org-roam-bibtex
-    :when (featurep! :lang org +roam2)
-    :after org
-    :preface
-    ;; if the user has not set a template mechanism set a reasonable one of them
-    ;; The package already tests for nil itself so we define a dummy tester
-    (defvar orb-preformat-keywords
-      '("title" "url" "file" "author-or-editor" "keywords" "citekey" "pdf"))
-    ;;:hook (org-roam-mode . org-roam-bibtex-mode)
-    :custom
-    (orb-note-actions-interface 'default)
-    :config
-    (setq orb-insert-interface 'generic)
-    ;; (setq orb-roam-ref-format 'org-ref-v2)
-    (setq orb-process-file-keyword t
-          orb-file-field-extensions '("pdf"))
-
-    (add-to-list 'org-roam-capture-templates
-                 '("b" "Bibliography note" plain
-                   "%?
-- keywords :: %^{keywords}
-- related ::
-
-* %^{title}
-:PROPERTIES:
-:Custom_ID: %^{citekey}
-:URL: %^{url}
-:AUTHOR: %^{author-or-editor}
-:NOTER_DOCUMENT: %^{file}
-:NOTER_PAGE:
-:END:\n\n"
-                   :if-new (file+head "${citekey}.org" ":PROPERTIES:
-:END:
-#+TITLE: ${citekey}: ${title}\n")
-                   :unnarrowed t))
-    (require 'org-ref))
-  (org-roam-bibtex-mode)
 
   (setq citar-templates
         '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
@@ -218,14 +242,11 @@
          (preview . "${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
          (note . "#+title: ${author editor}, ${title}")))
 
-  (setq citar-symbols
-        `((file ,(all-the-icons-faicon "file-o" :face 'all-the-icons-green :v-adjust -0.1) . " ")
-          (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
-          (link ,(all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01) . " ")))
+  ;; (setq citar-symbols
+  ;;       `((file ,(all-the-icons-faicon "file-o" :face 'all-the-icons-green :v-adjust -0.1) . " ")
+  ;;         (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
+  ;;         (link ,(all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01) . " ")))
   (setq citar-symbol-separator "  ")
-
-  (setq citar-file-open-note-function 'orb-citar-edit-note)
-  ;; (setq citar-file-open-note-function 'citar-file-open-notes-default-org)
 
   ;; Configure org-roam buffer display.
   ;; See https://www.orgroam.com/manual.html#Navigating-the-Org_002droam-Buffer
@@ -258,6 +279,13 @@
         :config (citar-org-roam-mode)
                 (setq citar-org-roam-capture-template-key "b")
         )
+
+   (use-package! org-node
+     :after org
+     :config (org-node-cache-mode))
+
+   (use-package! org-node-fakeroam :defer)
+
 
   ;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
   ;; makes it easier to distinguish from other org buffers.
@@ -422,6 +450,10 @@ If nil it defaults to `split-string-default-separators', normally
 
   (org-link-set-parameters "phantom" :follow #'phantom-open)
   (org-link-set-parameters "rdar" :follow #'rdar-open)
+  (org-link-set-parameters "adir" :follow #'adir-open)
+
+  (defun rdar-open (path _)
+    (browse-url (concat "adir:" path)))
 
   (defun rdar-open (path _)
     (browse-url (concat "rdar:" path)))
@@ -440,7 +472,80 @@ If nil it defaults to `split-string-default-separators', normally
   ;;     '((("AppleScript remember" ?y "* %:shortdesc\n  %:initial\n   Source: %u, %c\n\n  %?" (concat org-directory "inbox.org") "Remember"))
   ;;       (("AppleScript note" ?z "* %?\n\n  Date: %u\n" (concat org-directory "inbox.org") "Notes")))
   ;; )
-  (with-eval-after-load 'org (global-org-modern-mode))
+  ;
+  ;; (with-eval-after-load 'org (global-org-modern-mode))
+
+  ;; Fancy tags
+  ;; (require 'svg-tag-mode)
+
+  ;; (setq svg-tag-tags
+  ;;     '((":TODO:" . ((svg-tag-make "TODO" :face 'org-tag
+  ;;                                  :radius 0 :inverse t :margin 0)))
+  ;;       (":WAITING:" . ((svg-tag-make "WAITING" :face 'org-tag
+  ;;                                  :radius 0 :inverse t :margin 0)))
+  ;;       (":DONE:" . ((svg-tag-make "WAITING" :face 'org-tag
+  ;;                                  :radius 0 :inverse t :margin 0)))
+  ;;       (":CANCELED:" . ((svg-tag-make "WAITING" :face 'org-tag
+  ;;                                  :radius 0 :inverse t :margin 0)))
+  ;;       (":NOTE:" . ((svg-tag-make "NOTE" :face 'font-lock-comment-face
+  ;;                                  :inverse nil :margin 0 :radius 0)))
+  ;;       ("\([0-9a-zA-Z]\)" . ((lambda (tag)
+  ;;                               (svg-tag-make tag :beg 1 :end -1 :radius 12))))
+  ;;       ("\([0-9a-zA-Z][0-9a-zA-Z]\)" . ((lambda (tag)
+  ;;                                          (svg-tag-make tag :beg 1 :end -1 :radius 8))))
+  ;;       ("|[0-9a-zA-Z- ]+?|" . ((lambda (tag)
+  ;;                                 (svg-tag-make tag :face 'font-lock-comment-face
+  ;;                                               :margin 0 :beg 1 :end -1))))
+  ;;       ;; Org tags
+  ;;       (":\\([A-Za-z0-9]+\\)" . ((lambda (tag) (svg-tag-make tag))))
+  ;;       (":\\([A-Za-z0-9]+[ \-]\\)" . ((lambda (tag) tag)))
+
+  ;;       ;; Task priority
+  ;;       ("\\[#[A-Z]\\]" . ( (lambda (tag)
+  ;;                             (svg-tag-make tag :face 'org-priority
+  ;;                                           :beg 2 :end -1 :margin 0))))
+
+  ;;       ;; Citation of the form [cite:@Knuth:1984]
+  ;;       ("\\(\\[cite:@[A-Za-z]+:\\)" . ((lambda (tag)
+  ;;                                         (svg-tag-make tag
+  ;;                                                       :inverse t
+  ;;                                                       :beg 7 :end -1
+  ;;                                                       :crop-right t))))
+  ;;       ("\\[cite:@[A-Za-z]+:\\([0-9]+\\]\\)" . ((lambda (tag)
+  ;;                                               (svg-tag-make tag
+  ;;                                                             :end -1
+  ;;                                                             :crop-left t))))
+
+
+  ;;       ;; Active date (with or without day name, with or without time)
+  ;;       ;; (,(format "\\(<%s>\\)" date-re) .
+  ;;       ;;  ((lambda (tag)
+  ;;       ;;     (svg-tag-make tag :beg 1 :end -1 :margin 0))))
+  ;;       ;; (,(format "\\(<%s \\)%s>" date-re day-time-re) .
+  ;;       ;;  ((lambda (tag)
+  ;;       ;;     (svg-tag-make tag :beg 1 :inverse nil :crop-right t :margin 0))))
+  ;;       ;; (,(format "<%s \\(%s>\\)" date-re day-time-re) .
+  ;;       ;;  ((lambda (tag)
+  ;;       ;;     (svg-tag-make tag :end -1 :inverse t :crop-left t :margin 0))))
+
+  ;;       ;; ;; Inactive date  (with or without day name, with or without time)
+  ;;       ;;  (,(format "\\(\\[%s\\]\\)" date-re) .
+  ;;       ;;   ((lambda (tag)
+  ;;       ;;      (svg-tag-make tag :beg 1 :end -1 :margin 0 :face 'org-date))))
+  ;;       ;;  (,(format "\\(\\[%s \\)%s\\]" date-re day-time-re) .
+  ;;       ;;   ((lambda (tag)
+  ;;       ;;      (svg-tag-make tag :beg 1 :inverse nil :crop-right t :margin 0 :face 'org-date))))
+  ;;       ;;  (,(format "\\[%s \\(%s\\]\\)" date-re day-time-re) .
+  ;;       ;;   ((lambda (tag)
+  ;;       ;;      (svg-tag-make tag :end -1 :inverse t :crop-left t :margin 0 :face 'org-date))))
+
+  ;;       ;; ;; Progress
+  ;;       ("\\(\\[[0-9]\\{1,3\\}%\\]\\)" . ((lambda (tag)
+  ;;                                           (svg-progress-percent (substring tag 1 -2)))))
+  ;;       ("\\(\\[[0-9]+/[0-9]+\\]\\)" . ((lambda (tag)
+  ;;                                         (svg-progress-count (substring tag 1 -1)))))))
+  ;;       (svg-tag-mode t)
+
 ) ;; End of Org block
 
 ;; (use-package! org-clock-reminder
@@ -561,8 +666,8 @@ If nil it defaults to `split-string-default-separators', normally
 (defun rename-pdf ()
   " Rename the most recently modified PDF in the /tmp dir with the latest bibtex key. "
   (interactive)
-  (setq most-recent-pdf (string-trim-right (shell-command-to-string "ls -t /tmp/*.pdf | head -1")))
-  (setq dest-pdf-filename (string-trim-right (concat bibtex-completion-library-path (bibtex-completion-get-key-bibtex) ".pdf")))
+  (setq most-recent-pdf (string-trim-right (shell-command-to-string "ls -t ~/Downloads/*.pdf | head -1")))
+  (setq dest-pdf-filename (string-trim-right (concat (car bibtex-completion-library-path) (bibtex-completion-get-key-bibtex) ".pdf")))
   (if (yes-or-no-p (concat "Rename " most-recent-pdf " to " dest-pdf-filename "?"))
   (rename-file most-recent-pdf dest-pdf-filename)
   (message "Aborted.")
@@ -576,6 +681,11 @@ If nil it defaults to `split-string-default-separators', normally
 ;;   (global-evil-colemak-basics-mode) ; Enable colemak rebinds
 ;;   )
 
+(after! evil
+  (setq org-fold-core-style 'overlays)
+  (evil-select-search-module 'evil-search-module 'evil-search)
+  )
+
 ;; Workaround; see https://github.com/nnicandro/emacs-jupyter/issues/380#issuecomment-1014026589
 (after! ob-jupyter
   (defun jupyter-ansi-color-apply-on-region (begin end)
@@ -587,7 +697,13 @@ If nil it defaults to `split-string-default-separators', normally
 (epa-file-enable)
 
 ;; (setq system-uses-terminfo nil)
-(setq vterm-shell "/etc/profiles/per-user/jon/bin/nu")
+(after! vterm
+        (setq vterm-shell "/etc/profiles/per-user/jon/bin/nu --config ~/.config/nushell/emacs-config.nu")
+        (define-key vterm-mode-map (kbd "C-q") #'vterm-send-next-key)
+        (define-key vterm-mode-map (kbd "C-<escape>") #'vterm-send-next-key)
+        )
+
+;; (delete 'lsp-terraform lsp-client-packages)
 
 ;; (set-locale-environment "eo.utf-8")
 
@@ -600,6 +716,7 @@ If nil it defaults to `split-string-default-separators', normally
 
 (delete-file "~/Library/Colors/Emacs.clr")
 
+(require 'org-mac-link)
 (defun org-mac-link-applescript-calendar-current-event()
   "AppleScript to get the current event from Calendar."
   (let ((result
@@ -628,6 +745,7 @@ end tell
   (message "Applescript: Getting Calendar event...")
   (org-mac-link-paste-applescript-links (org-mac-link-applescript-calendar-current-event)))
 
+
 (defun insert-first-rdar-string ()
   "Insert the first 'rdar' string (e.g., 'rdar://...') from the latest git log entry at point."
   (interactive)
@@ -640,3 +758,189 @@ end tell
 
 ;; Treemacs error. See https://github.com/emacs-lsp/lsp-mode/issues/4054
 (add-to-list 'image-types 'svg)
+
+;; Treemacs icons with LSP: https://github.com/emacs-lsp/lsp-treemacs/issues/89
+;; (with-eval-after-load 'lsp-treemacs
+;;           (doom-themes-treemacs-config))
+;; (after! lsp-treemacs
+;;   (load-library "doom-themes-ext-treemacs"))
+
+;; EAF: Emacs Application Framework
+;; (use-package! eaf
+;;   :load-path "~/.elisp/emacs-application-framework"
+;;   :init
+;;   :custom
+;;   (eaf-browser-continue-where-left-off t)
+;;   (eaf-browser-enable-adblocker t)
+;;   (browse-url-browser-function 'eaf-open-browser) ;; Make EAF Browser my default browser
+;;   :config
+;;   (defalias 'browse-web #'eaf-open-browser)
+
+;;   (require 'eaf-file-manager)
+;;   (require 'eaf-music-player)
+;;   (require 'eaf-image-viewer)
+;;   (require 'eaf-camera)
+;;   (require 'eaf-demo)
+;;   (require 'eaf-airshare)
+;;   (require 'eaf-terminal)
+;;   (require 'eaf-markdown-previewer)
+;;   (require 'eaf-video-player)
+;;   (require 'eaf-vue-demo)
+;;   (require 'eaf-file-sender)
+;;   (require 'eaf-pdf-viewer)
+;;   (require 'eaf-mindmap)
+;;   (require 'eaf-netease-cloud-music)
+;;   (require 'eaf-jupyter)
+;;   (require 'eaf-org-previewer)
+;;   (require 'eaf-system-monitor)
+;;   (require 'eaf-rss-reader)
+;;   (require 'eaf-file-browser)
+;;   (require 'eaf-browser)
+;;   (require 'eaf-org)
+;;   (require 'eaf-mail)
+;;   (require 'eaf-git)
+;;   (when (display-graphic-p)
+;;     (require 'eaf-all-the-icons))
+
+;;   (require 'eaf-evil)
+;;   (define-key key-translation-map (kbd "SPC")
+;;     (lambda (prompt)
+;;       (if (derived-mode-p 'eaf-mode)
+;;           (pcase eaf--buffer-app-name
+;;             ("browser" (if  (string= (eaf-call-sync "call_function" eaf--buffer-id "is_focus") "True")
+;;                            (kbd "SPC")
+;;                          (kbd eaf-evil-leader-key)))
+;;             ("pdf-viewer" (kbd eaf-evil-leader-key))
+;;             ("image-viewer" (kbd eaf-evil-leader-key))
+;;             (_  (kbd "SPC")))
+;;         (kbd "SPC")))))
+
+(with-eval-after-load 'treemacs
+  (progn
+    (require 'treemacs-nerd-icons)
+    (treemacs-load-theme "nerd-icons")))
+
+;; From https://kitchingroup.cheme.cmu.edu/blog/2017/06/10/Adding-keymaps-to-src-blocks-via-org-font-lock-hook/
+(require 'lispy)
+(require 'elpy)
+
+(setq scimax-src-block-keymaps
+      `(("ipython" . ,(let ((map (make-composed-keymap
+                                  `(,elpy-mode-map ,python-mode-map ,pyvenv-mode-map)
+                                  org-mode-map)))
+                        ;; In org-mode I define RET so we f
+                        (define-key map (kbd "<return>") 'newline)
+                        (define-key map (kbd "C-c C-c") 'org-ctrl-c-ctrl-c)
+                        map))
+        ("python" . ,(let ((map (make-composed-keymap
+                                 `(,elpy-mode-map ,python-mode-map ,pyvenv-mode-map)
+                                 org-mode-map)))
+                       ;; In org-mode I define RET so we f
+                       (define-key map (kbd "<return>") 'newline)
+                       (define-key map (kbd "C-c C-c") 'org-ctrl-c-ctrl-c)
+                       map))
+        ("emacs-lisp" . ,(let ((map (make-composed-keymap `(,lispy-mode-map
+                                                            ,emacs-lisp-mode-map
+                                                            ,outline-minor-mode-map)
+                                                          org-mode-map)))
+                           (define-key map (kbd "C-c C-c") 'org-ctrl-c-ctrl-c)
+                           map))))
+
+(defun scimax-add-keymap-to-src-blocks (limit)
+  "Add keymaps to src-blocks defined in `scimax-src-block-keymaps'."
+  (let ((case-fold-search t)
+        lang)
+    (while (re-search-forward org-babel-src-block-regexp limit t)
+      (let ((lang (match-string 2))
+            (beg (match-beginning 0))
+            (end (match-end 0)))
+        (if (assoc (org-no-properties lang) scimax-src-block-keymaps)
+            (progn
+              (add-text-properties
+               beg end `(local-map ,(cdr (assoc
+                                          (org-no-properties lang)
+                                          scimax-src-block-keymaps))))
+              (add-text-properties
+               beg end `(cursor-sensor-functions
+                         ((lambda (win prev-pos sym)
+                            ;; This simulates a mouse click and makes a menu change
+                            (org-mouse-down-mouse nil)))))))))))
+
+(defun scimax-spoof-mode (orig-func &rest args)
+  "Advice function to spoof commands in org-mode src blocks.
+It is for commands that depend on the major mode. One example is
+`lispy--eval'."
+  (if (org-in-src-block-p)
+      (let ((major-mode (intern (format "%s-mode" (first (org-babel-get-src-block-info))))))
+        (apply orig-func args))
+    (apply orig-func args)))
+
+(define-minor-mode scimax-src-keymap-mode
+  "Minor mode to add mode keymaps to src-blocks."
+  :init-value nil
+  (if scimax-src-keymap-mode
+      (progn
+        (add-hook 'org-font-lock-hook #'scimax-add-keymap-to-src-blocks t)
+        (add-to-list 'font-lock-extra-managed-props 'local-map)
+        (add-to-list 'font-lock-extra-managed-props 'cursor-sensor-functions)
+        (advice-add 'lispy--eval :around 'scimax-spoof-mode)
+        (cursor-sensor-mode +1))
+    (remove-hook 'org-font-lock-hook #'scimax-add-keymap-to-src-blocks)
+    (advice-remove 'lispy--eval 'scimax-spoof-mode)
+    (cursor-sensor-mode -1))
+  (font-lock-fontify-buffer))
+
+(add-hook 'org-mode-hook (lambda ()
+                           (scimax-src-keymap-mode +1)))
+
+(use-package! ellama
+        :ensure t
+        :bind ("C-c e" . ellama)
+        ;; setup key bindings
+        ;; (setopt ellama-keymap-prefix "C-c e")
+        ;; language you want ellama to translate to
+        :hook (org-ctrl-c-ctrl-c-final . ellama-chat-send-last-message)
+        :init
+        (setopt ellama-auto-scroll t)
+        (setopt ellama-language "Esperanto")
+        ;; could be llm-openai for example
+        (require 'llm-ollama)
+        (setopt ellama-provider
+                (make-llm-ollama
+                ;; this model should be pulled to use it
+                ;; value should be the same as you print in terminal during pull
+                :chat-model "llama3:8b-instruct-q8_0"
+                :embedding-model "nomic-embed-text"
+                :default-chat-non-standard-params '(("num_ctx" . 8192))))
+        (setopt ellama-summarization-provider
+                (make-llm-ollama
+                :chat-model "qwen2.5:3b"
+                :embedding-model "nomic-embed-text"
+                :default-chat-non-standard-params '(("num_ctx" . 32768))))
+        (setopt ellama-coding-provider
+                (make-llm-ollama
+                :chat-model "deepseek-coder-v2"
+                :embedding-model "nomic-embed-text"
+                :default-chat-non-standard-params '(("num_ctx" . 32768))))
+        ;; Naming new sessions with llm
+        (setopt ellama-naming-provider
+                (make-llm-ollama
+                :chat-model "llama3:8b-instruct-q8_0"
+                :embedding-model "nomic-embed-text"
+                :default-chat-non-standard-params '(("stop" . ("\n")))))
+        (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
+        ;; Translation llm provider
+        (setopt ellama-translation-provider
+                (make-llm-ollama
+                :chat-model "qwen2.5:3b"
+                :embedding-model "nomic-embed-text"
+                :default-chat-non-standard-params
+                '(("num_ctx" . 32768))))
+        ;; customize display buffer behaviour
+        ;; see ~(info "(elisp) Buffer Display Action Functions")~
+        :config
+        (setopt ellama-chat-display-action-function #'display-buffer-full-frame)
+        (setopt ellama-instant-display-action-function #'display-buffer-at-bottom)
+        (advice-add 'pixel-scroll-precision :before #'ellama-disable-scroll)
+        (advice-add 'end-of-buffer :after #'ellama-enable-scroll)
+)

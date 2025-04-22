@@ -12,11 +12,11 @@
 # <xbar.image></xbar.image>
 # <xbar.abouturl></xbar.abouturl>
 
-export CLOCKSTRING=$(/opt/homebrew/bin/emacsclient --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)' 2>&1)
+export CLOCKSTRING=$(/etc/profiles/per-user/jon/bin/emacsclient  --eval '(if (org-clocking-p)(org-clock-get-clock-string) -1)' 2>&1)
 
-off=" Emacs off!"
+off="😳 Emacs off!"
 #noclock='<span color="#f00"> Off-clock!</span>'
-noclock=' Off-clock!'
+noclock='😳 Off-clock!'
 
 case "$CLOCKSTRING" in
     *"can\'t find socket"*)
