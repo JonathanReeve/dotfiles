@@ -82,9 +82,6 @@
 (package! org-clock-reminder
   :recipe (:host github :repo "inickey/org-clock-reminder"))
 
-;; UI improvements for Org mode
-(package! org-modern)
-
 ;; ~/.doom.d/packages.el
 (package! evil-colemak-basics) ; colemak remaps
 
@@ -94,13 +91,13 @@
 ;; Citar-org-roam
 (package! citar-org-roam)
 
-(package! radar
-  :recipe (:type git
-           :repo "git@github.pie.apple.com:emacs/emacs-radar.git"))
+;; (package! radar
+;;   :recipe (:type git
+;;            :repo "git@github.pie.apple.com:emacs/emacs-radar.git"))
 
 ;; Workaround to an org/org-roam bug;
 ;; see https://github.com/org-roam/org-roam/issues/2361
-(package! org :pin "ca873f7")
+;; (package! org :pin "ca873f7")
 
 (package! ob-mermaid)
 
@@ -113,23 +110,26 @@
 
 (package! jsonnet-mode)
 
-(package! svg-tag-mode)
-
 (package! ob-nushell
   :recipe (:type git
-           :repo "https://github.com/ln-nl/ob-nushell.git"))
+           :repo "https://github.com/ln-nl/ob-nushell.git")
+  :pin "767c8cfdaf929d9347f64ea44c6846b1c5e86da5")
 
 ;; Needed by scimax- hacks for org-babel
 (package! lispy)
 
 (package! org-node)
 
-(package! org-node-fakeroam)
-
-(package! ellama)
-
-(package! json-navigator)
+(package! ellama :pin "8281a9847b1a35df5433d93a8e7569bbe7ef1215")
 
 (package! turtle-mode
   :recipe (:type git
-           :repo "https://github.com/drobilla/turtle-mode"))
+           :repo "https://github.com/drobilla/turtle-mode")
+  :pin "8eb2ec3fee0a28f3716371c930b04be9cd639811"
+  )
+
+(package! aider :recipe (:host github :repo "tninja/aider.el" ))
+
+(package! apple-ldap
+    :recipe (:type git :host nil :repo "git@github.pie.apple.com:emacs/apple-ldap.git")
+    :pin "968e5f878127e0968bd8041bc7e5800128580814")

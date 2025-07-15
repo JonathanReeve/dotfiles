@@ -15,7 +15,6 @@
 ;; Set location of custom.el
 (setq custom-file "~/.config/emacs/custom.el")
 
-
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
 ;; - `doom-font' -- the primary font to use
@@ -34,27 +33,17 @@
 ;; (setq doom-font (font-spec :family "Iosevka Comfy" :size 12)
 ;;       doom-variable-pitch-font (font-spec :family "Helvetica" :size 13))
 
-(setq doom-font (font-spec :family "Agave" :size 14)
+(setq doom-font (font-spec :family "0xProto" :size 13)
       doom-variable-pitch-font (font-spec :family "Helvetica" :size 14))
 
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
 ;; refresh your font settings. If Emacs still can't find your font, it likely
 ;; wasn't installed correctly. Font issues are rarely Doom issues!
-;; (setq doom-font (font-spec :family "Fantasque Sans Mono" :size 18))
-;; (setq doom-themes-treemacs-enable-variable-pitch 'nil)
 
 (setq doom-modeline-buffer-file-name-style 'truncate-with-project)
-;;(setq doom-font (font-spec :family "Fira Code Nerd Font" :size 12 :weight 'semi-light)
-;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
 
 (setq vc-follow-symlinks t) ;; Always follow symlinks.
-
-;; Get system notifications through libnotify
-(setq alert-default-style 'libnotify)
-
-;; Don't prompt when opening journal or other large files
-;(setq large-file-warning-threshold 20000000)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -85,6 +74,9 @@
 ;; Org Mode
 (after! org
   (org-indent-mode)
+  (setq org-mem-do-sync-with-org-id t)
+  (setq org-mem-roamy-do-overwrite-real-db t)
+  (setq org-roam-db-update-on-save nil)
   (setq org-directory "~/Documents/Org"
         org-startup-indented t
         org-startup-folded t
@@ -122,6 +114,9 @@
             "* %a\n %?\n %i")
           ("j" "Journal" entry (file+olp+datetree "/Users/jon/Documents/Org/journal.org")
            "* %?" :tree-type week)
+          ("i" "Capture into ID node"
+           plain (function org-node-capture-target) nil
+           :empty-lines-after 1)
           ))
   (setq org-modules '(org-habit org-protocol))
   ;; Disable holidays. Is there an easier way of doing this?
@@ -133,13 +128,6 @@
   (add-hook 'org-agenda-mode-hook
             (lambda ()
               (calendar-set-date-style 'iso)))
-
-  (defun org-journal-new-entry ()
-    "Inserts header with inactive timestamp, hours and minutes.
-     A custom journal helper function."
-    (interactive)
-    (org-insert-heading)
-    (org-insert-time-stamp (current-time) t t))
 
   ;; Clock break time in pomodoro
   (setq org-pomodoro-clock-break t)
@@ -194,8 +182,6 @@
            (file+head
             "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/shared/${citar-citekey}.org"
             "#+title: ${citar-citekey} (${citar-date}). ${note-title}.
-#+created: %U
-#+last_modified: %U
 
  - keywords ::
  - related ::
@@ -236,11 +222,17 @@
   (setq org-clock-auto-clockout t)
   (setq org-clock-auto-clockout-timer 20)
 
+  ;; (setq citar-templates
+  ;;       '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
+  ;;        (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords keywords:*}")
+  ;;        (preview . "${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
+  ;;        (note . "#+title: ${author editor}, ${title}")))
+
   (setq citar-templates
-        '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
-         (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords keywords:*}")
-         (preview . "${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
-         (note . "#+title: ${author editor}, ${title}")))
+        '((main . "${author editor:30%sn}     ${date year issued:4}     ${title:48}")
+        (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords keywords:*}")
+        (preview . "${author editor:%etal} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
+        (note . "Notes on ${author editor:%etal}, ${title}")))
 
   ;; (setq citar-symbols
   ;;       `((file ,(all-the-icons-faicon "file-o" :face 'all-the-icons-green :v-adjust -0.1) . " ")
@@ -282,160 +274,38 @@
 
    (use-package! org-node
      :after org
-     :config (org-node-cache-mode))
-
-   (use-package! org-node-fakeroam :defer)
-
+     :config (org-node-cache-mode)
+      (setq org-mem-watch-dirs '("~/Documents/Org"))
+      (setq org-mem-do-sync-with-org-id t)
+      (org-mem-updater-mode)
+      (org-node-roam-accelerator-mode)
+      (org-mem-roamy-db-mode)
+      (org-node-complete-at-point-mode)
+      (setq org-roam-completion-everywhere nil)
+      (setq org-node-affixation-fn 'org-node-prepend-olp-append-tags)
+      )
 
   ;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
   ;; makes it easier to distinguish from other org buffers.
   ;; (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
 
-  ;; Automatically assign the tag Project for project notes
-  ;; Code: https://gist.github.com/d12frosted/a60e8ccb9aceba031af243dff0d19b2e
-  ;; Original blog post: https://d12frosted.io/posts/2021-01-16-task-management-with-roam-vol5.html
+   ;; Add files with todo items to the agenda.
+   (defun my-set-agenda-files (&rest _)
+     (setq org-agenda-files
+           (seq-filter
+            (lambda (file)
+              (and (not (string-equal (file-name-extension file) "org_archive"))
+                   (seq-find (lambda (entry)
+                               (or (org-mem-entry-active-timestamps entry)
+                                   (org-mem-entry-todo-state entry)
+                                   (org-mem-entry-scheduled entry)
+                                   (org-mem-entry-deadline entry)))
+                             (org-mem-entries-in file))))
+            (org-mem-all-files))
+           ))
+   (add-hook 'org-mem-post-full-scan-functions #'my-set-agenda-files)
 
-(defun vulpea-project-p ()
-  "Return non-nil if current buffer has any todo entry.
-
-TODO entries marked as done are ignored, meaning the this
-function returns nil if current buffer contains only completed
-tasks."
-  (seq-find                                 ; (3)
-   (lambda (type)
-     (eq type 'todo))
-   (org-element-map                         ; (2)
-       (org-element-parse-buffer 'headline) ; (1)
-       'headline
-     (lambda (h)
-       (org-element-property :todo-type h)))))
-
-(defun vulpea-project-update-tag ()
-    "Update PROJECT tag in the current buffer."
-    (when (and (not (active-minibuffer-window))
-               (vulpea-buffer-p))
-      (save-excursion
-        (goto-char (point-min))
-        (let* ((tags (vulpea-buffer-tags-get))
-               (original-tags tags))
-          (if (vulpea-project-p)
-              (setq tags (cons "project" tags))
-            (setq tags (remove "project" tags)))
-
-          ;; cleanup duplicates
-          (setq tags (seq-uniq tags))
-
-          ;; update tags if changed
-          (when (or (seq-difference tags original-tags)
-                    (seq-difference original-tags tags))
-            (apply #'vulpea-buffer-tags-set tags))))))
-
-(defun vulpea-buffer-p ()
-  "Return non-nil if the currently visited buffer is a note."
-  (and buffer-file-name
-       (string-prefix-p
-        (expand-file-name (file-name-as-directory org-roam-directory))
-        (file-name-directory buffer-file-name))))
-
-(defun vulpea-project-files ()
-    "Return a list of note files containing 'project' tag." ;
-    (seq-uniq
-     (seq-map
-      #'car
-      (org-roam-db-query
-       [:select [nodes:file]
-        :from tags
-        :left-join nodes
-        :on (= tags:node-id nodes:id)
-        :where (like tag (quote "%\"project\"%"))]))))
-
-(defun vulpea-agenda-files-update (&rest _)
-  "Update the value of `org-agenda-files'."
-  (setq org-agenda-files (delete-dups (append org-agenda-files (vulpea-project-files)))))
-
-;; (add-hook 'find-file-hook #'vulpea-project-update-tag)
-(add-hook 'before-save-hook #'vulpea-project-update-tag)
-(add-hook 'org-agenda-mode-hook #'vulpea-agenda-files-update)
-;; (remove-hook 'org-agenda-mode-hook #'vulpea-agenda-files-update)
-
-;; functions borrowed from `vulpea' library
-;; https://github.com/d12frosted/vulpea/blob/6a735c34f1f64e1f70da77989e9ce8da7864e5ff/vulpea-buffer.el
-
-(defun vulpea-buffer-tags-get ()
-  "Return filetags value in current buffer."
-  (vulpea-buffer-prop-get-list "filetags" "[ :]"))
-
-(defun vulpea-buffer-tags-set (&rest tags)
-  "Set TAGS in current buffer.
-If filetags value is already set, replace it."
-  (if tags
-      (vulpea-buffer-prop-set
-       "filetags" (concat ":" (string-join tags ":") ":"))
-    (vulpea-buffer-prop-remove "filetags")))
-
-(defun vulpea-buffer-tags-add (tag)
-  "Add a TAG to filetags in current buffer."
-  (let* ((tags (vulpea-buffer-tags-get))
-         (tags (append tags (list tag))))
-    (apply #'vulpea-buffer-tags-set tags)))
-
-(defun vulpea-buffer-tags-remove (tag)
-  "Remove a TAG from filetags in current buffer."
-  (let* ((tags (vulpea-buffer-tags-get))
-         (tags (delete tag tags)))
-    (apply #'vulpea-buffer-tags-set tags)))
-
-(defun vulpea-buffer-prop-set (name value)
-  "Set a file property called NAME to VALUE in buffer file.
-If the property is already set, replace its value."
-  (setq name (downcase name))
-  (org-with-point-at 1
-    (let ((case-fold-search t))
-      (if (re-search-forward (concat "^#\\+" name ":\\(.*\\)")
-                             (point-max) t)
-          (replace-match (concat "#+" name ": " value) 'fixedcase)
-        (while (and (not (eobp))
-                    (looking-at "^[#:]"))
-          (if (save-excursion (end-of-line) (eobp))
-              (progn
-                (end-of-line)
-                (insert "\n"))
-            (forward-line)
-            (beginning-of-line)))
-        (insert "#+" name ": " value "\n")))))
-
-(defun vulpea-buffer-prop-set-list (name values &optional separators)
-  "Set a file property called NAME to VALUES in current buffer.
-VALUES are quoted and combined into single string using
-`combine-and-quote-strings'.
-If SEPARATORS is non-nil, it should be a regular expression
-matching text that separates, but is not part of, the substrings.
-If nil it defaults to `split-string-default-separators', normally
-\"[ \f\t\n\r\v]+\", and OMIT-NULLS is forced to t.
-If the property is already set, replace its value."
-  (vulpea-buffer-prop-set
-   name (combine-and-quote-strings values separators)))
-
-(defun vulpea-buffer-prop-get (name)
-  "Get a buffer property called NAME as a string."
-  (org-with-point-at 1
-    (when (re-search-forward (concat "^#\\+" name ": \\(.*\\)")
-                             (point-max) t)
-      (buffer-substring-no-properties
-       (match-beginning 1)
-       (match-end 1)))))
-
-(defun vulpea-buffer-prop-get-list (name &optional separators)
-  "Get a buffer property NAME as a list using SEPARATORS.
-If SEPARATORS is non-nil, it should be a regular expression
-matching text that separates, but is not part of, the substrings.
-If nil it defaults to `split-string-default-separators', normally
-\"[ \f\t\n\r\v]+\", and OMIT-NULLS is forced to t."
-  (let ((value (vulpea-buffer-prop-get name)))
-    (when (and value (not (string-empty-p value)))
-      (split-string-and-unquote value separators))))
-
-  ;; (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
+;; (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
 
   ;; Org-projectile stuff
   ;; (require 'org-projectile)
@@ -452,7 +322,7 @@ If nil it defaults to `split-string-default-separators', normally
   (org-link-set-parameters "rdar" :follow #'rdar-open)
   (org-link-set-parameters "adir" :follow #'adir-open)
 
-  (defun rdar-open (path _)
+  (defun adir-open (path _)
     (browse-url (concat "adir:" path)))
 
   (defun rdar-open (path _)
@@ -944,3 +814,19 @@ It is for commands that depend on the major mode. One example is
         (advice-add 'pixel-scroll-precision :before #'ellama-disable-scroll)
         (advice-add 'end-of-buffer :after #'ellama-enable-scroll)
 )
+
+(after! dirvish
+  (setq dirvish-attributes
+        (append
+         ;; The order of these attributes is insignificant, they are always
+         ;; displayed in the same position.
+         '(vc-state subtree-state nerd-icons collapse)
+         ;; Other attributes are displayed in the order they appear in this list.
+         '(git-msg file-modes file-time file-size)))
+)
+
+(use-package! aider
+  :config
+  (setq aider-program (expand-file-name "~/.local/bin/aider"))
+  (setq aider-args (list "--genai" "sonnet-3-7"))
+  (require 'aider-doom))

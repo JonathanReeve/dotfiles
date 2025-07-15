@@ -5,7 +5,7 @@
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   # disabledModules = [ "targets/darwin/linkapps.nix" ];
-  imports = [ ./copy-apps.nix ];
+  # imports = [ ./copy-apps.nix ];
   home = {
     username = "jon";
     file.".inputrc".text = ''
@@ -15,7 +15,7 @@
       source = ../scripts/org-clock.sh;
       executable = true;
     };
-    # homeDirectory = "/Users/jon";
+    homeDirectory = "/Users/jon";
 
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage
@@ -71,7 +71,8 @@
 
       # Dev
       direnv
-      devenv
+      # devenv
+      fh
 
       # Rust
       rustup
@@ -81,19 +82,21 @@
       # Python
       pipenv
       poetry
+      pyright
 
       asdf
       poppler
       rye
-     (python39.withPackages(ps: with ps; [
+     (python3.withPackages(ps: with ps; [
      #   # LSP Integration
      #   # python-lsp-server
      #   # pylsp-mypy
      #   # flake8
      #   # For like, you know, science
-     #   # pandas
-     #   # plotly
-     #   # numpy
+       pandas
+       plotly
+       numpy
+       scipy
      #   # scikit-learn
      #   # matplotlib
      #   # jupyter
@@ -107,11 +110,16 @@
 
       # Haskell
       cabal2nix
-      awscli
+      cabal-install
+      haskell-language-server
 
       (haskellPackages.ghcWithPackages (ps: with ps; [
-        swish
+        hlint
+        cabal-fmt
+        cabal-gild
       ]))
+
+      awscli
 
       # Fancy MacOS terminal
       # iterm2
@@ -136,41 +144,9 @@
       nodejs
 
       # Latex etc
-      texlive.combined.scheme-full
+      # texlive.combined.scheme-full
       ispell
-
-      #aider-chat
-
-      # Oracle DB
-      # oracle-instantclient
     ];
-    # Hack for getting apps to show up in Spotlight, etc.
-    # See https://github.com/nix-community/home-manager/issues/1341
-    # And https://github.com/nix-community/home-manager/issues/1341#issuecomment-1714800288
-    # activation = {
-    #   trampolineApps = let
-    #     apps = pkgs.buildEnv {
-    #       name = "home-manager-applications";
-    #       paths = config.home.packages;
-    #       pathsToLink = "/Applications";
-    #     };
-    #   in
-    #     lib.hm.dag.entryAfter ["writeBoundary"] ''
-    #       toDir="$HOME/Applications/Home Manager Trampolines"
-    #       fromDir="${apps}/Applications"
-    #       rm -rf "$toDir"
-    #       mkdir "$toDir"
-    #       (
-    #         cd "$fromDir"
-    #         for app in *.app; do
-    #           /usr/bin/osacompile -o "$toDir/$app" -e 'do shell script "open \"$fromDir/$app\""'
-    #           icon="$(/usr/bin/plutil -extract CFBundleIconFile raw "$fromDir/$app/Contents/Info.plist")"
-    #           mkdir -p "$toDir/$app/Contents/Resources"
-    #           cp -f "$fromDir/$app/Contents/Resources/$icon" "$toDir/$app/Contents/Resources/applet.icns"
-    #         done
-    #       )
-    #     '';
-    # };
   };
   programs = {
     alacritty = {
@@ -204,11 +180,23 @@
       enableZshIntegration = true;
       enableNushellIntegration = true;
     };
-    home-manager.enable = true;
-    emacs = {
+    doom-emacs = {
       enable = true;
-      extraPackages = epkgs: [ epkgs.pdf-tools ];
+      doomDir = ./doom;
+      doomLocalDir = "${config.home.homeDirectory}/.local/share/nix-doom";
+      extraPackages = epkgs: with epkgs; [
+        treesit-grammars.with-all-grammars
+        nushell-mode
+        org-node
+        lispy
+        ob-nushell
+      ];
     };
+    home-manager.enable = true;
+    # emacs = {
+    #   enable = true;
+    #   extraPackages = epkgs: [ epkgs.pdf-tools ];
+    # };
     git = {
       enable = true;
       lfs.enable = true;
@@ -263,7 +251,7 @@
         path add "/usr/local/bin"
       '';
       shellAliases = {
-        upgrade = "darwin-rebuild switch --flake ~/Dotfiles/dotfiles";
+        # upgrade = "nix flake update --flake ~/Dotfiles/dotfiles/; sudo darwin-rebuild switch --flake ~/Dotfiles/dotfiles";
         git-root = "cd (git rev-parse --show-cdup)";
         proxy = "ssh -vND localhost:7999 pvgateway";
         gst = "git status";
@@ -372,7 +360,7 @@
       enableVteIntegration = true;
       autocd = true;
       defaultKeymap = "viins";
-      initExtra = ''
+      initContent = ''
 export JAVA_HOME=`/usr/libexec/java_home -v11`
 export PATH="$HOME/.config/emacs/bin:$HOME/.local/bin:$JAVA_HOME/bin:/opt/homebrew/bin:$PATH"
 export PATH="$PATH:/Users/jon/Library/Application Support/Coursier/bin"
@@ -382,7 +370,7 @@ export PATH="$JAVA_HOME/bin:/opt/homebrew/bin:$PATH"
 alias ls="ls --color"
 alias git-root='cd $(git rev-parse --show-cdup)'
 alias proxy='ssh -vND localhost:7999 pvgateway'
-alias upgrade='darwin-rebuild switch --flake ~/Dotfiles/dotfiles'
+#alias upgrade='sudo darwin-rebuild switch --flake ~/Dotfiles/dotfiles'
 
 source ~/Dotfiles/scripts/vterm.zsh
 

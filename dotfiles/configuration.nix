@@ -7,12 +7,17 @@
     [ pkgs.vim
     ];
   fonts = {
-    fontDir.enable = true;
-    fonts = [
-      pkgs.fira-code
+    packages = [
+      pkgs.cascadia-code
       pkgs.roboto
       pkgs.iosevka-comfy.comfy
       pkgs.agave
+      pkgs.nerd-fonts.victor-mono
+      pkgs.nerd-fonts.sauce-code-pro
+      pkgs.nerd-fonts.monofur
+      pkgs.nerd-fonts.fantasque-sans-mono
+      pkgs.nerd-fonts.fira-code
+      pkgs.nerd-fonts.departure-mono
     ];
   };
   homebrew = {
@@ -55,10 +60,8 @@
   environment.darwinConfig = "$HOME/Dotfiles/dotfiles/configuration.nix";
 
   # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
   nix = {
-    package = pkgs.nixVersions.stable;
-    settings.experimental-features = [ "nix-command" "flakes" ];
+    enable = false;
   };
 
   nixpkgs.config.allowUnfree = true;
