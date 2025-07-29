@@ -573,6 +573,19 @@
         (define-key vterm-mode-map (kbd "C-<escape>") #'vterm-send-next-key)
         )
 
+;; MANUALLY FIX PATH FOR NIX/MACOS GUI LAUNCH
+;; -------------------------------------------
+;; My Nix setup doesn't include the 'exec-path-from-shell' package,
+;; so I have to manually query the shell for the correct PATH when
+;; Emacs is launched as a GUI app.
+(when (and (memq window-system '(mac ns)) ; Only run on macOS GUI
+           (not (getenv "SSH_CLIENT")))    ; Don't run over SSH
+  (let ((path-from-shell (shell-command-to-string "/bin/zsh -l -c 'echo -n $PATH'")))
+    ;; Set the PATH environment variable for sub-processes (like vterm)
+    (setenv "PATH" path-from-shell)
+    ;; Set the exec-path for Emacs's own command searching
+    (setq exec-path (split-string path-from-shell path-separator))))
+
 ;; (delete 'lsp-terraform lsp-client-packages)
 
 ;; (set-locale-environment "eo.utf-8")

@@ -25,6 +25,11 @@
     # You can update Home Manager without changing this value. See
     # the Home Manager release notes for a list of state version
     # changes in each release.
+    shell = {
+      enableNushellIntegration = true;
+      enableShellIntegration = true;
+    };
+
     stateVersion = "22.11";
     packages = with pkgs; [
       # Basic necessities
