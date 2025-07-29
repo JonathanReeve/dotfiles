@@ -843,3 +843,14 @@ It is for commands that depend on the major mode. One example is
   (setq aider-program (expand-file-name "~/.local/bin/aider"))
   (setq aider-args (list "--genai" "sonnet-3-7"))
   (require 'aider-doom))
+
+
+(use-package! treemacs
+  :config
+  (require 'treemacs-nerd-icons)
+  (treemacs-load-theme "nerd-icons"))
+
+;; Dirty hack to fix treemacs-nerd-icons issue
+;; (let ((nerd-icons-path "/nix/store/1m3vkld6xz2phhrqj5nrpwj99xqlf0lg-emacs-packages-deps/share/emacs/site-lisp/elpa/treemacs-nerd-icons-20250116.1651/"))
+;;   (add-to-list 'load-path nerd-icons-path))
+;; (require 'treemacs-nerd-icons)

@@ -192,9 +192,12 @@
       extraPackages = epkgs: with epkgs; [
         treesit-grammars.with-all-grammars
         nushell-mode
+        ob-nushell
         org-node
         lispy
-        ob-nushell
+        treemacs
+        treemacs-nerd-icons
+        nerd-icons
       ];
     };
     home-manager.enable = true;
