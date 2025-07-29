@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "brew-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1751910772,
+        "narHash": "sha256-jQNdIkq2iRDNWskd5f8kX6q9BO/CBSXhMH41WNRft8E=",
+        "owner": "Homebrew",
+        "repo": "brew",
+        "rev": "700d67a85e0129ab8a893ff69246943479e33df1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Homebrew",
+        "ref": "4.5.9",
+        "repo": "brew",
+        "type": "github"
+      }
+    },
     "cl-nix-lite": {
       "locked": {
         "lastModified": 1728174978,
@@ -132,6 +149,38 @@
         "type": "github"
       }
     },
+    "homebrew-cask": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1753204454,
+        "narHash": "sha256-s6I15xnMK96Yc1GPq70xPx3pUAwmIlzU1tuqWMQbdpo=",
+        "owner": "homebrew",
+        "repo": "homebrew-cask",
+        "rev": "df8168ba6af22d3fb203f8b7b818baa460dc27ce",
+        "type": "github"
+      },
+      "original": {
+        "owner": "homebrew",
+        "repo": "homebrew-cask",
+        "type": "github"
+      }
+    },
+    "homebrew-core": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1753201843,
+        "narHash": "sha256-ZtjZxWExGOSU4smkWJIVzKHBh41qGoU8Cj1Yl5TU4MQ=",
+        "owner": "homebrew",
+        "repo": "homebrew-core",
+        "rev": "ed922ec6e8e9e7c105b61de835e393b79de3d8f3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "homebrew",
+        "repo": "homebrew-core",
+        "type": "github"
+      }
+    },
     "mac-app-util": {
       "inputs": {
         "cl-nix-lite": "cl-nix-lite",
@@ -172,6 +221,24 @@
       "original": {
         "owner": "marienz",
         "repo": "nix-doom-emacs-unstraightened",
+        "type": "github"
+      }
+    },
+    "nix-homebrew": {
+      "inputs": {
+        "brew-src": "brew-src"
+      },
+      "locked": {
+        "lastModified": 1752160973,
+        "narHash": "sha256-BCC8KB7TEtwv7vZN1WDu870tRbXtzUcmF9xNr6ws5Wc=",
+        "owner": "zhaofengli",
+        "repo": "nix-homebrew",
+        "rev": "69c1aa2f136f3c3326d9b6770e0eb54f12832971",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zhaofengli",
+        "repo": "nix-homebrew",
         "type": "github"
       }
     },
@@ -225,8 +292,11 @@
       "inputs": {
         "darwin": "darwin",
         "home-manager": "home-manager",
+        "homebrew-cask": "homebrew-cask",
+        "homebrew-core": "homebrew-core",
         "mac-app-util": "mac-app-util",
         "nix-doom-emacs-unstraightened": "nix-doom-emacs-unstraightened",
+        "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs_3"
       }
     },

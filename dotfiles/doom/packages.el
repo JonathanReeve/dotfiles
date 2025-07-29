@@ -85,12 +85,6 @@
 ;; ~/.doom.d/packages.el
 (package! evil-colemak-basics) ; colemak remaps
 
-;; Link stuff for macs
-(package! org-mac-link)
-
-;; Citar-org-roam
-(package! citar-org-roam)
-
 ;; (package! radar
 ;;   :recipe (:type git
 ;;            :repo "git@github.pie.apple.com:emacs/emacs-radar.git"))
@@ -133,3 +127,5 @@
 (package! apple-ldap
     :recipe (:type git :host nil :repo "git@github.pie.apple.com:emacs/apple-ldap.git")
     :pin "968e5f878127e0968bd8041bc7e5800128580814")
+
+(package! treemacs-nerd-icons)
