@@ -33,7 +33,7 @@
 ;; (setq doom-font (font-spec :family "Iosevka Comfy" :size 12)
 ;;       doom-variable-pitch-font (font-spec :family "Helvetica" :size 13))
 
-(setq doom-font (font-spec :family "0xProto" :size 13)
+(setq doom-font (font-spec :family "Cascadia Code" :size 13)
       doom-variable-pitch-font (font-spec :family "Helvetica" :size 14))
 
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
