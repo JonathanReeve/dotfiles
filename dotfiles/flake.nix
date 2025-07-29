@@ -14,9 +14,24 @@
     # Fix Mac Apps not appearing in Spotlight
     mac-app-util.url = "github:hraban/mac-app-util";
     nix-doom-emacs-unstraightened.url = "github:marienz/nix-doom-emacs-unstraightened";
+    # Manage homebrew with Nix
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    # Optional: Declarative tap management
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
   };
 
-  outputs = { self, darwin, nixpkgs, home-manager, mac-app-util, nix-doom-emacs-unstraightened }: {
+  outputs = { self
+            , darwin, nixpkgs, home-manager
+            , mac-app-util
+            , nix-doom-emacs-unstraightened
+            , nix-homebrew, homebrew-core, homebrew-cask }: {
     darwinConfigurations."Jonathans-MacBook-Pro" = darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       modules = [ ./configuration.nix
@@ -30,6 +45,22 @@
                       mac-app-util.homeManagerModules.default
                       nix-doom-emacs-unstraightened.homeModule
                     ];
+                  }
+                  nix-homebrew.darwinModules.nix-homebrew
+                  {
+                    nix-homebrew = {
+                      # Install Homebrew under the default prefix
+                      enable = true;
+
+                      # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
+                      enableRosetta = true;
+
+                      # User owning the Homebrew prefix
+                      user = "jon";
+
+                      # Automatically migrate existing Homebrew installations
+                      autoMigrate = true;
+                    };
                   }
                 ];
     };

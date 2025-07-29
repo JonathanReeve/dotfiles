@@ -21,7 +21,7 @@
     ];
   };
   homebrew = {
-    enable = false;
+    enable = true;
     onActivation = {
       autoUpdate = true;
       upgrade = true;
@@ -44,13 +44,16 @@
     casks = [
       "utm"
       "miniconda"
+      "applejdk-17"
       # "hammerspoon"
       # "logseq"
       # "nikitabobko/tap/aerospace"
       # "emacsclient"
       # "google-chrome"
     ];
-    taps = [ # "railwaycat/emacsmacport" 
+    taps = [
+      "apple/applejdk"
+      # "railwaycat/emacsmacport"
              # "d12frosted/emacs-plus"
              # "nikitabobko"
     ];
@@ -77,6 +80,7 @@
     home = "/Users/jon";
   };
 
+  system.primaryUser = "jon";
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
