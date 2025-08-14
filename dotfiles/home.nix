@@ -20,17 +20,7 @@ let
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
 in
 {
-  imports = [
-    # ./nix-doom-emacs.nix
-  ];
-  # modules = [
-  #   niri.homeModules.config {
-  #     programs.niri.settings = {
-  #       outputs."eDP-1".scale = 2.0;
-  #     };
-  #   }
-  # ];
-
+  imports = [];
   accounts.email = {
     maildirBasePath = "${maildir}";
     accounts = {
@@ -127,11 +117,9 @@ in
         modal = true;
       };
     };
-    emacs = {
+    doom-emacs = {
       enable = true;
-      extraPackages = epkgs: [
-        epkgs.mu4e
-      ];
+      doomDir = ./doom;
     };
     gnome-terminal = {
       profile.default = {
@@ -347,6 +335,9 @@ in
       theme = "~/.cache/wal/colors-rofi-dark.rasi";
       font = "${font} 12";
       package = pkgs.rofi-wayland;
+    };
+    quickshell = {
+      enable = true;
     };
     waybar = {
       enable = true;

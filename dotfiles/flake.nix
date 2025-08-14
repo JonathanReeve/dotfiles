@@ -6,54 +6,34 @@
       # url = "/home/jon/Code/home-manager";
       inputs.nixpkgs.follows = "nixos";
     };
-    nix-straight = {
-      url = "github:codingkoi/nix-straight.el?ref=codingkoi/apply-librephoenixs-fix";
-      flake = false;
-    };
-    nix-doom-emacs = {
-      url = "github:nix-community/nix-doom-emacs";
-      inputs = {
-        nix-straight.follows = "nix-straight";
-      };
-    };
+    caelestia-shell.url = "github:caelestia-dots/shell";
+    caelestia-cli.url = "github:caelestia-dots/cli";
     # niri.url = "github:sodiboo/niri-flake";
-    # Re-enable this after https://github.com/nix-community/nix-doom-emacs/issues/409 is fixed
-    # nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
     # nixos-hardware.url = github:NixOS/nixos-hardware/master;
-    nixos.url = "nixpkgs/nixos-unstable";
-    # Old Nixpkgs for mu
-    nixos-old.url = "nixpkgs/8af8e36";
-    # jupyterWith.url = "github:tweag/jupyterWith";
-    # nixos.url = "github:nixos/nixpkgs";
-    # nixos.url = "/home/jon/Code/nixpkgs";
-    # emacs-overlay.url = "github:nix-community/emacs-overlay";
+   nix-doom-emacs-unstraightened.url = "github:marienz/nix-doom-emacs-unstraightened";
+   nixos.url = "nixpkgs/nixos-unstable";
   };
-  outputs = { self, nixos, nixos-hardware,
-              home-manager, nix-straight, nix-doom-emacs, nixos-old }:
-    let overlays = [
-      # (final: prev: {mu = nixos-old.legacyPackages.${prev.system}.mu;})
-    ];
-    in {
-    nixosConfigurations.jon-laptop = nixos.lib.nixosSystem {
+  outputs = inputs @ { self, nixos, home-manager, ... }:
+    { nixosConfigurations.jon-laptop = nixos.lib.nixosSystem {
        system = "x86_64-linux";
        modules = [ ./configuration.nix
-                   # ({...}: { nixpkgs.overlays = [ (import self.inputs.emacs-overlay) ];})
-                   ({...}: { nixpkgs.overlays = overlays;})
                    # ./cachix.nix
                    # TODO. This makes the kernel rebuild, apparently
                    # nixos-hardware.nixosModules.dell-xps-13-9310
-                   nixos-hardware.nixosModules.common-cpu-intel
-                   nixos-hardware.nixosModules.common-pc-laptop
-                   nixos-hardware.nixosModules.common-pc-laptop-ssd
+                   # nixos-hardware.nixosModules.common-cpu-intel
+                   # nixos-hardware.nixosModules.common-pc-laptop
+                   # nixos-hardware.nixosModules.common-pc-laptop-ssd
 
                    home-manager.nixosModules.home-manager {
                      home-manager.useGlobalPkgs = true;
                      home-manager.useUserPackages = true;
                      home-manager.backupFileExtension = "backup";
+                     home-manager.extraSpecialArgs = { inherit inputs; };
                      home-manager.users.jon = { pkgs, ... }: {
                        imports = [ ./home.nix
-                                 #  ./nix-doom-emacs.nix
-                                  nix-doom-emacs.hmModule
+                                   ./hyprland.nix
+                                   inputs.nix-doom-emacs-unstraightened.homeModule
+                                   inputs.caelestia-shell.homeManagerModules.default
                                  ];
                      };
                    }
