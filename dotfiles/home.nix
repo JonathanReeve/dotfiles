@@ -637,11 +637,6 @@ in
       pkgs.pass # This is necessary for protonmail-bridge
     ];
     file = {
-      ".config/doom" = {
-      source = ./emacs/doom.d;
-      recursive = true;
-      onChange = "$HOME/.config/emacs/bin/doom sync";
-    };
       ".local/share/applications/org-protocol.desktop".text = ''
 [Desktop Entry]
 Name=org-protocol

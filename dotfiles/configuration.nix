@@ -384,7 +384,11 @@
     zsh.enable = true;
     chromium.enable = true;
     gnupg.agent = { enable = true; enableSSHSupport = true; };
-    # hyprland.enable = true;
+    hyprland = {
+      enable = true;
+      withUWSM = true;
+      xwayland.enable = true;
+    };
     sway = {
       enable = true;
       wrapperFeatures.gtk = true;
