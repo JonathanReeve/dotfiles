@@ -151,18 +151,6 @@ in
         (aspellWithDicts (dicts: with dicts; [ en en-computers en-science eo fr ]))
         ripgrep
       ];
-      provideEmacs = false;
-      # extraConfig = ''
-      #                       (setq mu4e-mu-binary "${pkgs.mu}/bin/mu")
-      #                       (setq epg-gpg-program "${pkgs.gnupg}/bin/gpg")
-      #
-      #'';
-    };
-    emacs = {
-      enable = true;
-      extraPackages = epkgs: [
-        epkgs.mu4e
-      ];
     };
     gnome-terminal = {
       profile.default = {
@@ -176,8 +164,6 @@ in
     # Have home-manager manage itself.
     home-manager = {
       enable = true;
-      # backupFileExtension = "backup";
-      # path = "/home/jon/Code/home-manager";
     };
     direnv = {
       nix-direnv.enable = true;
@@ -317,10 +303,6 @@ in
 
             #eval (direnv hook fish)
          '';
-    };
-    eww = {
-      enable = true;
-      configDir = ./eww;
     };
     fzf = {
       enable = true;
