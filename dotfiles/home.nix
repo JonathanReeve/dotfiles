@@ -649,10 +649,6 @@ Exec=emacsclient -- %u
 Terminal=false
 StartupWMClass=Emacs
 MimeType=x-scheme-handler/org-protocol;'';
-      #".emacs.d/init.el".text = ''
-      #    (load "default.el")
-      #'';
-
       # Vim all the things!
       ".inputrc".text =
         ''
