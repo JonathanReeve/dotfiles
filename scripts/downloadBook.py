@@ -24,13 +24,21 @@ def findISBN(soup):
     return isbn
 
 
-def findBookLink(soup):
+def findBookLinks(soup):
     allAs = soup.find_all("a")
+    booklinks = []
     for a in allAs:
         if 'href' in a.attrs:
-            if a.attrs['href'].startswith('https://cloudflare-ipfs.com'):
-                return a.attrs['href']
+            link = a.attrs['href']
+            if isBookLink(link):
+                booklinks.append(link)
+    return booklinks
 
+def isBookLink(link):
+    pats = ["https://cloudflare-ipfs.com", "https://gateway.ipfs.io", "https://gateway.pinata.cloud"]
+    for pat in pats:
+        if link.startswith(pat):
+            return True
 
 def isbnToBibtex(isbn):
     meta = isbnlib.meta(isbn)
@@ -44,8 +52,14 @@ def appendBibtex(bibtex, destFile=destFile):
         f.write(bibtex)
 
 
-def downloadBook(url, dest):
-    urlretrieve(url, dest)
+def downloadBook(bookLink, papersDir, key):
+    if bookLink.strip().endswith('pdf'):
+        dest = f"{papersDir}/{key}.pdf"
+    elif bookLink.strip().endswith('epub'):
+        dest = f"{papersDir}/{key}.epub"
+    else:
+        exit(f"Can't download book with this extension.")
+    urlretrieve(bookLink, dest)
     print(f"Wrote {dest}")
 
 
@@ -70,16 +84,15 @@ def main():
     key = getKey(bibtex)
     print(f"Key: {key}")
     appendBibtex(bibtex)
-    bookLink = findBookLink(soup)
-    pdfDest = f"{papersDir}/{key}.pdf"
-    if bookLink.strip().endswith('pdf'):
-        dest = f"{papersDir}/{key}.pdf"
-        downloadBook(bookLink, dest)
-    elif bookLink.strip().endswith('epub'):
-        dest = f"{papersDir}/{key}.epub"
-        downloadBook(bookLink, dest)
-    else:
-        exit(f"Can't download book with this extension.")
+    bookLinks = findBookLinks(soup)
+    for bookLink in bookLinks:
+        print("Trying download: ", bookLink)
+        try:
+            downloadBook(bookLink, papersDir, key)
+            break
+        except:
+            print("Download failed.")
+
     openNotes(key)
 
 

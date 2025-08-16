@@ -10,7 +10,7 @@
 ;; Set location of custom.el
 (setq custom-file "~/.config/emacs/custom.el")
 
-(setq doom-font (font-spec :family "Victor Mono" :size 18))
+(setq doom-font (font-spec :family "Victor Mono" :size 20))
 (setq doom-themes-treemacs-enable-variable-pitch 'nil)
 
 (setq vc-follow-symlinks t) ;; Always follow symlinks.
@@ -35,17 +35,22 @@
 
 ;; Citar
 ;; See https://github.com/hlissner/doom-emacs/blob/4612b39695405f7238dd3da0d4fd6d3a5cdd93d6/modules/tools/biblio/README.org
-(setq! citar-bibliography '("~/Dokumentoj/Papers/library.bib" "~/Dokumentoj/Papers/library2.bib")
-       citar-library-paths '("~/Dokumentoj/Papers/")
+(setq! citar-bibliography '("~/Dokumentoj/Papers/library.bib"
+                            "~/Dokumentoj/Papers/library2.bib"
+                            "~/Dokumentoj/Org/Roam/shared/library.bib")
+       citar-library-paths '("~/Dokumentoj/Papers/"
+                             "~/Dokumentoj/Org/Roam/shared/papers")
        citar-notes-paths '("~/Dokumentoj/Org/Roam/"))
 
-(setq! bibtex-completion-bibliography '("~/Dokumentoj/Papers/library.bib" "~/Dokumentoj/Papers/library2.bib")
+(setq! bibtex-completion-bibliography '("~/Dokumentoj/Papers/library.bib"
+                                        "~/Dokumentoj/Papers/library2.bib"
+                                        "~/Dokumentoj/Org/Roam/shared/library.bib")
        bibtex-completion-notes-path "~/Dokumentoj/Org/Roam/"
        bibtex-completion-library-path "~/Dokumentoj/Papers/")
 
 ;; Org Mode
 (after! org
-  (org-indent-mode)
+  ;; (org-indent-mode)
   (setq org-directory "~/Dokumentoj/Org"
         org-id-locations-file "~/Dokumentoj/Org/.orgids"
         org-startup-indented t
@@ -133,11 +138,39 @@
           ("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%u\n"
            :target (file+olp "movies.org" ("watched")
            ))
-          ("l" "literature note" plain "%?" :target
-           (file+head "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
-            "#+title: ${citar-citekey} (${citar-date}). ${note-title}.\n#+created: %U\n#+last_modified: %U\n\n")
-           :unnarrowed t))
-          )
+        ("b" "literature note" plain "%?" :target (file+head
+                "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
+                "#+title: ${citar-citekey} (${citar-date}). ${note-title}.
+        #+created: %U
+        #+last-modified: %U
+
+        - keywords ::
+        - related ::
+
+        * ${note-title}
+        :PROPERTIES:
+        :Custom_ID: ${citar-citekey}
+        :URL: ${citar-url}
+        :AUTHOR: ${citar-author}
+        :NOTER_DOCUMENT: ${citar-file}
+        :NOTER_PAGE:
+        :END:\n
+        "
+                )
+            :unarrowed t)
+           ))
+
+   (setq citar-org-roam-template-fields
+         '((:citar-title "title")
+           (:citar-author "author" "editor")
+           (:citar-date "date" "year" "issued")
+           (:citar-pages "pages")
+           (:citar-file "file")
+           (:citar-keywords "keywords")
+           (:citar-url "url")
+           (:citar-type "=type=")
+           ))
+
   (setq org-roam-capture-ref-templates
         '(("r" "ref" plain "%?" :target
            (file+head "${slug}.org" "#+title: ${title}") :unnarrowed t)
@@ -150,44 +183,11 @@
   (setq org-clock-auto-clockout t)
   (setq org-clock-auto-clockout-timer 20)
 
-  (require 'org-roam-bibtex)
-  (use-package! org-roam-bibtex
-    :when (featurep! :lang org +roam2)
-    :after org
-    :preface
-    ;; if the user has not set a template mechanism set a reasonable one of them
-    ;; The package already tests for nil itself so we define a dummy tester
-    (defvar orb-preformat-keywords
-      '("title" "url" "file" "author-or-editor" "keywords" "citekey" "pdf"))
-    ;;:hook (org-roam-mode . org-roam-bibtex-mode)
-    :custom
-    (orb-note-actions-interface 'default)
-    :config
-    (setq orb-insert-interface 'generic)
-    ;; (setq orb-roam-ref-format 'org-ref-v2)
-    (setq orb-process-file-keyword t
-          orb-file-field-extensions '("pdf"))
-
-    (add-to-list 'org-roam-capture-templates
-                 '("b" "Bibliography note" plain
-                   "%?
-- keywords :: %^{keywords}
-- related ::
-
-* %^{title}
-:PROPERTIES:
-:Custom_ID: %^{citekey}
-:URL: %^{url}
-:AUTHOR: %^{author-or-editor}
-:NOTER_DOCUMENT: %^{file}
-:NOTER_PAGE:
-:END:\n\n"
-                   :if-new (file+head "${citekey}.org" ":PROPERTIES:
-:END:
-#+TITLE: ${citekey}: ${title}\n")
-                   :unnarrowed t))
-    (require 'org-ref))
-  (org-roam-bibtex-mode)
+  (use-package! citar-org-roam
+    :after (citar org-roam)
+    :config (citar-org-roam-mode)
+    (setq citar-org-roam-capture-template-key "b")
+    )
 
   (setq citar-templates
         '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
@@ -297,8 +297,8 @@ tasks."
   (setq org-agenda-files (delete-dups (append org-agenda-files (vulpea-project-files)))))
 
 ;; (add-hook 'find-file-hook #'vulpea-project-update-tag)
-(add-hook 'before-save-hook #'vulpea-project-update-tag)
-(add-hook 'org-agenda-mode-hook #'vulpea-agenda-files-update)
+;; (add-hook 'before-save-hook #'vulpea-project-update-tag)
+;; (add-hook 'org-agenda-mode-hook #'vulpea-agenda-files-update)
 ;; (remove-hook 'org-agenda-mode-hook #'vulpea-agenda-files-update)
 
 ;; functions borrowed from `vulpea' library
@@ -409,12 +409,13 @@ If nil it defaults to `split-string-default-separators', normally
 
   (setq org-attach-store-link-p 'attached)
 
-  (add-to-list 'org-latex-classes
-      '("letter"
-      "\\documentclass{letter}"
-      ("\\section{%s}" . "\\section*{%s}")
-      ("\\subsection{%s}" . "\\subsection*{%s}")
-      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+  ;; (add-to-list 'org-latex-classes
+  ;;     '("letter"
+  ;;     "\\documentclass{letter}"
+  ;;     ("\\section{%s}" . "\\section*{%s}")
+  ;;     ("\\subsection{%s}" . "\\subsection*{%s}")
+  ;;     ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+
 ) ;; End of Org block
 
 ;; (use-package! org-clock-reminder
@@ -499,6 +500,10 @@ If nil it defaults to `split-string-default-separators', normally
 )
   ;; (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
   ;; (setq mu4e-html2text-command "w3m -T text/html")
+
+;; (after! notmuch
+;;   (setq +notmuch-sync-backend 'mbsync)
+;;   )
 
 (after! org-msg
   (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t"
@@ -689,6 +694,7 @@ If nil it defaults to `split-string-default-separators', normally
 ;; (setq system-uses-terminfo nil)
 (after! vterm
         (setq vterm-shell "nu")
+        ;; (setf vterm-shell "nu --config ~/.config/nushell/emacs-config.nu")
         )
 
 (set-locale-environment "eo.utf-8")

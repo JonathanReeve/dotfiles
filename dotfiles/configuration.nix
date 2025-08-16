@@ -32,19 +32,15 @@
     hostName = "jon-laptop"; # Define your hostname .
     networkmanager.enable = true;
     firewall.checkReversePath = "loose";
-    useDHCP = false;
+    # useDHCP = false;
     # interfaces.wlp0s20f3.useDHCP = true;
-    interfaces.enp0s13f0u1u3u1.useDHCP = true;
+    # interfaces.enp0s13f0u1u3u1.useDHCP = true;
     # firewall.allowedTCPPorts = [ 8000 ]; # For local agenda server
   };
 
   nix = {
     # package = pkgs.nixFlakes; # For flakes
-    extraOptions = ''
-      experimental-features = nix-command flakes
-      keep-outputs = true
-      keep-derivations = true
-    '';
+    settings.experimental-features = [ "nix-command" "flakes" ];
   };
 
   nixpkgs = {
@@ -75,7 +71,6 @@
     font-awesome_5
     fira-code
     noto-fonts
-    noto-fonts-cjk
     noto-fonts-emoji
     fira-code
     fira-code-symbols
@@ -99,8 +94,8 @@
      nix-index              # Indexing files for nix-locate
      nix-prefetch-git nix-prefetch-scripts # Help writing .nix files
      cabal2nix # pypi2nix
-     nixfmt
      cachix
+     devenv
 
      # Security
      # yubico-pam yubioath-desktop yubikey-personalization
@@ -118,7 +113,7 @@
      vale                   # Prose linting
      # aspell aspellDicts.en  # Spell checker
      (aspellWithDicts (dicts: with dicts; [ en en-computers en-science eo fr ]))
-     pass encfs             # Passwords and encryption
+     pass encfs gopass      # Passwords and encryption
      light                  # Brightness control
      networkmanager
      tailscale
@@ -127,7 +122,6 @@
      wget
      isync w3m              # Mail
      protonmail-bridge
-     pass # Required by protonmail-bridge
      protonmail-bridge-gui
 
      gnutls                 # For mail auth
@@ -138,7 +132,6 @@
      #direnv                # Essential project management thingy
      graphviz               # Simple charts
      xclip                  # Clipboard on the command line
-     x11idle
      dict                   # Dictionary
 
      pywal
@@ -183,6 +176,7 @@
 
      cabal-install
      texlive.combined.scheme-full
+     typst
      git                    # Version control
      github-cli
      zip unzip                  # Archives
@@ -211,6 +205,7 @@
      scrot                  # Screenshots
      tree                   # Show file hierarchies
      mpv                    # Minimalist video player
+     freetube
      #termite                # Vim-like modal terminal
      feh                    # Display images
      libnotify              # Notifications
@@ -226,7 +221,7 @@
      #qutebrowser            # Web browser
      chromium               # Another web browser
      firefox-wayland        # Yes, a third
-     nyxt                   # Why stop now?
+     #nyxt                   # Why stop now?
 
      # Ugh
      zoom-us
@@ -257,6 +252,7 @@
 
      # Hyprland
      hyprland
+     mpvpaper
 
      # Web dev
      nodejs
@@ -271,7 +267,10 @@
      quarto
      #jupyter-book
 
+     # Organize books
+     calibre
      
+     filezilla
    ];
 
   environment.variables = {
@@ -282,13 +281,9 @@
   };
 
   # Enable sound.
-  sound.enable = true;
   hardware = {
     firmware = with pkgs; [ firmwareLinuxNonfree ];
     keyboard.qmk.enable = true;
-    pulseaudio = {
-      enable = true;
-    };
     sensor.iio.enable = true;
     bluetooth.enable = true;
   };
@@ -374,6 +369,7 @@
   # Shell
   programs = {
     fish.enable = true;
+    hyprland.enable = true;
     chromium = {
       enable = true;
     };
@@ -397,7 +393,7 @@
     systemrestore =
       { isNormalUser = true;
         home = "/home/systemrestore";
-        shell = pkgs.fish;
+        shell = pkgs.zsh;
         description = "System Restore";
         extraGroups = [ "wheel" "networkmanager" ];
       };

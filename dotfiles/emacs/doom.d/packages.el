@@ -68,3 +68,10 @@
 ;; (package! evil-colemak-basics) ; colemak remaps
 
 (package! quarto-mode :recipe (:host github :repo "quarto-dev/quarto-emacs" ))
+
+;; (package! org-msg
+;;   :recipe (:host github :repo "danielfleischer/org-msg" :branch "1.12")
+;;   :pin "4dcd70f"
+;;  )
+
+;; (package! org-typst-preview :recipe (:host github :repo "remimimimimi/org-typst-preview.el"))

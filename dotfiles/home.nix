@@ -44,6 +44,7 @@ in
             ExpireUnread = "yes";
           };
         };
+        # notmuch.enable = true;
         realName = "${name}";
         thunderbird.enable = true;
       };
@@ -63,6 +64,7 @@ in
             ExpireUnread = "yes";
           };
         };
+        # notmuch.enable = true;
         realName = "${name}";
         thunderbird.enable = true;
       };
@@ -89,6 +91,7 @@ in
           };
         };
         mu.enable = true;
+        # notmuch.enable = true;
         mbsync = {
           enable = true;
           create = "maildir";
@@ -121,7 +124,7 @@ in
         font.size = 14;
         window.opacity = 0.9;
         colors.transparent_background_colors = true;
-        shell = "nu";
+        terminal.shell = "nu";
       };
     };
     bottom.enable = true;
@@ -131,6 +134,29 @@ in
       settings = {
         modal = true;
       };
+    };
+    doom-emacs = {
+      enable = true;
+      # emacs = pkgs.emacs29-pgtk;
+      doomDir = ./emacs/doom.d;
+      extraBinPackages = with pkgs; [
+        fd
+        ripgrep
+        git
+      ];
+      extraPackages = epkgs: with pkgs; [
+        mu
+        pass
+        gnupg
+        (aspellWithDicts (dicts: with dicts; [ en en-computers en-science eo fr ]))
+        ripgrep
+      ];
+      provideEmacs = false;
+      # extraConfig = ''
+      #                       (setq mu4e-mu-binary "${pkgs.mu}/bin/mu")
+      #                       (setq epg-gpg-program "${pkgs.gnupg}/bin/gpg")
+      #
+      #'';
     };
     emacs = {
       enable = true;
@@ -150,6 +176,7 @@ in
     # Have home-manager manage itself.
     home-manager = {
       enable = true;
+      # backupFileExtension = "backup";
       # path = "/home/jon/Code/home-manager";
     };
     direnv = {
@@ -170,13 +197,14 @@ in
     mbsync = {
       enable = true;
     };
+    # notmuch.enable = true;
     mu = {
       enable = true;
     };
     neovim = {
       enable = true;
       # package = pkgs.neovim;
-      plugins = with pkgs.vimPlugins; [ spacevim ];
+      plugins = with pkgs.vimPlugins; [ ];
       vimAlias = true;
       extraConfig =
         ''
@@ -289,44 +317,10 @@ in
 
             #eval (direnv hook fish)
          '';
-      # plugins = [
-      #   {
-      #     name = "z";
-      #     src = pkgs.fetchFromGitHub {
-      #       owner = "jethrokuan";
-      #       repo = "z";
-      #       rev = "45a9ff6d0932b0e9835cbeb60b9794ba706eef10";
-      #       sha256 = "pWkEhjbcxXduyKz1mAFo90IuQdX7R8bLCQgb0R+hXs4=";
-      #     };
-      #   }
-      #   {
-      #     name = "bang-bang";
-      #     src = pkgs.fetchFromGitHub {
-      #       owner = "oh-my-fish";
-      #       repo = "plugin-bang-bang";
-      #       rev = "f969c618301163273d0a03d002614d9a81952c1e";
-      #       sha256 = "A8ydBX4LORk+nutjHurqNNWFmW6LIiBPQcxS3x4nbeQ=";
-      #     };
-      #   }
-      #   {
-      #     name = "fzf.fish";
-      #     src = pkgs.fetchFromGitHub {
-      #       owner = "PatrickF1";
-      #       repo = "fzf.fish";
-      #       rev = "0dc2795255d6ac0759e6f1d572f64ea0768acefb";
-      #       sha256 = "fl4/Pgtkojk5AE52wpGDnuLajQxHoVqyphE90IIPYFU=";
-      #     };
-      #   }
-      #   {
-      #     name = "bass";
-      #     src = pkgs.fetchFromGitHub {
-      #       owner = "edc";
-      #       repo = "bass";
-      #       rev = "2fd3d2157d5271ca3575b13daec975ca4c10577a";
-      #       sha256 = "fl4/Pgtkojk5AE52wpGDnuLajQxHoVqyphE90IIPYFU=";
-      #     };
-      #   }
-      # ];
+    };
+    eww = {
+      enable = true;
+      configDir = ./eww;
     };
     fzf = {
       enable = true;
@@ -337,7 +331,7 @@ in
       enable = true;
       configFile.source = ./config.nu;
       environmentVariables = {
-        PASSWORD_STORE_DIR = "${dokumentoj}/Personal/.password-store";
+        PASSWORD_STORE_DIR = "\"${dokumentoj}/Personal/.password-store\"";
       };
       shellAliases = {
         # upgrade = "nix flake update ${dots}; sudo nixos-rebuild switch --flake ${dots}";
@@ -387,7 +381,7 @@ in
       settings = [{
         layer = "top";
         height = 30;
-        modules-left = [ "sway/workspaces" "sway/mode" "sway/window" ];
+        modules-left = [ "hyprland/workspaces" "hyprland/window" "sway/workspaces" "sway/mode" "sway/window" ];
         modules-center = [ "custom/clock" ];
         modules-right = [ "custom/org-clock" "pulseaudio" "cpu" "memory" "network" "battery" "clock" ];
         battery = {
@@ -479,12 +473,14 @@ in
           "i" =  "scroll right";
           "j" =  "search-next";
           "b" =  "set-cmd-text -s :tab-select ";
-          "gL" =  "open javascript:location.href='org-protocol://capture?template=l&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
-          "gM" =  "open javascript:location.href='org-protocol://roam-ref?template=m&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
+          "gL" = "open javascript:location.href='org-protocol://capture?template=l&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
+          "gM" = "open javascript:location.href='org-protocol://roam-ref?template=m&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
           "gR" = "open javascript:location.href='org-protocol://roam-ref?template=r&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
           "gB" = "spawn -m ${scripts}/downloadBook.py {url}";
-          "pf" =  "spawn --userscript qute-pass";
-          "gz" =  "jseval var d=document,s=d.createElement('script';;s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement;.appendChild(s;;void(0;;";
+          "pf" = "spawn --userscript qute-pass";
+          "gz" = "jseval var d=document,s=d.createElement('script';;s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement;.appendChild(s;;void(0;;";
+          "go" = "open javascript:void(open('https://omnivore.app/api/save?url='+encodeURIComponent(location.href),'Omnivore'))";
+
           "t" =  "set-cmd-text -s :open -t";
           "Y" =  "yank selection";
           "O" =  "set-cmd-text :open {url:pretty}";
@@ -556,6 +552,15 @@ in
       enable = true;
       launcher = "rofi";
     };
+    hyprpaper = {
+      enable = true;
+      settings = {
+        preload = "/home/jon/Bildujo/Ekranfonoj/nixos-wallpaper.png";
+        wallpaper = [
+          "eDP-2,/home/jon/Bildujo/Ekranfonoj/nixos-wallpaper.png"
+        ];
+      };
+    };
     dunst = {
       enable = true;
       settings = {
@@ -593,40 +598,6 @@ in
         };
       };
       waylandDisplay = "eDP-1";
-    };
-    kanshi = {
-      enable = true;
-      profiles = {
-        undocked = {
-          outputs = [
-            {
-              criteria = "eDP-1";
-            }
-          ];
-        };
-        docked = {
-          outputs = [
-            { criteria = "eDP-1";
-              position = "0,0";
-            }
-            {
-              criteria = "Samsung Electric Company SAMSUNG 0x00000F00";
-              position = "380,1440";
-            }
-          ];
-        };
-        clamshell = {
-          outputs = [
-            { criteria = "eDP-1";
-              status = "disable";
-            }
-            {
-              criteria = "Samsung Electric Company SAMSUNG 0x00000F00";
-              position = "0,0";
-            }
-          ];
-        };
-      };
     };
     pueue = {
       enable = true;
@@ -678,14 +649,21 @@ in
       # neovim-nightly
       #
       pkgs.pass # This is necessary for protonmail-bridge
-      pkgs.gnome.gnome-keyring # Same
     ];
     file = {
       ".config/doom" = {
-      source = ./emacs/doom.d;
-      recursive = true;
-      # onChange = "$HOME/.config/emacs/bin/doom sync";
-    };
+        source = ./emacs/doom.d;
+        recursive = true;
+        # onChange = "$HOME/.config/emacs/bin/doom sync";
+      };
+
+
+
+      # ".config/hypr/hyprland.conf".source = ./hyprland.conf;
+      ".config/doom/extra.el".text = ''
+                            (setq mu4e-mu-binary "${pkgs.mu}/bin/mu")
+                            (setq epg-gpg-program "${pkgs.gnupg}/bin/gpg")
+                          '';
       ".local/share/applications/org-protocol.desktop".text = ''
 [Desktop Entry]
 Name=org-protocol
@@ -763,6 +741,92 @@ MimeType=x-scheme-handler/org-protocol;'';
           WantedBy = ["timers.target"];
         };
       };
+    };
+  };
+  wayland.windowManager.hyprland = {
+    enable = true;
+    settings = {
+      input = {
+          kb_layout= "us";
+          kb_variant= "colemak";
+          kb_options = "caps:escape,esperanto:colemak";
+          follow_mouse = 1;
+      };
+      monitor = "eDP-2,2560x1600@165,0x0,1";
+      general = {
+        sensitivity = 1;
+        border_size = 4;
+      };
+      decoration = {
+        rounding = 10;
+        blur = {
+          size = 8;
+          passes = 2;
+        };
+      };
+      animations = {
+        # enabled = ye
+        # Some default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
+        bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
+        animation = [
+          "windows, 1, 7, myBezier"
+          "windowsOut, 1, 7, default, popin 80%"
+          "border, 1, 10, default"
+          "fade, 1, 7, default"
+          "workspaces, 1, 6, default"
+        ];
+      };
+      bind = [
+        "SUPER,H,exec,alacritty"
+        "SUPER_SHIFT,C,killactive,"
+        "SUPER_SHIFT,Q,exit,"
+        "SUPER_SHIFT,T,togglefloating,"
+        "SUPER,X,togglegroup"
+        "SUPER,space,exec,rofi -show drun"
+        "SUPER,P,pseudo,"
+        "ALT,H,movefocus,l"
+        "ALT,N,movefocus,d"
+        "ALT,E,movefocus,u"
+        "ALT,I,movefocus,r"
+        "ALT_SHIFT,H,movewindow,l"
+        "ALT_SHIFT,N,movewindow,d"
+        "ALT_SHIFT,E,movewindow,u"
+        "ALT_SHIFT,I,movewindow,r"
+        "SUPER,J,workspace,1"
+        "SUPER,L,workspace,2"
+        "SUPER,U,workspace,3"
+        "SUPER,Y,workspace,4"
+        "SUPER,5,workspace,5"
+        "SUPER,6,workspace,6"
+        "SUPER,7,workspace,7"
+        "SUPER,8,workspace,8"
+        "SUPER,9,workspace,9"
+        "SUPER,0,workspace,10"
+        "SUPER_SHIFT,J,movetoworkspace,1"
+        "SUPER_SHIFT,L,movetoworkspace,2"
+        "SUPER_SHIFT,U,movetoworkspace,3"
+        "SUPER_SHIFT,Y,movetoworkspace,4"
+        "ALT,5,movetoworkspace,5"
+        "ALT,6,movetoworkspace,6"
+        "ALT,7,movetoworkspace,7"
+        "ALT,8,movetoworkspace,8"
+        "ALT,9,movetoworkspace,9"
+        "ALT,0,movetoworkspace,10"
+        "XF86MonBrightnessUp,exec,${pkgs.brightnessctl}/bin/brightnessctl set '+10%'"
+        "XF86MonBrightnessDown,exec,${pkgs.brightnessctl}/bin/brightnessctl set '10%-'"
+        "XF86AudioRaiseVolume,exec,${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up"
+        "XF86AudioLowerVolume,exec,${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl down"
+        "XF86AudioMute,exec,${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute"
+    ];
+      bindm = [
+        "SUPER,mouse:272,movewindow" # Left mouse button and super moves
+        "SUPER,mouse:273,resizewindow,1" # Super + right mouse button resizes, keeping aspect ratio
+        "SUPER_SHIFT,mouse:273,resizewindow,2" # Same, but don't keep aspect ratio
+      ];
+      exec-once = [
+        "waybar"
+
+      ];
     };
   };
   wayland.windowManager.sway = {

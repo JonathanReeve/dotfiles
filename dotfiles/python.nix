@@ -4,7 +4,7 @@
   environment.systemPackages = with pkgs; [
      # Python Development
      pipenv
-     # poetry
+     poetry
      # mach-nix
      (python3.withPackages(ps: with ps; [
        pandas
@@ -23,9 +23,10 @@
        # tensorflow
        nltk
        pip
+       hatchling
        # poetry-dynamic-versioning
        numpy
-       nose
+       # nose
        tldextract # required by qute-pass
      ]))
   ];
