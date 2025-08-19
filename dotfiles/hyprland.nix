@@ -18,7 +18,7 @@
         input = {
           kb_layout = "us";
           kb_variant = "colemak";
-	  kb_options = [ "caps:escape" "esperanto:colemak" ];
+          kb_options = "caps:escape,esperanto:colemak";
           follow_mouse = 1;
         };
 
@@ -27,17 +27,21 @@
         };
 
         bind = [
-	  "Alt,space,exec,caelestia shell drawers toggle launcher"
+          "Alt,space,exec,caelestia shell drawers toggle launcher"
           "SUPER,H,exec,alacritty"
           "SUPER_SHIFT,C,killactive,"
           "SUPER_SHIFT,Q,exit,"
           "SUPER_SHIFT,T,togglefloating,"
           "SUPER,space,exec,rofi -show drun"
           "SUPER,P,pseudo,"
-          "SUPER,H,movefocus,l"
-          "SUPER,I,movefocus,r"
-          "SUPER,E,movefocus,u"
-          "SUPER,N,movefocus,d"
+          "Alt,H,movefocus,l"
+          "Alt,I,movefocus,r"
+          "Alt,E,movefocus,u"
+          "Alt,N,movefocus,d"
+          "Alt_Shift,H,movewindoworgroup,l"
+          "Alt_Shift,N,movewindoworgroup,d"
+          "Alt_Shift,E,movewindoworgroup,u"
+          "Alt_Shift,I,movewindoworgroup,r"
           "SUPER,J,workspace,1"
           "SUPER,L,workspace,2"
           "SUPER,U,workspace,3"

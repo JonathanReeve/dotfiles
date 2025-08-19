@@ -272,7 +272,8 @@
      quarto
      #jupyter-book
 
-     
+     # AI
+     aider-chat-full
    ];
 
   environment.variables = {

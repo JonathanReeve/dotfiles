@@ -72,3 +72,5 @@
 ;; (package! mu4e-compat :recipe (:host github :repo "tecosaur/mu4e-compat"))
 
 ;; (package! org-msg :recipe (:host github :repo "emacsomancer/org-msg"))
+
+(package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs"))

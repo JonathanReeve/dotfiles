@@ -72,6 +72,7 @@
        ;;shell             ; a terminal REPL for Emacs
        term              ; terminals in Emacs
        ;; vterm             ; another terminals in Emacs
+       eat
 
        :checkers
        syntax
