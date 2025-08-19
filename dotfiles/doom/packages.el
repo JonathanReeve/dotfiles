@@ -129,3 +129,9 @@
     :pin "968e5f878127e0968bd8041bc7e5800128580814")
 
 (package! treemacs-nerd-icons)
+
+(package! claude-code
+  :recipe (:host github
+           :repo "stevemolitor/claude-code.el"
+           :branch "main"
+           :files ("*.el" (:exclude "images/*"))))

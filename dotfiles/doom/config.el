@@ -586,10 +586,6 @@
     ;; Set the exec-path for Emacs's own command searching
     (setq exec-path (split-string path-from-shell path-separator))))
 
-;; (delete 'lsp-terraform lsp-client-packages)
-
-;; (set-locale-environment "eo.utf-8")
-
 ;; Scala
 ;; (add-to-list '+org-babel-mode-alist '(scala . ammonite))
 
@@ -639,64 +635,7 @@ end tell
     (when rdar-string
       (insert rdar-string))))
 
-;; Treemacs error. See https://github.com/emacs-lsp/lsp-mode/issues/4054
 (add-to-list 'image-types 'svg)
-
-;; Treemacs icons with LSP: https://github.com/emacs-lsp/lsp-treemacs/issues/89
-;; (with-eval-after-load 'lsp-treemacs
-;;           (doom-themes-treemacs-config))
-;; (after! lsp-treemacs
-;;   (load-library "doom-themes-ext-treemacs"))
-
-;; EAF: Emacs Application Framework
-;; (use-package! eaf
-;;   :load-path "~/.elisp/emacs-application-framework"
-;;   :init
-;;   :custom
-;;   (eaf-browser-continue-where-left-off t)
-;;   (eaf-browser-enable-adblocker t)
-;;   (browse-url-browser-function 'eaf-open-browser) ;; Make EAF Browser my default browser
-;;   :config
-;;   (defalias 'browse-web #'eaf-open-browser)
-
-;;   (require 'eaf-file-manager)
-;;   (require 'eaf-music-player)
-;;   (require 'eaf-image-viewer)
-;;   (require 'eaf-camera)
-;;   (require 'eaf-demo)
-;;   (require 'eaf-airshare)
-;;   (require 'eaf-terminal)
-;;   (require 'eaf-markdown-previewer)
-;;   (require 'eaf-video-player)
-;;   (require 'eaf-vue-demo)
-;;   (require 'eaf-file-sender)
-;;   (require 'eaf-pdf-viewer)
-;;   (require 'eaf-mindmap)
-;;   (require 'eaf-netease-cloud-music)
-;;   (require 'eaf-jupyter)
-;;   (require 'eaf-org-previewer)
-;;   (require 'eaf-system-monitor)
-;;   (require 'eaf-rss-reader)
-;;   (require 'eaf-file-browser)
-;;   (require 'eaf-browser)
-;;   (require 'eaf-org)
-;;   (require 'eaf-mail)
-;;   (require 'eaf-git)
-;;   (when (display-graphic-p)
-;;     (require 'eaf-all-the-icons))
-
-;;   (require 'eaf-evil)
-;;   (define-key key-translation-map (kbd "SPC")
-;;     (lambda (prompt)
-;;       (if (derived-mode-p 'eaf-mode)
-;;           (pcase eaf--buffer-app-name
-;;             ("browser" (if  (string= (eaf-call-sync "call_function" eaf--buffer-id "is_focus") "True")
-;;                            (kbd "SPC")
-;;                          (kbd eaf-evil-leader-key)))
-;;             ("pdf-viewer" (kbd eaf-evil-leader-key))
-;;             ("image-viewer" (kbd eaf-evil-leader-key))
-;;             (_  (kbd "SPC")))
-;;         (kbd "SPC")))))
 
 (with-eval-after-load 'treemacs
   (progn
@@ -844,13 +783,44 @@ It is for commands that depend on the major mode. One example is
   (setq aider-args (list "--genai" "sonnet-3-7"))
   (require 'aider-doom))
 
-
 (use-package! treemacs
   :config
   (require 'treemacs-nerd-icons)
   (treemacs-load-theme "nerd-icons"))
 
-;; Dirty hack to fix treemacs-nerd-icons issue
-;; (let ((nerd-icons-path "/nix/store/1m3vkld6xz2phhrqj5nrpwj99xqlf0lg-emacs-packages-deps/share/emacs/site-lisp/elpa/treemacs-nerd-icons-20250116.1651/"))
-;;   (add-to-list 'load-path nerd-icons-path))
-;; (require 'treemacs-nerd-icons)
+(use-package! claude-code
+  :config
+  ;; Use vterm backend instead of default eat
+  (setq claude-code-terminal-backend 'vterm)
+
+  ;; Enable claude-code-mode globally
+  (claude-code-mode)
+
+  ;; Vim-style keybindings using leader key (SPC l for LLM/Language model)
+  (map! :leader
+        (:prefix ("l" . "claude/llm")
+         :desc "Start Claude" "c" #'claude-code
+         :desc "Send command" "s" #'claude-code-send-command
+         :desc "Send command with context" "x" #'claude-code-send-command-with-context
+         :desc "Send region/buffer" "r" #'claude-code-send-region
+         :desc "Send buffer file" "o" #'claude-code-send-buffer-file
+         :desc "Fix error at point" "e" #'claude-code-fix-error-at-point
+         :desc "Toggle Claude window" "t" #'claude-code-toggle
+         :desc "Switch to Claude buffer" "b" #'claude-code-switch-to-buffer
+         :desc "Kill Claude session" "k" #'claude-code-kill
+         :desc "Start in directory" "d" #'claude-code-start-in-directory
+         :desc "Continue conversation" "C" #'claude-code-continue
+         :desc "Resume session" "R" #'claude-code-resume
+         :desc "New instance" "i" #'claude-code-new-instance
+         :desc "Toggle read-only" "z" #'claude-code-toggle-read-only-mode
+         :desc "Cycle modes" "M" #'claude-code-cycle-mode
+         :desc "Show transient menu" "m" #'claude-code-transient
+         :desc "Send return (yes)" "y" #'claude-code-send-return
+         :desc "Send escape (no)" "n" #'claude-code-send-escape
+         :desc "Send 1" "1" #'claude-code-send-1
+         :desc "Send 2" "2" #'claude-code-send-2
+         :desc "Send 3" "3" #'claude-code-send-3))
+
+  ;; Optional: Set up repeat map for mode cycling
+  :bind
+  (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode)))
