@@ -135,3 +135,8 @@
            :repo "stevemolitor/claude-code.el"
            :branch "main"
            :files ("*.el" (:exclude "images/*"))))
+
+(package! org-noter
+  :recipe (:host github
+           :repo "ahmed-shariff/org-noter"
+           ))

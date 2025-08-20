@@ -166,6 +166,7 @@
         +pretty          ; modern prettiness
         +pomodoro        ; be fruitful with the tomato technique
         +roam2            ; zettelkesten
+        +present
         +noter)
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
