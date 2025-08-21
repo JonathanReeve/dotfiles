@@ -136,7 +136,8 @@
            :branch "main"
            :files ("*.el" (:exclude "images/*"))))
 
-(package! org-noter
-  :recipe (:host github
-           :repo "ahmed-shariff/org-noter"
-           ))
+;; An interesting fork
+;; (package! org-noter
+;;   :recipe (:host github
+;;            :repo "ahmed-shariff/org-noter"
+;;            ))

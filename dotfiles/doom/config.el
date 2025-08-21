@@ -315,6 +315,7 @@
   ;; (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
   ;; (global-set-key (kbd "C-c c") 'org-capture)
   ;; (global-set-key (kbd "C-c n p") 'org-projectile-project-todo-completing-read)
+   
   (setq org-link-abbrev-alist
       '(("wikidata"        . "https://www.wikidata.org/wiki/")))
 
@@ -824,3 +825,6 @@ It is for commands that depend on the major mode. One example is
   ;; Optional: Set up repeat map for mode cycling
   :bind
   (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode)))
+
+(after! projectile
+  (setq projectile-project-search-path '("~/Code")))
