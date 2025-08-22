@@ -300,7 +300,7 @@
   (setq auth-sources '(pass))
   (setq auth-source-pass-filename "/home/jon/Dokumentoj/Personal/.password-store")
   (auth-source-pass-enable)
-  ;; (auth-source-pass--read-entry "127.0.0.1:1143")
+  ;; (auth-source-pass--read-entry "127.0.0.1:1143/jonathan@jonreeve.com")
   ;; (auth-source-pass-get "127.0.0.1:1143" "jonathan@jonreeve.com")
   (set-email-account! "gmail"
                       '((mu4e-sent-folder   . "/gmail/[Gmail]/Sent Mail")
