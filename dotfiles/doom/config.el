@@ -297,9 +297,9 @@
   (mu4e-icalendar-setup)
   ;; Use password-store as authentication source
   (require 'auth-source-pass)
-  (auth-source-pass-enable)
-  (setq auth-sources '(password-store))
+  (setq auth-sources '(pass))
   (setq auth-source-pass-filename "/home/jon/Dokumentoj/Personal/.password-store")
+  (auth-source-pass-enable)
   ;; (auth-source-pass--read-entry "127.0.0.1:1143")
   ;; (auth-source-pass-get "127.0.0.1:1143" "jonathan@jonreeve.com")
   (set-email-account! "gmail"
