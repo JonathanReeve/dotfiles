@@ -328,7 +328,7 @@
                         (smtpmail-smtp-user . "jonathan@jonreeve.com")
                         (user-mail-address  . "jonathan@jonreeve.com")
                         (smtpmail-smtp-server . "127.0.0.1")
-                        (smtpmail-smtp-service . 1025)
+                        (smtpmail-smtp-service . 1026)  ; Ĝusta porto por STARTTLS
                         (smtpmail-stream-type . starttls)
                         (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
                       t)
