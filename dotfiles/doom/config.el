@@ -328,12 +328,14 @@
                         (smtpmail-smtp-user . "jonathan@jonreeve.com")
                         (user-mail-address  . "jonathan@jonreeve.com")
                         (smtpmail-smtp-server . "127.0.0.1")
-                        (smtpmail-smtp-service . 1025)  ; Ĝusta porto por STARTTLS
+                        (smtpmail-smtp-service . 1025)
                         (smtpmail-stream-type . starttls)
+                        (smtpmail-smtp-user . "jonathan@jonreeve.com")  ; Eble necesas plena retadreso
+                        (user-full-name . "Jonathan Reeve")  ; Aldona agordo por senditaj mesaĝoj
                         (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
                       t)
   (setq message-send-mail-function 'smtpmail-send-it)
-  ;;(add-to-list 'gnutls-trustfiles "~/.config/protonmail/bridge/cert.pem")
+  (add-to-list 'gnutls-trustfiles "~/.config/protonmail/bridge/cert.pem")
   (setq mu4e-maildir "~/Retpoŝto"
         mu4e-trash-folder "/Trash"
         mu4e-refile-folder "/Archive"
