@@ -327,12 +327,12 @@
                         (mu4e-drafts-folder . "/protonmail/Drafts")
                         (smtpmail-smtp-user . "jonathan@jonreeve.com")
                         (user-mail-address  . "jonathan@jonreeve.com")
-                        (smtpmail-auth-credentials "localhost:1143:jonathan@jonreeve.com")
+                        (smtpmail-auth-credentials "127.0.0.1:1025:jonathan@jonreeve.com")
                         (smtpmail-smtp-server . "127.0.0.1")
                         (smtpmail-smtp-service . 1025)
                         (smtpmail-stream-type . starttls)
-                        (smtpmail-smtp-user . "jonathan@jonreeve.com")  ; Eble necesas plena retadreso
-                        (user-full-name . "Jonathan Reeve")  ; Aldona agordo por senditaj mesaĝoj
+                        (smtpmail-smtp-user . "jonathan@jonreeve.com")
+                        (user-full-name . "Jonathan Reeve")
                         (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
                       t)
   (setq message-send-mail-function 'smtpmail-send-it)
