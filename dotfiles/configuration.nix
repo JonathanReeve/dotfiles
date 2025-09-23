@@ -58,9 +58,10 @@
   console.useXkbConfig = true;
 
   # Select internationalisation properties.
+  # Use `extraLocales` instead of deprecated `supportedLocales`.
   i18n = {
     defaultLocale = "eo.UTF-8";
-    supportedLocales = [ "eo/UTF-8" "en_US.UTF-8/UTF-8" ];
+    extraLocales = [ "eo.UTF-8" "en_US.UTF-8" ];
   };
 
   # Fonts!
@@ -267,9 +268,9 @@
      #jupyter-book
 
      # Organize books
-     calibre
+     # calibre
      
-     filezilla
+     # filezilla
 
      # AI
      aider-chat-full
@@ -320,8 +321,13 @@
     };
 
     # Power button invokes suspend, not shutdown.
+    # Updated option name: see NixOS options for logind settings
     logind = {
-      lidSwitch = "suspend";
+      settings = {
+        Login = {
+          HandleLidSwitch = "suspend";
+        };
+      };
     };
 
     # Power management

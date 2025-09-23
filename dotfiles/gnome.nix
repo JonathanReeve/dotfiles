@@ -5,11 +5,6 @@
      deja-dup               # Backups
      gthumb                 # Photos
      gnome-tweaks
-     # gnome.gnome-boxes
-     #gnomeExtensions.appindicator
-     #gnomeExtensions.caffeine
-     #gnomeExtensions.dash-to-dock
-     #gnomeExtensions.gsconnect
      #gnomeExtensions.pop-shell
      gnomeExtensions.paperwm
      foliate                 # Ebooks
@@ -38,16 +33,7 @@
       tinysparql.enable = true;
       localsearch.enable = true;
     };
-  services.xserver = {
-      displayManager.gdm.enable = true;
-      desktopManager.gnome.enable = true;
-  };
-  programs = {
-    gnome-terminal.enable = true;
-    # gnome-documents.enable = true;
-    kdeconnect = {
-      enable = true;
-      package = pkgs.gnomeExtensions.gsconnect;
-    };
-  };
+  # Newer NixOS uses top-level `services.displayManager` and `services.desktopManager`
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
 }
