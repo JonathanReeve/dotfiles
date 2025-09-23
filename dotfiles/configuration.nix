@@ -226,6 +226,7 @@
      # Ugh
      zoom-us
      # calibre                # Ebooks
+     libgourou                # Epub/PDF DRM
 
      ntfs3g ntfsprogs       # Windows drives compatibility
 
@@ -271,6 +272,9 @@
      calibre
      
      filezilla
+
+     # AI
+     aider-chat-full
    ];
 
   environment.variables = {

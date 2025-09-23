@@ -138,7 +138,7 @@ in
     doom-emacs = {
       enable = true;
       # emacs = pkgs.emacs29-pgtk;
-      doomDir = ./emacs/doom.d;
+      doomDir = ./doom;
       extraBinPackages = with pkgs; [
         fd
         ripgrep
@@ -605,6 +605,10 @@ in
       }];
       timeouts = [{ timeout = 900; command = "${lockCmd}"; }];
     };
+    protonmail-bridge = {
+      enable = true;
+      extraPackages = with pkgs; [ pass gnome-keyring ];
+    };
   };
   qt = {
     enable = true;
@@ -628,20 +632,9 @@ in
       x11.enable = true;
     };
     packages = with pkgs; [
-      # neovim-nightly
       #
-      pkgs.pass # This is necessary for protonmail-bridge
     ];
     file = {
-      ".config/doom" = {
-        source = ./emacs/doom.d;
-        recursive = true;
-        # onChange = "$HOME/.config/emacs/bin/doom sync";
-      };
-
-
-
-      # ".config/hypr/hyprland.conf".source = ./hyprland.conf;
       ".config/doom/extra.el".text = ''
                             (setq mu4e-mu-binary "${pkgs.mu}/bin/mu")
                             (setq epg-gpg-program "${pkgs.gnupg}/bin/gpg")
@@ -691,11 +684,6 @@ MimeType=x-scheme-handler/org-protocol;'';
 
   systemd.user = {
     services = {
-      # protonmail = {
-      #   Unit = { Description = "Protonmail Bridge"; };
-      #   Service.ExecStart = "${pkgs.protonmail-bridge}/bin/protonmail-bridge --noninteractive";
-      #   Install.WantedBy = [ "default.target" ];
-      # };
       dwall = {
         Unit = {
           Description = "Set dynamic wallpaper using Dwall";
