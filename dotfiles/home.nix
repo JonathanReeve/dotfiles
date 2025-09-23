@@ -21,9 +21,7 @@ let
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
 in
 {
-  imports = [
-    # ./nix-doom-emacs.nix
-  ];
+  imports = [ ];
   accounts.email = {
     maildirBasePath = "${maildir}";
     accounts = {
@@ -206,10 +204,6 @@ in
         nnoremap l i
       '';
     };
-    niri = {
-      enable = true;
-      package = pkgs.niri;
-    };
     nix-index = {
       enable = true;
       enableFishIntegration = true;
@@ -356,7 +350,6 @@ in
       enable = true;
       theme = "~/.cache/wal/colors-rofi-dark.rasi";
       font = "${font} 12";
-      package = pkgs.rofi-wayland;
     };
     waybar = {
       enable = true;

@@ -6,12 +6,10 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
-      #./cachix.nix
+    [ #./cachix.nix
       ./gnome.nix
-      ./hardware-configuration.nix
       ./python.nix
-      # ./R.nix
+      #./R.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -323,7 +321,6 @@
 
     # Power button invokes suspend, not shutdown.
     logind = {
-      extraConfig = "HandlePowerKey=suspend";
       lidSwitch = "suspend";
     };
 
@@ -363,10 +360,6 @@
 	            & waitPID=$!''; 
         }
       ];
-      # windowManager.exwm = {
-      #   enable = true;
-      #   enableDefaultConfig = true;
-      # };
     };
   };
 

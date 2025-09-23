@@ -3,43 +3,58 @@
   inputs = {
     home-manager = {
       url = "github:nix-community/home-manager";
-      # url = "/home/jon/Code/home-manager";
       inputs.nixpkgs.follows = "nixos";
     };
-    niri.url = "github:sodiboo/niri-flake";
-    nix-doom-emacs-unstraightened.url = "github:marienz/nix-doom-emacs-unstraightened";
     nixos.url = "nixpkgs/nixos-unstable";
-    # nixos.url = "/home/jon/Code/nixpkgs";
-    # emacs-overlay.url = "github:nix-community/emacs-overlay";
-    nixos-old.url = "github:nixos/nixpkgs/nixos-23.11";
-    stylix.url = "github:danth/stylix";
-
+    nixos-hardware.url = "github:NixOS/nixos-hardware"; 
+    nix-doom-emacs-unstraightened.url = "github:marienz/nix-doom-emacs-unstraightened"; # Retained for both laptops
   };
   outputs = { self, 
               nixos, 
               nixos-hardware,
-              nixos-old,
               home-manager, 
-              nix-doom-emacs-unstraightened,
-              niri,
-              stylix
+              nix-doom-emacs-unstraightened
             }:
-    { nixosConfigurations.jon-laptop = nixos.lib.nixosSystem {
-       system = "x86_64-linux";
-       modules = [ ./configuration.nix
-                   nixos-hardware.nixosModules.framework-16-7040-amd
-                   home-manager.nixosModules.home-manager {
-                     home-manager.useGlobalPkgs = true;
-                     home-manager.useUserPackages = true;
-                     home-manager.backupFileExtension = "backup";
-                     home-manager.users.jon = { pkgs, ... }: {
-                       imports = [ ./home.nix
-                                   niri.homeModules.niri
-                                   nix-doom-emacs-unstraightened.hmModule
-                                 ];
-                     };
-                   }
-                 ];
-     };
-  };
+    {
+      # Define configurations for both laptops with new names
+      nixosConfigurations.fw12 = nixos.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./configuration.nix
+          ./hardware-configuration-fw12.nix  # Import specific hardware config
+          nixos-hardware.nixosModules.framework-12-13th-gen-intel
+          home-manager.nixosModules.home-manager {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.users.jon = { pkgs, ... }: {
+              imports = [ ./home.nix
+                          nix-doom-emacs-unstraightened.hmModule 
+                        ];
+            };
+          }
+        ];
+      };
+
+      nixosConfigurations.fw16 = nixos.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./configuration.nix
+          nixos-hardware.nixosModules.framework-16-7040-amd 
+          ./hardware-configuration-fw16.nix  # Import specific hardware config
+          home-manager.nixosModules.home-manager {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.users.jon = { pkgs, ... }: {
+              imports = [
+                ./home.nix
+                nix-doom-emacs-unstraightened.hmModule 
+              ];
+            };
+          }
+        ];
+      };
+    };
 }
+
