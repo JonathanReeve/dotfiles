@@ -1,7 +1,4 @@
 
-# spawn task to run in the background
-use ~/Agordoj/scripts/nu_scripts/modules/background_task/task.nu
-
 # Wallpaper management
 def wal-fav [] {
   open ~/.cache/wal/colors.json | get wallpaper |
@@ -10,13 +7,11 @@ def wal-fav [] {
 }
 
 def wal-fav-set [] {
-  task spawn -i -l swaybg {
-    ^pkill swaybg
-    task kill
-    let w = (open ~/.cache/wal/favs | lines | uniq | shuffle | first)
-    echo $"Using ($w)"
-    swaybg -i $w -m fill
-  }
+  pkill swaybg
+  let wall = (open ~/.cache/wal/favs | lines | uniq | shuffle | first)
+  print $"Using $wall"
+  let pid = job spawn { swaybg -i $wall -m fill }
+  return $pid
 }
 
 def wal-recent [] {

@@ -141,21 +141,21 @@
         ("b" "literature note" plain "%?" :target (file+head
                 "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
                 "#+title: ${citar-citekey} (${citar-date}). ${note-title}.
-        #+created: %U
-        #+last-modified: %U
+#+created: %U
+#+last-modified: %U
 
-        - keywords ::
-        - related ::
+- keywords ::
+- related ::
 
-        * ${note-title}
-        :PROPERTIES:
-        :Custom_ID: ${citar-citekey}
-        :URL: ${citar-url}
-        :AUTHOR: ${citar-author}
-        :NOTER_DOCUMENT: ${citar-file}
-        :NOTER_PAGE:
-        :END:\n
-        "
+* ${note-title}
+:PROPERTIES:
+:Custom_ID: ${citar-citekey}
+:URL: ${citar-url}
+:AUTHOR: ${citar-author}
+:NOTER_DOCUMENT: ${citar-file}
+:NOTER_PAGE:
+:END:\n
+"
                 )
             :unarrowed t)
            ))
@@ -296,8 +296,9 @@
   (require 'mu4e-icalendar)
   (mu4e-icalendar-setup)
   ;; Use password-store as authentication source
+  (require 'auth-source)
   (require 'auth-source-pass)
-  (setq auth-sources '(pass))
+  (setq auth-sources '("pass"))
   (setq auth-source-pass-filename "/home/jon/Dokumentoj/Personal/.password-store")
   (auth-source-pass-enable)
   ;; (auth-source-pass--read-entry "127.0.0.1:1143/jonathan@jonreeve.com")
@@ -327,14 +328,13 @@
                         (mu4e-drafts-folder . "/protonmail/Drafts")
                         (smtpmail-smtp-user . "jonathan@jonreeve.com")
                         (user-mail-address  . "jonathan@jonreeve.com")
-                        (smtpmail-auth-credentials '("localhost" 1025 "jonathan@jonreeve.com" nil))
+                        ;; (smtpmail-auth-credentials '("localhost" 1025 "jonathan@jonreeve.com" "your_password_here"))
                         (smtpmail-smtp-server . "localhost")
                         (smtpmail-smtp-service . 1025)
                         (smtpmail-stream-type . starttls)
-                        (smtpmail-smtp-user . "jonathan@jonreeve.com")
+                        (setq smtpmail-auth-supported '(login plain))
                         (user-full-name . "Jonathan Reeve")
-                        (smtpmail-smtp-server . "localhost")
-                        (smtpmail-auth-supported 'login)
+                        ;; (smtpmail-auth-supported 'login)
                         (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
                       t)
   (setq message-send-mail-function 'smtpmail-send-it)
@@ -345,7 +345,8 @@
         mu4e-view-show-addresses t
         mu4e-attachment-dir "~/Elŝutoj"
         mu4e-compose-dont-reply-to-self t
-        mu4e-user-mail-address-list '("jon.reeve@gmail.com" "jonathan.reeve@columbia.edu" "jpr2152@columbia.edu"))
+        mu4e-user-mail-address-list '("jon.reeve@gmail.com" "jonathan.reeve@columbia.edu" "jpr2152@columbia.edu" "jonathan@jonreeve.com"))
+  (setq gnutls-verify-host-names nil)
   (setq mu4e-bookmarks
         `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
           ("date:7d..now NOT flag:trashed AND NOT flag:replied" "Last 7 days unreplied" ?w)

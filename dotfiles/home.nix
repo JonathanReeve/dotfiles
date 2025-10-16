@@ -3,17 +3,17 @@
 let
   # Personal Info
   name = "Jonathan Reeve";
-  email = "jon.reeve@gmail.com";
+  email = "jonathan@jonreeve.com";
   githubUsername = "JonathanReeve";
   # Paths
   dots = "/home/jon/Agordoj/dotfiles";
   dokumentoj = "/home/jon/Dokumentoj";
   scripts = "/home/jon/Agordoj/scripts";
   maildir = "/home/jon/Retpoŝto";
+  vaultmount = "/home/jon/.private-mount";
+  vaultloc = "${dokumentoj}/Personal/.Vault_encfs";
   # Preferences
   font = "Victor Mono";
-  # font = "Nova Mono";
-  # font = "Fantasque Sans Mono";
   backgroundColor = "#243442"; # Blue steel
   foregroundColor = "#deedf9"; # Light blue
   warningColor = "#e23131"; # Reddish
@@ -26,8 +26,8 @@ in
     maildirBasePath = "${maildir}";
     accounts = {
       gmail = {
-        address = "${email}";
-        userName = "${email}";
+        address = "jon.reeve@gmail.com";
+        userName = "jon.reeve@gmail.com";
         flavor = "gmail.com";
         passwordCommand = "${pkgs.pass}/bin/pass gmail";
         primary = true;
@@ -135,7 +135,6 @@ in
     };
     doom-emacs = {
       enable = true;
-      # emacs = pkgs.emacs29-pgtk;
       doomDir = ./doom;
       extraBinPackages = with pkgs; [
         fd
@@ -143,7 +142,6 @@ in
         git
       ];
       extraPackages = epkgs: with pkgs; [
-        mu
         pass
         gnupg
         (aspellWithDicts (dicts: with dicts; [ en en-computers en-science eo fr ]))
@@ -175,19 +173,16 @@ in
       userEmail = "${email}";
       extraConfig = {
         pull.rebase = false;
-        # url = { "git@github.com:" = { insteadOf = "https://github.com"; }; };
       };
     };
     mbsync = {
       enable = true;
     };
-    # notmuch.enable = true;
     mu = {
       enable = true;
     };
     neovim = {
       enable = true;
-      # package = pkgs.neovim;
       plugins = with pkgs.vimPlugins; [ ];
       vimAlias = true;
       extraConfig =
@@ -206,11 +201,10 @@ in
     };
     nix-index = {
       enable = true;
-      enableFishIntegration = true;
       enableZshIntegration = true;
     };
     fish = {
-      enable = true;
+      enable = false;
       shellAbbrs = {
         # Git abbreviations
         "edit-home" = "$EDITOR ${dots}/home.nix";
@@ -231,72 +225,16 @@ in
         "gst" = "git status";
         # Other abbreviations
         "em" = "emacsclient -c";
-        # "lock" = "${lockCmd}";
-        "new-session" = "dbus-send --system --type=method_call --print-reply --dest=org.freedesktop.DisplayManager $XDG_SEAT_PATH org.freedesktop.DisplayManager.Seat.SwitchToGreeter";
-        "portrait-monitor" = "xrandr --output DP-1 --rotate left --auto --right-of eDP-1";
-        "monitor" = "xrandr --output DP-1 --auto --above eDP-1";
-        "monitor-off" = "xrandr --output DP-1 --off";
-      };
-      shellAliases = {
-        # Use vim as pager for manfiles, since it's prettier
-        # "man" = "env PAGER=\"vim -R -c 'set ft=man'\" man";
       };
       functions = {
-        vault="encfs $vaultloc $vaultmount";
-        unvault="fusermount -u $vaultmount";
-        jnl="vault; and emacsclient -c $vaultmount/Journal/jnl.org; and unvault";
-        upgrade=''
-            nix flake update ${dots}
-            sudo nixos-rebuild switch --flake ${dots}
-            '';
         clean = "nix-store --gc --print-roots; and sudo nix-collect-garbage --delete-older-than 5d";
         # A function for renaming the most recent PDF, and putting it in my Papers dir.
-        rename-pdf="mv (ls -t /tmp/*.pdf | head -n 1) ${dokumentoj}/Papers/$argv.pdf";
         find-book="for engine in b c libgen ia; qutebrowser \":open -t $engine $argv\"; end";
         # Search several search engines at once. `search b g l "search query"`
         search="for engine in $argv[1..-2]; qutebrowser \":open -t $engine $argv[-1]\"; end";
         # Proverbs for greeting
         fish_greeting = "shuf -n 1 ${scripts}/proverboj.txt | ${pkgs.neo-cowsay}/bin/cowsay";
-        em = "emacsclient -c $argv &; disown";
       };
-      interactiveShellInit =
-        ''
-            # Use Fisher for plugin management
-            if not functions -q fisher
-                set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
-                curl https://git.io/fisher --create-dirs -sLo $XDG_CONFIG_HOME/fish/functions/fisher.fish
-                fish -c fisher
-            end
-
-            # Don't use vi keybindings in unknown terminals,
-            # since weird things can happen. Also don't do colors.
-            set acceptable_terms xterm-256color screen-256color xterm-termite
-            if contains $TERM $acceptable_terms
-              fish_vi_key_bindings
-              # Load pywal colors
-              cat ~/.cache/wal/sequences
-            end
-
-            set -U vaultmount ~/.private-mount
-            set -U vaultloc ${dokumentoj}/Personal/.Vault_encfs
-
-            # Disable the vim-mode indicator [I] and [N].
-            # Let the theme handle it instead.
-            function fish_default_mode_prompt; true; end
-
-            # This doesn't seem to work below for some reason.
-            function fish_title; true; end
-
-            # Emacs ansi-term support
-            if test -n "$EMACS"
-              set -x TERM eterm-color
-              # Disable right prompt in emacs
-              # function fish_right_prompt; true; end
-              function fish_title; true; end
-            end
-
-            #eval (direnv hook fish)
-         '';
     };
     fzf = {
       enable = true;
@@ -307,10 +245,19 @@ in
       enable = true;
       configFile.source = ./config.nu;
       environmentVariables = {
-        PASSWORD_STORE_DIR = "\"${dokumentoj}/Personal/.password-store\"";
+        PASSWORD_STORE_DIR = "${dokumentoj}/Personal/.password-store";
       };
       shellAliases = {
-        # upgrade = "nix flake update ${dots}; sudo nixos-rebuild switch --flake ${dots}";
+        em = "emacsclient -c $argv";
+        upgrade = "do { nix flake update ${dots};
+                        sudo nixos-rebuild switch --flake ${dots}
+                      }";
+        vault = "encfs ${dokumentoj}/Personal/.Vault_encfs ~/.private-mount";
+        unvault = "fusermount -u ~/.private-mount";
+        jnl = "do { vault;
+                    emacsclient -c ~/.private-mount/Journal/jnl.org;
+                    unvault
+                  }";
       };
     };
     starship = {
@@ -341,7 +288,6 @@ in
     termite = {
       enable = true;
       clickableUrl = true;
-      # backgroundColor = "\${xrdb:background}";
       backgroundColor = "rgba(32, 45, 56, 0.8)";
       foregroundColor = "\${xrdb:foreground}";
       font = "${font} 14";
@@ -409,21 +355,6 @@ in
             "on-click" = "pavucontrol";
         };
       }];
-    };
-    zathura = {
-      enable = false;
-      extraConfig = ''
-        map n scroll down
-        map e scroll up
-        map h scroll left
-        map i scroll right
-        map j search next
-        map J search previous
-        set statusbar-v-padding 10
-      '';
-      options = {
-        font = "${font} 12";
-      };
     };
     password-store = {
       enable = true;
@@ -510,15 +441,6 @@ in
         url.default_page = "${scripts}/homepage/homepage.html";
       };
     };
-    # vscode = {
-    #   enable = true;
-    #   extensions = with pkgs.vscode-extensions; [
-    #     ms-python.python
-    #     vscodevim.vim
-    #   ];
-    # haskell = {
-    #   enable = true;
-    # };
   };
   services = {
     # gnome-keyring.enable = true;
@@ -526,15 +448,6 @@ in
     clipmenu = {
       enable = true;
       launcher = "rofi";
-    };
-    hyprpaper = {
-      enable = true;
-      settings = {
-        preload = "/home/jon/Bildujo/Ekranfonoj/nixos-wallpaper.png";
-        wallpaper = [
-          "eDP-2,/home/jon/Bildujo/Ekranfonoj/nixos-wallpaper.png"
-        ];
-      };
     };
     dunst = {
       enable = true;
@@ -669,9 +582,11 @@ MimeType=x-scheme-handler/org-protocol;'';
     language = {
       base = "eo";
     };
-    # sessionVariables.LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
-    # sessionVariables.LC_ALL = "eo.UTF-8";
     username = "jon";
+    shell = {
+      enableNushellIntegration = true;
+      enableZshIntegration = true;
+    };
     stateVersion = "24.05";
   };
 
@@ -704,92 +619,6 @@ MimeType=x-scheme-handler/org-protocol;'';
           WantedBy = ["timers.target"];
         };
       };
-    };
-  };
-  wayland.windowManager.hyprland = {
-    enable = true;
-    settings = {
-      input = {
-          kb_layout= "us";
-          kb_variant= "colemak";
-          kb_options = "caps:escape,esperanto:colemak";
-          follow_mouse = 1;
-      };
-      monitor = "eDP-2,2560x1600@165,0x0,1";
-      general = {
-        sensitivity = 1;
-        border_size = 4;
-      };
-      decoration = {
-        rounding = 10;
-        blur = {
-          size = 8;
-          passes = 2;
-        };
-      };
-      animations = {
-        # enabled = ye
-        # Some default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
-        bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
-        animation = [
-          "windows, 1, 7, myBezier"
-          "windowsOut, 1, 7, default, popin 80%"
-          "border, 1, 10, default"
-          "fade, 1, 7, default"
-          "workspaces, 1, 6, default"
-        ];
-      };
-      bind = [
-        "SUPER,H,exec,alacritty"
-        "SUPER_SHIFT,C,killactive,"
-        "SUPER_SHIFT,Q,exit,"
-        "SUPER_SHIFT,T,togglefloating,"
-        "SUPER,X,togglegroup"
-        "SUPER,space,exec,rofi -show drun"
-        "SUPER,P,pseudo,"
-        "ALT,H,movefocus,l"
-        "ALT,N,movefocus,d"
-        "ALT,E,movefocus,u"
-        "ALT,I,movefocus,r"
-        "ALT_SHIFT,H,movewindow,l"
-        "ALT_SHIFT,N,movewindow,d"
-        "ALT_SHIFT,E,movewindow,u"
-        "ALT_SHIFT,I,movewindow,r"
-        "SUPER,J,workspace,1"
-        "SUPER,L,workspace,2"
-        "SUPER,U,workspace,3"
-        "SUPER,Y,workspace,4"
-        "SUPER,5,workspace,5"
-        "SUPER,6,workspace,6"
-        "SUPER,7,workspace,7"
-        "SUPER,8,workspace,8"
-        "SUPER,9,workspace,9"
-        "SUPER,0,workspace,10"
-        "SUPER_SHIFT,J,movetoworkspace,1"
-        "SUPER_SHIFT,L,movetoworkspace,2"
-        "SUPER_SHIFT,U,movetoworkspace,3"
-        "SUPER_SHIFT,Y,movetoworkspace,4"
-        "ALT,5,movetoworkspace,5"
-        "ALT,6,movetoworkspace,6"
-        "ALT,7,movetoworkspace,7"
-        "ALT,8,movetoworkspace,8"
-        "ALT,9,movetoworkspace,9"
-        "ALT,0,movetoworkspace,10"
-        "XF86MonBrightnessUp,exec,${pkgs.brightnessctl}/bin/brightnessctl set '+10%'"
-        "XF86MonBrightnessDown,exec,${pkgs.brightnessctl}/bin/brightnessctl set '10%-'"
-        "XF86AudioRaiseVolume,exec,${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up"
-        "XF86AudioLowerVolume,exec,${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl down"
-        "XF86AudioMute,exec,${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute"
-    ];
-      bindm = [
-        "SUPER,mouse:272,movewindow" # Left mouse button and super moves
-        "SUPER,mouse:273,resizewindow,1" # Super + right mouse button resizes, keeping aspect ratio
-        "SUPER_SHIFT,mouse:273,resizewindow,2" # Same, but don't keep aspect ratio
-      ];
-      exec-once = [
-        "waybar"
-
-      ];
     };
   };
   wayland.windowManager.sway = {
