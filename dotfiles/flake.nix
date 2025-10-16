@@ -14,6 +14,7 @@
     # Fix Mac Apps not appearing in Spotlight
     mac-app-util.url = "github:hraban/mac-app-util";
     nix-doom-emacs-unstraightened.url = "github:marienz/nix-doom-emacs-unstraightened";
+    nix-doom-emacs-unstraightened.inputs.nixpkgs.follows = "nixpkgs";
     # Manage homebrew with Nix
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     # Optional: Declarative tap management
@@ -36,6 +37,7 @@
       system = "aarch64-darwin";
       modules = [ ./configuration.nix
                   # ./copy-apps.nix
+                  ./fix-fonts-module.nix
                   mac-app-util.darwinModules.default
                   home-manager.darwinModules.home-manager {
                     home-manager.useGlobalPkgs = true;

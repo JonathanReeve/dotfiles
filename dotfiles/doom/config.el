@@ -789,42 +789,55 @@ It is for commands that depend on the major mode. One example is
   (require 'treemacs-nerd-icons)
   (treemacs-load-theme "nerd-icons"))
 
-(use-package! claude-code
-  :config
-  ;; Use vterm backend instead of default eat
-  (setq claude-code-terminal-backend 'vterm)
+;; (use-package! claude-code
+;;   :config
+;;   ;; Use vterm backend instead of default eat
+;;   (setq claude-code-terminal-backend 'vterm)
 
-  ;; Enable claude-code-mode globally
-  (claude-code-mode)
+;;   ;; Enable claude-code-mode globally
+;;   (claude-code-mode)
+
+;;   ;; Vim-style keybindings using leader key (SPC l for LLM/Language model)
+;;   (map! :leader
+;;         (:prefix ("l" . "claude/llm")
+;;          :desc "Start Claude" "c" #'claude-code
+;;          :desc "Send command" "s" #'claude-code-send-command
+;;          :desc "Send command with context" "x" #'claude-code-send-command-with-context
+;;          :desc "Send region/buffer" "r" #'claude-code-send-region
+;;          :desc "Send buffer file" "o" #'claude-code-send-buffer-file
+;;          :desc "Fix error at point" "e" #'claude-code-fix-error-at-point
+;;          :desc "Toggle Claude window" "t" #'claude-code-toggle
+;;          :desc "Switch to Claude buffer" "b" #'claude-code-switch-to-buffer
+;;          :desc "Kill Claude session" "k" #'claude-code-kill
+;;          :desc "Start in directory" "d" #'claude-code-start-in-directory
+;;          :desc "Continue conversation" "C" #'claude-code-continue
+;;          :desc "Resume session" "R" #'claude-code-resume
+;;          :desc "New instance" "i" #'claude-code-new-instance
+;;          :desc "Toggle read-only" "z" #'claude-code-toggle-read-only-mode
+;;          :desc "Cycle modes" "M" #'claude-code-cycle-mode
+;;          :desc "Show transient menu" "m" #'claude-code-transient
+;;          :desc "Send return (yes)" "y" #'claude-code-send-return
+;;          :desc "Send escape (no)" "n" #'claude-code-send-escape
+;;          :desc "Send 1" "1" #'claude-code-send-1
+;;          :desc "Send 2" "2" #'claude-code-send-2
+;;          :desc "Send 3" "3" #'claude-code-send-3))
+
+;;   ;; Optional: Set up repeat map for mode cycling
+;;   :bind
+;;   (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode)))
+
+;; (use-package! claudemacs)
+
+(use-package! claude-code-ide
+  :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
+  :config
+  (claude-code-ide-emacs-tools-setup)
+  (setq claude-code-ide-cli-path "~/.npm-global/bin/claude")
 
   ;; Vim-style keybindings using leader key (SPC l for LLM/Language model)
   (map! :leader
         (:prefix ("l" . "claude/llm")
-         :desc "Start Claude" "c" #'claude-code
-         :desc "Send command" "s" #'claude-code-send-command
-         :desc "Send command with context" "x" #'claude-code-send-command-with-context
-         :desc "Send region/buffer" "r" #'claude-code-send-region
-         :desc "Send buffer file" "o" #'claude-code-send-buffer-file
-         :desc "Fix error at point" "e" #'claude-code-fix-error-at-point
-         :desc "Toggle Claude window" "t" #'claude-code-toggle
-         :desc "Switch to Claude buffer" "b" #'claude-code-switch-to-buffer
-         :desc "Kill Claude session" "k" #'claude-code-kill
-         :desc "Start in directory" "d" #'claude-code-start-in-directory
-         :desc "Continue conversation" "C" #'claude-code-continue
-         :desc "Resume session" "R" #'claude-code-resume
-         :desc "New instance" "i" #'claude-code-new-instance
-         :desc "Toggle read-only" "z" #'claude-code-toggle-read-only-mode
-         :desc "Cycle modes" "M" #'claude-code-cycle-mode
-         :desc "Show transient menu" "m" #'claude-code-transient
-         :desc "Send return (yes)" "y" #'claude-code-send-return
-         :desc "Send escape (no)" "n" #'claude-code-send-escape
-         :desc "Send 1" "1" #'claude-code-send-1
-         :desc "Send 2" "2" #'claude-code-send-2
-         :desc "Send 3" "3" #'claude-code-send-3))
-
-  ;; Optional: Set up repeat map for mode cycling
-  :bind
-  (:repeat-map my-claude-code-map ("M" . claude-code-cycle-mode)))
+         :desc "Start Claude" "c" #'claude-code-ide-menu)))
 
 (after! projectile
-  (setq projectile-project-search-path '("~/Code")))
+        (setq projectile-project-search-path '("~/Code")))

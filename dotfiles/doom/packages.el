@@ -119,10 +119,10 @@
 (package! turtle-mode
   :recipe (:type git
            :repo "https://github.com/drobilla/turtle-mode")
-  :pin "8eb2ec3fee0a28f3716371c930b04be9cd639811"
-  )
+  :pin "8eb2ec3fee0a28f3716371c930b04be9cd639811")
 
-(package! aider :recipe (:host github :repo "tninja/aider.el" ))
+
+(package! aider :recipe (:host github :repo "tninja/aider.el"))
 
 (package! apple-ldap
     :recipe (:type git :host nil :repo "git@github.pie.apple.com:emacs/apple-ldap.git")
@@ -130,14 +130,30 @@
 
 (package! treemacs-nerd-icons)
 
-(package! claude-code
-  :recipe (:host github
-           :repo "stevemolitor/claude-code.el"
-           :branch "main"
-           :files ("*.el" (:exclude "images/*"))))
+;; (package! claude-code
+;;   :recipe (:host github
+;;            :repo "stevemolitor/claude-code.el"
+;;            :branch "main"
+;;            :files ("*.el" (:exclude "images/*"))))
 
-;; An interesting fork
+;; An interesting fork of org-noter
 ;; (package! org-noter
 ;;   :recipe (:host github
 ;;            :repo "ahmed-shariff/org-noter"
 ;;            ))
+
+;; (package! eat)
+
+;; (package! claudemacs
+;;   :recipe (:host github :repo "cpoile/claudemacs")
+;;   :pin "bf0c2d6e3e41c965a552e6fc9ee16cffc2f79355")
+
+(package! claude-code-ide
+  :recipe (:host github :repo "manzaltu/claude-code-ide.el")
+  :pin "32d853e20b9d245a6ee89c4a153a4e568250c62c")
+
+(package! buffer-box
+  :recipe (:host github :repo "rougier/buffer-box")
+  :pin "d508e015cd93baeb68b83db6b1364756e86fd807")
+
+(package! eat)

@@ -62,10 +62,8 @@
   # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
   environment.darwinConfig = "$HOME/Dotfiles/dotfiles/configuration.nix";
 
-  # Auto upgrade nix package and the daemon service.
-  nix = {
-    enable = false;
-  };
+  # Determinate Nix requires nix-darwin's management of the nix install to be disabled
+  nix.enable = false;
 
   nixpkgs.config.allowUnfree = true;
 

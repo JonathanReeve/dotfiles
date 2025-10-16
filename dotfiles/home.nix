@@ -76,7 +76,7 @@
 
       # Dev
       direnv
-      # devenv
+      devenv
       fh
 
       # Rust
@@ -153,6 +153,8 @@
       ispell
     ];
   };
+  # Let nix-darwin handle fonts
+  fonts.fontconfig.enable = false;
   programs = {
     alacritty = {
       enable = false;
@@ -190,7 +192,6 @@
       doomDir = ./doom;
       doomLocalDir = "${config.home.homeDirectory}/.local/share/nix-doom";
       extraPackages = epkgs: with epkgs; [
-        treesit-grammars.with-all-grammars
         nushell-mode
         ob-nushell
         org-node
@@ -198,6 +199,8 @@
         treemacs
         treemacs-nerd-icons
         nerd-icons
+        tree-sitter
+        treesit-grammars.with-all-grammars
       ];
     };
     home-manager.enable = true;
@@ -257,6 +260,7 @@
         use std/util "path add"
         path add "~/.local/bin"
         path add "/usr/local/bin"
+        path add "~/.npm-global/bin"
       '';
       shellAliases = {
         # upgrade = "nix flake update --flake ~/Dotfiles/dotfiles/; sudo darwin-rebuild switch --flake ~/Dotfiles/dotfiles";
@@ -374,7 +378,7 @@ export PATH="$HOME/.config/emacs/bin:$HOME/.local/bin:$JAVA_HOME/bin:/opt/homebr
 export PATH="$PATH:/Users/jon/Library/Application Support/Coursier/bin"
 # This should automatically work, except it is disabled for emacs
 eval "$(/etc/profiles/per-user/jon/bin/starship init zsh)"
-export PATH="$JAVA_HOME/bin:/opt/homebrew/bin:$PATH"
+export PATH="$HOME/.npm-global/bin:$JAVA_HOME/bin:/opt/homebrew/bin:$PATH"
 alias ls="ls --color"
 alias git-root='cd $(git rev-parse --show-cdup)'
 alias proxy='ssh -vND localhost:7999 pvgateway'
@@ -396,6 +400,19 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
+
+# Direnv hack; see https://github.com/anthropics/claude-code/issues/2110#issuecomment-2996564886
+# also need mkdir -p ~/.config/direnv
+# touch ~/.config/direnv/direnv.toml
+# because there is a bug that causes DIRENV_LOG_FORMAT to be ignore if the config
+# file does not exist
+
+if command -v direnv >/dev/null; then
+  if [[ ! -z "$CLAUDECODE" ]]; then
+    eval "$(direnv hook zsh)"
+    eval "$(DIRENV_LOG_FORMAT= direnv export zsh)"  # Need to trigger "hook" manually
+  fi
+fi
       '';
     };
     zoxide = {
@@ -448,11 +465,11 @@ unset __conda_setup
       '';
       executable = true;
     };
-    configFile."doom" = {
-        source = ./doom;
-        recursive = true;
-        # onChange = "$HOME/.config/emacs/bin/doom sync";
-    };
+    # configFile."doom" = {
+    #     source = ./doom;
+    #     recursive = true;
+    #     # onChange = "$HOME/.config/emacs/bin/doom sync";
+    # };
 
   };
 }
