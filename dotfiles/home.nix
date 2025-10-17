@@ -202,6 +202,8 @@
         tree-sitter
         treesit-grammars.with-all-grammars
       ];
+      lspUsePlists = false;
+      experimentalFetchTree = true;
     };
     home-manager.enable = true;
     # emacs = {
