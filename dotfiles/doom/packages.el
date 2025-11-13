@@ -76,3 +76,15 @@
 ;;  )
 
 ;; (package! org-typst-preview :recipe (:host github :repo "remimimimimi/org-typst-preview.el"))
+ 
+(package! shell-maker
+  :recipe (:host github :repo "xenodium/shell-maker")
+  :pin "9388492f6cb56e52a56fbdf6d5fe68c1cdff4909")
+(package! acp :recipe (:host github :repo "xenodium/acp.el")
+  :pin "f9dd828c7bfb209523e907cc947668924ff9f1bf")
+(package! agent-shell :recipe (:host github :repo "xenodium/agent-shell")
+  :pin "203a782087b2e2f40a7368022fdae24ed84bccc8")
+
+(package! aider :recipe (:host github :repo "tninja/aider.el" )
+   :pin "7053d21eb29407f48bc3b50a9b472feeae9d562c")
+

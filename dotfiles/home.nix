@@ -248,15 +248,15 @@ in
         PASSWORD_STORE_DIR = "${dokumentoj}/Personal/.password-store";
       };
       shellAliases = {
-        em = "emacsclient -c $argv";
+        em = "emacsclient -c ";
         upgrade = "do { nix flake update ${dots};
                         sudo nixos-rebuild switch --flake ${dots}
                       }";
         vault = "encfs ${dokumentoj}/Personal/.Vault_encfs ~/.private-mount";
         unvault = "fusermount -u ~/.private-mount";
-        jnl = "do { vault;
+        jnl = "do { encfs ${dokumentoj}/Personal/.Vault_encfs ~/.private-mount;
                     emacsclient -c ~/.private-mount/Journal/jnl.org;
-                    unvault
+                    fusermount -u ~/.private-mount;
                   }";
       };
     };
@@ -416,6 +416,7 @@ in
         "h" =  "https://hackage.haskell.org/packages/search?terms={}";
         "ho" = "https://hoogle.haskell.org/?hoogle={}";
         "libgen" =  "https://libgen.is/search.php?req={}";
+        "a" = "https://annas-archive.org/search?q=%s";
         "viki" =  "https://eo.wikipedia.org/w/index.php?search={}";
         "ia" =  "https://archive.org/details/texts?and%5B%5D={}&sin=";
         "mm" =  "https://muse-jhu-edu.ezproxy.cul.columbia.edu/search?action=search&query=content:{}:and&limit=journal_id:131&min=1&max=10&t=search_journal_header";

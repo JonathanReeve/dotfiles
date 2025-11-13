@@ -566,3 +566,12 @@
 ;; Word wrap issues; possible fix for https://github.com/doomemacs/doomemacs/issues/7133
 (setq +global-word-wrap-mode 'nil)
 (setq font-lock-global-modes '(not mu4e-compose-mode))
+
+(use-package! aider
+  :config
+  ;; For latest claude sonnet model
+  (setq aider-args '("--model" "gemini" "--no-auto-accept-architect")) ;; add --no-auto-commits if you don't want it
+  (aider-magit-setup-transients) ;; add aider magit function to magit menu
+  ;; auto revert buffer
+  (global-auto-revert-mode 1)
+  (auto-revert-mode 1))

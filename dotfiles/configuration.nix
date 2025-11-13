@@ -28,7 +28,8 @@
   networking = {
     hostName = "jon-laptop"; # Define your hostname .
     networkmanager.enable = true;
-    firewall.checkReversePath = "loose";
+    # Needed for VPN; see https://discourse.nixos.org/t/how-to-configure-and-use-proton-vpn-on-nixos/65837
+    firewall.checkReversePath = false; # Needed for VPN
   };
 
   nix = {
@@ -57,7 +58,7 @@
     font-awesome_5
     fira-code
     noto-fonts
-    noto-fonts-emoji
+    noto-fonts-color-emoji
     fira-code
     fira-code-symbols
     font-awesome
@@ -111,7 +112,7 @@
      protonmail-bridge-gui
 
      gnutls                 # For mail auth
-     protonvpn-cli          # VPN
+     protonvpn-gui          # VPN
      pandoc
      zlib                   # For Pandoc development
 
@@ -164,7 +165,6 @@
      # Julia
      julia-stable-bin
      # Scala
-     dotty
      metals
      coursier
      # Minimal computing
@@ -185,10 +185,10 @@
      ncdu                   # Fancy disk usage analyzer
      neofetch               # Fancy system information
      # GUI
-     #qutebrowser            # Web browser
+     #qutebrowser           # Web browser
      chromium               # Another web browser
-     firefox-wayland        # Yes, a third
-     #nyxt                   # Why stop now?
+     firefox                # Yes, a third
+     #nyxt                  # Why stop now?
 
      # Ugh
      zoom-us
@@ -235,6 +235,14 @@
 
      # AI
      aider-chat-full
+     gemini-cli
+
+     # Network
+     wireguard-tools
+     protonvpn-gui
+
+     # Ugh
+     libreoffice
    ];
 
   environment.variables = {
@@ -246,7 +254,7 @@
 
   # Enable sound.
   hardware = {
-    firmware = with pkgs; [ firmwareLinuxNonfree ];
+    firmware = with pkgs; [ linux-firmware ];
     keyboard.qmk.enable = true;
     sensor.iio.enable = true;
     bluetooth.enable = true;

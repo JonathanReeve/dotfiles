@@ -6,22 +6,30 @@ def wal-fav [] {
   str join | save --append ~/.cache/wal/favs
 }
 
+def wal-kill [] {
+  if (job list | where tag == "wall" | length) > 0 {
+    let jobid = (job list | where tag == "wall" | get id | first)
+    job kill $jobid
+  } else { pkill swaybg } 
+} 
+
 def wal-fav-set [] {
-  pkill swaybg
+  wal-kill
   let wall = (open ~/.cache/wal/favs | lines | uniq | shuffle | first)
   print $"Using $wall"
-  let pid = job spawn { swaybg -i $wall -m fill }
+  let pid = job spawn -t wall { swaybg -i $wall -m fill }
   return $pid
 }
 
 def wal-recent [] {
-  wal -i (ls /run/media/jon/systemrestore/.systemrestore/Bildoj
-         | sort-by modified -r
-         | first 50
-         | shuffle
-         | first
-         | get name)
-}
+  wal-kill
+  let wall = (ls /run/media/jon/systemrestore/.systemrestore/Bildoj
+         | sort-by modified -r | first 50 | shuffle | first | get name)
+  let pid = job spawn -t wall {
+    wal -i $wall
+    swaybg -i $wall -m fill
+    }
+  }
 
 def wal-backup [] {
   sudo rsync -a /home/systemrestore/Bildoj /run/media/jon/systemrestore/.systemrestore
@@ -101,4 +109,3 @@ module vprompt {
 
 use vterm
 use vprompt
-#$env.PROMPT_COMMAND = {|| vprompt left-prompt-track-cwd }

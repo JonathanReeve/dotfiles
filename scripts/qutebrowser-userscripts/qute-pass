@@ -1,21 +1,8 @@
-#!/run/current-system/sw/bin/python
+#!/usr/bin/env python
 
-# Copyright 2017 Chris Braun (cryzed) <cryzed@googlemail.com>
+# SPDX-FileCopyrightText: Chris Braun (cryzed) <cryzed@googlemail.com>
 #
-# This file is part of qutebrowser.
-#
-# qutebrowser is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# qutebrowser is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with qutebrowser.  If not, see <https://www.gnu.org/licenses/>.
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 """
 Insert login information using pass and a dmenu-compatible application (e.g. dmenu, rofi -dmenu, ...). A short
@@ -45,7 +32,6 @@ Suggested bindings similar to Uzbl's `formfiller` script:
 """
 
 EPILOG = """Dependencies: tldextract (Python 3 module), pass, pass-otp (optional).
-For issues and feedback please use: https://github.com/cryzed/qutebrowser-userscripts.
 
 WARNING: The login details are viewable as plaintext in qutebrowser's debug log (qute://log) and might be shared if
 you decide to submit a crash report!"""
@@ -54,11 +40,14 @@ import argparse
 import enum
 import fnmatch
 import functools
+import idna
 import os
 import re
 import shlex
 import subprocess
 import sys
+import unicodedata
+from urllib.parse import urlparse
 
 import tldextract
 
@@ -129,6 +118,23 @@ def qute_command(command):
         fifo.write(command + '\n')
         fifo.flush()
 
+# Encode candidate string parts as Internationalized Domain Name, doing
+# Unicode normalization before. This allows to properly match (non-ASCII)
+# pass entries with the corresponding domain names.
+def idna_encode(name):
+    # Do Unicode normalization first, we use form NFKC because:
+    # 1. Use the compatibility normalization because these sequences have "the same meaning in some contexts"
+    # 2. idna.encode() below requires the Unicode strings to be in normalization form C
+    # See https://en.wikipedia.org/wiki/Unicode_equivalence#Normal_forms
+    unicode_normalized = unicodedata.normalize("NFKC", name)
+    # Empty strings can not be encoded, they appear for example as empty
+    # parts in split_path. If something like this happens, we just fall back
+    # to the unicode representation (which may already be ASCII then).
+    try:
+        idna_encoded = idna.encode(unicode_normalized)
+    except idna.IDNAError:
+        idna_encoded = unicode_normalized
+    return idna_encoded
 
 def find_pass_candidates(domain, unfiltered=False):
     candidates = []
@@ -143,6 +149,7 @@ def find_pass_candidates(domain, unfiltered=False):
             if unfiltered or domain in password:
                 candidates.append(password)
     else:
+        idna_domain = idna_encode(domain)
         for path, directories, file_names in os.walk(arguments.password_store, followlinks=True):
             secrets = fnmatch.filter(file_names, '*.gpg')
             if not secrets:
@@ -151,11 +158,14 @@ def find_pass_candidates(domain, unfiltered=False):
             # Strip password store path prefix to get the relative pass path
             pass_path = path[len(arguments.password_store):]
             split_path = pass_path.split(os.path.sep)
+            idna_split_path = [idna_encode(part) for part in split_path]
             for secret in secrets:
                 secret_base = os.path.splitext(secret)[0]
-                if not unfiltered and domain not in (split_path + [secret_base]):
+                idna_secret_base = idna_encode(secret_base)
+                if not unfiltered and idna_domain not in (idna_split_path + [idna_secret_base]):
                     continue
 
+                # Append the unencoded Unicode path/name since this is how pass uses them
                 candidates.append(os.path.join(pass_path, secret_base))
     return candidates
 
@@ -222,7 +232,7 @@ def main(arguments):
 
     # Try to find candidates using targets in the following order: fully-qualified domain name (includes subdomains),
     # the registered domain name, the IPv4 address if that's what the URL represents and finally the private domain
-    # (if a non-public suffix was used).
+    # (if a non-public suffix was used), and the URL netloc.
     candidates = set()
     attempted_targets = []
 
@@ -231,7 +241,22 @@ def main(arguments):
         private_domain = ('.'.join((extract_result.subdomain, extract_result.domain))
                           if extract_result.subdomain else extract_result.domain)
 
-    for target in filter(None, [extract_result.fqdn, extract_result.registered_domain, extract_result.ipv4, private_domain]):
+    netloc = urlparse(arguments.url).netloc
+
+    for target in filter(
+        None,
+        [
+            extract_result.fqdn,
+            (
+                extract_result.top_domain_under_public_suffix
+                if hasattr(extract_result, "top_domain_under_public_suffix")
+                else extract_result.registered_domain
+            ),
+            extract_result.ipv4,
+            private_domain,
+            netloc,
+        ],
+    ):
         attempted_targets.append(target)
         target_candidates = find_pass_candidates(target, unfiltered=arguments.unfiltered)
         if not target_candidates:
