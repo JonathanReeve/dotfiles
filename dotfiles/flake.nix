@@ -8,12 +8,14 @@
     nixos.url = "nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware"; 
     nix-doom-emacs-unstraightened.url = "github:marienz/nix-doom-emacs-unstraightened"; # Retained for both laptops
+    caelestia-shell.url = "github:caelestia-dots/shell";
+    caelestia-cli.url = "github:caelestia-dots/cli";
   };
-  outputs = { self, 
+  outputs = inputs @ { self,
               nixos, 
               nixos-hardware,
               home-manager, 
-              nix-doom-emacs-unstraightened
+              ...
             }:
     {
       # Define configurations for both laptops with new names
@@ -29,7 +31,9 @@
             home-manager.backupFileExtension = "backup";
             home-manager.users.jon = { pkgs, ... }: {
               imports = [ ./home.nix
-                          nix-doom-emacs-unstraightened.hmModule 
+                          ./hyprland.nix
+                          inputs.nix-doom-emacs-unstraightened.homeModule
+                          inputs.caelestia-shell.homeManagerModules.default
                         ];
             };
           }
@@ -49,7 +53,7 @@
             home-manager.users.jon = { pkgs, ... }: {
               imports = [
                 ./home.nix
-                nix-doom-emacs-unstraightened.hmModule 
+                inputs.nix-doom-emacs-unstraightened.hmModule
               ];
             };
           }

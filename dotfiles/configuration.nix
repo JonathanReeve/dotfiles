@@ -6,8 +6,7 @@
 
 {
   imports =
-    [ #./cachix.nix
-      ./gnome.nix
+    [ ./gnome.nix
       ./python.nix
       #./R.nix
     ];
@@ -29,15 +28,11 @@
   networking = {
     hostName = "jon-laptop"; # Define your hostname .
     networkmanager.enable = true;
-    firewall.checkReversePath = "loose";
-    # useDHCP = false;
-    # interfaces.wlp0s20f3.useDHCP = true;
-    # interfaces.enp0s13f0u1u3u1.useDHCP = true;
-    # firewall.allowedTCPPorts = [ 8000 ]; # For local agenda server
+    # Needed for VPN; see https://discourse.nixos.org/t/how-to-configure-and-use-proton-vpn-on-nixos/65837
+    firewall.checkReversePath = false; # Needed for VPN
   };
 
   nix = {
-    # package = pkgs.nixFlakes; # For flakes
     settings.experimental-features = [ "nix-command" "flakes" ];
   };
 
@@ -46,22 +41,15 @@
                allowBroken = true;
     };
     overlays = [
-      # (import (builtins.fetchTarball {
-      #   url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
-      #   sha256 = "0i74f97f3ljr49jlhh60pglqsfj6vbwigyrl5q76sclirkzfyvr0";
-      # }
-      # ))
     ];
   };
-
 
   console.useXkbConfig = true;
 
   # Select internationalisation properties.
-  # Use `extraLocales` instead of deprecated `supportedLocales`.
   i18n = {
     defaultLocale = "eo.UTF-8";
-    extraLocales = [ "eo.UTF-8" "en_US.UTF-8" ];
+    supportedLocales = [ "eo/UTF-8" "en_US.UTF-8/UTF-8" ];
   };
 
   # Fonts!
@@ -70,7 +58,7 @@
     font-awesome_5
     fira-code
     noto-fonts
-    noto-fonts-emoji
+    noto-fonts-color-emoji
     fira-code
     fira-code-symbols
     font-awesome
@@ -124,7 +112,7 @@
      protonmail-bridge-gui
 
      gnutls                 # For mail auth
-     protonvpn-cli          # VPN
+     protonvpn-gui          # VPN
      pandoc
      zlib                   # For Pandoc development
 
@@ -141,37 +129,20 @@
      cmake
      extra-cmake-modules
 
-     # (emacsWithPackagesFromUsePackage {
-     #   config = "";
-     #   package = pkgs.emacsPgtkNativeComp;
-     #    extraEmacsPackages = epkgs: [
-     #      epkgs.pdf-tools
-     #  ];
-     # })
-
-     # (emacs.pkgs.withPackages (epkgs: with emacsPackages; [
-     #   pdf-tools
-     # ]))
-
      stack
      (haskellPackages.ghcWithPackages (ps: with ps; [
        # pandoc-citeproc
        shake         # Build tool
        hlint         # Required for spacemacs haskell-mode
-       apply-refact  # Required for spacemacs haskell-mode
        hasktags      # Required for spacemacs haskell-mode
        hoogle        # Required for spacemacs haskell-mode
        lucid 
-       # stylish-haskell # Required for spacemacs haskell-mode
-       # ^ marked as broken
        turtle        # Scripting
        regex-compat
        #PyF
        HandsomeSoup
        tokenize
-       # chatter
      ]))
-     # ihaskell
 
      cabal-install
      texlive.combined.scheme-full
@@ -190,15 +161,12 @@
 
      # Elm
      elmPackages.elm
-     # elmPackages.elm-review
      elmPackages.elm-format
      # Julia
      julia-stable-bin
      # Scala
-     dotty
      metals
      coursier
-     # ammonite
      # Minimal computing
      ranger highlight       # File manager
      scrot                  # Screenshots
@@ -217,10 +185,10 @@
      ncdu                   # Fancy disk usage analyzer
      neofetch               # Fancy system information
      # GUI
-     #qutebrowser            # Web browser
+     #qutebrowser           # Web browser
      chromium               # Another web browser
-     firefox-wayland        # Yes, a third
-     #nyxt                   # Why stop now?
+     firefox                # Yes, a third
+     #nyxt                  # Why stop now?
 
      # Ugh
      zoom-us
@@ -235,12 +203,10 @@
      alsa-utils
      alsa-firmware
      pavucontrol
+     spotify
 
      # Keyboard stuff
      plover.dev
-     # xorg.libxcb
-     # xorg.xcbutil
-     # libsForQt5.qtstyleplugins
      waydroid
 
      # sway related
@@ -267,13 +233,16 @@
      quarto
      #jupyter-book
 
-     # Organize books
-     # calibre
-     
-     # filezilla
-
      # AI
      aider-chat-full
+     gemini-cli
+
+     # Network
+     wireguard-tools
+     protonvpn-gui
+
+     # Ugh
+     libreoffice
    ];
 
   environment.variables = {
@@ -285,7 +254,7 @@
 
   # Enable sound.
   hardware = {
-    firmware = with pkgs; [ firmwareLinuxNonfree ];
+    firmware = with pkgs; [ linux-firmware ];
     keyboard.qmk.enable = true;
     sensor.iio.enable = true;
     bluetooth.enable = true;
@@ -301,6 +270,7 @@
       enable = true;
       DBs = with pkgs.dictdDBs; [ wiktionary wordnet ];
     };
+    desktopManager.cosmic.enable = true;
     flatpak.enable = true;
     fwupd.enable = true; # Firmware updates
 
@@ -320,12 +290,12 @@
      };
     };
 
-    # Power button invokes suspend, not shutdown.
     # Updated option name: see NixOS options for logind settings
     logind = {
       settings = {
         Login = {
           HandleLidSwitch = "suspend";
+          HandlePowerKey = "suspend";
         };
       };
     };
@@ -371,7 +341,6 @@
 
   # Shell
   programs = {
-    fish.enable = true;
     hyprland.enable = true;
     chromium = {
       enable = true;
