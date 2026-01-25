@@ -5,6 +5,7 @@
      # Python Development
      pipenv
      poetry
+     uv
      # mach-nix
      (python3.withPackages(ps: with ps; [
        pandas

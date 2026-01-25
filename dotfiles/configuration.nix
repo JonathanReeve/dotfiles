@@ -58,6 +58,11 @@
     font-awesome_5
     fira-code
     noto-fonts
+    noto-fonts-cjk-sans
+    newcomputermodern
+    lmodern
+    libertinus
+    liberation_ttf
     noto-fonts-color-emoji
     fira-code
     fira-code-symbols

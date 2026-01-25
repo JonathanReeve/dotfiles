@@ -9,6 +9,7 @@
      gnomeExtensions.paperwm
      foliate                 # Ebooks
      polkit_gnome
+     evince # PDFs and documents
 
      # GTK Themes
      theme-vertex

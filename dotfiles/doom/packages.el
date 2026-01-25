@@ -88,3 +88,12 @@
 (package! aider :recipe (:host github :repo "tninja/aider.el" )
    :pin "7053d21eb29407f48bc3b50a9b472feeae9d562c")
 
+;; install gemini-cli.el
+;; (package! gemini-cli :recipe (:host github :repo "linchen2chris/gemini-cli.el")
+;;   :pin "c28aef428733abae03ca1367a10beda06f65cc68")
+
+(package! typst-ts-mode)
+;; :recipe (:host codeberg :repo "meow_king/typst-ts-mode")
+;;   :pin "7c2ef0d5bd2b5a8727fe6d00938c47ba562e0c94")
+
+(package! org-node)

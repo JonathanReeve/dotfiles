@@ -575,3 +575,12 @@
   ;; auto revert buffer
   (global-auto-revert-mode 1)
   (auto-revert-mode 1))
+
+;; (use-package! gemini-cli 
+;;   :config
+;;    (use-package vterm :ensure t)
+;;    ;; for slash commands popup
+;;    (use-package popup :ensure t)
+;;    ;; install gemini-cli.el
+;;    (gemini-cli-mode)
+;; )

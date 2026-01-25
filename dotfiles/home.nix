@@ -146,6 +146,7 @@ in
         gnupg
         (aspellWithDicts (dicts: with dicts; [ en en-computers en-science eo fr ]))
         ripgrep
+        epkgs.treesit-grammars.with-all-grammars
       ];
     };
     gnome-terminal = {
@@ -385,8 +386,7 @@ in
           "gB" = "spawn -m ${scripts}/downloadBook.py {url}";
           "pf" = "spawn --userscript qute-pass";
           "gz" = "jseval var d=document,s=d.createElement('script';;s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement;.appendChild(s;;void(0;;";
-          "go" = "open javascript:void(open('https://omnivore.app/api/save?url='+encodeURIComponent(location.href),'Omnivore'))";
-
+          "gr" = "open javascript:location.href='https://app.raindrop.io/add?link='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&note='+encodeURIComponent((document.getSelection&&document.getSelection().toString())||'')";
           "t" =  "set-cmd-text -s :open -t";
           "Y" =  "yank selection";
           "O" =  "set-cmd-text :open {url:pretty}";
@@ -416,7 +416,7 @@ in
         "h" =  "https://hackage.haskell.org/packages/search?terms={}";
         "ho" = "https://hoogle.haskell.org/?hoogle={}";
         "libgen" =  "https://libgen.is/search.php?req={}";
-        "a" = "https://annas-archive.org/search?q=%s";
+        "a" = "https://annas-archive.org/search?q={}";
         "viki" =  "https://eo.wikipedia.org/w/index.php?search={}";
         "ia" =  "https://archive.org/details/texts?and%5B%5D={}&sin=";
         "mm" =  "https://muse-jhu-edu.ezproxy.cul.columbia.edu/search?action=search&query=content:{}:and&limit=journal_id:131&min=1&max=10&t=search_journal_header";
