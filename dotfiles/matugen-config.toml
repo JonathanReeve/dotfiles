@@ -1,0 +1,14 @@
+[config]
+# Custom templates for DMS
+
+[templates.emacs]
+input_path = '/home/jon/.config/matugen/templates/base16-dms-theme.el.template'
+output_path = '/home/jon/.emacs.d/private/base16-dms-theme.el'
+
+[templates.alacritty]
+input_path = '/home/jon/.config/matugen/templates/alacritty-colors.toml.template'
+output_path = '/home/jon/.config/alacritty/colors.toml'
+
+[templates.qutebrowser]
+input_path = '/home/jon/.config/matugen/templates/qutebrowser-colors.py.template'
+output_path = '/tmp/dms-qute-config.py'
