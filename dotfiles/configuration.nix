@@ -106,7 +106,7 @@
      # aspell aspellDicts.en  # Spell checker
      (aspellWithDicts (dicts: with dicts; [ en en-computers en-science eo fr ]))
      pass encfs gopass      # Passwords and encryption
-     light                  # Brightness control
+     brightnessctl          # Brightness control
      networkmanager
      tailscale
      gcc gnumake libtool
@@ -188,7 +188,7 @@
      sd                     # Sed replacement
      bottom                 # Top replacement (system monitor)
      ncdu                   # Fancy disk usage analyzer
-     neofetch               # Fancy system information
+     fastfetch              # Fancy system information
      # GUI
      #qutebrowser           # Web browser
      chromium               # Another web browser
@@ -208,6 +208,7 @@
      alsa-utils
      alsa-firmware
      pavucontrol
+     pamixer
      spotify
 
      # Keyboard stuff
@@ -229,7 +230,7 @@
      nodejs
 
      # Notetaking
-     anytype
+     # anytype
 
      # Editor
      vscode
@@ -239,8 +240,10 @@
      #jupyter-book
 
      # AI
-     aider-chat-full
+     # aider-chat-full
      gemini-cli
+     # claude-code
+     # claude-agent-acp
 
      # Network
      wireguard-tools
@@ -401,7 +404,7 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "26.05"; # Did you read the comment?
 
   # virtualisation.anbox.enable = true;
   virtualisation.docker.enable = true;

@@ -62,6 +62,7 @@
 
 ;; Life in the danger zone!
 ;; (unpin! org-ref org-roam-bibtex)
+(package! org-msg :pin "0c93f4d6250c207099a3bcbd15dfd3fc91135515")
 
 ;; (package! notebook-mode :recipe (:host github :repo "rougier/notebook-mode" :files ("*.el")))
 
@@ -69,11 +70,6 @@
 ;; (package! evil-colemak-basics) ; colemak remaps
 
 (package! quarto-mode :recipe (:host github :repo "quarto-dev/quarto-emacs" ))
-
-;; (package! org-msg
-;;   :recipe (:host github :repo "danielfleischer/org-msg" :branch "1.12")
-;;   :pin "4dcd70f"
-;;  )
 
 ;; (package! org-typst-preview :recipe (:host github :repo "remimimimimi/org-typst-preview.el"))
  
@@ -96,4 +92,20 @@
 ;; :recipe (:host codeberg :repo "meow_king/typst-ts-mode")
 ;;   :pin "7c2ef0d5bd2b5a8727fe6d00938c47ba562e0c94")
 
+(package! org-mem)
 (package! org-node)
+
+(package! eldev)
+
+;; (package! gemini-cli
+;;   :recipe (:host github :repo "linchen2chris/gemini-cli.el")
+;;   :pin "c28aef428733abae03ca1367a10beda06f65cc68")
+
+(package! org-todoist
+  :recipe (:host github
+           :repo "lillenne/org-todoist"
+           :branch "main"
+           :files ("org-todoist.el"))
+  :pin "d8c06d935b1ece57c67e81b12e6d8154d43cc303")
+
+(package! citar :recipe (:local-repo "citar"))

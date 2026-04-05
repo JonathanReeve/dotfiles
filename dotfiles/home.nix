@@ -133,6 +133,37 @@ in
         modal = true;
       };
     };
+    caelestia = {
+      enable = false;
+      systemd = {
+        enable = false; # if you prefer starting from your compositor
+        target = "graphical-session.target";
+        environment = [];
+      };
+      settings = {
+        paths.wallpaperDir = "~/Bildoj/Ekranfonoj";
+      };
+      cli = {
+        enable = true; # Also add caelestia-cli to path
+        settings = {
+          theme.enableGtk = true;
+        };
+      };
+    };
+    dank-material-shell = {
+      enable = true;
+      systemd.enable = true;
+      # niri = {
+      #   enableKeybinds = true;   # Sets static preset keybinds
+      #   enableSpawn = true;      # Auto-start DMS with niri, if enabled
+      # };
+      enableSystemMonitoring = true;     # System monitoring widgets (dgop)
+      enableVPN = true;                  # VPN management widget
+      enableDynamicTheming = true;       # Wallpaper-based theming (matugen)
+      enableAudioWavelength = true;      # Audio visualizer (cava)
+      enableCalendarEvents = true;       # Calendar integration (khal)
+      enableClipboardPaste = true;       # Pasting from the clipboard history (wtype)
+    };
     doom-emacs = {
       enable = true;
       doomDir = ./doom;
@@ -416,7 +447,7 @@ in
         "h" =  "https://hackage.haskell.org/packages/search?terms={}";
         "ho" = "https://hoogle.haskell.org/?hoogle={}";
         "libgen" =  "https://libgen.is/search.php?req={}";
-        "a" = "https://annas-archive.org/search?q={}";
+        "a" = "https://annas-archive.gl/search?q={}";
         "viki" =  "https://eo.wikipedia.org/w/index.php?search={}";
         "ia" =  "https://archive.org/details/texts?and%5B%5D={}&sin=";
         "mm" =  "https://muse-jhu-edu.ezproxy.cul.columbia.edu/search?action=search&query=content:{}:and&limit=journal_id:131&min=1&max=10&t=search_journal_header";
@@ -588,7 +619,7 @@ MimeType=x-scheme-handler/org-protocol;'';
       enableNushellIntegration = true;
       enableZshIntegration = true;
     };
-    stateVersion = "24.05";
+    stateVersion = "26.05";
   };
 
   systemd.user = {
@@ -694,9 +725,12 @@ MimeType=x-scheme-handler/org-protocol;'';
           "Mod4+Shift+v" = "split h";
           "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '+10%'";
           "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '10%-'";
-          "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl up";
-          "XF86AudioLowerVolume" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl down";
-          "XF86AudioMute" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute";
+          # "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pamixer}/bin/pulseaudio-ctl up";
+          "XF86AudioRaiseVolume" =  "dms ipc call audio increment 10";
+          # "XF86AudioLowerVolume" =  "exec --no-startup-id ${pkgs.pamixer}/bin/pulseaudio-ctl down";
+          "XF86AudioLowerVolume" =  "dms ipc call audio decrement 10";
+          #"XF86AudioMute" =  "exec --no-startup-id ${pkgs.pulseaudio-ctl}/bin/pulseaudio-ctl mute";
+          "XF86AudioMute" =  "dms ipc call audio mute";
           # Open agenda with Super + A
           "Mod4+a" = "exec emacsclient -c -e '(org-agenda-list)(delete-other-windows)(org-agenda-day-view)'";
           "Mod4+m" = "exec emacsclient -c -e '(mu4e)(mu4e-update-mail-and-index)'";
@@ -726,10 +760,10 @@ MimeType=x-scheme-handler/org-protocol;'';
         # Fix for slow GTK applications; see https://github.com/swaywm/sway/wiki#gtk-applications-take-20-seconds-to-start
         { command = "exec systemctl --user import-environment"; }
         # { command = "exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK"; }
-        { command = "exec swaybg -i ~/Bildujo/Ekranfonoj/nixos-wallpaper.png -o '*' -m fill"; }
-        { command = "exec ${pkgs.pywal}/bin/wal --theme base16-nord"; }
+        # { command = "exec swaybg -i ~/Bildujo/Ekranfonoj/nixos-wallpaper.png -o '*' -m fill"; }
+        # { command = "exec ${pkgs.pywal}/bin/wal --theme base16-nord"; }
         { command = "exec megasync"; }
-        { command = "exec waybar"; }
+        # { command = "exec waybar"; }
         { command = "exec ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"; }
         { command = "exec ${pkgs.autotiling}/bin/autotiling"; }
       ];

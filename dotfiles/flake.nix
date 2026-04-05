@@ -10,6 +10,11 @@
     nix-doom-emacs-unstraightened.url = "github:marienz/nix-doom-emacs-unstraightened"; # Retained for both laptops
     caelestia-shell.url = "github:caelestia-dots/shell";
     caelestia-cli.url = "github:caelestia-dots/cli";
+    dms.url = "github:AvengeMedia/DankMaterialShell";
+    dms-plugin-registry = {
+      url = "github:AvengeMedia/dms-plugin-registry";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = inputs @ { self,
               nixos, 
@@ -34,9 +39,12 @@
                           ./hyprland.nix
                           inputs.nix-doom-emacs-unstraightened.homeModule
                           inputs.caelestia-shell.homeManagerModules.default
+                          inputs.dms.homeModules.dank-material-shell
+                          inputs.dms-plugin-registry.modules.default
+                          # inputs.dms.homeModules.niri
                         ];
-            };
-          }
+              };
+            }
         ];
       };
 

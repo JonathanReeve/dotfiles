@@ -230,6 +230,30 @@
           org-roam-ui-open-on-start nil)
     )
 
+  (use-package! org-mem
+    :defer t
+    :config
+    (setq org-mem-do-sync-with-org-id t)
+    ;; Optional
+    (setq org-mem-watch-dirs (list "~/Dokumentoj/Org/Roam")) ;; Your org-roam-directory here
+    (org-mem-updater-mode))
+
+  (use-package! org-node
+    :init
+    ;; Optional key bindings
+    ;; Tip: Try changing these to just "M-o"!
+    (keymap-set global-map "M-o n" org-node-global-prefix-map)
+    (with-eval-after-load 'org
+      (keymap-set org-mode-map "M-o n" org-node-org-prefix-map))
+    :config
+    (org-node-cache-mode)
+    (org-node-roam-accelerator-mode)
+    (org-node-complete-at-point-mode)
+    (setq org-node-creation-fn #'org-node-new-via-roam-capture)
+    (setq org-node-file-slug-fn #'org-node-slugify-like-roam-default)
+    (setq org-node-file-timestamp-format "%Y%m%d%H%M%S-"))
+
+
   ;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
   ;; makes it easier to distinguish from other org buffers.
   ;; (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
@@ -245,7 +269,10 @@
   ;; (global-set-key (kbd "C-c c") 'org-capture)
   ;; (global-set-key (kbd "C-c n p") 'org-projectile-project-todo-completing-read)
   (setq org-link-abbrev-alist
-      '(("wikidata"        . "https://www.wikidata.org/wiki/")))
+        '(("wikidata"   . "https://www.wikidata.org/wiki/")
+          ("wd"         . "https://www.wikidata.org/wiki/")
+          ))
+
   ;; Disable editing source code in dedicated buffer
   ;; https://emacs.stackexchange.com/questions/73986/how-do-i-stop-org-babel-from-trying-to-edit-a-source-block-in-a-dedicated-buffer/73988#73988
   (defun org-edit-src-code nil)

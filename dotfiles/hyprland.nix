@@ -79,16 +79,6 @@
       };
   };
   programs = {
-    caelestia = {
-      enable = true;
-      cli.enable = true; # optional, for CLI tools
-      settings = {
-        paths.wallpaperDir = "~/Bildoj/Ekranfonoj";
-      };
-      extraConfig = ''
-      { "theme": "dark" }
-    '';
-    };
     hyprlock.enable = true;
   };
   services = {
