@@ -117,7 +117,7 @@
      protonmail-bridge-gui
 
      gnutls                 # For mail auth
-     protonvpn-gui          # VPN
+     proton-vpn             # VPN
      pandoc
      zlib                   # For Pandoc development
 

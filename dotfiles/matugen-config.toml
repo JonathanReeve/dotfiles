@@ -4,11 +4,11 @@
 [templates.ewal]
 input_path = '/home/jon/.config/matugen/templates/colors-ewal.json.template'
 output_path = '/home/jon/.cache/wal/colors.json'
-post_hook = "/run/current-system/sw/bin/emacsclient --eval \"(load-theme 'ewal-doom-one t)\""
 
 [templates.emacs]
 input_path = '/home/jon/.config/matugen/templates/base16-dms-theme.el.template'
 output_path = '/home/jon/.emacs.d/private/base16-dms-theme.el'
+post_hook = "/etc/profiles/per-user/jon/bin/emacsclient --eval '(load-theme (quote ewal-doom-one) t))'"
 
 [templates.alacritty]
 input_path = '/home/jon/.config/matugen/templates/alacritty-colors.toml.template'
@@ -18,4 +18,3 @@ output_path = '/home/jon/.config/alacritty/colors.toml'
 input_path = '/home/jon/.config/matugen/templates/qutebrowser-colors.py.template'
 output_path = '/home/jon/.cache/dms-qute-config.py'
 post_hook = "/etc/profiles/per-user/jon/bin/qutebrowser ':config-source /home/jon/.cache/dms-qute-config.py'"
-dms-qute-config.py'"
