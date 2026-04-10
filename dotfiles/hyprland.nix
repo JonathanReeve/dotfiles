@@ -64,13 +64,18 @@
           "ALT,8,movetoworkspace,8"
           "ALT,9,movetoworkspace,9"
           "ALT,0,movetoworkspace,10"
+          ",XF86AudioRaiseVolume,exec,dms ipc call audio increment 5"
+          ",XF86AudioLowerVolume,exec,dms ipc call audio decrement 5"
+          ",XF86AudioMute,exec,dms ipc call audio mute"
+          ",XF86MonBrightnessUp,exec,dms ipc call brightness increment 10 backlight:intel_backlight"
+          ",XF86MonBrightnessDown,exec,dms ipc call brightness decrement 10 backlight:intel_backlight"
 	  ];
     bindm = [
       "SUPER, mouse:272, movewindow" # Super + Left mouse button moves windows
       "SUPER, mouse:273, resizewindow" # Super + Right mouse button resizes
     ];
     exec-once = [
-      "waybar"
+      # DMS starts via systemd or automatically
     ];
     gesture = [
       "3, left, workspace"

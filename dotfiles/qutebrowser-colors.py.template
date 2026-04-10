@@ -1,4 +1,4 @@
-c.colors.tabs.even.bg = "{{dank16.color1.default.hex}}"
-c.colors.tabs.odd.bg = "{{dank16.color1.default.hex}}"
-c.colors.tabs.selected.even.bg = "{{dank16.color2.default.hex}}"
-c.colors.tabs.selected.odd.bg = "{{dank16.color2.default.hex}}"
+c.colors.tabs.even.bg = "{{colors.surface_container.default.hex}}"
+c.colors.tabs.odd.bg = "{{colors.surface_container.default.hex}}"
+c.colors.tabs.selected.even.bg = "{{colors.primary.default.hex}}"
+c.colors.tabs.selected.odd.bg = "{{colors.primary.default.hex}}"

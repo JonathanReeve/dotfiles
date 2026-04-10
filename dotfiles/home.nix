@@ -118,6 +118,7 @@ in
     alacritty = {
       enable = true;
       settings = {
+        general.import = [ "/home/jon/.config/alacritty/colors.toml" ];
         font.normal.family = "${font}";
         font.size = 14;
         window.opacity = 0.9;
@@ -163,6 +164,73 @@ in
       enableAudioWavelength = true;      # Audio visualizer (cava)
       enableCalendarEvents = true;       # Calendar integration (khal)
       enableClipboardPaste = true;       # Pasting from the clipboard history (wtype)
+      managePluginSettings = true;
+      settings = {
+        runUserMatugenTemplates = true;
+        maxWorkspaceIcons = 1;
+        currentThemeName = "dynamic";
+        currentThemeCategory = "dynamic";
+        cornerRadius = 11;
+        fontFamily = "Fira Code";
+        fontScale = 1.18;
+        iconTheme = "Flat-Remix-Black-Dark";
+        barConfigs = [
+          {
+            id = "default";
+            name = "Main Bar";
+            enabled = true;
+            position = 0;
+            screenPreferences = [ "all" ];
+            showOnLastDisplay = true;
+            leftWidgets = [ "launcherButton" "workspaceSwitcher" "focusedWindow" ];
+            centerWidgets = [ "music" "clock" "weather" ];
+            rightWidgets = [ "systemTray" "clipboard" "cpuUsage" "memUsage" "notificationButton" "battery" "controlCenterButton" ];
+            spacing = 0;
+            innerPadding = 6;
+            bottomGap = -3;
+            transparency = 1;
+            widgetTransparency = 1;
+            squareCorners = true;
+            noBackground = false;
+            gothCornersEnabled = true;
+            gothCornerRadiusOverride = false;
+            gothCornerRadiusValue = 15;
+            borderEnabled = false;
+            borderColor = "surfaceText";
+            borderOpacity = 1;
+            borderThickness = 1;
+            fontScale = 1.32;
+            autoHide = false;
+            autoHideDelay = 250;
+            openOnOverview = false;
+            visible = true;
+            popupGapsAuto = true;
+            popupGapsManual = 4;
+            widgetOutlineEnabled = false;
+            widgetPadding = 9;
+          }
+        ];
+      };
+      plugins = {
+        intervalCommand = {
+          src = pkgs.fetchFromGitHub {
+            owner = "corcoran";
+            repo = "dms-interval-command";
+            rev = "main";
+            sha256 = "0s392i6skhzy9aq75d4mf1564mv2i9akzrdrb0r6sjzz67dca9yw";
+          };
+          settings = {
+            widgets = [
+              {
+                name = "Org Clock";
+                command = "${scripts}/org-clock-wrapper.sh";
+                icon = "clock";
+                refreshInterval = 30;
+              }
+            ];
+          };
+        };
+      };
     };
     doom-emacs = {
       enable = true;
@@ -478,47 +546,10 @@ in
     # gnome-keyring.enable = true;
     gpg-agent.enable = true;
     clipmenu = {
-      enable = true;
-      launcher = "rofi";
+      enable = false;
+      launcher = "dms ipc launcher open";
     };
-    dunst = {
-      enable = true;
-      settings = {
-        global = {
-          geometry = "950x80-30+70";
-          padding = 32;
-          horizontal_padding = 30;
-          # frame_width = 10;
-          font = "${font} 12";
-          line_height = 4;
-          markup = "full";
-          alignment = "left";
-          word_wrap = "true";
-        };
-        shortcuts = {
-          close = "ctrl+space";
-          close_all = "ctrl+shift+space";
-          history = "ctrl+grave";
-          context = "ctrl+shift+period";
-        };
-        urgency_low = {
-          timeout = 4;
-          foreground = "${foregroundColor}";
-          background = "${backgroundColor}";
-        };
-        urgency_normal = {
-          timeout = 8;
-          foreground = "${foregroundColor}";
-          background = "${backgroundColor}";
-        };
-        urgency_critical = {
-          timeout = 0;
-          foreground = "${foregroundColor}";
-          background = "${warningColor}";
-        };
-      };
-      waylandDisplay = "eDP-1";
-    };
+
     pueue = {
       enable = true;
       settings = {
@@ -559,7 +590,12 @@ in
 
   # Dotfiles for the home root, ~/
   home = {
+    sessionVariables = {
+      DMS_POPOUT_LAYER = "overlay";
+      DMS_DANKBAR_LAYER = "top";
+    };
     # This should only be necessary with non-NixOS
+
     keyboard = {
       options = [ "caps:escape" "esperanto:colemak" ];
       variant = "colemak";
@@ -599,6 +635,11 @@ MimeType=x-scheme-handler/org-protocol;'';
           set editing-mode vi
           set keymap vi-command
         '';
+      ".config/matugen/config.toml".source = ./matugen-config.toml;
+      ".config/matugen/templates/colors-ewal.json.template".source = ./colors-ewal.json.template;
+      ".config/matugen/templates/base16-dms-theme.el.template".source = ./base16-dms-theme.el.template;
+      ".config/matugen/templates/alacritty-colors.toml.template".source = ./alacritty-colors.toml.template;
+      ".config/matugen/templates/qutebrowser-colors.py.template".source = ./qutebrowser-colors.py.template;
       ".stack/config.yaml".text =
         ''
           templates:
@@ -623,35 +664,6 @@ MimeType=x-scheme-handler/org-protocol;'';
   };
 
   systemd.user = {
-    services = {
-      dwall = {
-        Unit = {
-          Description = "Set dynamic wallpaper using Dwall";
-        };
-        Service = {
-          Type = "oneshot";
-          ExecStart = "${scripts}/dynamic-wallpaper/dwall.sh -p -s aurora";
-        };
-        Install = {
-          WantedBy = ["multi-user.target"];
-        };
-      };
-    };
-    timers = {
-      dwall = {
-        Unit = {
-          Description = "Set dynamic wallpaper using Dwall.";
-          Requires = "dwall.service";
-        };
-        Timer = {
-          Unit = "dwall.service";
-          OnCalendar="*-*-* *:00:00"; # Every hour
-        };
-        Install = {
-          WantedBy = ["timers.target"];
-        };
-      };
-    };
   };
   wayland.windowManager.sway = {
     enable = true;
@@ -692,9 +704,9 @@ MimeType=x-scheme-handler/org-protocol;'';
           "Mod4+Shift+u" = "move container to workspace number 3";
           "Mod4+Shift+y" = "move container to workspace number 4";
           "Mod4+h" = "exec alacritty";
-          "Mod4+c" = "clipmenu";
+          "Mod4+c" = "exec dms ipc clipboard toggle";
           "Mod4+Shift+c" = "kill";
-          "Mod4+space" = "exec ${pkgs.rofi}/bin/rofi -show drun";
+          "Mod4+space" = "exec dms ipc launcher toggle";
           # "Mod4+y" = "output eDP-1 disable";
           # "Mod4+Shift+y" = "output eDP-1 enable";
           "Mod4+n" = "workspace next";
@@ -702,6 +714,7 @@ MimeType=x-scheme-handler/org-protocol;'';
           "Mod4+Shift+q" = "exit";
           "Mod4+Shift+r" = "restart";
           "Mod4+p" = "focus parent";
+          "Mod4+Escape" = "exec ${scripts}/dms-close-all.sh";
           "Mod4+Shift+p" = "focus child";
           "Mod1+h" = "focus left";
           "Mod1+n" = "focus down";
@@ -723,8 +736,8 @@ MimeType=x-scheme-handler/org-protocol;'';
           "Mod4+x" = "layout toggle all";
           "Mod4+v" = "split v";
           "Mod4+Shift+v" = "split h";
-          "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '+10%'";
-          "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set '10%-'";
+          "XF86MonBrightnessUp" = "exec dms ipc call brightness increment 10 backlight:intel_backlight";
+          "XF86MonBrightnessDown" = "exec dms ipc call brightness decrement 10 backlight:intel_backlight";
           # "XF86AudioRaiseVolume" =  "exec --no-startup-id ${pkgs.pamixer}/bin/pulseaudio-ctl up";
           "XF86AudioRaiseVolume" =  "dms ipc call audio increment 10";
           # "XF86AudioLowerVolume" =  "exec --no-startup-id ${pkgs.pamixer}/bin/pulseaudio-ctl down";
@@ -813,9 +826,6 @@ MimeType=x-scheme-handler/org-protocol;'';
   xdg = {
     enable = true;
     configFile = {
-      "waybar/style.css" = {
-        source = ./waybar-style.css;
-      };
     };
     dataFile = {
       "qutebrowser/userscripts/" = {

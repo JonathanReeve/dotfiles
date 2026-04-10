@@ -1,0 +1,11 @@
+--- a/quickshell/Widgets/DankPopout.qml
++++ b/quickshell/Widgets/DankPopout.qml
+@@ -58,6 +58,8 @@
+     signal popoutClosed
+     signal backgroundClicked
+ 
++    onBackgroundClicked: close()
++
+     property var _lastOpenedScreen: null
+ 
+     property int effectiveBarPosition: 0

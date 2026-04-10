@@ -527,6 +527,16 @@
 ;; Treat all themes as safe
 (setq custom-safe-themes t)
 
+(use-package! ewal
+  :init
+  (setq ewal-use-standard-at-startup t
+        ewal-json-file "~/.cache/wal/colors.json"))
+
+(use-package! ewal-doom-themes
+  :after (ewal doom-themes)
+  :config
+  (load-theme 'ewal-doom-one t))
+
 ;; Fancy splash image
 (setq fancy-splash-image "/home/jon/Bildujo/typewriter1.jpg")
 
