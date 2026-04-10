@@ -17,4 +17,5 @@ output_path = '/home/jon/.config/alacritty/colors.toml'
 [templates.qutebrowser]
 input_path = '/home/jon/.config/matugen/templates/qutebrowser-colors.py.template'
 output_path = '/home/jon/.cache/dms-qute-config.py'
-post_hook = "/etc/profiles/per-user/jon/bin/qutebrowser ':config-source ~/.cache/dms-qute-config.py'"
+post_hook = "/etc/profiles/per-user/jon/bin/qutebrowser ':config-source /home/jon/.cache/dms-qute-config.py'"
+dms-qute-config.py'"
