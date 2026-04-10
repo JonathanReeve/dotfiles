@@ -1,13 +1,9 @@
 [config]
 # Custom templates for DMS
 
-[templates.ewal]
+[templates.emacs]
 input_path = '/home/jon/.config/matugen/templates/colors-ewal.json.template'
 output_path = '/home/jon/.cache/wal/colors.json'
-
-[templates.emacs]
-input_path = '/home/jon/.config/matugen/templates/base16-dms-theme.el.template'
-output_path = '/home/jon/.emacs.d/private/base16-dms-theme.el'
 post_hook = "/etc/profiles/per-user/jon/bin/emacsclient --eval '(load-theme (quote ewal-doom-one) t))'"
 
 [templates.alacritty]
