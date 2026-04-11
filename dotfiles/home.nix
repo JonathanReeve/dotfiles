@@ -183,7 +183,7 @@ in
             screenPreferences = [ "all" ];
             showOnLastDisplay = true;
             leftWidgets = [ "launcherButton" "workspaceSwitcher" "focusedWindow" ];
-            centerWidgets = [ "music" "clock" "weather" ];
+            centerWidgets = [ "music" "plugin:intervalCommand:Org Clock" "clock" "weather" ];
             rightWidgets = [ "systemTray" "clipboard" "cpuUsage" "memUsage" "notificationButton" "battery" "controlCenterButton" ];
             spacing = 0;
             innerPadding = 6;
@@ -213,15 +213,12 @@ in
       };
       plugins = {
         intervalCommand = {
-          src = pkgs.fetchFromGitHub {
-            owner = "corcoran";
-            repo = "dms-interval-command";
-            rev = "main";
-            sha256 = "0s392i6skhzy9aq75d4mf1564mv2i9akzrdrb0r6sjzz67dca9yw";
-          };
+          enable = true;
+          # src is handled by inputs.dms-plugin-registry.modules.default
           settings = {
-            widgets = [
+            variants = [
               {
+                id = "Org Clock";
                 name = "Org Clock";
                 command = "${scripts}/org-clock-wrapper.sh";
                 icon = "clock";
