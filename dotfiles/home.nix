@@ -490,6 +490,18 @@ in
         "ia" =  "https://archive.org/details/texts?and%5B%5D={}&sin=";
         "mm" =  "https://muse-jhu-edu.ezproxy.cul.columbia.edu/search?action=search&query=content:{}:and&limit=journal_id:131&min=1&max=10&t=search_journal_header";
       };
+      settings = {
+        content.local_content_can_access_remote_urls = true;
+        content.headers.accept_language = "eo,en-US,en,fr";
+        fonts = {
+          completion.category = "11pt monospace";
+          default_family = "${font}";
+          default_size = "12pt";
+        };
+        hints.chars = "arstdhneio";
+        url.default_page = "${scripts}/homepage/homepage.html";
+        colors.webpage.darkmode.enabled = true;
+      };
     };
   };
 
