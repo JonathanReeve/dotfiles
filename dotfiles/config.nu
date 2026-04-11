@@ -1,35 +1,18 @@
 
 # Wallpaper management
 def wal-fav [] {
-  open ~/.cache/wal/colors.json | get wallpaper |
-  each { |it| echo $it (char newline)} |
-  str join | save --append ~/.cache/wal/favs
+  dms ipc wallpaper get | save --append ~/.cache/wal/favs
 }
 
-def wal-kill [] {
-  if (job list | where tag == "wall" | length) > 0 {
-    let jobid = (job list | where tag == "wall" | get id | first)
-    job kill $jobid
-  } else { pkill swaybg } 
-} 
-
 def wal-fav-set [] {
-  wal-kill
-  let wall = (open ~/.cache/wal/favs | lines | uniq | shuffle | first)
-  print $"Using $wall"
-  let pid = job spawn -t wall { swaybg -i $wall -m fill }
-  return $pid
+  dms ipc wallpaper set (open ~/.cache/wal/favs | lines | shuffle | first)
 }
 
 def wal-recent [] {
-  wal-kill
   let wall = (ls /run/media/jon/systemrestore/.systemrestore/Bildoj
          | sort-by modified -r | first 50 | shuffle | first | get name)
-  let pid = job spawn -t wall {
-    wal -i $wall
-    swaybg -i $wall -m fill
-    }
-  }
+  dms ipc wallpaper set $wall 
+}
 
 def wal-backup [] {
   sudo rsync -a /home/systemrestore/Bildoj /run/media/jon/systemrestore/.systemrestore
@@ -109,3 +92,18 @@ module vprompt {
 
 use vterm
 use vprompt
+
+# Startup message
+def show-proverbo [] {
+    let proverbo_file = "/home/jon/Agordoj/scripts/proverboj.txt"
+    if ($proverbo_file | path exists) {
+        let proverbo = (open $proverbo_file | lines | shuffle | first)
+        if (which cowsay | is-empty) {
+            print $proverbo
+        } else {
+            print ($proverbo | cowsay)
+        }
+    }
+}
+
+show-proverbo

@@ -100,7 +100,7 @@
      #logseq               # Fancy notes
 
      # CLI
-     fish                   # Shell
+     cowsay                 # For startup proverbs
      vim                    # Text editors
      vale                   # Prose linting
      # aspell aspellDicts.en  # Spell checker
@@ -247,7 +247,7 @@
 
      # Network
      wireguard-tools
-     protonvpn-gui
+     proton-vpn
 
      # Ugh
      libreoffice

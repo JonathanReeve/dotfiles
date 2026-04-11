@@ -1,4 +1,0 @@
-c.colors.tabs.even.bg = "{{colors.surface_container.default.hex}}"
-c.colors.tabs.odd.bg = "{{colors.surface_container.default.hex}}"
-c.colors.tabs.selected.even.bg = "{{colors.primary.default.hex}}"
-c.colors.tabs.selected.odd.bg = "{{colors.primary.default.hex}}"

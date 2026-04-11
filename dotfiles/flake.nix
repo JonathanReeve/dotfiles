@@ -53,7 +53,6 @@
             home-manager.backupFileExtension = "backup";
             home-manager.users.jon = { pkgs, ... }: {
               imports = [ ./home.nix
-                          ./hyprland.nix
                           inputs.nix-doom-emacs-unstraightened.homeModule
                           inputs.caelestia-shell.homeManagerModules.default
                           inputs.dms.homeModules.dank-material-shell
