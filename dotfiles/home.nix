@@ -282,8 +282,8 @@ in
         currentThemeName = "dynamic";
         currentThemeCategory = "dynamic";
         cornerRadius = 11;
-        fontFamily = "Fira Code";
-        fontScale = 1.18;
+        fontFamily = "${font}";
+        fontScale = 1.0;
         iconTheme = "Flat-Remix-Black-Dark";
         barConfigs = [
           {
@@ -494,9 +494,11 @@ in
         content.local_content_can_access_remote_urls = true;
         content.headers.accept_language = "eo,en-US,en,fr";
         fonts = {
-          completion.category = "11pt monospace";
+          completion.category = "11pt \"${font}\"";
           default_family = "${font}";
-          default_size = "12pt";
+          default_size = "11pt";
+          tabs.selected = "11pt \"${font}\"";
+          tabs.unselected = "11pt \"${font}\"";
         };
         hints.chars = "arstdhneio";
         url.default_page = "${scripts}/homepage/homepage.html";
@@ -543,7 +545,7 @@ in
         "SUPER,N,workspace, e+1"
         "SUPER,E,workspace, e-1"
         "SUPER,F,fullscreen, 0"
-        "SUPER,T,togglefloating,"
+        "SUPER,T,exec,hyprctl dispatch togglefloating && hyprctl dispatch resizeactive exact 70% 70% && hyprctl dispatch centerwindow"
         "SUPER,G,exec,/home/jon/Agordoj/scripts/hypr-gaps-toggle.nu"
         "SUPER,S,exec,/home/jon/Agordoj/scripts/hypr-layout-toggle.nu"
         "SUPER_SHIFT,E,exec,${emacsclient} -c -a emacs"

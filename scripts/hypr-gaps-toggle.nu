@@ -13,14 +13,24 @@ def main [] {
     }
 
     if $gaps_val == 0 {
-        # Restore gaps
+        # Restore gaps and rounded/goth look
         hyprctl keyword general:gaps_in 5
         hyprctl keyword general:gaps_out 10
         hyprctl keyword decoration:rounding 11
+        
+        # Restore DMS settings
+        dms ipc call settings set cornerRadius 11
+        # To restore goth corners, we need to know the previous state, 
+        # but usually it's enabled.
+        dms ipc call settings set gothCornersEnabled true
     } else {
-        # Remove gaps
+        # Remove gaps and make everything square
         hyprctl keyword general:gaps_in 0
         hyprctl keyword general:gaps_out 0
         hyprctl keyword decoration:rounding 0
+        
+        # DMS square look
+        dms ipc call settings set cornerRadius 0
+        dms ipc call settings set gothCornersEnabled false
     }
 }

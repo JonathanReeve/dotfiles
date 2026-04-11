@@ -512,18 +512,12 @@
 (add-hook 'nov-mode-hook 'my-nov-font-setup)
 
 ;; Toggle transparency
- (defun toggle-transparency ()
-   (interactive)
-   (let ((alpha (frame-parameter nil 'alpha)))
-     (set-frame-parameter
-      nil 'alpha
-      (if (eql (cond ((numberp alpha) alpha)
-                     ((numberp (cdr alpha)) (cdr alpha))
-                     ;; Also handle undocumented (<active> <inactive>) form.
-                     ((numberp (cadr alpha)) (cadr alpha)))
-               100)
-          '(85 . 50) '(100 . 100)))))
-
+(defun toggle-transparency ()
+  (interactive)
+  (let ((alpha (frame-parameter nil 'alpha-background)))
+    (if (or (not alpha) (= alpha 100))
+        (set-frame-parameter nil 'alpha-background 85)
+      (set-frame-parameter nil 'alpha-background 100))))
 ;; Treat all themes as safe
 (setq custom-safe-themes t)
 
