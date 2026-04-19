@@ -532,7 +532,7 @@
   (load-theme 'ewal-doom-one t))
 
 ;; Fancy splash image
-(setq fancy-splash-image "/home/jon/Bildujo/typewriter1.jpg")
+(setq fancy-splash-image "/home/jon/Bildoj/Ekranfonoj/typewriter.png")
 
 ;; Stop autocompleting parentheses and quotation marks
 (remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)

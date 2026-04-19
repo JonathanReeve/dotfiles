@@ -10,7 +10,9 @@
     nix-doom-emacs-unstraightened.url = "github:marienz/nix-doom-emacs-unstraightened"; # Retained for both laptops
     caelestia-shell.url = "github:caelestia-dots/shell";
     caelestia-cli.url = "github:caelestia-dots/cli";
-    dms.url = "github:AvengeMedia/DankMaterialShell";
+    # dms.url = "github:AvengeMedia/DankMaterialShell";
+    # Local copy for testing
+    dms.url = "path:/home/jon/Programaroj/DankMaterialShell";
     dms-plugin-registry.url = "github:AvengeMedia/dms-plugin-registry";
   };
   outputs = inputs @ { self,

@@ -391,15 +391,15 @@
     # };
     };
 
-  # systemd.user.services.protonmail = {
-  #   description = "Protonmail Bridge";
-  #   enable = true;
-  #   script =
-  #     "${pkgs.protonmail-bridge}/bin/protonmail-bridge --log-level debug";
-  #   path = [ pkgs.gnome.gnome-keyring ]; # HACK: https://github.com/ProtonMail/proton-bridge/issues/176
-  #   wantedBy = [ "graphical-session.target" ];
-  #   partOf = [ "graphical-session.target" ];
-  # };
+  systemd.user.services.protonmail = {
+    description = "Protonmail Bridge";
+    enable = true;
+    script =
+      "${pkgs.protonmail-bridge}/bin/protonmail-bridge --log-level debug";
+    path = [ pkgs.gnome.gnome-keyring ]; # HACK: https://github.com/ProtonMail/proton-bridge/issues/176
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+  };
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you

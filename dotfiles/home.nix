@@ -66,7 +66,6 @@ let
     error = "{{colors.error.default.hex}}"
 
     # Completion
-    c.colors.completion.bg = bg
     c.colors.completion.category.bg = bg_alt
     c.colors.completion.category.fg = fg
     c.colors.completion.category.border.bottom = bg
@@ -224,6 +223,16 @@ in
     platformTheme.name = "adwaita";
   };
 
+  fonts.fontconfig = {
+    enable = true;
+    defaultFonts = {
+      emoji = [ "Noto Color Emoji" ];
+      monospace = [ font ] ;
+      sansSerif = [ "Liberation Sans" ];
+      serif = [ "Liberation Serif" ];
+    };
+  };
+
   # Dotfiles for the home root, ~/
   home = {
     sessionVariables = {
@@ -279,6 +288,7 @@ in
       settings = {
         runUserMatugenTemplates = true;
         maxWorkspaceIcons = 1;
+        showWorkspaceApps = false;
         currentThemeName = "dynamic";
         currentThemeCategory = "dynamic";
         cornerRadius = 11;
@@ -298,7 +308,7 @@ in
             rightWidgets = [ "systemTray" "clipboard" "cpuUsage" "memUsage" "notificationButton" "battery" "controlCenterButton" ];
             spacing = 0;
             innerPadding = 6;
-            bottomGap = -3;
+            bottomGap = 0;
             transparency = 1;
             widgetTransparency = 1;
             squareCorners = true;
@@ -310,7 +320,7 @@ in
             borderColor = "surfaceText";
             borderOpacity = 1;
             borderThickness = 1;
-            fontScale = 1.32;
+            fontScale = 1.0;
             autoHide = false;
             autoHideDelay = 250;
             openOnOverview = false;
@@ -494,11 +504,11 @@ in
         content.local_content_can_access_remote_urls = true;
         content.headers.accept_language = "eo,en-US,en,fr";
         fonts = {
-          completion.category = "11pt \"${font}\"";
+          completion.category = "11pt '${font}'";
           default_family = "${font}";
           default_size = "11pt";
-          tabs.selected = "11pt \"${font}\"";
-          tabs.unselected = "11pt \"${font}\"";
+          tabs.selected = "11pt '${font}'";
+          tabs.unselected = "11pt '${font}'";
         };
         hints.chars = "arstdhneio";
         url.default_page = "${scripts}/homepage/homepage.html";
@@ -517,7 +527,7 @@ in
       general = {
         gaps_in = 5;
         gaps_out = 20;
-        border_size = 3;
+        border_size = 5;
         "col.active_border" = "$primary";
         "col.inactive_border" = "$outline";
         layout = "dwindle";
@@ -534,20 +544,40 @@ in
         follow_mouse = 1;
       };
       decoration = { rounding = 10; };
+      animations = {
+        enabled = true;
+        bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
+        animation = [
+          "windows, 1, 7, myBezier"
+          "windowsOut, 1, 7, default, popin 80%"
+          "border, 1, 10, default"
+          "borderangle, 1, 8, default"
+          "fade, 1, 7, default"
+          "workspaces, 1, 6, default, slidevert"
+        ];
+      };
+      workspace = [
+        "1, persistent:true"
+        "2, persistent:true"
+        "3, persistent:true"
+        "4, persistent:true"
+      ];
       bind = [
         "Alt,space,exec,caelestia shell drawers toggle launcher"
         "SUPER,H,exec,alacritty"
         "SUPER_SHIFT,C,killactive,"
-        "SUPER_SHIFT,Q,exit,"
+        "SUPER_SHIFT,Q,exec,dms ipc powermenu open"
         "SUPER_SHIFT,T,togglefloating,"
         "SUPER,space,exec,dms ipc launcher toggle"
         "SUPER,P,pseudo,"
         "SUPER,N,workspace, e+1"
         "SUPER,E,workspace, e-1"
         "SUPER,F,fullscreen, 0"
-        "SUPER,T,exec,hyprctl dispatch togglefloating && hyprctl dispatch resizeactive exact 70% 70% && hyprctl dispatch centerwindow"
+        "SUPER,T,exec,/home/jon/Agordoj/scripts/hypr-float-toggle.nu"
         "SUPER,G,exec,/home/jon/Agordoj/scripts/hypr-gaps-toggle.nu"
         "SUPER,S,exec,/home/jon/Agordoj/scripts/hypr-layout-toggle.nu"
+        "SUPER,W,exec,dms ipc wallpaper set $(find ~/Bildoj/Ekranfonoj -maxdepth 1 -type f | shuf -n 1)"
+        "SUPER_SHIFT,W,exec,dms ipc wallpaper set $(find /run/media/jon/systemrestore/.systemrestore/Bildoj -maxdepth 1 -type f | shuf -n 1)"
         "SUPER_SHIFT,E,exec,${emacsclient} -c -a emacs"
         "Alt,H,movefocus,l"
         "Alt,I,movefocus,r"
@@ -595,10 +625,12 @@ in
         "megasync"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
       ];
-      gesture = [
-        "3, left, workspace"
-        "3, right, workspace"
-      ];
+      gestures = {
+        gesture = [
+          "3, horizontal, workspace"
+        ];
+        workspace_swipe_touch = true;
+      };
     };
   };
 
@@ -607,11 +639,11 @@ in
     configFile = {
       "matugen/config.toml".text = ''
         [config]
-        post_hook = "${emacsclient} --eval '(progn (ewal-load-color-design) (load-theme (quote ewal-doom-one) t))'"
 
         [templates.ewal]
         input_path = '/home/jon/.config/matugen/templates/colors-ewal.json.template'
         output_path = '/home/jon/.cache/wal/colors.json'
+        post_hook = "${scripts}/emacs-reload.nu"
 
         [templates.alacritty]
         input_path = '/home/jon/.config/matugen/templates/alacritty-colors.toml.template'
@@ -620,7 +652,7 @@ in
         [templates.qutebrowser]
         input_path = '/home/jon/.config/matugen/templates/qutebrowser-colors.py.template'
         output_path = '/home/jon/.cache/dms-qute-config.py'
-        post_hook = "${qutebrowser} ':config-source /home/jon/.cache/dms-qute-config.py'"
+        post_hook = "${scripts}/qutebrowser-reload.nu"
       '';
     };
     dataFile = {
