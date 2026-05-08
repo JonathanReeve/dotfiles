@@ -276,9 +276,10 @@ in
               author-email: ${email}
               github-username: ${githubUsername}
         '';
-      ".gemini/skills/mu-email.skill".source = ../mu-email.skill;
-      ".gemini/tmp/mu-email/scripts/mu_search.nu".source = ../scripts/mu_search.nu;
-      ".gemini/tmp/mu-email/scripts/mu_view.nu".source = ../scripts/mu_view.nu;
+      ".gemini/skills/" = {
+        source = ../skills;
+        recursive = true;
+      };
     };
     stateVersion = "26.05";
   };
@@ -638,9 +639,9 @@ in
         "SUPER,N,workspace, e+1"
         "SUPER,E,workspace, e-1"
         "SUPER,F,fullscreen, 0"
-        "SUPER,T,exec,/home/jon/Agordoj/scripts/hypr-float-toggle.nu"
-        "SUPER,G,exec,/home/jon/Agordoj/scripts/hypr-gaps-toggle.nu"
-        "SUPER,S,exec,/home/jon/Agordoj/scripts/hypr-layout-toggle.nu"
+        "SUPER,T,exec,/home/jon/Agordoj/scripts/hypr.nu float-toggle"
+        "SUPER,G,exec,/home/jon/Agordoj/scripts/hypr.nu gaps-toggle"
+        "SUPER,S,exec,/home/jon/Agordoj/scripts/hypr.nu layout-toggle"
         "SUPER,W,exec,dms ipc wallpaper set $(find ~/Bildoj/Ekranfonoj -maxdepth 1 -type f | shuf -n 1)"
         "SUPER_SHIFT,W,exec,dms ipc wallpaper set $(find /run/media/jon/systemrestore/.systemrestore/Bildoj -maxdepth 1 -type f | shuf -n 1)"
         "SUPER_SHIFT,E,exec,${emacsclient} -c -a emacs"
