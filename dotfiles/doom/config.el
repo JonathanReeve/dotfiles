@@ -19,30 +19,46 @@
 (setq alert-default-style 'libnotify)
 
 ;; Don't prompt when opening journal or other large files
-;(setq large-file-warning-threshold 20000000)
+					;(setq large-file-warning-threshold 20000000)
 
 ;; Default spelling dictionary is English
 (setq ispell-dictionary "english")
 
 (after! spell-fu
-  (add-hook 'spell-fu-mode-hook
-            (lambda ()
-              (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "en"))
-              (spell-fu-dictionary-add
-               (spell-fu-get-personal-dictionary "en-personal" "/home/jon/Dotfiles/scripts/aspell.en.pws")))))
+	(add-hook 'spell-fu-mode-hook
+		  (lambda ()
+		    (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "en"))
+		    (spell-fu-dictionary-add
+		     (spell-fu-get-personal-dictionary "en-personal" "/home/jon/Dotfiles/scripts/aspell.en.pws")))))
 
 ;; Bibliography
 
+(setq org-roam-directory "~/Dokumentoj/Org/Roam"
+      org-roam-dailies-directory "Daily/"
+      org-roam-db-location "~/Dokumentoj/Org/Roam/org-roam.db")
+
+
+
 ;; Citar
 ;; See https://github.com/hlissner/doom-emacs/blob/4612b39695405f7238dd3da0d4fd6d3a5cdd93d6/modules/tools/biblio/README.org
-(setq! citar-bibliography '("~/Dokumentoj/Papers/library.bib"
+(setq! citar-bibliography '(
+                            "~/Dokumentoj/Papers/library.bib"
                             "~/Dokumentoj/Papers/library2.bib"
-                            "~/Dokumentoj/Org/Roam/shared/library.bib")
+                            "~/Dokumentoj/Org/Roam/shared/library.bib"
+                            ;; "~/Dokumentoj/Org/Roam/org-roam.db")
+                            )
        citar-library-paths '("~/Dokumentoj/Papers/"
                              "~/Dokumentoj/Org/Roam/shared/papers")
-       citar-notes-paths '("~/Dokumentoj/Org/Roam/"))
+       citar-notes-paths '("~/Dokumentoj/Org/Roam/")
+       citar-parsing-functions
+       '(("\\.bib\\'" . parsebib-parse)
+         ("\\.biblatex\\'" . parsebib-parse)
+         ("\\.json\\'" . parsebib-parse)
+         ("\\.org\\'" . citar-org-parse)
+         ("\\.db\\'" . citar-org-parse)))
 
-(setq! bibtex-completion-bibliography '("~/Dokumentoj/Papers/library.bib"
+(setq! bibtex-completion-bibliography '(
+                                        "~/Dokumentoj/Papers/library.bib"
                                         "~/Dokumentoj/Papers/library2.bib"
                                         "~/Dokumentoj/Org/Roam/shared/library.bib")
        bibtex-completion-notes-path "~/Dokumentoj/Org/Roam/"
@@ -50,76 +66,76 @@
 
 ;; Org Mode
 (after! org
-  ;; (org-indent-mode)
-  (setq org-directory "~/Dokumentoj/Org"
-        org-id-locations-file "~/Dokumentoj/Org/.orgids"
-        org-startup-indented t
-        org-startup-folded t
-        evil-org-key-theme '(textobjects navigation additional insert todo)
-        org-default-priority ?C
-        org-lowest-priority ?G
-        org-duration-format 'h:mm
-        diary-file "~/Dokumentoj/Org/diary"
-        org-agenda-include-diary t
-        org-agenda-files (list "~/Dokumentoj/Org/Projects/")
-        org-agenda-skip-scheduled-if-done t
-        org-agenda-skip-deadline-if-done t
-        org-todo-keywords '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
-        org-todo-keywords-for-agenda '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
-        ;; Put state changes into the LOGBOOK drawer, to clean up a bit
-        org-log-into-drawer t
-        )
-  (setq org-refile-targets '((nil :maxlevel . 9)
-                              (org-agenda-files :maxlevel . 9)))
-  (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
-  (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
+	;; (org-indent-mode)
+	(setq org-directory "~/Dokumentoj/Org"
+              org-id-locations-file "~/Dokumentoj/Org/.orgids"
+              org-startup-indented t
+              org-startup-folded t
+              evil-org-key-theme '(textobjects navigation additional insert todo)
+              org-default-priority ?C
+              org-lowest-priority ?G
+              org-duration-format 'h:mm
+              diary-file "~/Dokumentoj/Org/diary"
+              org-agenda-include-diary t
+              org-agenda-files (list "~/Dokumentoj/Org/Projects/")
+              org-agenda-skip-scheduled-if-done t
+              org-agenda-skip-deadline-if-done t
+              org-todo-keywords '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
+              org-todo-keywords-for-agenda '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
+              ;; Put state changes into the LOGBOOK drawer, to clean up a bit
+              org-log-into-drawer t
+              )
+	(setq org-refile-targets '((nil :maxlevel . 9)
+				   (org-agenda-files :maxlevel . 9)))
+	(setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
+	(setq org-refile-use-outline-path t)                  ; Show full paths for refiling
 
-  ;; Adapted from http://stackoverflow.com/a/12751732/584121
-  ; (require 'org-protocol)
-  (setq org-protocol-default-template-key "l")
-  (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline "/home/jon/Dokumentoj/Org/notes.org" "Tasks")
-            "* TODO %?  %i\n  %a")
-          ("m" "Movie" entry (file+headline "/home/jon/Dokumentoj/Org/Roam/movies.org" "to watch")
-            "* %a\n %?\n %i")
-          ("l" "Link" entry (file+olp "/home/jon/Dokumentoj/Org/notes.org" "Web Links")
-            "* %a\n %?\n %i")
-          ("s" "Schedule" entry (file "/home/jon/Dokumentoj/Org/Projects/schedule.org")
-            "* %?\n :PROPERTIES:\n :LOCATION:\n :END:\n %a\n %i")
-          ))
-  (setq org-modules '(org-habit org-protocol))
-  ;; Disable holidays. Is there an easier way of doing this?
-  (setq holiday-christian-holidays nil
-        holiday-islamic-holidays nil
-        holiday-bahai-holidays nil
-        holiday-oriental-holidays nil
-        holiday-hebrew-holidays nil)
-  (add-hook 'org-agenda-mode-hook
-            (lambda ()
-              (calendar-set-date-style 'iso)))
+	;; Adapted from http://stackoverflow.com/a/12751732/584121
+					; (require 'org-protocol)
+	(setq org-protocol-default-template-key "l")
+	(setq org-capture-templates
+              '(("t" "Todo" entry (file+headline "/home/jon/Dokumentoj/Org/notes.org" "Tasks")
+		 "* TODO %?  %i\n  %a")
+		("m" "Movie" entry (file+headline "/home/jon/Dokumentoj/Org/Roam/movies.org" "to watch")
+		 "* %a\n %?\n %i")
+		("l" "Link" entry (file+olp "/home/jon/Dokumentoj/Org/notes.org" "Web Links")
+		 "* %a\n %?\n %i")
+		("s" "Schedule" entry (file "/home/jon/Dokumentoj/Org/Projects/schedule.org")
+		 "* %?\n :PROPERTIES:\n :LOCATION:\n :END:\n %a\n %i")
+		))
+	(setq org-modules '(org-habit org-protocol))
+	;; Disable holidays. Is there an easier way of doing this?
+	(setq holiday-christian-holidays nil
+              holiday-islamic-holidays nil
+              holiday-bahai-holidays nil
+              holiday-oriental-holidays nil
+              holiday-hebrew-holidays nil)
+	(add-hook 'org-agenda-mode-hook
+		  (lambda ()
+		    (calendar-set-date-style 'iso)))
 
-  (defun org-journal-new-entry ()
-    "Inserts header with inactive timestamp, hours and minutes.
+	(defun org-journal-new-entry ()
+	  "Inserts header with inactive timestamp, hours and minutes.
      A custom journal helper function."
-    (interactive)
-    (org-insert-heading)
-    (org-insert-time-stamp (current-time) t t))
+	  (interactive)
+	  (org-insert-heading)
+	  (org-insert-time-stamp (current-time) t t))
 
-  ;; Clock break time in pomodoro
-  (setq org-pomodoro-clock-break t)
-  (add-hook 'org-mode-hook 'visual-line-mode)
+	;; Clock break time in pomodoro
+	(setq org-pomodoro-clock-break t)
+	(add-hook 'org-mode-hook 'visual-line-mode)
 
-  (setq org-roam-directory "~/Dokumentoj/Org/Roam")
-  (setq org-roam-dailies-directory "Daily/")
-  (setq org-roam-db-location "~/Dokumentoj/Org/Roam/org-roam.db")
-  ;; Get a timestamp for tomorrow
-  (defun my/tomorrow ()
-    (format-time-string "%Y-%m-%d" (time-add 86400 (current-time))))
-  (setq org-roam-dailies-capture-templates
-      '(("d" "default" entry
-         "* %?"
-         :target (file+head "%<%Y-%m-%d>.org"
-                            ":PROPERTIES:
+	
+	
+	
+	;; Get a timestamp for tomorrow
+	(defun my/tomorrow ()
+	  (format-time-string "%Y-%m-%d" (time-add 86400 (current-time))))
+	(setq org-roam-dailies-capture-templates
+	      '(("d" "default" entry
+		 "* %?"
+		 :target (file+head "%<%Y-%m-%d>.org"
+				    ":PROPERTIES:
 :DRINKS:
 :PHONE:
 :KETO:
@@ -131,16 +147,16 @@
 #+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"%<%Y-%m-%d>\" :tend \"%(my/tomorrow)\"
 #+END: "))))
 
-  (setq org-roam-capture-templates
-        '(("d" "default" plain "%?" :target
-           (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-           :unnarrowed t)
-          ("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%u\n"
-           :target (file+olp "movies.org" ("watched")
-           ))
-        ("b" "literature note" plain "%?" :target (file+head
-                "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
-                "#+title: ${citar-citekey} (${citar-date}). ${note-title}.
+	(setq org-roam-capture-templates
+              '(("d" "default" plain "%?" :target
+		 (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+		 :unnarrowed t)
+		("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%u\n"
+		 :target (file+olp "movies.org" ("watched")
+				   ))
+		("b" "literature note" plain "%?" :target (file+head
+							   "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
+							   "#+title: ${citar-citekey} (${citar-date}). ${note-title}.
 #+created: %U
 #+last-modified: %U
 
@@ -156,150 +172,150 @@
 :NOTER_PAGE:
 :END:\n
 "
-                )
-            :unarrowed t)
-           ))
+							   )
+		 :unarrowed t)
+		))
 
-   (setq citar-org-roam-template-fields
-         '((:citar-title "title")
-           (:citar-author "author" "editor")
-           (:citar-date "date" "year" "issued")
-           (:citar-pages "pages")
-           (:citar-file "file")
-           (:citar-keywords "keywords")
-           (:citar-url "url")
-           (:citar-type "=type=")
-           ))
+	(setq citar-org-roam-template-fields
+              '((:citar-title "title")
+		(:citar-author "author" "editor")
+		(:citar-date "date" "year" "issued")
+		(:citar-pages "pages")
+		(:citar-file "file")
+		(:citar-keywords "keywords")
+		(:citar-url "url")
+		(:citar-type "=type=")
+		))
 
-  (setq org-roam-capture-ref-templates
-        '(("r" "ref" plain "%?" :target
-           (file+head "${slug}.org" "#+title: ${title}") :unnarrowed t)
-          ("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :WIKIDATA: ${ref}\n :END:\n%u\n"
-           :target (file+olp "movies.org" ("watched")))
-          )
-        )
+	(setq org-roam-capture-ref-templates
+              '(("r" "ref" plain "%?" :target
+		 (file+head "${slug}.org" "#+title: ${title}") :unnarrowed t)
+		("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :WIKIDATA: ${ref}\n :END:\n%u\n"
+		 :target (file+olp "movies.org" ("watched")))
+		)
+              )
 
-  (setq org-clock-idle-time 15)
-  (setq org-clock-auto-clockout t)
-  (setq org-clock-auto-clockout-timer 20)
+	(setq org-clock-idle-time 15)
+	(setq org-clock-auto-clockout t)
+	(setq org-clock-auto-clockout-timer 20)
 
-  (use-package! citar-org-roam
-    :after (citar org-roam)
-    :config (citar-org-roam-mode)
-    (setq citar-org-roam-capture-template-key "b")
-    )
+	(use-package! citar-org-roam
+		      :after (citar org-roam)
+		      :config (citar-org-roam-mode)
+		      (setq citar-org-roam-capture-template-key "b")
+		      )
 
-  (setq citar-templates
-        '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
-         (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords keywords:*}")
-         (preview . "${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
-         (note . "#+title: ${author editor}, ${title}")))
+	(setq citar-templates
+              '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
+		(suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords keywords:*}")
+		(preview . "${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
+		(note . "#+title: ${author editor}, ${title}")))
 
-  ;; (setq citar-symbols
-  ;;       `((file ,(all-the-icons-faicon "file-o" :face 'all-the-icons-green :v-adjust -0.1) . " ")
-  ;;         (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
-  ;;         (link ,(all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01) . " ")))
-  ;; (setq citar-symbol-separator "  ")
+	;; (setq citar-symbols
+	;;       `((file ,(all-the-icons-faicon "file-o" :face 'all-the-icons-green :v-adjust -0.1) . " ")
+	;;         (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
+	;;         (link ,(all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01) . " ")))
+	;; (setq citar-symbol-separator "  ")
 
-  (setq citar-file-open-note-function 'orb-citar-edit-note)
-  ;; (setq citar-file-open-note-function 'citar-file-open-notes-default-org)
+	(setq citar-file-open-note-function 'orb-citar-edit-note)
+	;; (setq citar-file-open-note-function 'citar-file-open-notes-default-org)
 
-  ;; Configure org-roam buffer display.
-  ;; See https://www.orgroam.com/manual.html#Navigating-the-Org_002droam-Buffer
-  (add-to-list 'display-buffer-alist
-               '("\\*org-roam\\*"
-                 (display-buffer-in-direction)
-                 (direction . right)
-                 (window-width . 0.33)
-                 (window-height . fit-window-to-buffer)))
+	;; Configure org-roam buffer display.
+	;; See https://www.orgroam.com/manual.html#Navigating-the-Org_002droam-Buffer
+	(add-to-list 'display-buffer-alist
+		     '("\\*org-roam\\*"
+                       (display-buffer-in-direction)
+                       (direction . right)
+                       (window-width . 0.33)
+                       (window-height . fit-window-to-buffer)))
 
-  (use-package! websocket
-    :after org-roam)
+	(use-package! websocket
+		      :after org-roam)
 
-  (use-package! org-roam-ui
-    :after org-roam ;; or :after org
-    ;; :hook
-    ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-    ;;         a hookable mode anymore, you're advised to pick something yourself
-    ;;         if you don't care about startup time, use
-    ;;  :hook (after-init . org-roam-ui-mode)
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start nil)
-    )
+	(use-package! org-roam-ui
+		      :after org-roam ;; or :after org
+		      ;; :hook
+		      ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+		      ;;         a hookable mode anymore, you're advised to pick something yourself
+		      ;;         if you don't care about startup time, use
+		      ;;  :hook (after-init . org-roam-ui-mode)
+		      :config
+		      (setq org-roam-ui-sync-theme t
+			    org-roam-ui-follow t
+			    org-roam-ui-update-on-save t
+			    org-roam-ui-open-on-start nil)
+		      )
 
-  (use-package! org-mem
-    :defer t
-    :config
-    (setq org-mem-do-sync-with-org-id t)
-    ;; Optional
-    (setq org-mem-watch-dirs (list "~/Dokumentoj/Org/Roam")) ;; Your org-roam-directory here
-    (org-mem-updater-mode))
+	(use-package! org-mem
+		      :defer t
+		      :config
+		      (setq org-mem-do-sync-with-org-id t)
+		      ;; Optional
+		      (setq org-mem-watch-dirs (list "~/Dokumentoj/Org/Roam")) ;; Your org-roam-directory here
+		      (org-mem-updater-mode))
 
-  (use-package! org-node
-    :init
-    ;; Optional key bindings
-    ;; Tip: Try changing these to just "M-o"!
-    (keymap-set global-map "M-o n" org-node-global-prefix-map)
-    (with-eval-after-load 'org
-      (keymap-set org-mode-map "M-o n" org-node-org-prefix-map))
-    :config
-    (org-node-cache-mode)
-    (org-node-roam-accelerator-mode)
-    (org-node-complete-at-point-mode)
-    (setq org-node-creation-fn #'org-node-new-via-roam-capture)
-    (setq org-node-file-slug-fn #'org-node-slugify-like-roam-default)
-    (setq org-node-file-timestamp-format "%Y%m%d%H%M%S-"))
+	(use-package! org-node
+		      :init
+		      ;; Optional key bindings
+		      ;; Tip: Try changing these to just "M-o"!
+		      (keymap-set global-map "M-o n" org-node-global-prefix-map)
+		      (with-eval-after-load 'org
+			(keymap-set org-mode-map "M-o n" org-node-org-prefix-map))
+		      :config
+		      (org-node-cache-mode)
+		      (org-node-roam-accelerator-mode)
+		      (org-node-complete-at-point-mode)
+		      (setq org-node-creation-fn #'org-node-new-via-roam-capture)
+		      (setq org-node-file-slug-fn #'org-node-slugify-like-roam-default)
+		      (setq org-node-file-timestamp-format "%Y%m%d%H%M%S-"))
 
 
-  ;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
-  ;; makes it easier to distinguish from other org buffers.
-  ;; (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
+	;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
+	;; makes it easier to distinguish from other org buffers.
+	;; (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
 
-  ;; (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
+	;; (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
 
-  ;; Org-projectile stuff
-  ;; (require 'org-projectile)
-  ;; (setq org-projectile-projects-file
-  ;;       "/your/path/to/an/org/file/for/storing/project/todos.org")
-  ;; (push (org-projectile-project-todo-entry) org-capture-templates)
-  ;; (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
-  ;; (global-set-key (kbd "C-c c") 'org-capture)
-  ;; (global-set-key (kbd "C-c n p") 'org-projectile-project-todo-completing-read)
-  (setq org-link-abbrev-alist
-        '(("wikidata"   . "https://www.wikidata.org/wiki/")
-          ("wd"         . "https://www.wikidata.org/wiki/")
-          ))
+	;; Org-projectile stuff
+	;; (require 'org-projectile)
+	;; (setq org-projectile-projects-file
+	;;       "/your/path/to/an/org/file/for/storing/project/todos.org")
+	;; (push (org-projectile-project-todo-entry) org-capture-templates)
+	;; (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+	;; (global-set-key (kbd "C-c c") 'org-capture)
+	;; (global-set-key (kbd "C-c n p") 'org-projectile-project-todo-completing-read)
+	(setq org-link-abbrev-alist
+              '(("wikidata"   . "https://www.wikidata.org/wiki/")
+		("wd"         . "https://www.wikidata.org/wiki/")
+		))
 
-  ;; Disable editing source code in dedicated buffer
-  ;; https://emacs.stackexchange.com/questions/73986/how-do-i-stop-org-babel-from-trying-to-edit-a-source-block-in-a-dedicated-buffer/73988#73988
-  (defun org-edit-src-code nil)
+	;; Disable editing source code in dedicated buffer
+	;; https://emacs.stackexchange.com/questions/73986/how-do-i-stop-org-babel-from-trying-to-edit-a-source-block-in-a-dedicated-buffer/73988#73988
+	(defun org-edit-src-code nil)
 
-  ;; Org-attach stuff
-  (setq org-attach-id-dir (concat org-directory "/.attach"))
-  (setq org-attach-method 'mv)
+	;; Org-attach stuff
+	(setq org-attach-id-dir (concat org-directory "/.attach"))
+	(setq org-attach-method 'mv)
 
-  ;; Org-modern
-  (global-org-modern-mode)
-  (setq org-modern-label-border 1)
+	;; Org-modern
+	(global-org-modern-mode)
+	(setq org-modern-label-border 1)
 
-  (defun org-procrastinate ()
-    "Set the scheduled date on an Org agenda item to tomorrow."
-    (interactive)
-    (org-agenda-schedule nil "+1d"))
+	(defun org-procrastinate ()
+	  "Set the scheduled date on an Org agenda item to tomorrow."
+	  (interactive)
+	  (org-agenda-schedule nil "+1d"))
 
-  (setq org-attach-store-link-p 'attached)
+	(setq org-attach-store-link-p 'attached)
 
-  ;; (add-to-list 'org-latex-classes
-  ;;     '("letter"
-  ;;     "\\documentclass{letter}"
-  ;;     ("\\section{%s}" . "\\section*{%s}")
-  ;;     ("\\subsection{%s}" . "\\subsection*{%s}")
-  ;;     ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+	;; (add-to-list 'org-latex-classes
+	;;     '("letter"
+	;;     "\\documentclass{letter}"
+	;;     ("\\section{%s}" . "\\section*{%s}")
+	;;     ("\\subsection{%s}" . "\\subsection*{%s}")
+	;;     ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
 
-) ;; End of Org block
+	) ;; End of Org block
 
 ;; (use-package! org-clock-reminder
 ;;   :config
@@ -317,104 +333,104 @@
 
 ;; Mail
 (after! mu4e
-  ;; (require 'org-mu4e)
-  (setq read-mail-command 'mu4e) ;; Why is this not already set?
-  ;; Respond to calendar invites. But is this even working?
-  (require 'mu4e-icalendar)
-  (mu4e-icalendar-setup)
-  ;; Use password-store as authentication source
-  (require 'auth-source)
-  (require 'auth-source-pass)
-  (setq auth-sources '("pass"))
-  (setq auth-source-pass-filename "/home/jon/Dokumentoj/Personal/.password-store")
-  (auth-source-pass-enable)
-  ;; (auth-source-pass--read-entry "127.0.0.1:1143/jonathan@jonreeve.com")
-  ;; (auth-source-pass-get "127.0.0.1:1143" "jonathan@jonreeve.com")
-  (set-email-account! "gmail"
-                      '((mu4e-sent-folder   . "/gmail/[Gmail]/Sent Mail")
-                        (mu4e-drafts-folder . "/gmail/[Gmail]/Drafts")
-                        (smtpmail-smtp-user . "jon.reeve")
-                        (smtpmail-smtp-server . "smtp.gmail.com")
-                        (smtpmail-smtp-service . 587)
-                        (smtpmail-stream-type . starttls)
-                        (user-mail-address  . "jon.reeve@gmail.com")
-                        (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
-                      t)
-  (set-email-account! "columbia"
-                      '((mu4e-sent-folder   . "/columbia/[Gmail]/Sent Mail")
-                        (mu4e-drafts-folder . "/columbia/[Gmail]/Drafts")
-                        (smtpmail-smtp-user . "jpr2152@columbia.edu")
-                        (user-mail-address  . "jpr2152@columbia.edu")
-                        (smtpmail-smtp-server . "smtp.gmail.com")
-                        (smtpmail-smtp-service . 587)
-                        (smtpmail-stream-type . starttls)
-                        (mu4e-compose-signature . "--\nJonathan Reeve\nPhD Candidate, Department of English and Comparative Literature\nhttps://jonreeve.com"))
-                      t)
-  (set-email-account! "protonmail"
-                      '((mu4e-sent-folder   . "/protonmail/Sent")
-                        (mu4e-drafts-folder . "/protonmail/Drafts")
-                        (smtpmail-smtp-user . "jonathan@jonreeve.com")
-                        (user-mail-address  . "jonathan@jonreeve.com")
-                        ;; (smtpmail-auth-credentials '("localhost" 1025 "jonathan@jonreeve.com" "your_password_here"))
-                        (smtpmail-smtp-server . "localhost")
-                        (smtpmail-smtp-service . 1025)
-                        (smtpmail-stream-type . starttls)
-                        (setq smtpmail-auth-supported '(login plain))
-                        (user-full-name . "Jonathan Reeve")
-                        ;; (smtpmail-auth-supported 'login)
-                        (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
-                      t)
-  (setq message-send-mail-function 'smtpmail-send-it)
-  (add-to-list 'gnutls-trustfiles "~/.config/protonmail/bridge/cert.pem")
-  (setq mu4e-maildir "~/Retpoŝto"
-        mu4e-trash-folder "/Trash"
-        mu4e-refile-folder "/Archive"
-        mu4e-view-show-addresses t
-        mu4e-attachment-dir "~/Elŝutoj"
-        mu4e-compose-dont-reply-to-self t
-        mu4e-user-mail-address-list '("jon.reeve@gmail.com" "jonathan.reeve@columbia.edu" "jpr2152@columbia.edu" "jonathan@jonreeve.com"))
-  (setq gnutls-verify-host-names nil)
-  (setq mu4e-bookmarks
-        `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
-          ("date:7d..now NOT flag:trashed AND NOT flag:replied" "Last 7 days unreplied" ?w)
-          ("maildir:/columbia/Inbox NOT flag:trashed AND NOT flag:replied" "Columbia" ?c)
-          ("maildir:/columbia/Inbox OR maildir:/gmail/Inbox OR maildir:/personal/Inbox OR maildir:/protonmail/Inbox NOT flag:trashed" "All" ?a)
-          ("maildir:/gmail/Inbox NOT flag:trashed AND NOT flag:replied" "Gmail" ?g)
-          ("maildir:/gmail/Lists OR maildir:/protonmail/Lists NOT flag:trashed AND NOT flag:replied" "Lists" ?l)
-          ("maildir:/personal/Inbox NOT flag:trashed AND NOT flag:replied" "Personal" ?p)
-          ("maildir:/columbia/Homework NOT flag:trashed" "Homework" ?h)
-          ))
-  ;; Only alert interesting emails
-  (setq mu4e-alert-interesting-mail-query "maildir:/columbia/Inbox OR maildir:/gmail/Inbox OR maildir:/personal/Inbox OR maildir:/protonmail/Inbox NOT flag:trashed")
-  ;; (setq mu4e-headers-list-mark       (cons "l" (+mu4e-normalised-icon "sitemap" :set "faicon"))
-  ;;       mu4e-headers-personal-mark   (cons "p" (+mu4e-normalised-icon "user"))
-  ;;       mu4e-headers-calendar-mark   (cons "c" (+mu4e-normalised-icon "calendar")))
-)
-  ;; (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
-  ;; (setq mu4e-html2text-command "w3m -T text/html")
+	;; (require 'org-mu4e)
+	(setq read-mail-command 'mu4e) ;; Why is this not already set?
+	;; Respond to calendar invites. But is this even working?
+	(require 'mu4e-icalendar)
+	(mu4e-icalendar-setup)
+	;; Use password-store as authentication source
+	(require 'auth-source)
+	(require 'auth-source-pass)
+	(setq auth-sources '("pass"))
+	(setq auth-source-pass-filename "/home/jon/Dokumentoj/Personal/.password-store")
+	(auth-source-pass-enable)
+	;; (auth-source-pass--read-entry "127.0.0.1:1143/jonathan@jonreeve.com")
+	;; (auth-source-pass-get "127.0.0.1:1143" "jonathan@jonreeve.com")
+	(set-email-account! "gmail"
+			    '((mu4e-sent-folder   . "/gmail/[Gmail]/Sent Mail")
+                              (mu4e-drafts-folder . "/gmail/[Gmail]/Drafts")
+                              (smtpmail-smtp-user . "jon.reeve")
+                              (smtpmail-smtp-server . "smtp.gmail.com")
+                              (smtpmail-smtp-service . 587)
+                              (smtpmail-stream-type . starttls)
+                              (user-mail-address  . "jon.reeve@gmail.com")
+                              (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
+			    t)
+	(set-email-account! "columbia"
+			    '((mu4e-sent-folder   . "/columbia/[Gmail]/Sent Mail")
+                              (mu4e-drafts-folder . "/columbia/[Gmail]/Drafts")
+                              (smtpmail-smtp-user . "jpr2152@columbia.edu")
+                              (user-mail-address  . "jpr2152@columbia.edu")
+                              (smtpmail-smtp-server . "smtp.gmail.com")
+                              (smtpmail-smtp-service . 587)
+                              (smtpmail-stream-type . starttls)
+                              (mu4e-compose-signature . "--\nJonathan Reeve\nPhD Candidate, Department of English and Comparative Literature\nhttps://jonreeve.com"))
+			    t)
+	(set-email-account! "protonmail"
+			    '((mu4e-sent-folder   . "/protonmail/Sent")
+                              (mu4e-drafts-folder . "/protonmail/Drafts")
+                              (smtpmail-smtp-user . "jonathan@jonreeve.com")
+                              (user-mail-address  . "jonathan@jonreeve.com")
+                              ;; (smtpmail-auth-credentials '("localhost" 1025 "jonathan@jonreeve.com" "your_password_here"))
+                              (smtpmail-smtp-server . "localhost")
+                              (smtpmail-smtp-service . 1025)
+                              (smtpmail-stream-type . starttls)
+                              (setq smtpmail-auth-supported '(login plain))
+                              (user-full-name . "Jonathan Reeve")
+                              ;; (smtpmail-auth-supported 'login)
+                              (mu4e-compose-signature . "--\nJonathan Reeve\nhttps://jonreeve.com"))
+			    t)
+	(setq message-send-mail-function 'smtpmail-send-it)
+	(add-to-list 'gnutls-trustfiles "~/.config/protonmail/bridge/cert.pem")
+	(setq mu4e-maildir "~/Retpoŝto"
+              mu4e-trash-folder "/Trash"
+              mu4e-refile-folder "/Archive"
+              mu4e-view-show-addresses t
+              mu4e-attachment-dir "~/Elŝutoj"
+              mu4e-compose-dont-reply-to-self t
+              mu4e-user-mail-address-list '("jon.reeve@gmail.com" "jonathan.reeve@columbia.edu" "jpr2152@columbia.edu" "jonathan@jonreeve.com"))
+	(setq gnutls-verify-host-names nil)
+	(setq mu4e-bookmarks
+              `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
+		("date:7d..now NOT flag:trashed AND NOT flag:replied" "Last 7 days unreplied" ?w)
+		("maildir:/columbia/Inbox NOT flag:trashed AND NOT flag:replied" "Columbia" ?c)
+		("maildir:/columbia/Inbox OR maildir:/gmail/Inbox OR maildir:/personal/Inbox OR maildir:/protonmail/Inbox NOT flag:trashed" "All" ?a)
+		("maildir:/gmail/Inbox NOT flag:trashed AND NOT flag:replied" "Gmail" ?g)
+		("maildir:/gmail/Lists OR maildir:/protonmail/Lists NOT flag:trashed AND NOT flag:replied" "Lists" ?l)
+		("maildir:/personal/Inbox NOT flag:trashed AND NOT flag:replied" "Personal" ?p)
+		("maildir:/columbia/Homework NOT flag:trashed" "Homework" ?h)
+		))
+	;; Only alert interesting emails
+	(setq mu4e-alert-interesting-mail-query "maildir:/columbia/Inbox OR maildir:/gmail/Inbox OR maildir:/personal/Inbox OR maildir:/protonmail/Inbox NOT flag:trashed")
+	;; (setq mu4e-headers-list-mark       (cons "l" (+mu4e-normalised-icon "sitemap" :set "faicon"))
+	;;       mu4e-headers-personal-mark   (cons "p" (+mu4e-normalised-icon "user"))
+	;;       mu4e-headers-calendar-mark   (cons "c" (+mu4e-normalised-icon "calendar")))
+	)
+;; (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
+;; (setq mu4e-html2text-command "w3m -T text/html")
 
 (after! org-msg
-  (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t"
-        org-msg-startup "hidestars indent inlineimages"
-        org-msg-greeting-fmt "\nHi%s,\n\n"
-        org-msg-default-alternatives '((new        . (text html))
-                                       (reply-to-html    . (text html))
-                                       (reply-to-text    . (text   html))))
-;;   (setq org-msg-convert-citation t
-;; 	org-msg-signature "
+	(setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t"
+              org-msg-startup "hidestars indent inlineimages"
+              org-msg-greeting-fmt "\nHi%s,\n\n"
+              org-msg-default-alternatives '((new        . (text html))
+					     (reply-to-html    . (text html))
+					     (reply-to-text    . (text   html))))
+	;;   (setq org-msg-convert-citation t
+	;; 	org-msg-signature "
 
-;; Best,
+	;; Best,
 
-;; Jonathan
+	;; Jonathan
 
-;; #+begin_signature
-;; --
-;; Jonathan Reeve
-;; https://jonreeve.com
-;; #+end_signature")
-  ;; (setq message-citation-line-format "Je %a, %b %d %Y, %N skribis:\n")
-  ;; (setq org-msg-posting-style nil)      ;
-)
+	;; #+begin_signature
+	;; --
+	;; Jonathan Reeve
+	;; https://jonreeve.com
+	;; #+end_signature")
+	;; (setq message-citation-line-format "Je %a, %b %d %Y, %N skribis:\n")
+	;; (setq org-msg-posting-style nil)      ;
+	)
 
 ;; Set browser
 (setq browse-url-browser-function 'browse-url-generic
@@ -422,21 +438,21 @@
 
 ;; Better looking HTML mail
 (after! shr
-  (setq shr-color-visible-luminance-min 80)
-  (setq shr-use-colors nil)
-  (setq shr-use-fonts nil)
-  (define-advice mm-shr (:around (oldfn &rest handle) delete-trailing-whitespace)
-    "Delete leading and trailing whitespace in Gnus article buffer."
-    (if (derived-mode-p 'gnus-article-mode)
-        (save-restriction
-          (narrow-to-region (point) (point))
-          (apply oldfn handle)
-          (delete-trailing-whitespace))
-      (apply oldfn handle)))
-  '(progn (setq shr-width -1)
-          (defun shr-fill-text (text) text)
-          (defun shr-fill-lines (start end) nil)
-          (defun shr-fill-line () nil)))
+	(setq shr-color-visible-luminance-min 80)
+	(setq shr-use-colors nil)
+	(setq shr-use-fonts nil)
+	(define-advice mm-shr (:around (oldfn &rest handle) delete-trailing-whitespace)
+	  "Delete leading and trailing whitespace in Gnus article buffer."
+	  (if (derived-mode-p 'gnus-article-mode)
+              (save-restriction
+		(narrow-to-region (point) (point))
+		(apply oldfn handle)
+		(delete-trailing-whitespace))
+	    (apply oldfn handle)))
+	'(progn (setq shr-width -1)
+		(defun shr-fill-text (text) text)
+		(defun shr-fill-lines (start end) nil)
+		(defun shr-fill-line () nil)))
 
 (add-hook 'elfeed-show-mode-hook 'visual-line-mode)
 (setq rmh-elfeed-org-files '("/home/jon/Dokumentoj/Org/RSS.org"))
@@ -476,24 +492,24 @@
 (map! :map evil-org-agenda-mode-map "P" 'org-procrastinate)
 
 (map! :map evil-treemacs-state-map "n" 'treemacs-next-line
-                                   "e" 'treemacs-previous-line)
+      "e" 'treemacs-previous-line)
 
 (map! :map evil-window-map "n" #'evil-window-down
-                           "N" 'evil-window-move-very-bottom
-                           "e" 'evil-window-up
-                           "E" 'evil-window-move-very-top
-                           "i" 'evil-window-right
-                           "I" 'evil-window-move-far-right
-                           "j" 'evil-window-new)
+      "N" 'evil-window-move-very-bottom
+      "e" 'evil-window-up
+      "E" 'evil-window-move-very-top
+      "i" 'evil-window-right
+      "I" 'evil-window-move-far-right
+      "j" 'evil-window-new)
 
 (map! :n "SPC w c" 'evil-window-new)
 
 ;; Bind stuff
 (map! :after pdf-tools :map pdf-view-mode-map :n "C-i" 'org-noter-insert-precise-note
-                             :n "C-n" 'pdf-view-next-page
-                             :n "C-e" 'pdf-view-previous-page
-                             :n "n"   'pdf-view-scroll-up-or-next-page
-                             :n "e"   'pdf-view-scroll-down-or-previous-page)
+      :n "C-n" 'pdf-view-next-page
+      :n "C-e" 'pdf-view-previous-page
+      :n "n"   'pdf-view-scroll-up-or-next-page
+      :n "e"   'pdf-view-scroll-down-or-previous-page)
 
 (map! :after ranger :map ranger-normal-mode-map
       :nvm "h" 'ranger-up-directory
@@ -508,7 +524,7 @@
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 (defun my-nov-font-setup ()
   (face-remap-add-relative 'variable-pitch :family "Liberation Serif"
-                                           :height 1.4))
+                           :height 1.4))
 (add-hook 'nov-mode-hook 'my-nov-font-setup)
 
 ;; Toggle transparency
@@ -522,14 +538,14 @@
 (setq custom-safe-themes t)
 
 (use-package! ewal
-  :init
-  (setq ewal-use-standard-at-startup t
-        ewal-json-file "~/.cache/wal/colors.json"))
+	      :init
+	      (setq ewal-use-standard-at-startup t
+		    ewal-json-file "~/.cache/wal/colors.json"))
 
 (use-package! ewal-doom-themes
-  :after (ewal doom-themes)
-  :config
-  (load-theme 'ewal-doom-one t))
+	      :after (ewal doom-themes)
+	      :config
+	      (load-theme 'ewal-doom-one t))
 
 ;; Fancy splash image
 (setq fancy-splash-image "/home/jon/Bildoj/Ekranfonoj/typewriter.png")
@@ -538,9 +554,9 @@
 (remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
 
 (after! org-cite
-  (require 'oc-csl-activate)
-  (setq org-cite-activate-processor 'csl-activate)
-  )
+	(require 'oc-csl-activate)
+	(setq org-cite-activate-processor 'csl-activate)
+	)
 
 ;; (add-to-list 'auto-mode-alist '("\\.cljs\\.hl\\'" . clojurescript-mode)
 
@@ -550,9 +566,9 @@
   (setq most-recent-pdf (string-trim-right (shell-command-to-string "ls -t /tmp/*.pdf | head -1")))
   (setq dest-pdf-filename (string-trim-right (concat bibtex-completion-library-path (bibtex-completion-get-key-bibtex) ".pdf")))
   (if (yes-or-no-p (concat "Rename " most-recent-pdf " to " dest-pdf-filename "?"))
-  (rename-file most-recent-pdf dest-pdf-filename)
-  (message "Aborted.")
-  ))
+      (rename-file most-recent-pdf dest-pdf-filename)
+    (message "Aborted.")
+    ))
 
 (defun rename-epub ()
   " Rename the most recently modified Epub in the /tmp dir with the latest bibtex key. "
@@ -560,9 +576,9 @@
   (setq most-recent-epub (string-trim-right (shell-command-to-string "ls -t /tmp/*.epub | head -1")))
   (setq dest-epub-filename (string-trim-right (concat bibtex-completion-library-path (bibtex-completion-get-key-bibtex) ".epub")))
   (if (yes-or-no-p (concat "Rename " most-recent-epub " to " dest-epub-filename "?"))
-  (rename-file most-recent-epub dest-epub-filename)
-  (message "Aborted.")
-  ))
+      (rename-file most-recent-epub dest-epub-filename)
+    (message "Aborted.")
+    ))
 ;; (use-package! notebook-mode)
 
 ;; (use-package! evil-colemak-basics
@@ -575,9 +591,9 @@
 
 ;; Workaround; see https://github.com/nnicandro/emacs-jupyter/issues/380#issuecomment-1014026589
 (after! ob-jupyter
-  (defun jupyter-ansi-color-apply-on-region (begin end)
-    (ansi-color-apply-on-region begin end t))
-  )
+	(defun jupyter-ansi-color-apply-on-region (begin end)
+	  (ansi-color-apply-on-region begin end t))
+	)
 
 ;; Encryption
 (require 'epa-file)
@@ -599,13 +615,13 @@
 (setq font-lock-global-modes '(not mu4e-compose-mode))
 
 (use-package! aider
-  :config
-  ;; For latest claude sonnet model
-  (setq aider-args '("--model" "gemini" "--no-auto-accept-architect")) ;; add --no-auto-commits if you don't want it
-  (aider-magit-setup-transients) ;; add aider magit function to magit menu
-  ;; auto revert buffer
-  (global-auto-revert-mode 1)
-  (auto-revert-mode 1))
+	      :config
+	      ;; For latest claude sonnet model
+	      (setq aider-args '("--model" "gemini" "--no-auto-accept-architect")) ;; add --no-auto-commits if you don't want it
+	      (aider-magit-setup-transients) ;; add aider magit function to magit menu
+	      ;; auto revert buffer
+	      (global-auto-revert-mode 1)
+	      (auto-revert-mode 1))
 
 ;; (use-package! gemini-cli 
 ;;   :config

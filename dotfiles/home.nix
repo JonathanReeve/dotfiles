@@ -1,4 +1,4 @@
-{pkgs, lib, ...}:
+{pkgs, lib, inputs, ...}:
 
 let
   # Personal Info
@@ -100,26 +100,33 @@ let
     c.colors.tabs.selected.odd.fg = fg_focused
   '';
 
-  alacrittyTemplate = ''
-    [colors.normal]
-    black   = '{{colors.surface.default.hex}}'
-    red     = '{{colors.error.default.hex}}'
-    green   = '{{colors.primary.default.hex}}'
-    yellow  = '{{colors.tertiary.default.hex}}'
-    blue    = '{{colors.secondary.default.hex}}'
-    magenta = '{{colors.primary_fixed.default.hex}}'
-    cyan    = '{{colors.secondary_fixed.default.hex}}'
-    white   = '{{colors.on_surface.default.hex}}'
+  footTemplate = ''
+    [main]
+    font=${font}:size=14
+    shell=/etc/profiles/per-user/jon/bin/nu
+    
 
-    [colors.bright]
-    black   = '{{colors.outline.default.hex}}'
-    red     = '{{colors.error_container.default.hex}}'
-    green   = '{{colors.primary_container.default.hex}}'
-    yellow  = '{{colors.tertiary_container.default.hex}}'
-    blue    = '{{colors.secondary_container.default.hex}}'
-    magenta = '{{colors.inverse_primary.default.hex}}'
-    cyan    = '{{colors.inverse_surface.default.hex}}'
-    white   = '{{colors.surface_bright.default.hex}}'
+    [colors-dark]
+    alpha = 0.9
+    background = {{colors.surface.default.hex_stripped}}
+    foreground = {{colors.on_surface.default.hex_stripped}}
+    regular0 = {{colors.surface.default.hex_stripped}}
+    regular1 = {{colors.error.default.hex_stripped}}
+    regular2 = {{colors.primary.default.hex_stripped}}
+    regular3 = {{colors.tertiary.default.hex_stripped}}
+    regular4 = {{colors.secondary.default.hex_stripped}}
+    regular5 = {{colors.primary_fixed.default.hex_stripped}}
+    regular6 = {{colors.secondary_fixed.default.hex_stripped}}
+    regular7 = {{colors.on_surface.default.hex_stripped}}
+
+    bright0 = {{colors.outline.default.hex_stripped}}
+    bright1 = {{colors.error_container.default.hex_stripped}}
+    bright2 = {{colors.primary_container.default.hex_stripped}}
+    bright3 = {{colors.tertiary_container.default.hex_stripped}}
+    bright4 = {{colors.secondary_container.default.hex_stripped}}
+    bright5 = {{colors.inverse_primary.default.hex_stripped}}
+    bright6 = {{colors.inverse_surface.default.hex_stripped}}
+    bright7 = {{colors.surface_bright.default.hex_stripped}}
   '';
 
 in
@@ -260,8 +267,7 @@ in
           set keymap vi-command
         '';
       ".config/matugen/templates/colors-ewal.json.template".text = ewalTemplate;
-      ".config/matugen/templates/alacritty-colors.toml.template".text = alacrittyTemplate;
-      ".config/matugen/templates/qutebrowser-colors.py.template".text = qutebrowserTemplate;
+      ".config/matugen/templates/foot.ini.template".text = footTemplate;      ".config/matugen/templates/qutebrowser-colors.py.template".text = qutebrowserTemplate;
       ".stack/config.yaml".text =
         ''
           templates:
@@ -270,11 +276,27 @@ in
               author-email: ${email}
               github-username: ${githubUsername}
         '';
+      ".gemini/skills/mu-email.skill".source = ../mu-email.skill;
+      ".gemini/tmp/mu-email/scripts/mu_search.nu".source = ../scripts/mu_search.nu;
+      ".gemini/tmp/mu-email/scripts/mu_view.nu".source = ../scripts/mu_view.nu;
     };
     stateVersion = "26.05";
   };
 
   programs = {
+    alacritty = {
+      enable = true;
+      settings = {
+        general.import = [ "/home/jon/.config/alacritty/colors.toml" ];
+        font.normal.family = "${font}";
+        font.size = 14;
+        window.opacity = 0.9;
+        colors.transparent_background_colors = true;
+        terminal.shell = "nu";
+      };
+    };
+    bottom.enable = true;
+    broot.enable = true;
     dank-material-shell = {
       enable = true;
       systemd.enable = true;
@@ -349,14 +371,61 @@ in
         };
       };
     };
+    dsearch = {
+      enable = true;
+      config = {
+        max_file_bytes = 5242880;  # 5MB
+        worker_count = 8;
+        
+        index_paths = [
+          {
+            path = "~/Dokumentoj";
+            max_depth = 0;  # No limit
+            exclude_hidden = false;
+            exclude_dirs = [ ".git" ];
+          }
+          {
+            path = "~/Programaroj";
+            max_depth = 3;
+            exclude_hidden = true;
+            exclude_dirs = [ "node_modules" "venv" "target" ".git" "dist" "build" ];
+          }
+        ];
+      };
+    };
+    direnv = {
+      nix-direnv.enable = true;
+      enable = true;
+      enableZshIntegration = true;
+      enableNushellIntegration = true;
+    };
     doom-emacs = {
       enable = true;
       doomDir = ./doom;
+      # emacsPackageOverrides = self: super: {
+      #   citar = super.citar.overrideAttrs (old: {
+      #     src = inputs.citar-src;
+      #   });
+      # };
       extraBinPackages = with pkgs; [ fd ripgrep git ];
       extraPackages = epkgs: with pkgs; [
         pass gnupg (aspellWithDicts (dicts: with dicts; [ en en-computers en-science eo fr ]))
         ripgrep epkgs.treesit-grammars.with-all-grammars
       ];
+    };
+    foot = {
+      enable = true;
+      server.enable = true;
+    };
+    git = {
+      enable = true;
+      settings = {
+        user = {
+          name = "${name}";
+          email = "${email}";
+        };
+        pull.rebase = false;
+      };
     };
     gnome-terminal = {
       profile.default = {
@@ -368,18 +437,6 @@ in
       };
     };
     home-manager.enable = true;
-    direnv = {
-      nix-direnv.enable = true;
-      enable = true;
-      enableZshIntegration = true;
-      enableNushellIntegration = true;
-    };
-    git = {
-      enable = true;
-      userName = "${name}";
-      userEmail = "${email}";
-      extraConfig = { pull.rebase = false; };
-    };
     mbsync.enable = true;
     mu.enable = true;
     neovim = {
@@ -404,40 +461,6 @@ in
       configFile.source = ./config.nu;
       envFile.source = ./env.nu;
     };
-    starship = {
-      enable = true;
-      enableNushellIntegration = true;
-      enableZshIntegration = true;
-    };
-    thunderbird = {
-      enable = true;
-      profiles.default.isDefault = true;
-    };
-    zsh = {
-      enable = true;
-      enableCompletion = true;
-      enableVteIntegration = true;
-      autosuggestion.enable = true;
-      syntaxHighlighting.enable = true;
-    };
-    zoxide = {
-      enable = true;
-      enableNushellIntegration = true;
-      enableZshIntegration = true;
-    };
-    alacritty = {
-      enable = true;
-      settings = {
-        general.import = [ "/home/jon/.config/alacritty/colors.toml" ];
-        font.normal.family = "${font}";
-        font.size = 14;
-        window.opacity = 0.9;
-        colors.transparent_background_colors = true;
-        terminal.shell = "nu";
-      };
-    };
-    bottom.enable = true;
-    broot.enable = true;
     password-store = {
       enable = true;
       settings = { PASSWORD_STORE_DIR = "${dokumentoj}/Personal/.password-store"; };
@@ -515,6 +538,27 @@ in
         colors.webpage.darkmode.enabled = true;
       };
     };
+    starship = {
+      enable = true;
+      enableNushellIntegration = true;
+      enableZshIntegration = true;
+    };
+    thunderbird = {
+      enable = true;
+      profiles.default.isDefault = true;
+    };
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+      enableVteIntegration = true;
+      autosuggestion.enable = true;
+      syntaxHighlighting.enable = true;
+    };
+    zoxide = {
+      enable = true;
+      enableNushellIntegration = true;
+      enableZshIntegration = true;
+    };
   };
 
   systemd.user = { };
@@ -522,6 +566,9 @@ in
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
+    plugins = [
+      inputs.hyprgrass.packages.${pkgs.system}.default
+    ];
     settings = {
       source = [ "~/.config/hypr/dms/colors.conf" ];
       general = {
@@ -542,8 +589,27 @@ in
         kb_variant = "colemak";
         kb_options = "caps:escape,esperanto:colemak";
         follow_mouse = 1;
+        touchpad = {
+          natural_scroll = true;
+          tap-to-click = true;
+        };
       };
-      decoration = { rounding = 10; };
+      decoration = {
+        rounding = 10;
+        blur = {
+          enabled = true;
+          size = 3;
+          passes = 2;
+        };
+      };
+      windowrule = [
+        "float on, center on, size 1000 700, match:title ^(org-node-find)$"
+      ];
+      misc = {
+        vfr = true;
+        disable_hyprland_logo = true;
+        force_default_wallpaper = 0;
+      };
       animations = {
         enabled = true;
         bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
@@ -563,8 +629,7 @@ in
         "4, persistent:true"
       ];
       bind = [
-        "Alt,space,exec,caelestia shell drawers toggle launcher"
-        "SUPER,H,exec,alacritty"
+        "SUPER,H,exec,footclient"
         "SUPER_SHIFT,C,killactive,"
         "SUPER_SHIFT,Q,exec,dms ipc powermenu open"
         "SUPER_SHIFT,T,togglefloating,"
@@ -614,8 +679,12 @@ in
         ",XF86AudioRaiseVolume,exec,dms ipc call audio increment 5"
         ",XF86AudioLowerVolume,exec,dms ipc call audio decrement 5"
         ",XF86AudioMute,exec,dms ipc call audio mute"
+        ",XF86AudioPlay,exec,dms ipc call mpris playPause"
+        ",XF86AudioPrev,exec,dms ipc call mpris previous"
+        ",XF86AudioNext,exec,dms ipc call mpris next"
         ",XF86MonBrightnessUp,exec,dms ipc call brightness increment 10 backlight:intel_backlight"
         ",XF86MonBrightnessDown,exec,dms ipc call brightness decrement 10 backlight:intel_backlight"
+        ",Print,exec,${emacsclient} -c -F '((name . \"org-node-find\"))' --eval '(org-node-find)'"
       ];
       bindm = [
         "SUPER, mouse:272, movewindow"
@@ -624,12 +693,39 @@ in
       exec-once = [
         "megasync"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
+        "iio-hyprland"
       ];
       gestures = {
+        workspace_swipe_touch = false; # Set to false to allow hyprgrass to work
         gesture = [
-          "3, horizontal, workspace"
+          "3, vertical, workspace"
+          "3, left, dispatcher, layoutmsg, move +col"
+          "3, right, dispatcher, layoutmsg, move -col"
         ];
-        workspace_swipe_touch = true;
+      };
+      plugin = {
+        touch_gestures = {
+          # The number of fingers for a workspace swipe
+          workspace_swipe_fingers = 3;
+          sensitivity = 4.0;
+          experimental = {
+            send_cancel = true;
+          };
+
+          # Use both bind and gesture for maximum compatibility
+          hyprgrass-bind = [
+            ", swipe:3:u, workspace, e-1"
+            ", swipe:3:d, workspace, e+1"
+            ", swipe:3:l, layoutmsg, move +col"
+            ", swipe:3:r, layoutmsg, move -col"
+            ", edge:d:u, exec, dms ipc launcher toggle"
+          ];
+          hyprgrass-gesture = [
+            "swipe, 3, vertical, workspace"
+            "swipe, 3, left, dispatcher, layoutmsg, move +col"
+            "swipe, 3, right, dispatcher, layoutmsg, move -col"
+          ];
+        };
       };
     };
   };
@@ -645,9 +741,9 @@ in
         output_path = '/home/jon/.cache/wal/colors.json'
         post_hook = "${scripts}/emacs-reload.nu"
 
-        [templates.alacritty]
-        input_path = '/home/jon/.config/matugen/templates/alacritty-colors.toml.template'
-        output_path = '/home/jon/.config/alacritty/colors.toml'
+        [templates.foot]
+        input_path = '/home/jon/.config/matugen/templates/foot.ini.template'
+        output_path = '/home/jon/.config/foot/foot.ini'
 
         [templates.qutebrowser]
         input_path = '/home/jon/.config/matugen/templates/qutebrowser-colors.py.template'

@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, options, lib, ... }:
+{ config, pkgs, options, lib, inputs, ... }:
 
 {
   imports =
@@ -48,8 +48,8 @@
 
   # Select internationalisation properties.
   i18n = {
-    defaultLocale = "eo.UTF-8";
-    supportedLocales = [ "eo/UTF-8" "en_US.UTF-8/UTF-8" ];
+    defaultLocale = "eo";
+    # extraLocales = [ "en_US.UTF-8/UTF-8" ];
   };
 
   # Fonts!
@@ -212,7 +212,7 @@
      spotify
 
      # Keyboard stuff
-     plover.dev
+     plover
      waydroid
 
      # sway related
@@ -251,13 +251,15 @@
 
      # Ugh
      libreoffice
+
+     # Hyprland
+     inputs.iio-hyprland.packages.${pkgs.system}.default
    ];
 
   environment.variables = {
     # Preferred applications
     EDITOR = "emacsclient -c";
     BROWSER = "qutebrowser";
-    CM_LAUNCHER = "rofi"; # Clipmenu
   };
 
   # Enable sound.
@@ -325,9 +327,9 @@
     # Security
     udev.packages = [ pkgs.yubikey-personalization pkgs.libu2f-host ];
     pcscd.enable = true;
-    mozillavpn = {
-      enable = true;
-    };
+    # mozillavpn = {
+    #   enable = true;
+    # };
 
     # X
     xserver = {
@@ -396,7 +398,7 @@
     enable = true;
     script =
       "${pkgs.protonmail-bridge}/bin/protonmail-bridge --log-level debug";
-    path = [ pkgs.gnome.gnome-keyring ]; # HACK: https://github.com/ProtonMail/proton-bridge/issues/176
+    path = [ pkgs.gnome-keyring ]; # HACK: https://github.com/ProtonMail/proton-bridge/issues/176
     wantedBy = [ "graphical-session.target" ];
     partOf = [ "graphical-session.target" ];
   };

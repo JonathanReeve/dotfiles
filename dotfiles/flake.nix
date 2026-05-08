@@ -8,12 +8,26 @@
     nixos.url = "nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware"; 
     nix-doom-emacs-unstraightened.url = "github:marienz/nix-doom-emacs-unstraightened"; # Retained for both laptops
-    caelestia-shell.url = "github:caelestia-dots/shell";
-    caelestia-cli.url = "github:caelestia-dots/cli";
     # dms.url = "github:AvengeMedia/DankMaterialShell";
     # Local copy for testing
-    dms.url = "path:/home/jon/Programaroj/DankMaterialShell";
+    dms = {
+      url = "git+file:///home/jon/Programaroj/DankMaterialShell?ref=eo-traduko";
+    };
     dms-plugin-registry.url = "github:AvengeMedia/dms-plugin-registry";
+    iio-hyprland.url = "github:JeanSchoeller/iio-hyprland";
+    hyprland.url = "github:hyprwm/Hyprland";
+    hyprgrass = {
+      url = "github:horriblename/hyprgrass";
+      inputs.hyprland.follows = "hyprland";
+    };
+    danksearch = {
+      url = "github:AvengeMedia/danksearch";
+      inputs.nixpkgs.follows = "nixos";
+    };
+    citar-src = {
+      url = "path:/home/jon/Programaroj/citar";
+      flake = false;
+    };
   };
   outputs = inputs @ { self,
               nixos, 
@@ -25,6 +39,7 @@
       # Define configurations for both laptops with new names
       nixosConfigurations.fw12 = nixos.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
         modules = [
           ({ pkgs, ... }: {
             nixpkgs.overlays = [
@@ -53,13 +68,13 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "backup";
+            home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.users.jon = { pkgs, ... }: {
               imports = [ ./home.nix
                           inputs.nix-doom-emacs-unstraightened.homeModule
-                          inputs.caelestia-shell.homeManagerModules.default
                           inputs.dms.homeModules.dank-material-shell
                           inputs.dms-plugin-registry.modules.default
-                          # inputs.dms.homeModules.niri
+                          inputs.danksearch.homeModules.dsearch
                         ];
               # Use our patched package
               programs.dank-material-shell.package = pkgs.dms-shell-patched;
@@ -78,6 +93,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "backup";
+            home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.users.jon = { pkgs, ... }: {
               imports = [
                 ./home.nix

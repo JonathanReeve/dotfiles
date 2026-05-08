@@ -108,6 +108,6 @@
            :files ("org-todoist.el"))
   :pin "d8c06d935b1ece57c67e81b12e6d8154d43cc303")
 
-(package! citar :recipe (:local-repo "citar"))
+(package! citar)
 
 (package! base16-theme)
