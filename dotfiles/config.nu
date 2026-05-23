@@ -29,7 +29,27 @@ def create_left_prompt [] {
 }
 
 # Handy aliases
-def em [f] { spawn { emacsclient -c $f } }
+def em [f] { job spawn { emacsclient -c $f } }
+
+# Vault management
+const vault_mount = "/home/jon/.private-mount"
+const vault_enc = "/home/jon/Dokumentoj/Personal/.Vault_encfs"
+
+def vault [] {
+    encfs $vault_enc $vault_mount
+}
+
+def unvault [] {
+    fusermount -u $vault_mount
+}
+
+def jnl [] {
+    do {
+        vault
+        emacsclient -c ($vault_mount | path join Journal jnl.org)
+        unvault
+    }
+}
 
 module vterm {
   # Escape a command for outputting by vterm send
