@@ -33,12 +33,6 @@
 
 ;; Bibliography
 
-(setq org-roam-directory "~/Dokumentoj/Org/Roam"
-      org-roam-dailies-directory "Daily/"
-      org-roam-db-location "~/Dokumentoj/Org/Roam/org-roam.db")
-
-
-
 ;; Citar
 ;; See https://github.com/hlissner/doom-emacs/blob/4612b39695405f7238dd3da0d4fd6d3a5cdd93d6/modules/tools/biblio/README.org
 (setq! citar-bibliography '(
@@ -131,70 +125,6 @@
 	;; Get a timestamp for tomorrow
 	(defun my/tomorrow ()
 	  (format-time-string "%Y-%m-%d" (time-add 86400 (current-time))))
-	(setq org-roam-dailies-capture-templates
-	      '(("d" "default" entry
-		 "* %?"
-		 :target (file+head "%<%Y-%m-%d>.org"
-				    ":PROPERTIES:
-:DRINKS:
-:PHONE:
-:KETO:
-:EXERCISE:
-:MOOD:
-:END:
-#+title: %<%Y-%m-%d>
-
-#+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"%<%Y-%m-%d>\" :tend \"%(my/tomorrow)\"
-#+END: "))))
-
-	(setq org-roam-capture-templates
-              '(("d" "default" plain "%?" :target
-		 (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-		 :unnarrowed t)
-		("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%u\n"
-		 :target (file+olp "movies.org" ("watched")
-				   ))
-		("b" "literature note" plain "%?" :target (file+head
-							   "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
-							   "#+title: ${citar-citekey} (${citar-date}). ${note-title}.
-#+created: %U
-#+last-modified: %U
-
-- keywords ::
-- related ::
-
-* ${note-title}
-:PROPERTIES:
-:Custom_ID: ${citar-citekey}
-:URL: ${citar-url}
-:AUTHOR: ${citar-author}
-:NOTER_DOCUMENT: ${citar-file}
-:NOTER_PAGE:
-:END:\n
-"
-							   )
-		 :unarrowed t)
-		))
-
-	(setq citar-org-roam-template-fields
-              '((:citar-title "title")
-		(:citar-author "author" "editor")
-		(:citar-date "date" "year" "issued")
-		(:citar-pages "pages")
-		(:citar-file "file")
-		(:citar-keywords "keywords")
-		(:citar-url "url")
-		(:citar-type "=type=")
-		))
-
-	(setq org-roam-capture-ref-templates
-              '(("r" "ref" plain "%?" :target
-		 (file+head "${slug}.org" "#+title: ${title}") :unnarrowed t)
-		("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :WIKIDATA: ${ref}\n :END:\n%u\n"
-		 :target (file+olp "movies.org" ("watched")))
-		)
-              )
-
 	(setq org-clock-idle-time 15)
 	(setq org-clock-auto-clockout t)
 	(setq org-clock-auto-clockout-timer 20)
@@ -211,42 +141,7 @@
 	;;         (link ,(all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01) . " ")))
 	;; (setq citar-symbol-separator "  ")
 
-	(setq citar-file-open-note-function 'orb-citar-edit-note)
-	;; (setq citar-file-open-note-function 'citar-file-open-notes-default-org)
-
-	;; Configure org-roam buffer display.
-	;; See https://www.orgroam.com/manual.html#Navigating-the-Org_002droam-Buffer
-	(add-to-list 'display-buffer-alist
-		     '("\\*org-roam\\*"
-                       (display-buffer-in-direction)
-                       (direction . right)
-                       (window-width . 0.33)
-                       (window-height . fit-window-to-buffer)))
-
-	(use-package! websocket
-		      :after org-roam)
-
-	(use-package! org-roam-ui
-		      :after org-roam ;; or :after org
-		      ;; :hook
-		      ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-		      ;;         a hookable mode anymore, you're advised to pick something yourself
-		      ;;         if you don't care about startup time, use
-		      ;;  :hook (after-init . org-roam-ui-mode)
-		      :config
-		      (setq org-roam-ui-sync-theme t
-			    org-roam-ui-follow t
-			    org-roam-ui-update-on-save t
-			    org-roam-ui-open-on-start nil)
-		      )
-
-	(use-package! org-mem
-		      :defer t
-		      :config
-		      (setq org-mem-do-sync-with-org-id t)
-		      ;; Optional
-		      (setq org-mem-watch-dirs (list "~/Dokumentoj/Org/Roam")) ;; Your org-roam-directory here
-		      (org-mem-updater-mode))
+	(setq citar-file-open-note-function 'citar-file-open-notes-default-org)
 
 	;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
 	;; makes it easier to distinguish from other org buffers.
