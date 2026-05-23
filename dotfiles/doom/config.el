@@ -199,12 +199,6 @@
 	(setq org-clock-auto-clockout t)
 	(setq org-clock-auto-clockout-timer 20)
 
-	(use-package! citar-org-roam
-		      :after (citar org-roam)
-		      :config (citar-org-roam-mode)
-		      (setq citar-org-roam-capture-template-key "b")
-		      )
-
 	(setq citar-templates
               '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
 		(suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords keywords:*}")
@@ -253,22 +247,6 @@
 		      ;; Optional
 		      (setq org-mem-watch-dirs (list "~/Dokumentoj/Org/Roam")) ;; Your org-roam-directory here
 		      (org-mem-updater-mode))
-
-	(use-package! org-node
-		      :init
-		      ;; Optional key bindings
-		      ;; Tip: Try changing these to just "M-o"!
-		      (keymap-set global-map "M-o n" org-node-global-prefix-map)
-		      (with-eval-after-load 'org
-			(keymap-set org-mode-map "M-o n" org-node-org-prefix-map))
-		      :config
-		      (org-node-cache-mode)
-		      (org-node-roam-accelerator-mode)
-		      (org-node-complete-at-point-mode)
-		      (setq org-node-creation-fn #'org-node-new-via-roam-capture)
-		      (setq org-node-file-slug-fn #'org-node-slugify-like-roam-default)
-		      (setq org-node-file-timestamp-format "%Y%m%d%H%M%S-"))
-
 
 	;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
 	;; makes it easier to distinguish from other org buffers.

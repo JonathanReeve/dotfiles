@@ -92,6 +92,7 @@
        lsp
        ;;macos             ; MacOS-specific commands
        magit             ; a git porcelain for Emacs
+       llm               ; LLM client
        ;;make              ; run make tasks from Emacs
        (pass +auth)        ; password manager for nerds
        pdf               ; pdf enhancements
@@ -173,6 +174,10 @@
        (rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
        ;;write             ; emacs for writers (fiction, notes, papers, etc.)
+
+       :private
+       gptel
+       vulpea
 
        :config
        ;;literate

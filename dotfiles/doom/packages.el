@@ -46,7 +46,6 @@
 ;; UI improvements for Org mode
 (package! org-modern)
 
-;; (package! vulpea :recipe (:host github :repo "d12frosted/vulpea"))
 
 ;; (package! emacsql-sqlite)
 
@@ -111,3 +110,5 @@
 (package! citar)
 
 (package! base16-theme)
+
+(package! gptel-agent :recipe (:host github :repo "karthink/gptel-agent"))

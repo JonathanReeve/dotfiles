@@ -1,0 +1,19 @@
+I use nix-doom-emacs-unstraightened which installs doom-emacs and packages using Nix. 
+
+* DONE on a new branch `gptel`: 
+CLOSED: [2026-05-23 sab 16:20]
+** DONE install gptel and configure gemini
+** DONE install gptel-agent and configure
+* DONE on a new branch, `vulpea`:
+CLOSED: [2026-05-23 sab 16:20]
+** DONE migrate from org-roam and org-node to [[https://github.com/d12frosted/vulpea][vulpea]]
+** DONE make a custom doom module for vulpea which reuses the org-roam keybindings, like SPC n r f 
+** DONE install [[https://github.com/fabcontigiani/citar-vulpea][citar-vulpea]]
+** DONE install the rest of the vulpea ecosystem: vulpea-ui, vulpea-journal, consult-vulpea  
+* DONE migrate the skill which is currently a .skill zip file to a plain text version
+* DONE copy the gptel agents to a new dir called agents/
+* DONE convert all the agents to org files (see gptel-agent readme)
+* DONE edit the agents so that there is no bash tools, only nushell tools (I prefer nushell)
+* DONE make a new nushell skill for yourself in skills/
+* DONE make sure that skills which are in skills/ are symlinked to the appropriate gemini dir with nix (using home-manager)
+* DONE build my system (not with sudo, just a dry build) to make sure it all works 
