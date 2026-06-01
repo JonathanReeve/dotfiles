@@ -125,7 +125,7 @@
        ;;idris             ;
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
        ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
-       julia             ; a better, faster MATLAB
+       ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
        ;;latex             ; writing papers in Emacs has never been so fun
        ;;lean
@@ -141,7 +141,6 @@
         +jupyter
         +pandoc          ; export-with-pandoc support
         +pomodoro        ; be fruitful with the tomato technique
-        +roam2            ; zettelkesten
         +noter)
        ;;perl              ; write code no one else can comprehend
        php               ; perl's insecure younger brother

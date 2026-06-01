@@ -1,12 +1,12 @@
 ;;; private/vulpea/config.el -*- lexical-binding: t; -*-
 
-(setq org-roam-directory "~/Dokumentoj/Org/Roam"
-      org-roam-dailies-directory "Daily/"
-      org-roam-db-location "~/Dokumentoj/Org/Roam/org-roam.db")
+(setq vulpea-directory "~/Dokumentoj/Org/Roam"
+      vulpea-db-sync-directories '("~/Dokumentoj/Org/Roam" "~/Dokumentoj/Org")
+      vulpea-db-location "~/Dokumentoj/Org/Roam/vulpea.db")
 
 (use-package! vulpea
-  :hook (org-roam-db-autosync-mode . vulpea-db-autosync-enable)
   :config
+  (vulpea-db-autosync-mode 1)
   (defun my/vulpea-update-metadata ()
     "Update metadata for the current node."
     (when (vulpea-buffer-p)
@@ -20,14 +20,14 @@
     (let ((annotated (vulpea-db-query)))
       (list (save-excursion (backward-word) (point))
             (point)
-            (mapcar #'vulpea-node-title annotated)
+            (mapcar #'vulpea-note-title annotated)
             :exit-function
             (lambda (str _status)
-              (let ((node (seq-find (lambda (n) (string= (vulpea-node-title n) str))
+              (let ((node (seq-find (lambda (n) (string= (vulpea-note-title n) str))
                                     annotated)))
                 (when node
                   (delete-region (save-excursion (backward-word) (point)) (point))
-                  (insert (format "[[id:%s][%s]]" (vulpea-node-id node) str))))))))
+                  (insert (format "[[id:%s][%s]]" (vulpea-note-id node) str))))))))
 
   (add-hook 'org-mode-hook
             (lambda ()
@@ -35,55 +35,152 @@
 
 (use-package! vulpea-ui
   :after vulpea
-  :config
-  (vulpea-ui-mode 1))
+  :hook (org-mode . (lambda () 
+                      (when (and (fboundp 'vulpea-buffer-p)
+                                 (buffer-file-name) 
+                                 (vulpea-buffer-p)) 
+                        (vulpea-ui-sidebar-open)))))
 
 (use-package! vulpea-journal
-  :after (vulpea org-roam)
+  :after vulpea
   :config
-  (setq vulpea-journal-directory (concat org-roam-directory "/daily/")))
+  (setq vulpea-journal-directory (concat vulpea-directory "/Daily/"))
+  (setq! vulpea-journal-default-template
+         '(:file-name "%Y-%m-%d.org"
+           :title "%Y-%m-%d"
+           :tags ("journal")
+           :properties (("DRINKS" . "")
+                        ("PHONE" . "")
+                        ("KETO" . "")
+                        ("EXERCISE" . "")
+                        ("MOOD" . ""))
+           :head "#+created: %<[%Y-%m-%d]>
+
+#+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"%<%Y-%m-%d>\" :tend \"%(my/tomorrow)\"
+#+END: ")))
 
 (use-package! consult-vulpea
-  :after (vulpea consult))
+  :after (vulpea consult)
+  :config
+  (consult-vulpea-mode 1))
 
 (use-package! citar-vulpea
   :after (citar vulpea)
-  :config (citar-vulpea-mode))
+  :config 
+  (citar-vulpea-mode)
 
-(after! org-roam
-  (setq org-roam-capture-templates
-        '(("d" "default" plain "%?" :target
-           (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-           :unnarrowed t)
-          ("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%u\n"
-           :target (file+olp "movies.org" ("watched")))
-          ("b" "literature note" plain "%?" :target (file+head
-                                                     "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
-                                                     "#+title: ${citar-citekey} (${citar-date}). ${note-title}.
-#+created: %U
-#+last-modified: %U
+  (defun my/find-paper-file (citekey)
+    "Find a PDF or EPUB in papers directories matching CITEKEY.
+Returns the absolute path if found, otherwise nil."
+    (let* ((search-dirs '("~/Dokumentoj/Papers/" "~/Dokumentoj/Org/Roam/shared/papers/"))
+           (found nil))
+      (while (and search-dirs (not found))
+        (let* ((dir (expand-file-name (car search-dirs)))
+               (files (when (file-directory-p dir)
+                        (directory-files dir t (regexp-quote citekey)))))
+          (setq found (seq-find (lambda (f) (string-match-p "\\.\\(pdf\\|epub\\)$" f))
+                                files))
+          (setq search-dirs (cdr search-dirs))))
+      found)))
 
-- keywords ::
+;; LITERATURE NOTE OVERRIDE
+;; We override this globally to ensure citar-vulpea uses our template
+(after! citar-vulpea
+  (require 'vulpea)
+  ;; Ensure we use :REFERENCES: instead of :ROAM_REFS:
+  (setq citar-vulpea-references-property "REFERENCES")
+  
+  (defun citar-vulpea--create-note (citekey &optional _entry)
+    "Create a new bibliographic note for CITEKEY.
+This override ensures the literature note template is applied and avoids overwriting."
+    (let* ((filename (concat citekey ".org"))
+           (path (expand-file-name filename vulpea-directory))
+           ;; Use :REFERENCES: with cite: prefix
+           (ref (concat "cite:" citekey))
+           (node (or (car (vulpea-db-query-by-property "REFERENCES" ref))
+                    (car (vulpea-db-query-by-property "ROAM_REFS" ref)) ;; Fallback for migration
+                    (seq-find (lambda (n) (string= (vulpea-note-path n) path))
+                              (vulpea-db-query)))))
+      (cond
+       ;; 1. Node exists in DB -> visit it
+       (node
+        (vulpea-visit node)
+        path)
+       ;; 2. File exists on disk but not in DB -> open it
+       ((file-exists-p path)
+        (find-file path)
+        path)
+       ;; 3. Truly new note -> create it
+       (t
+        (let* ((entry (citar-get-entry citekey))
+               (title (or (citar-vulpea--format-note-title citekey)
+                          (read-string "Title: ")))
+               (bib-file (citar-get-value "file" entry))
+               (paper-file (my/find-paper-file citekey))
+               (author (or (citar-get-value "author" entry) ""))
+               (keywords (or (citar-get-value "keywords" entry) ""))
+               (url (or (citar-get-value "url" entry) ""))
+               (noter-doc (or bib-file paper-file ""))
+               (note (vulpea-create
+                      title
+                      filename
+                      :tags (list citar-vulpea-keyword)
+                      :properties `(("REFERENCES" . ,ref)
+                                    ("BIB_KEY" . ,citekey)
+                                    ("BIB_AUTHOR" . ,author)
+                                    ("BIB_URL" . ,url)
+                                    ("NOTER_DOCUMENT" . ,noter-doc)
+                                    ("NOTER_PAGE" . ""))
+                      :head (format "#+title: %s
+#+created: %s
+#+last-modified: %s
+
+- keywords :: %s
 - related ::
 
-* ${note-title}
+* %s
+"
+                                    title
+                                    (format-time-string "[%Y-%m-%d %a %H:%M]")
+                                    (format-time-string "[%Y-%m-%d %a %H:%M]")
+                                    keywords
+                                    title))))
+          (when note
+            (vulpea-visit note)
+            (vulpea-note-path note))))))))
+
+(setq vulpea-capture-templates
+      '(("d" "default" plain "%?" :target
+         (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+         :unnarrowed t)
+        ("r" "reference" plain "%?"
+         :target (file+head "${citekey}.org"
+                            "#+title: ${title}
 :PROPERTIES:
-:Custom_ID: ${citar-citekey}
-:URL: ${citar-url}
-:AUTHOR: ${citar-author}
-:NOTER_DOCUMENT: ${citar-file}
+:BIB_KEY: ${citekey}
+:BIB_AUTHOR: ${author}
+:BIB_URL: ${url}
+:NOTER_DOCUMENT: ${noter-document}
 :NOTER_PAGE:
-:END:\n"))))
+:END:
+#+filetags: :${tags}:
+#+created: %u
+#+last-modified: %u
 
-  (setq org-roam-capture-ref-templates
-        '(("r" "ref" plain "%?" :target
-           (file+head "${slug}.org" "#+title: ${title}") :unnarrowed t)
-          ("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :WIKIDATA: ${ref}\n :END:\n%u\n"
-           :target (file+olp "movies.org" ("watched"))))))
+- keywords :: ${keywords}
+- related ::
 
+* ${title}
+")
+         :unnarrowed t)
+        ("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%u\n"
+         :target (file+olp "movies.org" ("watched")))))
+
+;; Bindings - kept at top level to ensure the prefix map is always defined
 (map! :leader
       (:prefix-map ("n" . "notes")
        (:prefix-map ("r" . "roam")
-        :desc "Find vulpea node"   "f" #'consult-vulpea-find
+        :desc "Find vulpea node"   "f" #'vulpea-find
+        :desc "Vulpea grep"        "g" #'consult-vulpea-grep
         :desc "Insert vulpea node" "i" #'vulpea-insert
-        :desc "Vulpea journal"     "D" #'vulpea-journal-open)))
+        :desc "Vulpea journal"     "D" #'vulpea-journal)))

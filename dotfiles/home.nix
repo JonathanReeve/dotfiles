@@ -567,6 +567,7 @@ in
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
+    configType = "hyprlang";
     plugins = [
       inputs.hyprgrass.packages.${pkgs.system}.default
     ];
@@ -584,7 +585,7 @@ in
         column_width = 0.5;
         focus_fit_method = 1;
       };
-      monitor = "eDP-1,1920x1200@60,0x0,1";
+      monitor = ",preferred,auto,1";
       input = {
         kb_layout = "us";
         kb_variant = "colemak";
@@ -604,10 +605,12 @@ in
         };
       };
       windowrule = [
-        "float on, center on, size 1000 700, match:title ^(org-node-find)$"
+        "float on, center on, size 1000 700, match:title ^(vulpea-find)$"
       ];
-      misc = {
+      debug = {
         vfr = true;
+      };
+      misc = {
         disable_hyprland_logo = true;
         force_default_wallpaper = 0;
       };
@@ -685,7 +688,7 @@ in
         ",XF86AudioNext,exec,dms ipc call mpris next"
         ",XF86MonBrightnessUp,exec,dms ipc call brightness increment 10 backlight:intel_backlight"
         ",XF86MonBrightnessDown,exec,dms ipc call brightness decrement 10 backlight:intel_backlight"
-        ",Print,exec,${emacsclient} -c -F '((name . \"org-node-find\"))' --eval '(org-node-find)'"
+        ",Print,exec,${emacsclient} -c -F '((name . \"vulpea-find\"))' --eval '(consult-vulpea-find)'"
       ];
       bindm = [
         "SUPER, mouse:272, movewindow"

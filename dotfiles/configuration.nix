@@ -132,7 +132,6 @@
 
      # Building stuff
      cmake
-     extra-cmake-modules
 
      stack
      (haskellPackages.ghcWithPackages (ps: with ps; [

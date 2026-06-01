@@ -38,7 +38,6 @@
     {
       # Define configurations for both laptops with new names
       nixosConfigurations.fw12 = nixos.lib.nixosSystem {
-        system = "x86_64-linux";
         specialArgs = { inherit inputs; };
         modules = [
           ({ pkgs, ... }: {
@@ -84,7 +83,6 @@
       };
 
       nixosConfigurations.fw16 = nixos.lib.nixosSystem {
-        system = "x86_64-linux";
         modules = [
           ./configuration.nix
           nixos-hardware.nixosModules.framework-16-7040-amd 

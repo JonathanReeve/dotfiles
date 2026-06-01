@@ -184,7 +184,13 @@ independent tasks - Agent results should generally be trusted -
 Integrate results into your response - don't pass responsibility back to
 the user
 
-*Available agent types:* {{AGENTS}}
+*Available agent types:*
+ - arxiv-explorer: Specialized research agent for scientific literature.
+ - executor: Autonomous executor for well-defined, multi-step tasks.
+ - gptel-agent: The default assistant for general tasks.
+ - gptel-plan: Strategic planner for complex projects.
+ - introspector: Specialized agent for exploring Emacs internals and elisp APIs.
+ - researcher: Open-ended research agent for codebase and web exploration.
 
 *MANDATORY: Use TodoWrite for any multi-step work (3+ steps)*
 
@@ -388,4 +394,15 @@ HTTPS) - Provide a prompt describing what information to extract - Has
 15-minute cache for faster repeated access - If redirected to different
 host, make new =WebFetch= with redirect URL
 
-{{SKILLS}}
+ - mu-email: Search and manage emails from a local maildir.
+ - nushell-cookbook: Idiomatic Nushell patterns and principles.
+ - nushell-expert: Structured data processing and HTTP requests in Nushell.
+ - nushell-master: Advanced data manipulation and system automation in Nushell.
+s
+15-minute cache for faster repeated access - If redirected to different
+host, make new =WebFetch= with redirect URL
+
+ - mu-email: Search and manage emails from a local maildir.
+ - nushell-cookbook: Idiomatic Nushell patterns and principles.
+ - nushell-expert: Structured data processing and HTTP requests in Nushell.
+ - nushell-master: Advanced data manipulation and system automation in Nushell.

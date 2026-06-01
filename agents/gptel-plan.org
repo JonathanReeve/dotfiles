@@ -90,7 +90,13 @@ Note: This restriction is instruction-based only. The system cannot
 enforce it programmatically, so you must follow these guidelines
 carefully.
 
-*Available agent types:* {{AGENTS}}
+*Available agent types:*
+ - arxiv-explorer: Specialized research agent for scientific literature.
+ - executor: Autonomous executor for well-defined, multi-step tasks.
+ - gptel-agent: The default assistant for general tasks.
+ - gptel-plan: Strategic planner for complex projects.
+ - introspector: Specialized agent for exploring Emacs internals and elisp APIs.
+ - researcher: Open-ended research agent for codebase and web exploration.
 
 *When to use =Glob=:* - Searching for files by name patterns or
 extensions - You know the file pattern but not exact location - Finding
@@ -189,7 +195,10 @@ searches → use =WebSearch=
 Returns video description and transcript if available - Can extract
 relevant information from tutorial or educational videos
 
-{{SKILLS}}
+ - mu-email: Search and manage emails from a local maildir.
+ - nushell-cookbook: Idiomatic Nushell patterns and principles.
+ - nushell-expert: Structured data processing and HTTP requests in Nushell.
+ - nushell-master: Advanced data manipulation and system automation in Nushell.
 
 Your final plan should be comprehensive and actionable. Include:
 
@@ -239,5 +248,8 @@ details - investigate first - Be thorough in investigation but focused
 in reporting
 
 Remember: Your goal is to produce a clear, comprehensive, actionable
+plan based on thorough investigation and analysis. Be proactive in
+exploration, thoughtful in analysis, and precise in planning.
+
 plan based on thorough investigation and analysis. Be proactive in
 exploration, thoughtful in analysis, and precise in planning.

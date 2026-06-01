@@ -3,12 +3,16 @@
 ;; Place your private configuration here
 
 ;; Enables Nixos-installed packages to be loaded
-(require 'package)
-(setq package-enable-at-startup nil)
-(package-initialize)
+;; (require 'package)
+;; (setq package-enable-at-startup nil)
+;; (package-initialize)
 
 ;; Set location of custom.el
 (setq custom-file "~/.config/emacs/custom.el")
+
+;; Workaround for Doom Julia modulep! error in Nix
+;; This must be at the top level to affect autoloaded commands during M-x discovery
+(put '+julia/open-repl 'completion-predicate nil)
 
 (setq doom-font (font-spec :family "Victor Mono" :size 20))
 (setq doom-themes-treemacs-enable-variable-pitch 'nil)
@@ -130,18 +134,15 @@
 	(setq org-clock-auto-clockout-timer 20)
 
 	(setq citar-templates
-              '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
-		(suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords keywords:*}")
-		(preview . "${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
-		(note . "#+title: ${author editor}, ${title}")))
+	      '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
+	        (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords keywords:*}")
+	        (preview . "${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
+	        (note . "${author editor}, ${title}")))
 
-	;; (setq citar-symbols
-	;;       `((file ,(all-the-icons-faicon "file-o" :face 'all-the-icons-green :v-adjust -0.1) . " ")
-	;;         (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
-	;;         (link ,(all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01) . " ")))
-	;; (setq citar-symbol-separator "  ")
-
-	(setq citar-file-open-note-function 'citar-file-open-notes-default-org)
+	;; Force citar-vulpea activation
+	(after! citar-vulpea
+	  (citar-vulpea-mode 1)
+	  (setq citar-notes-source 'citar-vulpea))
 
 	;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
 	;; makes it easier to distinguish from other org buffers.
@@ -163,15 +164,16 @@
 		))
 
 	;; Disable editing source code in dedicated buffer
-	;; https://emacs.stackexchange.com/questions/73986/how-do-i-stop-org-babel-from-trying-to-edit-a-source-block-in-a-dedicated-buffer/73988#73988
-	(defun org-edit-src-code nil)
+	;; Instead of redefining the function, which can break things, use the standard variable
+	(setq org-src-window-setup 'current-window)
 
 	;; Org-attach stuff
 	(setq org-attach-id-dir (concat org-directory "/.attach"))
 	(setq org-attach-method 'mv)
 
 	;; Org-modern
-	(global-org-modern-mode)
+	(add-hook 'org-mode-hook #'org-modern-mode)
+	(add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
 	(setq org-modern-label-border 1)
 
 	(defun org-procrastinate ()

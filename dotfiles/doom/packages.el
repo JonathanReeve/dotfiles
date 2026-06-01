@@ -32,11 +32,8 @@
 
 (package! websocket)
 (package! pass)
-(package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
 
 (package! org-ref)
-(package! org-roam-bibtex
- :recipe (:host github :repo "org-roam/org-roam-bibtex"))
 
 ;; (package! org-cite-csl-activate :recipe (:host github :repo "andras-simonyi/org-cite-csl-activate" :files ("*.el")))
 
@@ -60,7 +57,7 @@
 ;; (package! enlive)
 
 ;; Life in the danger zone!
-;; (unpin! org-ref org-roam-bibtex)
+;; (unpin! org-ref)
 (package! org-msg :pin "0c93f4d6250c207099a3bcbd15dfd3fc91135515")
 
 ;; (package! notebook-mode :recipe (:host github :repo "rougier/notebook-mode" :files ("*.el")))
@@ -92,7 +89,6 @@
 ;;   :pin "7c2ef0d5bd2b5a8727fe6d00938c47ba562e0c94")
 
 (package! org-mem)
-(package! org-node)
 
 (package! eldev)
 

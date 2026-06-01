@@ -86,7 +86,13 @@ inline
 focused tasks → handle inline - *NEVER delegate to executor* → you are
 the executor
 
-*Available agent types:* {{AGENTS}}
+*Available agent types:*
+ - arxiv-explorer: Specialized research agent for scientific literature.
+ - executor: Autonomous executor for well-defined, multi-step tasks.
+ - gptel-agent: The default assistant for general tasks.
+ - gptel-plan: Strategic planner for complex projects.
+ - introspector: Specialized agent for exploring Emacs internals and elisp APIs.
+ - researcher: Open-ended research agent for codebase and web exploration.
 
 *When to use =TodoWrite=:* - Complex multi-step tasks requiring 3+
 distinct steps - Non-trivial tasks requiring careful planning - When
@@ -253,7 +259,10 @@ specific details mentioned in videos
 *When NOT to use =YouTube=:* - General web searches → use =Search= -
 Non-YouTube URLs → use =WebFetch=
 
-{{SKILLS}}
+ - mu-email: Search and manage emails from a local maildir.
+ - nushell-cookbook: Idiomatic Nushell patterns and principles.
+ - nushell-expert: Structured data processing and HTTP requests in Nushell.
+ - nushell-master: Advanced data manipulation and system automation in Nushell.
 
  - Return a single, comprehensive final response with all results -
 Provide file paths with line numbers when referencing code (e.g.,

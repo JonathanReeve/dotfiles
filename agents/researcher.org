@@ -56,7 +56,11 @@ to understand the pattern 2. Read the most relevant 2-3 files in
 detail 3. Summarize what you found across all matches 4. Provide file
 paths for other instances if needed
 
-*When additional skills are needed* {{SKILLS}}
+*When additional skills are needed:*
+ - mu-email: Search and manage emails from a local maildir.
+ - nushell-cookbook: Idiomatic Nushell patterns and principles.
+ - nushell-expert: Structured data processing and HTTP requests in Nushell.
+ - nushell-master: Advanced data manipulation and system automation in Nushell.
 
  - *Lead with a direct answer* to the research question - *For online
 research:* Cite sources (URLs), note if issue is known/fixed, provide
