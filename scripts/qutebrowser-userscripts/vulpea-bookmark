@@ -1,0 +1,26 @@
+#!/usr/bin/env nu
+
+# A qutebrowser userscript to capture a web page as a vulpea note
+def main [] {
+    let url = $env.QUTE_URL
+    # Escape quotes for elisp
+    let title = $env.QUTE_TITLE | str replace -a '"' '\\"'
+    let selected = ($env.QUTE_SELECTED_TEXT? | default "") | str replace -a '"' '\\"'
+    
+    let elisp = $"(progn
+      (require 'vulpea)
+      (let* ((title \"($title)\")
+             (url \"($url)\")
+             (selected \"($selected)\")
+             (body (if (string-empty-p selected) \"\" (concat \"#+begin_quote\\n\" selected \"\\n#+end_quote\")))
+             (note (vulpea-create 
+                    title
+                    nil
+                    :properties `((\"REFERENCES\" . ,url))
+                    :body body)))
+        (when note
+          (vulpea-visit note)
+          (select-frame-set-input-focus (selected-frame)))))"
+          
+    ^emacsclient --eval $elisp
+}

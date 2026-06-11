@@ -1,3 +1,13 @@
-#!/run/current-system/sw/bin/bash
-TITLE=`urlencode $QUTE_TITLE`
-emacsclient "org-protocol://capture?template=l&url=$QUTE_URL&title=$TITLE&body=$QUTE_SELECTED_TEXT"
+#!/usr/bin/env nu
+
+# A qutebrowser userscript to capture a web page as a simple Org link
+def main [] {
+    let url = $env.QUTE_URL
+    let title = $env.QUTE_TITLE | str replace -a '"' '\\"'
+    let selected = ($env.QUTE_SELECTED_TEXT? | default "") | str replace -a '"' '\\"'
+    
+    # We use org-protocol for standard capture
+    let protocol_url = $"org-protocol://capture?template=l&url=($url | url encode)&title=($title | url encode)&body=($selected | url encode)"
+    
+    ^emacsclient $protocol_url
+}

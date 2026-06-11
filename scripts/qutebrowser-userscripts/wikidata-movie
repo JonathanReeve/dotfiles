@@ -1,0 +1,10 @@
+#!/usr/bin/env nu
+
+# A qutebrowser userscript to capture a movie from wikidata
+def main [] {
+    let title = $env.QUTE_TITLE | str replace -a '"' '\\"'
+    let script_path = "/home/jon/Agordoj/scripts/wikidata_movie.py"
+    
+    # Run the python script with the movie title
+    ^python3 $script_path $title
+}
