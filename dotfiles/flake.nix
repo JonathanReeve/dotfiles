@@ -28,6 +28,10 @@
       url = "path:/home/jon/Programaroj/citar";
       flake = false;
     };
+    antigravity-nix = {
+      url = "github:jacopone/antigravity-nix";
+      inputs.nixpkgs.follows = "nixos";
+    };
   };
   outputs = inputs @ { self,
               nixos, 

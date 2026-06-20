@@ -253,6 +253,13 @@
 
      # Hyprland
      inputs.iio-hyprland.packages.${pkgs.system}.default
+
+     # Needed for vulpea etc
+     fswatch
+
+     inputs.antigravity-nix.packages.x86_64-linux.default # Base App
+     inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-ide # IDE
+     inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-cli # CLI
    ];
 
   environment.variables = {
