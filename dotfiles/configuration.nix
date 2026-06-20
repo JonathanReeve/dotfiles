@@ -105,7 +105,7 @@
      vale                   # Prose linting
      # aspell aspellDicts.en  # Spell checker
      (aspellWithDicts (dicts: with dicts; [ en en-computers en-science eo fr ]))
-     pass encfs gopass      # Passwords and encryption
+     pass gopass gocryptfs      # Passwords and encryption
      brightnessctl          # Brightness control
      networkmanager
      tailscale

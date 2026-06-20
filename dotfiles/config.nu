@@ -33,10 +33,10 @@ def em [f] { job spawn { emacsclient -c $f } }
 
 # Vault management
 const vault_mount = "/home/jon/.private-mount"
-const vault_enc = "/home/jon/Dokumentoj/Personal/.Vault_encfs"
+const vault_enc = "/home/jon/Dokumentoj/Personal/.Vault_gocryptfs"
 
 def vault [] {
-    encfs $vault_enc $vault_mount
+    gocryptfs $vault_enc $vault_mount
 }
 
 def unvault [] {
