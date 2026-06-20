@@ -7,6 +7,9 @@
 (use-package! vulpea
   :config
   (vulpea-db-autosync-mode 1)
+  (setq vulpea-select-describe-fn #'vulpea-select-describe-outline-full)
+  (after! consult-vulpea
+    (consult-vulpea-mode 1))
   (defun my/vulpea-update-metadata ()
     "Update metadata for the current node."
     (when (vulpea-buffer-p)
@@ -126,13 +129,12 @@ This override ensures the literature note template is applied and avoids overwri
                       filename
                       :tags (list citar-vulpea-keyword)
                       :properties `(("REFERENCES" . ,ref)
-                                    ("BIB_KEY" . ,citekey)
-                                    ("BIB_AUTHOR" . ,author)
-                                    ("BIB_URL" . ,url)
+                                    ("CUSTOM_ID" . ,citekey)
+                                    ("AUTHOR" . ,author)
+                                    ("URL" . ,url)
                                     ("NOTER_DOCUMENT" . ,noter-doc)
                                     ("NOTER_PAGE" . ""))
-                      :head (format "#+title: %s
-#+created: %s
+                      :head (format "#+created: %s
 #+last-modified: %s
 
 - keywords :: %s
@@ -140,7 +142,6 @@ This override ensures the literature note template is applied and avoids overwri
 
 * %s
 "
-                                    title
                                     (format-time-string "[%Y-%m-%d %a %H:%M]")
                                     (format-time-string "[%Y-%m-%d %a %H:%M]")
                                     keywords
@@ -157,9 +158,9 @@ This override ensures the literature note template is applied and avoids overwri
          :target (file+head "${citekey}.org"
                             "#+title: ${title}
 :PROPERTIES:
-:BIB_KEY: ${citekey}
-:BIB_AUTHOR: ${author}
-:BIB_URL: ${url}
+:CUSTOM_ID: ${citekey}
+:AUTHOR: ${author}
+:URL: ${url}
 :NOTER_DOCUMENT: ${noter-document}
 :NOTER_PAGE:
 :END:
@@ -176,11 +177,14 @@ This override ensures the literature note template is applied and avoids overwri
         ("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%u\n"
          :target (file+olp "movies.org" ("watched")))))
 
-;; Bindings - kept at top level to ensure the prefix map is always defined
-(map! :leader
-      (:prefix-map ("n" . "notes")
-       (:prefix-map ("r" . "roam")
-        :desc "Find vulpea node"   "f" #'vulpea-find
-        :desc "Vulpea grep"        "g" #'consult-vulpea-grep
-        :desc "Insert vulpea node" "i" #'vulpea-insert
-        :desc "Vulpea journal"     "D" #'vulpea-journal)))
+  ;; Bindings - kept at top level to ensure the prefix map is always defined
+  (map! :leader
+        (:prefix-map ("n" . "notes")
+         (:prefix-map ("r" . "roam")
+          :desc "Find vulpea node"   "f" #'vulpea-find
+          :desc "Vulpea grep"        "g" #'consult-vulpea-grep
+          :desc "Insert vulpea node" "i" #'vulpea-insert
+          :desc "Vulpea journal"     "D" #'vulpea-journal
+          :desc "Enhance metadata"   "e" #'my/bib-enhance-buffer))))
+
+(load! "/home/jon/Agordoj/scripts/enhance-bib-metadata.el")

@@ -68,15 +68,15 @@
     },
     "dms": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
-        "quickshell": "quickshell"
+        "flake-compat": "flake-compat",
+        "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1777485435,
-        "narHash": "sha256-h7jQwOuOIR1StA1Ud87KXv6T0PdNe3BWkIiQH/GRSlQ=",
+        "lastModified": 1781835416,
+        "narHash": "sha256-uvqxsgDUNHkpTWGj3qhMaSoBhtVXD5QSfa+hx3lhLnI=",
         "ref": "eo-traduko",
-        "rev": "3fd613860b56d05b0b406e3bf69a63dc427a7f57",
-        "revCount": 3580,
+        "rev": "226c09b1aaf8906b79b1e902abc4ddf83d5c3d94",
+        "revCount": 3896,
         "type": "git",
         "url": "file:///home/jon/Programaroj/DankMaterialShell"
       },

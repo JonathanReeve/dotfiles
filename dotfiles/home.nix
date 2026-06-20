@@ -11,7 +11,7 @@ let
   scripts = "/home/jon/Agordoj/scripts";
   maildir = "/home/jon/Retpoŝto";
   vaultmount = "/home/jon/.private-mount";
-  vaultloc = "${dokumentoj}/Personal/.Vault_encfs";
+  vaultloc = "${dokumentoj}/Personal/.Vault_gocryptfs";
   # Preferences
   font = "Victor Mono";
   backgroundColor = "#243442"; # Blue steel
@@ -285,17 +285,6 @@ in
   };
 
   programs = {
-    alacritty = {
-      enable = true;
-      settings = {
-        general.import = [ "/home/jon/.config/alacritty/colors.toml" ];
-        font.normal.family = "${font}";
-        font.size = 14;
-        window.opacity = 0.9;
-        colors.transparent_background_colors = true;
-        terminal.shell = "nu";
-      };
-    };
     bottom.enable = true;
     broot.enable = true;
     dank-material-shell = {
@@ -403,11 +392,11 @@ in
     doom-emacs = {
       enable = true;
       doomDir = ./doom;
-      # emacsPackageOverrides = self: super: {
-      #   citar = super.citar.overrideAttrs (old: {
-      #     src = inputs.citar-src;
-      #   });
-      # };
+      emacsPackageOverrides = self: super: {
+        citar = super.citar.overrideAttrs (old: {
+          src = inputs.citar-src;
+        });
+      };
       extraBinPackages = with pkgs; [ fd ripgrep git ];
       extraPackages = epkgs: with pkgs; [
         pass gnupg (aspellWithDicts (dicts: with dicts; [ en en-computers en-science eo fr ]))
@@ -487,6 +476,9 @@ in
           "gM" = "open javascript:location.href='org-protocol://roam-ref?template=m&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
           "gR" = "open javascript:location.href='org-protocol://roam-ref?template=r&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
           "gB" = "spawn -m ${scripts}/downloadBook.py {url}";
+          "gV" = "spawn --userscript vulpea-bookmark";
+          "gO" = "spawn --userscript org-link";
+          "gW" = "spawn --userscript wikidata-movie";
           "pf" = "spawn --userscript qute-pass";
           "gz" = "jseval var d=document,s=d.createElement('script';;s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement;.appendChild(s;;void(0;;";
           "gr" = "open javascript:location.href='https://app.raindrop.io/add?link='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&note='+encodeURIComponent((document.getSelection&&document.getSelection().toString())||'')";
@@ -689,6 +681,7 @@ in
         ",XF86MonBrightnessUp,exec,dms ipc call brightness increment 10 backlight:intel_backlight"
         ",XF86MonBrightnessDown,exec,dms ipc call brightness decrement 10 backlight:intel_backlight"
         ",Print,exec,${emacsclient} -c -F '((name . \"vulpea-find\"))' --eval '(consult-vulpea-find)'"
+        "SUPER_SHIFT,V,exec,python3 ${scripts}/visualize_habits.py && qutebrowser journal_stats.html habit_heatmap.html"
       ];
       bindm = [
         "SUPER, mouse:272, movewindow"

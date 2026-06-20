@@ -17,7 +17,8 @@
 (setq doom-font (font-spec :family "Victor Mono" :size 20))
 (setq doom-themes-treemacs-enable-variable-pitch 'nil)
 
-(setq vc-follow-symlinks t) ;; Always follow symlinks.
+(setq vc-follow-symlinks t ;; Always follow symlinks.
+      display-line-numbers-type nil)
 
 ;; Get system notifications through libnotify
 (setq alert-default-style 'libnotify)
@@ -39,12 +40,7 @@
 
 ;; Citar
 ;; See https://github.com/hlissner/doom-emacs/blob/4612b39695405f7238dd3da0d4fd6d3a5cdd93d6/modules/tools/biblio/README.org
-(setq! citar-bibliography '(
-                            "~/Dokumentoj/Papers/library.bib"
-                            "~/Dokumentoj/Papers/library2.bib"
-                            "~/Dokumentoj/Org/Roam/shared/library.bib"
-                            ;; "~/Dokumentoj/Org/Roam/org-roam.db")
-                            )
+(setq! citar-bibliography '("~/Dokumentoj/Org/Roam/vulpea.db")
        citar-library-paths '("~/Dokumentoj/Papers/"
                              "~/Dokumentoj/Org/Roam/shared/papers")
        citar-notes-paths '("~/Dokumentoj/Org/Roam/")
@@ -92,16 +88,16 @@
 					; (require 'org-protocol)
 	(setq org-protocol-default-template-key "l")
 	(setq org-capture-templates
-              '(("t" "Todo" entry (file+headline "/home/jon/Dokumentoj/Org/notes.org" "Tasks")
-		 "* TODO %?  %i\n  %a")
-		("m" "Movie" entry (file+headline "/home/jon/Dokumentoj/Org/Roam/movies.org" "to watch")
-		 "* %a\n %?\n %i")
-		("l" "Link" entry (file+olp "/home/jon/Dokumentoj/Org/notes.org" "Web Links")
-		 "* %a\n %?\n %i")
-		("s" "Schedule" entry (file "/home/jon/Dokumentoj/Org/Projects/schedule.org")
-		 "* %?\n :PROPERTIES:\n :LOCATION:\n :END:\n %a\n %i")
-		))
-	(setq org-modules '(org-habit org-protocol))
+	      '(("t" "Todo" entry (file+headline "/home/jon/Dokumentoj/Org/notes.org" "Tasks")
+	         "* TODO %?  %i\n  %a")
+	        ("m" "Movie" entry (file+headline "/home/jon/Dokumentoj/Org/Roam/movies.org" "to watch")
+	         "* %a\n %?\n %i")
+	        ("l" "Link" entry (file+olp "/home/jon/Dokumentoj/Org/notes.org" "Web Links")
+	         "* %a\n %?\n %i")
+	        ("b" "Book (Literature Note)" plain "%?" :target (file "") :funcall (lambda () (vulpea-capture "r")))
+	        ("s" "Schedule" entry (file "/home/jon/Dokumentoj/Org/Projects/schedule.org")
+	         "* %?\n :PROPERTIES:\n :LOCATION:\n :END:\n %a\n %i")
+	        ))	(setq org-modules '(org-habit org-protocol))
 	;; Disable holidays. Is there an easier way of doing this?
 	(setq holiday-christian-holidays nil
               holiday-islamic-holidays nil
@@ -401,6 +397,116 @@
   (face-remap-add-relative 'variable-pitch :family "Liberation Serif"
                            :height 1.4))
 (add-hook 'nov-mode-hook 'my-nov-font-setup)
+
+(defvar my/nov-work-dir-sym (intern-soft "nov-work-dir"))
+(defvar my/nov-temp-dir-sym (intern-soft "nov-temp-directory"))
+(defvar my/nov-docs-sym (intern-soft "nov-documents"))
+
+(defun my/nov-search-book (query)
+  "Search all chapters in the current EPUB for QUERY using ripgrep.
+Displays matches in a completing-read buffer and jumps to the selection."
+  (interactive "sSearch entire book: ")
+  (require 'nov)
+  (let* ((nov-buffer (cond
+                      ((derived-mode-p 'nov-mode) (current-buffer))
+                      ((and (fboundp 'org-noter--get-session)
+                            (org-noter--get-session))
+                       (org-noter--session-document-buffer (org-noter--get-session)))
+                      (t (cl-loop for buf in (buffer-list)
+                                  if (with-current-buffer buf (derived-mode-p 'nov-mode))
+                                  return buf))))
+         (temp-dir (when nov-buffer
+                     (with-current-buffer nov-buffer
+                       (cond ((and my/nov-work-dir-sym (boundp my/nov-work-dir-sym)) (symbol-value my/nov-work-dir-sym))
+                             ((and my/nov-temp-dir-sym (boundp my/nov-temp-dir-sym)) (symbol-value my/nov-temp-dir-sym))
+                             (t nil)))))
+         (docs (when nov-buffer
+                 (with-current-buffer nov-buffer
+                   (if (and my/nov-docs-sym (boundp my/nov-docs-sym))
+                       (symbol-value my/nov-docs-sym)
+                     nil)))))
+    (unless (and temp-dir (file-exists-p temp-dir))
+      (user-error "Could not find an active nov-mode buffer or its work directory"))
+    (unless docs
+      (user-error "Could not find document list for this EPUB"))
+    (let* ((dir (file-name-as-directory temp-dir))
+           (cmd (format "rg --line-number --column --no-heading --color never %s %s"
+                        (shell-quote-argument query)
+                        (shell-quote-argument dir)))
+           (output (shell-command-to-string cmd))
+           (lines (split-string output "\n" t))
+           (candidates nil))
+      (dolist (line lines)
+        (when (string-match "\\([^:]+\\):\\([0-9]+\\):\\([0-9]+\\):\\(.*\\)" line)
+          (let* ((full-path (match-string 1 line))
+                 (text (match-string 4 line))
+                 (clean-text (replace-regexp-in-string "<[^>]*>" "" text))
+                 ;; nov-documents can be a vector or a list
+                 (doc-idx (cl-loop for doc across (if (vectorp docs) docs (vconcat docs))
+                                   when (string= full-path (cdr doc))
+                                   return (car doc))))
+            (when doc-idx
+              (push (cons (format "Ch %s: %s" doc-idx (string-trim clean-text))
+                          (list :idx doc-idx :query query :buffer nov-buffer))
+                    candidates)))))
+      (if candidates
+          (let* ((choice (completing-read "Go to match: " (reverse candidates)))
+                 (data (cdr (assoc choice candidates)))
+                 (target-buf (plist-get data :buffer)))
+            (with-current-buffer target-buf
+              (nov-goto-document (plist-get data :idx))
+              (goto-char (point-min))
+              (search-forward (plist-get data :query) nil t))
+            (pop-to-buffer target-buf))
+        (message "No matches found for '%s'" query)))))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(defun my/open-in-foliate ()
+  "Open the current EPUB file in the Foliate reader.
+Works both in nov-mode and while in an org-noter session."
+  (interactive)
+  (let ((file (cond
+               ((derived-mode-p 'nov-mode) buffer-file-name)
+               ((and (featurep 'org-noter) (org-noter--get-session))
+                (buffer-file-name (org-noter--session-document-buffer (org-noter--get-session))))
+               (t (error "Not in nov-mode or an active org-noter session")))))
+    (if (and file (file-exists-p file))
+        (progn
+          (message "Opening in Foliate...")
+          (start-process "foliate" nil "foliate" file))
+      (error "No EPUB file found associated with this buffer"))))
+
+(defun my/study-book (file)
+  "Open an EPUB file in Emacs, start org-noter, and launch Foliate simultaneously."
+  (interactive "fOpen EPUB for study: ")
+  (find-file file)
+  (org-noter)
+  (my/open-in-foliate))
+
+(after! nov
+  (map! :map nov-mode-map
+        :n "C-n" #'nov-next-document
+        :n "C-e" #'nov-previous-document
+        :n "s"   #'my/nov-search-book
+        :n "K"   #'my/open-in-foliate))
+
+(map! :map org-mode-map
+      :localleader
+      "K" #'my/open-in-foliate)
 
 ;; Toggle transparency
 (defun toggle-transparency ()

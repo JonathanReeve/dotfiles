@@ -108,3 +108,5 @@
 (package! base16-theme)
 
 (package! gptel-agent :recipe (:host github :repo "karthink/gptel-agent"))
+
+(package! nushell-mode :recipe (:host github :repo "mrkkrp/nushell-mode"))

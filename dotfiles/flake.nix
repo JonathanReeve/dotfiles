@@ -53,12 +53,6 @@
                     # 1. Wire the background click signal to the close function
                     substituteInPlace $out/share/quickshell/dms/Widgets/DankPopout.qml \
                       --replace-fail "signal backgroundClicked" "signal backgroundClicked; onBackgroundClicked: close()"
-                    
-                    # 2. Fix the contentWindow size to ensure it can catch clicks outside the widget
-                    # We make it cover the screen when it should be visible
-                    substituteInPlace $out/share/quickshell/dms/Widgets/DankPopout.qml \
-                      --replace-fail "right: !useBackgroundWindow" "right: true" \
-                      --replace-fail "bottom: _fullHeight || !useBackgroundWindow" "bottom: true"
                   '';
                 });
               })
@@ -76,7 +70,6 @@
               imports = [ ./home.nix
                           inputs.nix-doom-emacs-unstraightened.homeModule
                           inputs.dms.homeModules.dank-material-shell
-                          inputs.dms-plugin-registry.modules.default
                           inputs.dms-plugin-registry.homeModules.default
                           inputs.danksearch.homeModules.dsearch
                         ];

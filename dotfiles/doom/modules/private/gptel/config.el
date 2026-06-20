@@ -7,15 +7,24 @@
           (require 'auth-source-pass)
           ;; Ensure we look in the correct password-store directory
           (let ((auth-source-pass-filename "/home/jon/Dokumentoj/Personal/.password-store"))
-            (let ((key (auth-source-pass-get 'secret "api.google.com/apikey")))
+            (let ((key (auth-source-pass-get 'secret "openrouter.ai/apikey")))
               (unless key
-                (error "GPTel: API key not found in pass (entry: api.google.com/apikey)"))
+                (error "GPTel: API key not found in pass (entry: openrouter.ai/apikey)"))
               key))))
 
-  (setq gptel-backend (gptel-make-gemini "Gemini"
+  ;; (setq gptel-backend (gptel-make-gemini "Gemini"
+  ;;                       :key gptel-api-key
+  ;;                       :stream t))
+
+  (setq gptel-backend (gptel-make-openai "OpenRouter"
+                        :host "openrouter.ai"
+                        :endpoint "/api/v1/chat/completions"
                         :key gptel-api-key
-                        :stream t))
-  (setq gptel-model 'gemini-2.0-flash))
+                        :stream t
+                        :models '(google/gemini-3-flash-preview
+                                  openai/gpt-3.5-turbo
+                                  )))
+  (setq gptel-model 'google/gemini-3-flash-preview)
 
 (defun my/gptel-agent--execute-nushell (callback command)
   "Execute COMMAND asynchronously in nushell and call CALLBACK with output."

@@ -1,19 +1,84 @@
-I use nix-doom-emacs-unstraightened which installs doom-emacs and packages using Nix. 
+* Foundational System Configuration & Notetaking Standards
 
-* DONE on a new branch `gptel`: 
-CLOSED: [2026-05-23 sab 16:20]
-** DONE install gptel and configure gemini
-** DONE install gptel-agent and configure
-* DONE on a new branch, `vulpea`:
-CLOSED: [2026-05-23 sab 16:20]
-** DONE migrate from org-roam and org-node to [[https://github.com/d12frosted/vulpea][vulpea]]
-** DONE make a custom doom module for vulpea which reuses the org-roam keybindings, like SPC n r f 
-** DONE install [[https://github.com/fabcontigiani/citar-vulpea][citar-vulpea]]
-** DONE install the rest of the vulpea ecosystem: vulpea-ui, vulpea-journal, consult-vulpea  
-* DONE migrate the skill which is currently a .skill zip file to a plain text version
-* DONE copy the gptel agents to a new dir called agents/
-* DONE convert all the agents to org files (see gptel-agent readme)
-* DONE edit the agents so that there is no bash tools, only nushell tools (I prefer nushell)
-* DONE make a new nushell skill for yourself in skills/
-* DONE make sure that skills which are in skills/ are symlinked to the appropriate gemini dir with nix (using home-manager)
-* DONE build my system (not with sudo, just a dry build) to make sure it all works 
+I use /NixOS/ and /Home Manager/ with ~nix-doom-emacs-unstraightened~. All configuration lives in ~/Agordoj/dotfiles/~.
+
+** Notetaking (Vulpea & Zettelkasten)
+- *Directory*: All notes live in ~/Dokumentoj/Org/Roam/~.
+- *Database*: We use /Vulpea/ for node management.
+  - ~vulpea-db-sync-directories~ includes both the Roam folder and the base Org directory.
+  - ~SPC n r f~ is bound to ~vulpea-find~ (node search) with ~consult-vulpea-mode~ for live previews.
+  - Hierarchy display is enabled via ~vulpea-select-describe-outline-full~.
+- *Formatting*: We strictly use /file-level metadata/ in the top-level property drawer. Internal "title headings" (e.g., ~* Mrs Dalloway~) are forbidden and should be promoted to the file level.
+
+** Bibliographic Integration (Citar)
+- *Database-First*: ~citar-bibliography~ is set to ~vulpea.db~. We treat Org notes as the canonical source for bibliographic metadata.
+- *Custom Citar Fork*: We use a local fork at ~/Programaroj/citar/~ that is patched to:
+  - Detect Vulpea databases.
+  - Parse JSON properties directly from the ~notes~ table.
+  - Discover citekeys from the ~:REFERENCES:~ or ~:CUSTOM_ID:~ properties.
+- *Metadata Standards*: We use the standard /org-bibtex/ property names in uppercase:
+  - ~:CUSTOM_ID:~ - The BibTeX citekey.
+  - ~:REFERENCES:~ - Vulpea association (format: ~cite:KEY~).
+  - ~:AUTHOR:~, ~:YEAR:~, ~:URL:~, ~:PUBLISHER:~, etc.
+- *Capture*: ~SPC X b~ is bound to a literature note capture that redirects to ~vulpea-capture~.
+
+** Automation & Tools
+- *Shell*: We prefer /Nushell/ (~nu~) for all scripts and agent tools. Never use Bash for agent tasks.
+- *Metadata Enhancement*: Use ~scripts/enhance-bib-metadata.el~ (bound to ~SPC n r e~) to fill missing metadata via CrossRef (DOI) or Google Books.
+- *Visualizations*: ~scripts/visualize_habits.py~ generates interactive Plotly charts for journal stats and habits.
+- *Browser Integration*: Qutebrowser userscripts in ~scripts/qutebrowser-userscripts/~:
+  - ~gV~ (~vulpea-bookmark~): Captures page + selection as a Vulpea note.
+  - ~gW~ (~wikidata-movie~): Captures movie metadata from Wikidata to ~movies.org~.
+
+** AI (GPTel)
+- *Model*: Default to ~gemini-1.5-flash~ (preview 2.0-flash has zero quota for free users).
+- *Credentials*: Handled via ~auth-source-pass~ from ~/home/jon/Dokumentoj/Personal/.password-store~.
+- *Agents*: Custom agent definitions live in ~/Agordoj/agents/~.
+
+---
+
+* Task History & TODOs
+
+** DONE Fix: SPC n r f should look for nodes with vulpea, but it only looks for files 
+** DONE Fix: vulpea is now only finding nodes in movies.org and in the journal  
+** DONE Gptel-agent is failing, citing `Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash` but I haven't used it at all 
+- I've explained that the 2.0-flash model is in preview and often has a zero limit for free tier users.
+- I've switched the default model to 1.5-flash which has a reliable free tier.
+- I've also clarified that the consumer Gemini Pro plan does not apply to AI Studio API usage.
+** TODO On a new branch let's rewrite my whole emacs config to a single org file. Be sure to consult docs for nix-doom-emacs-unstraightened first for the right way to do it.
+- Along the way clean up commented-out stuff
+- And organize everything logically
+** DONE Every time I change my wallpaper in DMS I get "Theme Worker Failed (1)". Let's debug that. Also, relatedly: every time I change my wallpaper it starts Qutebrowser, which I don't necessarily want. 
+** DONE Shouldn't org-capture and vulpea be better integrated?
+- I've added a "Book (Literature Note)" template to `org-capture-templates`.
+- It redirects to `vulpea-capture "r"`, allowing you to use standard `SPC X b` to capture books into Vulpea.
+** DONE Fully migrate to an org-bibtex way of storing bibligraphic data
+** DONE Fully migrate to the vulpea style of storing references (:REFERENCES: instead of :ROAM_REFS:) and other properties
+** DONE Line numbers are automatically enabled in doom whenever I switch the focus to a given window. I only want line numbers enabled if I do so manually
+** DONE The vulpea node hierarchy is not being respected. For example when a node is in movies.org I expect to see Movies -> Watched -> Some Movie, but I only see Some Movie when I do vulpea-find
+** DONE When I do SPC n b to open citar notes on a new book, it creates the new note but doesn't switch to it.
+- I only see `Vulpea: Sync complete - 1 file (0 updated, 1 unchanged, 0.00s) [2 times]` in the minibuffer.
+- Then when I repeat the command, it switches to the buffer but the title has been duplicated—there are two title lines.
+** DONE make sure bibliographic data that is in library.bib or library2.bib is reflected in the corresponding notes, in the properties, in the org-bibtex form
+** DONE make a visualization script which reads my org files and generates line charts for various habits and stats over time 
+- read my vulpea journals for example and keep track of the drinks I've had over time, mood over time, etc
+- read my habits from todo.org and make a nice plot of my consistency with them (maybe some kind of heatmap matrix) 
+** DONE presuming org-noter can handle noter properties being declared at the file level, migrate from the old format in which I declared all my book properties in a heading inside each note, rather than in the file-level headings. 
+
+
+** DONE consult web apis to enhance and complete missing bibliographic metadata in my book collection 
+- I've created `scripts/enhance-bib-metadata.el` which uses native Org mode parsing.
+- It can be triggered in the current buffer with `SPC n r e`.
+- It supports Google Books (via ID from URL or Title search) and CrossRef (via DOI).
+** DONE write a script in nushell which hits the api at https://developer.raindrop.io/ and gets my raindrop bookmarks
+** DONE write a bookmark script which can capture a web page and do this:
+- make a new vulpea note with REFERENCES equal to the URL 
+- the title of the note should be the web page title 
+- anything highlighted in qutebrowser should be in a quote block 
+** DONE make a bookmark script which can capture a web page and just make it a link
+** DONE make a script which can capture a movie from wikidata and populate a note with it using a few common movie properties 
+- The wikidata entity id should go in :WIKIDATA: wd:Q124124 
+- If I already have a note for the director, add a link to my note 
+- Read my movies.org for conventions I use and emulate those  
+
+** DONE note titles should still have citekeys in them, but the TITLE property should of course just be the bare title. That will help us understanding for example a book called Art. 
