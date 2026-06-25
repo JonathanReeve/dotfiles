@@ -104,7 +104,7 @@ let
     [main]
     font=${font}:size=14
     shell=/etc/profiles/per-user/jon/bin/nu
-    
+    pad=5x5
 
     [colors-dark]
     alpha = 0.9
@@ -561,7 +561,19 @@ in
     xwayland.enable = true;
     configType = "hyprlang";
     plugins = [
-      inputs.hyprgrass.packages.${pkgs.system}.default
+      (inputs.hyprgrass.packages.${pkgs.system}.default.overrideAttrs (oldAttrs: {
+        postPatch = (oldAttrs.postPatch or "") + ''
+          sed -i '1s/^/#include <render\/Renderer.hpp>\n/' src/TouchVisualizer.cpp
+          substituteInPlace src/TouchVisualizer.cpp \
+            --replace-fail "2 * PI" "2 * 3.14159265358979323846" \
+            --replace-fail "g_pCompositor->scheduleFrameForMonitor(" "g_pHyprRenderer->damageMonitor("
+          substituteInPlace src/GestureManager.cpp \
+            --replace-fail "hyprland/src/helpers/Monitor.hpp" "hyprland/src/output/Monitor.hpp" \
+            --replace-fail '#include <hyprland/src/output/Monitor.hpp>' '#include <hyprland/src/output/Monitor.hpp>
+#include <hyprland/src/state/MonitorState.hpp>' \
+            --replace-fail "g_pCompositor->getMonitorFromName(!ev.device->m_boundOutput.empty() ? ev.device->m_boundOutput : \"\")" "State::monitorState()->query().name(!ev.device->m_boundOutput.empty() ? ev.device->m_boundOutput : \"\").run()"
+        '';
+      }))
     ];
     settings = {
       source = [ "~/.config/hypr/dms/colors.conf" ];
@@ -736,7 +748,7 @@ in
         [templates.ewal]
         input_path = '/home/jon/.config/matugen/templates/colors-ewal.json.template'
         output_path = '/home/jon/.cache/wal/colors.json'
-        post_hook = "${scripts}/emacs-reload.nu"
+        post_hook = "${scripts}/theme-reload.nu --emacsclient ${emacsclient}"
 
         [templates.foot]
         input_path = '/home/jon/.config/matugen/templates/foot.ini.template'
@@ -745,7 +757,7 @@ in
         [templates.qutebrowser]
         input_path = '/home/jon/.config/matugen/templates/qutebrowser-colors.py.template'
         output_path = '/home/jon/.cache/dms-qute-config.py'
-        post_hook = "${scripts}/qutebrowser-reload.nu"
+        post_hook = "${scripts}/theme-reload.nu --qutebrowser ${qutebrowser}"
       '';
     };
     dataFile = {
