@@ -12,6 +12,7 @@
     # Local copy for testing
     dms = {
       url = "git+file:///home/jon/Programaroj/DankMaterialShell?ref=eo-traduko";
+      inputs.nixpkgs.follows = "nixos";
     };
     dms-plugin-registry.url = "github:AvengeMedia/dms-plugin-registry";
     iio-hyprland.url = "github:JeanSchoeller/iio-hyprland";
