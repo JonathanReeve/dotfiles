@@ -47,6 +47,7 @@
 (use-package! vulpea-journal
   :after vulpea
   :config
+  (vulpea-journal-setup)
   (setq vulpea-journal-directory (concat vulpea-directory "/Daily/"))
   (setq! vulpea-journal-default-template
          '(:file-name "%Y-%m-%d.org"
@@ -54,7 +55,6 @@
            :tags ("journal")
            :properties (("DRINKS" . "")
                         ("PHONE" . "")
-                        ("KETO" . "")
                         ("EXERCISE" . "")
                         ("MOOD" . ""))
            :head "#+created: %<[%Y-%m-%d]>
