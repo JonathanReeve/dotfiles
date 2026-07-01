@@ -1,10 +1,210 @@
-#!/usr/bin/env nu
+#!/usr/bin/env nix-shell
+#!nix-shell -i python3 -p "python3.withPackages (ps: [ ps.requests ])"
 
-# A qutebrowser userscript to capture a movie from wikidata
-def main [] {
-    let title = $env.QUTE_TITLE | str replace -a '"' '\\"'
-    let script_path = "/home/jon/Agordoj/scripts/wikidata_movie.py"
+import sys
+import os
+import requests
+import subprocess
+import urllib.parse
+from datetime import datetime
+
+HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AntigravityMovieCapture/1.0'}
+
+def emacs_eval(elisp):
+    result = subprocess.run(['emacsclient', '--eval', elisp], capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"Emacs error: {result.stderr.strip()}", file=sys.stderr)
+    return result.stdout.strip()
+
+def search_movie(title):
+    url = "https://www.wikidata.org/w/api.php"
+    params = {
+        "action": "wbsearchentities",
+        "search": title,
+        "language": "en",
+        "format": "json",
+        "type": "item"
+    }
+    try:
+        r = requests.get(url, params=params, headers=HEADERS)
+        data = r.json()
+        return data.get('search', [])
+    except Exception as e:
+        print(f"Error searching Wikidata: {e}", file=sys.stderr)
+        return []
+
+def get_label(entity_id):
+    url = "https://www.wikidata.org/w/api.php"
+    params = {
+        "action": "wbgetentities",
+        "ids": entity_id,
+        "props": "labels",
+        "languages": "en",
+        "format": "json"
+    }
+    try:
+        r = requests.get(url, params=params, headers=HEADERS)
+        data = r.json()
+        return data['entities'][entity_id]['labels']['en']['value']
+    except Exception as e:
+        print(f"Error getting label for {entity_id}: {e}", file=sys.stderr)
+        return "Unknown"
+
+def get_entity_details(entity_id):
+    url = f"https://www.wikidata.org/wiki/Special:EntityData/{entity_id}.json"
+    try:
+        r = requests.get(url, headers=HEADERS)
+        data = r.json()
+        entity = data['entities'][entity_id]
+        claims = entity.get('claims', {})
+        
+        label = entity.get('labels', {}).get('en', {}).get('value', 'Unknown')
+        
+        # Director (P57)
+        director = "Unknown"
+        director_claims = claims.get('P57', [])
+        if director_claims:
+            d_id = director_claims[0]['mainsnak']['datavalue']['value']['id']
+            director = get_label(d_id)
+            
+        # Publication date (P577)
+        year = ""
+        date_claims = claims.get('P577', [])
+        if date_claims:
+            date_str = date_claims[0]['mainsnak']['datavalue']['value']['time']
+            if date_str.startswith('+'):
+                year = date_str[1:5]
+                
+        return {"id": entity_id, "label": label, "director": director, "year": year}
+    except Exception as e:
+        print(f"Error getting details for {entity_id}: {e}", file=sys.stderr)
+        return {"id": entity_id, "label": "Unknown", "director": "Unknown", "year": ""}
+
+def get_wikidata_id(url, title):
+    # 1. Try to parse Wikidata ID from Wikidata URL
+    if url:
+        parsed = urllib.parse.urlparse(url)
+        if 'wikidata.org' in parsed.netloc:
+            path_parts = parsed.path.split('/')
+            for part in path_parts:
+                part = part.split('.')[0]  # Remove extensions like .json
+                if part.startswith('Q') and part[1:].isdigit():
+                    return part
+
+        # 2. Try to resolve Wikipedia URL to Wikidata ID
+        if 'wikipedia.org' in parsed.netloc:
+            lang = parsed.netloc.split('.')[0]
+            site = f'{lang}wiki'
+            title_part = parsed.path.split('/')[-1]
+            title_unquoted = urllib.parse.unquote(title_part)
+            try:
+                r = requests.get('https://www.wikidata.org/w/api.php', params={
+                    'action': 'wbgetentities',
+                    'sites': site,
+                    'titles': title_unquoted,
+                    'format': 'json'
+                }, headers=HEADERS)
+                data = r.json()
+                entities = data.get('entities', {})
+                if entities:
+                    entity_id = list(entities.keys())[0]
+                    if entity_id != '-1':
+                        return entity_id
+            except Exception as e:
+                print(f"Error resolving Wikipedia URL: {e}", file=sys.stderr)
+
+    # 3. Fallback to searching Wikidata with title
+    clean_title = title
+    if clean_title:
+        # Strip suffixes
+        for suffix in [' - Wikipedia', ' - Wikidata', ' (film)']:
+            if clean_title.endswith(suffix):
+                clean_title = clean_title[:-len(suffix)]
+        clean_title = clean_title.replace(' (film)', '')
+        
+        results = search_movie(clean_title)
+        if results:
+            return results[0]['id']
+            
+    return None
+
+def main():
+    qute_url = os.environ.get('QUTE_URL')
+    qute_title = os.environ.get('QUTE_TITLE')
     
-    # Run the python script with the movie title
-    ^python3 $script_path $title
-}
+    # Fallback to command line arguments
+    if not qute_title and len(sys.argv) > 1:
+        qute_title = sys.argv[1]
+    if not qute_url and len(sys.argv) > 2:
+        qute_url = sys.argv[2]
+        
+    if not qute_title and not qute_url:
+        print("Usage: wikidata-movie <movie title> [url]")
+        sys.exit(1)
+        
+    entity_id = get_wikidata_id(qute_url, qute_title)
+    if not entity_id:
+        print("Could not find Wikidata entity.")
+        sys.exit(1)
+        
+    details = get_entity_details(entity_id)
+    
+    director = details['director']
+    safe_director = director.replace('"', '\\"')
+    
+    # Find director node in Vulpea DB
+    director_node_id = emacs_eval(
+        f'(let ((nodes (vulpea-db-query))) '
+        f'(when-let ((node (seq-find (lambda (n) (string-match-p "{safe_director}" (vulpea-note-title n))) nodes))) '
+        f'(vulpea-note-id node)))'
+    )
+    
+    director_link = f"[[id:{director_node_id}][{director}]]" if (director_node_id and director_node_id != "nil") else director
+    title = f"{details['label']} ({details['year']})" if details['year'] else details['label']
+    
+    # Format today's date in Esperanto day-of-week format
+    eo_days = {
+        "Mon": "lun",
+        "Tue": "mar",
+        "Wed": "mer",
+        "Thu": "ĵaŭ",
+        "Fri": "ven",
+        "Sat": "sab",
+        "Sun": "dim"
+    }
+    en_day = datetime.now().strftime("%a")
+    eo_day = eo_days.get(en_day, en_day.lower())
+    today = datetime.now().strftime(f"[%Y-%m-%d {eo_day}]")
+    
+    # Prepare details for Elisp insertion
+    safe_title = title.replace('"', '\\"')
+    safe_director_link = director_link.replace('"', '\\"')
+    
+    body_content = f"{today}\\n\\nDirected by {safe_director_link}.\\n\\n"
+    
+    final_elisp = f"""(let* ((file "/home/jon/Dokumentoj/Org/Roam/movies.org")
+           (buf (find-file-noselect file))
+           (id (org-id-uuid)))
+      (with-current-buffer buf
+        (org-with-wide-buffer
+         (goto-char (point-min))
+         (if (re-search-forward "^\\\\* watched\\\\s-*$" nil t)
+             (progn
+               (forward-line 1)
+               (unless (bolp) (insert "\\n"))
+               (insert (format "** {safe_title}\\n:PROPERTIES:\\n:ID:       %s\\n:WIKIDATA: [[wd:{entity_id}]]\\n:RATING:   ***\\n:END:\\n{body_content}" id))
+               (save-buffer)
+               (pop-to-buffer buf)
+               (goto-char (point-min))
+               (org-id-goto id)
+               id)
+           (error "Could not find '* watched' headline")))))"""
+           
+    result_id = emacs_eval(final_elisp)
+    if result_id and result_id != "nil":
+        print(f"Created note for {title} in movies.org (ID: {result_id})")
+    else:
+        print("Failed to capture movie in Emacs.")
+
+if __name__ == "__main__":
+    main()
