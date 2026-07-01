@@ -90,8 +90,8 @@
 	(setq org-capture-templates
 	      '(("t" "Todo" entry (file+headline "/home/jon/Dokumentoj/Org/notes.org" "Tasks")
 	         "* TODO %?  %i\n  %a")
-	        ("m" "Movie" entry (file+headline "/home/jon/Dokumentoj/Org/Roam/movies.org" "to watch")
-	         "* %a\n %?\n %i")
+	        ("m" "Movie" entry (file+headline "/home/jon/Dokumentoj/Org/Roam/movies.org" "watched")
+	         (function my/capture-movie-template) :prepend t)
 	        ("l" "Link" entry (file+olp "/home/jon/Dokumentoj/Org/notes.org" "Web Links")
 	         "* %a\n %?\n %i")
 	        ("b" "Book (Literature Note)" plain "%?" :target (file "") :funcall (lambda () (vulpea-capture "r")))

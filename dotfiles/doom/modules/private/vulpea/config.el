@@ -188,3 +188,4 @@ This override ensures the literature note template is applied and avoids overwri
           :desc "Enhance metadata"   "e" #'my/bib-enhance-buffer))))
 
 (load! "/home/jon/Agordoj/scripts/enhance-bib-metadata.el")
+(load! "wikidata-movie")

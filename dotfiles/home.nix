@@ -473,7 +473,7 @@ in
           "j" =  "search-next";
           "b" =  "set-cmd-text -s :tab-select ";
           "gL" = "open javascript:location.href='org-protocol://capture?template=l&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
-          "gM" = "spawn --userscript wikidata-movie";
+          "gM" = "open javascript:location.href='org-protocol://capture?template=m&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
           "gR" = "open javascript:location.href='org-protocol://roam-ref?template=r&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
           "gB" = "spawn -m ${scripts}/downloadBook.py {url}";
           "gV" = "spawn --userscript vulpea-bookmark";
@@ -764,6 +764,15 @@ in
       "qutebrowser/userscripts/" = {
         source = ../scripts/qutebrowser-userscripts;
         recursive = true;
+      };
+    };
+    desktopEntries = {
+      org-protocol = {
+        name = "Org Protocol Handler";
+        exec = "emacsclient %u";
+        icon = "emacs";
+        type = "Application";
+        mimeType = [ "x-scheme-handler/org-protocol" ];
       };
     };
     mimeApps = {
