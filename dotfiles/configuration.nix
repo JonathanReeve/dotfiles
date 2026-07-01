@@ -368,6 +368,10 @@
       wrapperFeatures.gtk = true;
     };
     zsh.enable = true;
+    nh = {
+      enable = true;
+      flake = "/home/jon/Agordoj/dotfiles";
+    };
   };
 
   users.users = {
