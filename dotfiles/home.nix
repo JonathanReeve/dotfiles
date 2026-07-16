@@ -563,15 +563,14 @@ in
     plugins = [
       (inputs.hyprgrass.packages.${pkgs.system}.default.overrideAttrs (oldAttrs: {
         postPatch = (oldAttrs.postPatch or "") + ''
-          sed -i '1s/^/#include <render\/Renderer.hpp>\n/' src/TouchVisualizer.cpp
-          substituteInPlace src/TouchVisualizer.cpp \
-            --replace-fail "2 * PI" "2 * 3.14159265358979323846" \
-            --replace-fail "g_pCompositor->scheduleFrameForMonitor(" "g_pHyprRenderer->damageMonitor("
           substituteInPlace src/GestureManager.cpp \
-            --replace-fail "hyprland/src/helpers/Monitor.hpp" "hyprland/src/output/Monitor.hpp" \
-            --replace-fail '#include <hyprland/src/output/Monitor.hpp>' '#include <hyprland/src/output/Monitor.hpp>
-#include <hyprland/src/state/MonitorState.hpp>' \
-            --replace-fail "g_pCompositor->getMonitorFromName(!ev.device->m_boundOutput.empty() ? ev.device->m_boundOutput : \"\")" "State::monitorState()->query().name(!ev.device->m_boundOutput.empty() ? ev.device->m_boundOutput : \"\").run()"
+            --replace-fail "#define private public" "#define private public
+#define protected public" \
+            --replace-fail "#undef private" "#undef private
+#undef protected" \
+            --replace-fail "#include <hyprland/src/protocols/core/Compositor.hpp>" "#include <hyprland/src/protocols/core/Compositor.hpp>
+#include <hyprland/src/managers/fullscreen/FullscreenController.hpp>" \
+            --replace-fail "w->isFullscreen()" "Fullscreen::controller()->isFullscreen(w)"
         '';
       }))
     ];

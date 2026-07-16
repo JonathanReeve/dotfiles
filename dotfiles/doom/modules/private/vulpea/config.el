@@ -32,9 +32,10 @@
                   (delete-region (save-excursion (backward-word) (point)) (point))
                   (insert (format "[[id:%s][%s]]" (vulpea-note-id node) str))))))))
 
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (add-to-list 'completion-at-point-functions #'vulpea-capf))))
+  ;; (add-hook 'org-mode-hook
+  ;;           (lambda ()
+  ;;             (add-to-list 'completion-at-point-functions #'vulpea-capf)))
+  )
 
 (use-package! vulpea-ui
   :after vulpea
@@ -48,9 +49,8 @@
   :after vulpea
   :config
   (vulpea-journal-setup)
-  (setq vulpea-journal-directory (concat vulpea-directory "/Daily/"))
   (setq! vulpea-journal-default-template
-         '(:file-name "%Y-%m-%d.org"
+         '(:file-name "Daily/%Y-%m-%d.org"
            :title "%Y-%m-%d"
            :tags ("journal")
            :properties (("DRINKS" . "")
@@ -188,4 +188,4 @@ This override ensures the literature note template is applied and avoids overwri
           :desc "Enhance metadata"   "e" #'my/bib-enhance-buffer))))
 
 (load! "/home/jon/Agordoj/scripts/enhance-bib-metadata.el")
-(load! "wikidata-movie")
+

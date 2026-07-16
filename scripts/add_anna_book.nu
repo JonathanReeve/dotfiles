@@ -10,7 +10,7 @@ const PAPERS_DIR = "/home/jon/Dokumentoj/Papers"
 const SCAN_DIRS = [ "~/Elŝutoj/" "/tmp/" ]
 
 const ANNA_API_BASE = "https://annas-archive.gl/db/aarecord_elasticsearch/md5:"
-const ANNA_WEB_BASE = "https://annas-archive.org/md5/"
+const ANNA_WEB_BASE = "https://annas-archive.gl/md5/"
 
 const PAYLOAD_FILE = "/tmp/anna_payload.json"
 const HELPER_EL = "/home/jon/Agordoj/scripts/anna-vulpea-helper.el"
@@ -58,6 +58,7 @@ def generate_citekey [author: string, year: string, title: string] {
 }
 
 def main [
+    ...targets: string # Specific books to process (paths, filenames, or MD5s)
     --all (-a)  # Process all matching books found (default: only the most recent)
     --dry-run (-d) # Show what would be done without making changes
 ] {
@@ -71,11 +72,16 @@ def main [
         error make {msg: $"Cookie database not found at ($cookie_db)"}
     }
 
-    let aa_cookie = (sqlite3 $cookie_db "SELECT value FROM cookies WHERE host_key LIKE '%annas-archive.org%' AND name = 'aa_account_id2'")
+    let host = ($ANNA_API_BASE | url parse | get host)
+    let cookies_list = (sqlite3 $cookie_db $"SELECT name, value FROM cookies WHERE host_key LIKE '%($host)%'" 
+        | lines 
+        | parse "{name}|{value}")
 
-    if ($aa_cookie | is-empty) {
-        error make {msg: "No aa_account_id2 cookie found in qutebrowser. Please log in to Anna's Archive in qutebrowser."}
+    if not ($cookies_list | any { |c| $c.name == "aa_account_id2" }) {
+        error make {msg: $"No aa_account_id2 cookie found for ($host) in qutebrowser. Please log in to Anna's Archive in qutebrowser."}
     }
+
+    let cookie_header = ($cookies_list | each { |row| $"($row.name)=($row.value)" } | str join "; ")
 
     # Search for files with 32-char hex MD5 in name
     mut books = []
@@ -100,12 +106,50 @@ def main [
     
     $books = ($books | sort-by modified)
 
-    if ($books | is-empty) {
-        print "No books with MD5 in filename found."
-        return
+    mut to_process = []
+    if ($targets | is-empty) {
+        if ($books | is-empty) {
+            print "No books with MD5 in filename found."
+            return
+        }
+        $to_process = if $all { $books } else { [($books | last)] }
+    } else {
+        for target in $targets {
+            let expanded = ($target | path expand)
+            if ($expanded | path exists) {
+                if (ls $expanded | get 0.type) == "file" {
+                    let md5_list = ($expanded | parse --regex "([a-fA-F0-9]{32})")
+                    if ($md5_list | length) > 0 {
+                        $to_process = ($to_process | append {
+                            path: $expanded,
+                            filename: ($expanded | path basename),
+                            extension: ($expanded | path parse | get extension),
+                            md5: ($md5_list | get 0.capture0),
+                            modified: (ls $expanded | get 0.modified)
+                        })
+                    } else {
+                        print $"Warning: File '($target)' does not contain a 32-character hex MD5 in its name."
+                    }
+                } else {
+                    print $"Warning: '($target)' is not a file."
+                }
+            } else {
+                # Try to match in the scanned books
+                let matched = ($books | where filename =~ $target or path =~ $target or md5 =~ $target)
+                if ($matched | is-empty) {
+                    print $"Warning: Could not find any book matching '($target)'."
+                } else {
+                    $to_process = ($to_process | append $matched)
+                }
+            }
+        }
+        $to_process = ($to_process | uniq)
     }
 
-    let to_process = if $all { $books } else { [($books | last)] }
+    if ($to_process | is-empty) {
+        print "No books to process."
+        return
+    }
 
     for book in $to_process {
         if ($book | is-empty) { continue }
@@ -129,11 +173,12 @@ def main [
                 open $raw_meta_path
             } else {
                 let url = $"($ANNA_API_BASE)($md5).json"
-                let headers = [Cookie $"aa_account_id2=($aa_cookie)"]
+                let headers = {Cookie: $cookie_header}
                 try {
                     let res = (http get --headers $headers $url)
                     $res | to json | save --force $raw_meta_path
                     print $"  Fetched and saved metadata to ($raw_meta_path)"
+                    sleep 3sec
                     $res
                 } catch { |err|
                     let is_404 = (try { ($err | to text) =~ "404" } catch { false })
@@ -143,6 +188,7 @@ def main [
                         print "  Error fetching metadata:"
                         print $err
                     }
+                    sleep 3sec
                     continue
                 }
             }

@@ -157,6 +157,8 @@
 	(setq org-link-abbrev-alist
               '(("wikidata"   . "https://www.wikidata.org/wiki/")
 		("wd"         . "https://www.wikidata.org/wiki/")
+		("imdb"       . "https://www.imdb.com/title/")
+		("tmdb"       . "https://www.themoviedb.org/movie/")
 		))
 
 	;; Disable editing source code in dedicated buffer

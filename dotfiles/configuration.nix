@@ -198,6 +198,7 @@
      zoom-us
      # calibre                # Ebooks
      libgourou                # Epub/PDF DRM
+     poppler-utils
 
      ntfs3g ntfsprogs       # Windows drives compatibility
 

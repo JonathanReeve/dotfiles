@@ -1,4 +1,4 @@
-;;; modules/private/vulpea/wikidata-movie.el -*- lexical-binding: t; -*-
+;;; modules/private/vulpea/autoload/wikidata-movie.el -*- lexical-binding: t; -*-
 
 (require 'json)
 (require 'url)
