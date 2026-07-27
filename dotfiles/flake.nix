@@ -8,12 +8,12 @@
     nixos.url = "nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware"; 
     nix-doom-emacs-unstraightened.url = "github:marienz/nix-doom-emacs-unstraightened"; # Retained for both laptops
-    # dms.url = "github:AvengeMedia/DankMaterialShell";
+    dms.url = "github:AvengeMedia/DankMaterialShell";
     # Local copy for testing
-    dms = {
-      url = "git+file:///home/jon/Programaroj/DankMaterialShell?ref=eo-traduko";
-      inputs.nixpkgs.follows = "nixos";
-    };
+    # dms = {
+    #   url = "git+file:///home/jon/Programaroj/DankMaterialShell?ref=eo-traduko";
+    #   inputs.nixpkgs.follows = "nixos";
+    # };
     dms-plugin-registry.url = "github:AvengeMedia/dms-plugin-registry";
     iio-hyprland.url = "github:JeanSchoeller/iio-hyprland";
     hyprland.url = "github:hyprwm/Hyprland";
@@ -24,10 +24,6 @@
     danksearch = {
       url = "github:AvengeMedia/danksearch";
       inputs.nixpkgs.follows = "nixos";
-    };
-    citar-src = {
-      url = "path:/home/jon/Programaroj/citar";
-      flake = false;
     };
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";

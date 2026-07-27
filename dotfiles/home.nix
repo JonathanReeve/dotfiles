@@ -392,11 +392,6 @@ in
     doom-emacs = {
       enable = true;
       doomDir = ./doom;
-      emacsPackageOverrides = self: super: {
-        citar = super.citar.overrideAttrs (old: {
-          src = inputs.citar-src;
-        });
-      };
       extraBinPackages = with pkgs; [ fd ripgrep git ];
       extraPackages = epkgs: with pkgs; [
         pass gnupg (aspellWithDicts (dicts: with dicts; [ en en-computers en-science eo fr ]))
