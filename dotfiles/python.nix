@@ -29,6 +29,7 @@
        numpy
        # nose
        tldextract # required by qute-pass
+       weasyprint
      ]))
   ];
 }
