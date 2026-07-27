@@ -185,7 +185,39 @@ This override ensures the literature note template is applied and avoids overwri
           :desc "Vulpea grep"        "g" #'consult-vulpea-grep
           :desc "Insert vulpea node" "i" #'vulpea-insert
           :desc "Vulpea journal"     "D" #'vulpea-journal
-          :desc "Enhance metadata"   "e" #'my/bib-enhance-buffer))))
+          :desc "Enhance metadata"   "e" #'my/bib-enhance-buffer)))
+
+(defun my/vulpea-capture-url (url title &optional selected)
+  "Create a Vulpea note for URL with TITLE and optional SELECTED text."
+  (interactive "sURL: \nsTitle: \nsSelected: ")
+  (require 'vulpea)
+  (let* ((body (if (or (null selected) (string-empty-p selected))
+                   ""
+                 (concat "#+begin_quote\n" selected "\n#+end_quote")))
+         (note (vulpea-create
+                title
+                nil
+                :properties `(("REFERENCES" . ,url))
+                :body body)))
+    (when note
+      (vulpea-visit note)
+      (select-frame-set-input-focus (selected-frame)))))
+
+(defun my/org-protocol-vulpea-capture (data)
+  "Process `org-protocol://vulpea-capture` URL with DATA plist."
+  (let ((url (plist-get data :url))
+        (title (or (plist-get data :title) "Bookmark"))
+        (body (plist-get data :body)))
+    (my/vulpea-capture-url url title body)
+    nil))
+
+(after! org-protocol
+  (add-to-list 'org-protocol-protocol-alist
+               '("vulpea-capture"
+                 :protocol "vulpea-capture"
+                 :function my/org-protocol-vulpea-capture
+                 :kill-client t)))
 
 (load! "/home/jon/Agordoj/scripts/enhance-bib-metadata.el")
+
 

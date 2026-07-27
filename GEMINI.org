@@ -81,4 +81,8 @@ I use /NixOS/ and /Home Manager/ with ~nix-doom-emacs-unstraightened~. All confi
 - If I already have a note for the director, add a link to my note 
 - Read my movies.org for conventions I use and emulate those  
 
-** DONE note titles should still have citekeys in them, but the TITLE property should of course just be the bare title. That will help us understanding for example a book called Art. 
+** DONE note titles should still have citekeys in them, but the TITLE property should of course just be the bare title. That will help us understanding for example a book called Art.
+** TODO movie capture is broken
+*** TODO SPC X followed by =m= for =Movie= shows:  
+=Template function my/capture-movie-template not found= probably because that file isn't getting loaded. Maybe let's move these
+*** TODO  

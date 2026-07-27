@@ -34,7 +34,7 @@ def generate_citekey [author: string, year: string, title: string] {
                     $parts | get 0
                 }
             }
-        } | str downcase | str replace --all --regex `[^a-z0-9]` ""
+        } | str lowercase | str replace --all --regex `[^a-z0-9]` ""
     )
 
     let year_clean = ($year | str replace --all --regex `[^0-9]` "" | str substring 0..4)
@@ -45,7 +45,7 @@ def generate_citekey [author: string, year: string, title: string] {
             "book"
         } else {
             $title 
-            | str downcase 
+            | str lowercase 
             | split row --regex `[\s\-_/]+` 
             | where ($it != "the" and $it != "a" and $it != "an" and $it != "of" and $it != "and") 
             | get 0? 

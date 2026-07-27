@@ -1,4 +1,4 @@
-{pkgs, lib, inputs, ...}:
+{pkgs, lib, inputs, config, ...}:
 
 let
   # Personal Info
@@ -609,6 +609,7 @@ in
       };
       windowrule = [
         "float on, center on, size 1000 700, match:title ^(vulpea-find)$"
+        "float on, center on, match:class ^(MEGAsync|megasync)$"
       ];
       debug = {
         vfr = true;
@@ -691,7 +692,7 @@ in
         ",XF86AudioNext,exec,dms ipc call mpris next"
         ",XF86MonBrightnessUp,exec,dms ipc call brightness increment 10 backlight:intel_backlight"
         ",XF86MonBrightnessDown,exec,dms ipc call brightness decrement 10 backlight:intel_backlight"
-        ",Print,exec,${emacsclient} -c -F '((name . \"vulpea-find\"))' --eval '(consult-vulpea-find)'"
+        ",Print,exec,${emacsclient} -c -F '((name . \"vulpea-find\"))' --eval '(vulpea-find)'"
         "SUPER_SHIFT,V,exec,python3 ${scripts}/visualize_habits.py && qutebrowser journal_stats.html habit_heatmap.html"
       ];
       bindm = [
@@ -699,7 +700,7 @@ in
         "SUPER, mouse:273, resizewindow"
       ];
       exec-once = [
-        "megasync"
+        "sleep 3 && megasync"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
         "iio-hyprland"
       ];
@@ -760,9 +761,8 @@ in
       '';
     };
     dataFile = {
-      "qutebrowser/userscripts/" = {
-        source = ../scripts/qutebrowser-userscripts;
-        recursive = true;
+      "qutebrowser/userscripts" = {
+        source = config.lib.file.mkOutOfStoreSymlink "${scripts}/qutebrowser-userscripts";
       };
     };
     desktopEntries = {
