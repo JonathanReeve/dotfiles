@@ -129,6 +129,15 @@
 	(setq org-clock-auto-clockout t)
 	(setq org-clock-auto-clockout-timer 20)
 
+	;; Sync Org Clock with Busybar and DMS on any clock action
+	(defun my/sync-busybar ()
+	  (start-process "busybar-update" nil "/home/jon/Agordoj/scripts/busybar.py" "update"))
+
+	(add-hook 'org-clock-in-hook #'my/sync-busybar)
+	(add-hook 'org-clock-out-hook #'my/sync-busybar)
+	(add-hook 'org-clock-cancel-hook #'my/sync-busybar)
+
+
 	(setq citar-templates
 	      '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
 	        (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords keywords:*}")

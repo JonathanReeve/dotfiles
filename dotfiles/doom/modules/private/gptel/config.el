@@ -69,3 +69,12 @@ This tool provides access to a Nushell environment.
    :include t)
 
   (gptel-agent-update))
+
+(use-package! mcp
+  :after gptel
+  :config
+  (require 'mcp-hub)
+  (require 'gptel-integrations)
+  (setq mcp-hub-servers
+        '(("playwright" . (:command "playwright-mcp" :args ()))))
+  (add-hook 'gptel-mode-hook #'gptel-mcp-connect))

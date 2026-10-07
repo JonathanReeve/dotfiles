@@ -471,7 +471,8 @@
       "centerWidgets": [
         "music",
         "clock",
-        "weather"
+        "weather",
+        "intervalCommand:Org Clock"
       ],
       "rightWidgets": [
         "systemTray",

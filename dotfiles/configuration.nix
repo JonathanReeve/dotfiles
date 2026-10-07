@@ -104,7 +104,7 @@
      vim                    # Text editors
      vale                   # Prose linting
      # aspell aspellDicts.en  # Spell checker
-     (aspellWithDicts (dicts: with dicts; [ en en-computers en-science eo fr ]))
+     (aspellWithDicts (dicts: with dicts; [ en eo fr ]))
      pass gopass gocryptfs      # Passwords and encryption
      brightnessctl          # Brightness control
      networkmanager
@@ -155,7 +155,6 @@
      github-cli
      zip unzip                  # Archives
 
-     texlive.combined.scheme-full
      git git-lfs            # Version control
      unzip                  # Archives
      file                   # File properties
@@ -410,6 +409,17 @@
     script =
       "${pkgs.protonmail-bridge}/bin/protonmail-bridge --log-level debug";
     path = [ pkgs.gnome-keyring ]; # HACK: https://github.com/ProtonMail/proton-bridge/issues/176
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+  };
+
+  systemd.user.services.busybar-daemon = {
+    description = "Busybar Org Clock Listener Daemon";
+    enable = true;
+    environment = {
+      PASSWORD_STORE_DIR = "/home/jon/Dokumentoj/Personal/.password-store";
+    };
+    script = "/home/jon/Agordoj/scripts/busybar.py daemon";
     wantedBy = [ "graphical-session.target" ];
     partOf = [ "graphical-session.target" ];
   };

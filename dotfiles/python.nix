@@ -4,7 +4,7 @@
   environment.systemPackages = with pkgs; [
      # Python Development
      pipenv
-     poetry
+     # poetry
      uv
      # mach-nix
      (python3.withPackages(ps: with ps; [

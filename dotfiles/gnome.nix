@@ -12,21 +12,8 @@
      evince # PDFs and documents
 
      # GTK Themes
-     theme-vertex
      arc-theme
-     theme-obsidian2
-     plano-theme
-     orchis-theme
-     materia-theme
-     equilux-theme
-     numix-gtk-theme
      gnome-themes-extra
-     arc-icon-theme
-     tela-icon-theme
-     faba-icon-theme
-     vimix-icon-theme
-     qogir-icon-theme
-     flat-remix-icon-theme
   ];
   services.gnome = {
       gnome-keyring.enable = true;

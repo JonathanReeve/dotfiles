@@ -259,6 +259,15 @@ in
       x11.enable = true;
     };
 
+    packages = with pkgs; [
+      playwright-driver
+      (writeShellScriptBin "playwright-mcp" ''
+        export PLAYWRIGHT_BROWSERS_PATH="${pkgs.playwright-driver.browsers}"
+        export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+        exec ${pkgs.nodejs}/bin/npx -y @playwright/mcp "$@"
+      '')
+    ];
+
     file = {
       # Vim all the things!
       ".inputrc".text =
@@ -267,7 +276,8 @@ in
           set keymap vi-command
         '';
       ".config/matugen/templates/colors-ewal.json.template".text = ewalTemplate;
-      ".config/matugen/templates/foot.ini.template".text = footTemplate;      ".config/matugen/templates/qutebrowser-colors.py.template".text = qutebrowserTemplate;
+      ".config/matugen/templates/foot.ini.template".text = footTemplate;
+      ".config/matugen/templates/qutebrowser-colors.py.template".text = qutebrowserTemplate;
       ".stack/config.yaml".text =
         ''
           templates:
@@ -279,6 +289,22 @@ in
       ".gemini/skills/" = {
         source = ../skills;
         recursive = true;
+      };
+      ".gemini/config/mcp_config.json".text = builtins.toJSON {
+        mcpServers = {
+          playwright = {
+            command = "playwright-mcp";
+            args = [ ];
+          };
+        };
+      };
+      ".gemini/antigravity-cli/mcp_config.json".text = builtins.toJSON {
+        mcpServers = {
+          playwright = {
+            command = "playwright-mcp";
+            args = [ ];
+          };
+        };
       };
     };
     stateVersion = "26.05";
@@ -316,7 +342,7 @@ in
             screenPreferences = [ "all" ];
             showOnLastDisplay = true;
             leftWidgets = [ "launcherButton" "workspaceSwitcher" "focusedWindow" ];
-            centerWidgets = [ "music" "plugin:intervalCommand:Org Clock" "clock" "weather" ];
+            centerWidgets = [ "music" "clock" "weather" "intervalCommand:Org Clock" ];
             rightWidgets = [ "systemTray" "clipboard" "cpuUsage" "memUsage" "notificationButton" "battery" "controlCenterButton" ];
             spacing = 0;
             innerPadding = 6;
@@ -353,6 +379,7 @@ in
                 id = "Org Clock";
                 name = "Org Clock";
                 command = "${scripts}/org-clock.nu";
+                clickCommand = "${scripts}/busybar.py toggle";
                 icon = "clock";
                 refreshInterval = 30;
               }
@@ -394,7 +421,7 @@ in
       doomDir = ./doom;
       extraBinPackages = with pkgs; [ fd ripgrep git ];
       extraPackages = epkgs: with pkgs; [
-        pass gnupg (aspellWithDicts (dicts: with dicts; [ en en-computers en-science eo fr ]))
+        pass gnupg (aspellWithDicts (dicts: with dicts; [ en eo fr ]))
         ripgrep epkgs.treesit-grammars.with-all-grammars
       ];
     };
@@ -556,18 +583,7 @@ in
     xwayland.enable = true;
     configType = "hyprlang";
     plugins = [
-      (inputs.hyprgrass.packages.${pkgs.system}.default.overrideAttrs (oldAttrs: {
-        postPatch = (oldAttrs.postPatch or "") + ''
-          substituteInPlace src/GestureManager.cpp \
-            --replace-fail "#define private public" "#define private public
-#define protected public" \
-            --replace-fail "#undef private" "#undef private
-#undef protected" \
-            --replace-fail "#include <hyprland/src/protocols/core/Compositor.hpp>" "#include <hyprland/src/protocols/core/Compositor.hpp>
-#include <hyprland/src/managers/fullscreen/FullscreenController.hpp>" \
-            --replace-fail "w->isFullscreen()" "Fullscreen::controller()->isFullscreen(w)"
-        '';
-      }))
+      # inputs.hyprgrass.packages.${pkgs.system}.default
     ];
     settings = {
       source = [ "~/.config/hypr/dms/colors.conf" ];
