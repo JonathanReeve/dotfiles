@@ -238,12 +238,6 @@
      quarto
      #jupyter-book
 
-     # AI
-     # aider-chat-full
-     gemini-cli
-     # claude-code
-     # claude-agent-acp
-
      # Network
      wireguard-tools
      proton-vpn

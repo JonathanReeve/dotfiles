@@ -41,20 +41,6 @@
       nixosConfigurations.fw12 = nixos.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [
-          ({ pkgs, ... }: {
-            nixpkgs.overlays = [
-              (final: prev: {
-                # Patch dms-shell to fix click-outside and ensure toggle works correctly
-                dms-shell-patched = (inputs.dms.packages.${pkgs.system}.default.override { }).overrideAttrs (old: {
-                  postInstall = (old.postInstall or "") + ''
-                    # 1. Wire the background click signal to the close function
-                    substituteInPlace $out/share/quickshell/dms/Widgets/DankPopout.qml \
-                      --replace-fail "signal backgroundClicked" "signal backgroundClicked; onBackgroundClicked: close()"
-                  '';
-                });
-              })
-            ];
-          })
           ./configuration.nix
           ./hardware-configuration-fw12.nix  # Import specific hardware config
           nixos-hardware.nixosModules.framework-12-13th-gen-intel
@@ -70,8 +56,6 @@
                           inputs.dms-plugin-registry.homeModules.default
                           inputs.danksearch.homeModules.dsearch
                         ];
-              # Use our patched package
-              programs.dank-material-shell.package = pkgs.dms-shell-patched;
               };
             }
         ];
