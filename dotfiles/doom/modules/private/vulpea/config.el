@@ -175,7 +175,9 @@ This override ensures the literature note template is applied and avoids overwri
 ")
          :unnarrowed t)
         ("m" "movie" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%u\n"
-         :target (file+olp "movies.org" ("watched")))))
+         :target (file+olp "movies.org" ("watched")))
+        ("T" "tv" plain "** ${title}\n :PROPERTIES:\n :ID: %(org-id-uuid)\n :RATING:\n :END:\n%u\n"
+         :target (file+olp "20220427210214-tv.org" ("Watched")))))
 
   ;; Bindings - kept at top level to ensure the prefix map is always defined
   (map! :leader

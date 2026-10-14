@@ -425,6 +425,20 @@ in
         pass gnupg (aspellWithDicts (dicts: with dicts; [ en eo fr ]))
         ripgrep epkgs.treesit-grammars.with-all-grammars
       ];
+      emacsPackageOverrides = eself: esuper: {
+        org-todoist = esuper.org-todoist.overrideAttrs (old: {
+          postPatch = (old.postPatch or "") + ''
+            substituteInPlace org-todoist.el \
+              --replace-fail $';;;###autoload\n(transient-define-prefix org-todoist-dispatch' \
+                             $';;;###autoload (autoload \'org-todoist-dispatch "org-todoist" nil t)\n(transient-define-prefix org-todoist-dispatch'
+          '';
+        });
+        typst-ts-mode = esuper.typst-ts-mode.overrideAttrs (old: {
+          postInstall = (old.postInstall or "") + ''
+            sed -i "1i (require 'compile)" $out/share/emacs/site-lisp/elpa/typst-ts-mode-*/typst-ts-mode-autoloads.el
+          '';
+        });
+      };
     };
     foot = {
       enable = true;
@@ -497,6 +511,7 @@ in
           "b" =  "set-cmd-text -s :tab-select ";
           "gL" = "open javascript:location.href='org-protocol://capture?template=l&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(document.getSelection())";
           "gM" = "open javascript:location.href='org-protocol://capture?template=m&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
+          "gT" = "open javascript:location.href='org-protocol://capture?template=T&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
           "gR" = "open javascript:location.href='org-protocol://roam-ref?template=r&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
           "gB" = "spawn -m ${scripts}/downloadBook.py {url}";
           "gV" = "spawn --userscript vulpea-bookmark";
@@ -552,6 +567,7 @@ in
         hints.chars = "arstdhneio";
         url.default_page = "${scripts}/homepage/homepage.html";
         colors.webpage.darkmode.enabled = true;
+        qt.args = ["disable-accelerated-video-decode"];
       };
     };
     starship = {

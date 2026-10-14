@@ -92,6 +92,8 @@
 	         "* TODO %?  %i\n  %a")
 	        ("m" "Movie" entry (file+headline "/home/jon/Dokumentoj/Org/Roam/movies.org" "watched")
 	         (function my/capture-movie-template) :prepend t)
+	        ("T" "TV Show" entry (file+headline "/home/jon/Dokumentoj/Org/Roam/20220427210214-tv.org" "Watched")
+	         (function my/capture-tv-template) :prepend t)
 	        ("l" "Link" entry (file+olp "/home/jon/Dokumentoj/Org/notes.org" "Web Links")
 	         "* %a\n %?\n %i")
 	        ("b" "Book (Literature Note)" plain "%?" :target (file "") :funcall (lambda () (vulpea-capture "r")))
