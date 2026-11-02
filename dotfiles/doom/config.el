@@ -96,7 +96,12 @@
 	         (function my/capture-tv-template) :prepend t)
 	        ("l" "Link" entry (file+olp "/home/jon/Dokumentoj/Org/notes.org" "Web Links")
 	         "* %a\n %?\n %i")
-	        ("b" "Book (Literature Note)" plain "%?" :target (file "") :funcall (lambda () (vulpea-capture "r")))
+	        ("b" "Book (Literature Note)" plain (function my/org-capture-vulpea-book)
+	         "%?" :unnarrowed t)
+	        ("p" "Person" plain (function my/org-capture-vulpea-person)
+	         "%?" :unnarrowed t)
+	        ("P" "Project" plain (function my/org-capture-vulpea-project)
+	         "%?" :unnarrowed t)
 	        ("s" "Schedule" entry (file "/home/jon/Dokumentoj/Org/Projects/schedule.org")
 	         "* %?\n :PROPERTIES:\n :LOCATION:\n :END:\n %a\n %i")
 	        ))	(setq org-modules '(org-habit org-protocol))
@@ -146,10 +151,11 @@
 	        (preview . "${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
 	        (note . "${author editor}, ${title}")))
 
-	;; Force citar-vulpea activation
-	(after! citar-vulpea
-	  (citar-vulpea-mode 1)
-	  (setq citar-notes-source 'citar-vulpea))
+	;; Activate Libro Citar notes & bibliography integration
+	(after! citar
+	  (add-to-list 'load-path "/home/jon/Programaroj/libro")
+	  (require 'libro-citar)
+	  (libro-citar-mode 1))
 
 	;; Hide the mode line in the org-roam buffer, since it serves no purpose. This
 	;; makes it easier to distinguish from other org buffers.

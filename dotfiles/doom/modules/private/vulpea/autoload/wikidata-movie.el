@@ -64,8 +64,36 @@ By default, TV shows do not include a director."
                      (substring time-str 1 5))))))
     (list :id entity-id :label label :director director :year year)))
 
-(defun my/wikidata-resolve-id (url-or-title)
-  "Resolve Wikidata ID from URL-OR-TITLE."
+(defun my/wikidata-get-person-details (entity-id)
+  "Get person details (label, birth year, death year, formatted years) for ENTITY-ID."
+  (let* ((url (format "https://www.wikidata.org/wiki/Special:EntityData/%s.json" entity-id))
+         (data (my/wikidata-get-json url))
+         (entities (cdr (assoc 'entities data)))
+         (entity (cdr (assoc (intern entity-id) entities)))
+         (claims (cdr (assoc 'claims entity)))
+         (labels (cdr (assoc 'labels entity)))
+         (en-label (cdr (assoc 'en labels)))
+         (label (if en-label (cdr (assoc 'value en-label)) "Unknown"))
+         (extract-year
+          (lambda (prop-claims)
+            (when prop-claims
+              (let* ((mainsnak (cdr (assoc 'mainsnak (car prop-claims))))
+                     (datavalue (cdr (assoc 'datavalue mainsnak)))
+                     (value (cdr (assoc 'value datavalue)))
+                     (time-str (cdr (assoc 'time value))))
+                (when (and time-str (string-match "^[+-]?0*\\([12][0-9]\\{2,3\\}\\)-" time-str))
+                  (match-string 1 time-str))))))
+         ;; Date of birth (P569) and Date of death (P570)
+         (birth-year (funcall extract-year (cdr (assoc 'P569 claims))))
+         (death-year (funcall extract-year (cdr (assoc 'P570 claims))))
+         (years (when birth-year
+                  (format "%s–%s" birth-year (or death-year "")))))
+    (list :id entity-id :label label :birth-year birth-year :death-year death-year :years years)))
+
+(defun my/wikidata-resolve-id (url-or-title &optional media-type target-year)
+  "Resolve Wikidata ID from URL-OR-TITLE with optional MEDIA-TYPE and TARGET-YEAR.
+MEDIA-TYPE can be :movie, :tv, :person, or nil.
+TARGET-YEAR can be a string or number representing the expected year."
   (cond
    ;; 1. Empty input
    ((or (not url-or-title) (string-empty-p (string-trim url-or-title)))
@@ -104,17 +132,46 @@ By default, TV shows do not include a director."
    ((string-match-p "\\`https?://" url-or-title)
     nil)
 
-   ;; 6. Search by title
+   ;; 6. Search by title with type-safe disambiguation
    (t
-    (let* ((clean-title (replace-regexp-in-string
-                         "\\`Watch \\| - Wikipedia\\| - Wikidata\\| - IMDb\\| | Prime Video\\| | Netflix\\| (film)\\| (TV series)\\| (TV Series.*)\\| (miniseries)\\| (TV miniseries)\\|: Season [0-9]+\\| - Season [0-9]+"
+    (let* ((year (or target-year
+                     (when (string-match "(\\([12][0-9]\\{3\\}\\))" url-or-title)
+                       (match-string 1 url-or-title))))
+           (clean-title (replace-regexp-in-string
+                         "\\`Watch \\| - Wikipedia\\| - Wikidata\\| - IMDb\\| | Prime Video\\| | Netflix\\| (film)\\| (TV series)\\| (TV Series.*)\\| (miniseries)\\| (TV miniseries)\\|: Season [0-9]+\\| - Season [0-9]+\\| ([12][0-9]\\{3\\})"
                          "" url-or-title))
-           (api-url (format "https://www.wikidata.org/w/api.php?action=wbsearchentities&search=%s&language=en&format=json&type=item"
+           (api-url (format "https://www.wikidata.org/w/api.php?action=wbsearchentities&search=%s&language=en&format=json&type=item&limit=10"
                             (url-hexify-string (string-trim clean-title))))
            (data (my/wikidata-get-json api-url))
-           (search (cdr (assoc 'search data))))
-      (when search
-        (cdr (assoc 'id (car search))))))))
+           (candidates (cdr (assoc 'search data)))
+           (filtered
+            (cl-remove-if-not
+             (lambda (item)
+               (let ((desc (downcase (or (cdr (assoc 'description item)) ""))))
+                 (pcase media-type
+                   (:movie
+                    (and (or (string-match-p "film" desc)
+                             (string-match-p "movie" desc)
+                             (string-match-p "documentary" desc))
+                         (not (string-match-p "television series\\|tv series\\|soundtrack\\|video game\\|given name\\|production company" desc))))
+                   (:tv
+                    (and (or (string-match-p "television series\\|tv series\\|miniseries\\|television program\\|animated series" desc))
+                         (not (string-match-p "soundtrack\\|video game\\|given name\\|film" desc))))
+                   (:person
+                    (not (string-match-p "film\\|television\\|series\\|album\\|song\\|genus\\|video game" desc)))
+                   (_ t))))
+             candidates))
+           ;; If year is known, prefer candidate matching the year
+           (matched-candidate
+            (or (when year
+                  (seq-find (lambda (item)
+                              (string-match-p (regexp-quote (format "%s" year))
+                                              (or (cdr (assoc 'description item)) "")))
+                            filtered))
+                (car filtered)
+                (car candidates))))
+      (when matched-candidate
+        (cdr (assoc 'id matched-candidate)))))))
 
 (defun my/extract-url-and-title-from-annotation (annotation)
   "Extract (URL . TITLE) from ANNOTATION."
@@ -149,9 +206,9 @@ MEDIA-TYPE can be :movie (default) or :tv."
          (url (or (car url-and-title) link))
          (page-title (cdr url-and-title))
          (url-or-title (or url page-title))
-         (entity-id (or (when url (my/wikidata-resolve-id url))
-                        (when page-title (my/wikidata-resolve-id page-title))
-                        (my/wikidata-resolve-id (read-string "URL or Title: ")))))
+         (entity-id (or (when url (my/wikidata-resolve-id url media-type))
+                        (when page-title (my/wikidata-resolve-id page-title media-type))
+                        (my/wikidata-resolve-id (read-string "URL or Title: ") media-type))))
     (if (not entity-id)
         (error "Could not find Wikidata entity for: %s" (or url-or-title "unknown input"))
       (let* ((details (my/wikidata-get-details entity-id))
@@ -183,9 +240,12 @@ MEDIA-TYPE can be :movie (default) or :tv."
                                           (format "[[id:%s][%s]]" (vulpea-note-id director-node) dir-name)
                                         dir-name)))
                   (format "%s\n\nDirected by %s.\n\n" today director-link)))))
-             (id (org-id-uuid)))
-        (format "* %s\n:PROPERTIES:\n:ID:       %s\n:WIKIDATA: [[wd:%s]]\n:RATING:   ***\n:END:\n%s"
-                title id entity-id body-content)))))
+             (id (org-id-uuid))
+             (year-prop (if (and year (not (string-empty-p year)))
+                            (format ":YEAR:     %s\n" year)
+                          "")))
+        (format "* %s\n:PROPERTIES:\n:ID:       %s\n%s:WIKIDATA: [[wd:%s]]\n:RATING:   ***\n:END:\n%s"
+                title id year-prop entity-id body-content)))))
 
 ;;;###autoload
 (defun my/capture-movie-template ()

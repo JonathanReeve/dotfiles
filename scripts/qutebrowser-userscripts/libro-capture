@@ -1,0 +1,18 @@
+#!/usr/bin/env nu
+
+# A qutebrowser userscript to capture a web page (Google Books, Goodreads,
+# Wikidata, Wikipedia, DOI/CrossRef, OpenLibrary, etc.) as a Libro Vulpea note
+def main [] {
+    let url = ($env.QUTE_URL? | default "")
+    let title = ($env.QUTE_TITLE? | default "")
+    let selected = ($env.QUTE_SELECTED_TEXT? | default "")
+
+    # Convert values to JSON strings so quotes, newlines, and special characters are safely escaped for Elisp
+    let url_json = ($url | to json)
+    let title_json = ($title | to json)
+    let selected_json = ($selected | to json)
+
+    let elisp = ["(libro-capture-url " $url_json " " $title_json " " $selected_json ")"] | str join ""
+
+    ^emacsclient --eval $elisp
+}

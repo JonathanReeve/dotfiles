@@ -229,7 +229,8 @@
      nodejs
 
      # Notetaking
-     # anytype
+     anytype
+     anytype-cli
 
      # Editor
      vscode

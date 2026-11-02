@@ -514,6 +514,7 @@ in
           "gT" = "open javascript:location.href='org-protocol://capture?template=T&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
           "gR" = "open javascript:location.href='org-protocol://roam-ref?template=r&ref='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)";
           "gB" = "spawn -m ${scripts}/downloadBook.py {url}";
+          "gb" = "spawn --userscript libro-capture";
           "gV" = "spawn --userscript vulpea-bookmark";
           "gO" = "spawn --userscript org-link";
           "gW" = "spawn --userscript wikidata-movie";
