@@ -1,85 +1,78 @@
 {
   description = "My NixOS configuration.";
   inputs = {
+    nixos.url = "nixpkgs/nixos-unstable";
+    nixos-hardware.url = "github:NixOS/nixos-hardware";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixos";
     };
-    nixos.url = "nixpkgs/nixos-unstable";
-    nixos-hardware.url = "github:NixOS/nixos-hardware"; 
-    nix-doom-emacs-unstraightened.url = "github:marienz/nix-doom-emacs-unstraightened"; # Retained for both laptops
-    dms.url = "github:AvengeMedia/DankMaterialShell";
+    nix-doom-emacs-unstraightened.url = "github:marienz/nix-doom-emacs-unstraightened";
+    dms = {
+      url = "github:duxlabs-dev/dux-shell";
+      inputs.nixpkgs.follows = "nixos";
+    };
     # Local copy for testing
     # dms = {
     #   url = "git+file:///home/jon/Programaroj/DankMaterialShell?ref=eo-traduko";
     #   inputs.nixpkgs.follows = "nixos";
     # };
-    dms-plugin-registry.url = "github:AvengeMedia/dms-plugin-registry";
+    dms-plugin-registry = {
+      url = "github:duxlabs-dev/dux-plugin-registry";
+      inputs.nixpkgs.follows = "nixos";
+    };
+    danksearch = {
+      url = "github:duxlabs-dev/dux-search";
+      inputs.nixpkgs.follows = "nixos";
+    };
     iio-hyprland.url = "github:JeanSchoeller/iio-hyprland";
     hyprland.url = "github:hyprwm/Hyprland";
     hyprgrass = {
       url = "github:horriblename/hyprgrass";
       inputs.hyprland.follows = "hyprland";
     };
-    danksearch = {
-      url = "github:AvengeMedia/danksearch";
-      inputs.nixpkgs.follows = "nixos";
-    };
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixos";
     };
   };
-  outputs = inputs @ { self,
-              nixos, 
-              nixos-hardware,
-              home-manager, 
-              ...
-            }:
-    {
-      # Define configurations for both laptops with new names
-      nixosConfigurations.fw12 = nixos.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./configuration.nix
-          ./hardware-configuration-fw12.nix  # Import specific hardware config
-          nixos-hardware.nixosModules.framework-12-13th-gen-intel
-          home-manager.nixosModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
-            home-manager.extraSpecialArgs = { inherit inputs; };
-            home-manager.users.jon = { pkgs, ... }: {
-              imports = [ ./home.nix
-                          inputs.nix-doom-emacs-unstraightened.homeModule
-                          inputs.dms.homeModules.dank-material-shell
-                          inputs.dms-plugin-registry.homeModules.default
-                          inputs.danksearch.homeModules.dsearch
-                        ];
+
+  outputs = inputs@{ self, nixos, nixos-hardware, home-manager, ... }:
+    let
+      mkHost = { hostName, extraModules ? [ ] }:
+        nixos.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./configuration.nix
+            ./hosts/${hostName}.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                backupFileExtension = "backup";
+                extraSpecialArgs = { inherit inputs; };
+                users.jon = ./home.nix;
               };
             }
-        ];
-      };
+          ] ++ extraModules;
+        };
+    in
+    {
+      nixosConfigurations = {
+        fw12 = mkHost {
+          hostName = "fw12";
+          extraModules = [
+            nixos-hardware.nixosModules.framework-12-13th-gen-intel
+          ];
+        };
 
-      nixosConfigurations.fw16 = nixos.lib.nixosSystem {
-        modules = [
-          ./configuration.nix
-          nixos-hardware.nixosModules.framework-16-7040-amd 
-          ./hardware-configuration-fw16.nix  # Import specific hardware config
-          home-manager.nixosModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
-            home-manager.extraSpecialArgs = { inherit inputs; };
-            home-manager.users.jon = { pkgs, ... }: {
-              imports = [
-                ./home.nix
-                inputs.nix-doom-emacs-unstraightened.hmModule
-              ];
-            };
-          }
-        ];
+        fw16 = mkHost {
+          hostName = "fw16";
+          extraModules = [
+            nixos-hardware.nixosModules.framework-16-7040-amd
+          ];
+        };
       };
     };
 }
-

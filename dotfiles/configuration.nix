@@ -20,13 +20,11 @@
     blacklistedKernelModules = [ "psmouse" ];
     tmp.cleanOnBoot = true;
     plymouth.enable = true;
-    resumeDevice = "/dev/nvme0n1p3";
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
   };
 
   networking = {
-    hostName = "jon-laptop"; # Define your hostname .
     networkmanager.enable = true;
     # Needed for VPN; see https://discourse.nixos.org/t/how-to-configure-and-use-proton-vpn-on-nixos/65837
     firewall.checkReversePath = false; # Needed for VPN
@@ -37,8 +35,12 @@
   };
 
   nixpkgs = {
-    config = { allowUnfree = true;
-               allowBroken = true;
+    config = {
+      allowUnfree = true;
+      allowBroken = true;
+      permittedInsecurePackages = [
+        "keybase-gui-6.6.3"
+      ];
     };
     overlays = [
     ];
@@ -64,7 +66,6 @@
     libertinus
     liberation_ttf
     noto-fonts-color-emoji
-    fira-code
     fira-code-symbols
     font-awesome
     libertine
@@ -128,7 +129,6 @@
 
      pywal
      wallust
-     ranger
 
      # Building stuff
      cmake
@@ -151,12 +151,9 @@
      cabal-install
      texlive.combined.scheme-full
      typst
-     git                    # Version control
-     github-cli
-     zip unzip                  # Archives
-
      git git-lfs            # Version control
-     unzip                  # Archives
+     github-cli
+     zip unzip              # Archives
      file                   # File properties
      imagemagick            # Image manipulation
      libxml2
@@ -241,20 +238,16 @@
 
      # Network
      wireguard-tools
-     proton-vpn
 
      # Ugh
      libreoffice
 
-     # Hyprland
-     inputs.iio-hyprland.packages.${pkgs.system}.default
-
      # Needed for vulpea etc
      fswatch
 
-     inputs.antigravity-nix.packages.x86_64-linux.default # Base App
-     inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-ide # IDE
-     inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-cli # CLI
+     inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.default # Base App
+     inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.google-antigravity-ide # IDE
+     inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.google-antigravity-cli # CLI
    ];
 
   environment.variables = {
@@ -267,7 +260,6 @@
   hardware = {
     firmware = with pkgs; [ linux-firmware ];
     keyboard.qmk.enable = true;
-    sensor.iio.enable = true;
     bluetooth.enable = true;
   };
   # home-manager.users.jon = import ./home.nix;
