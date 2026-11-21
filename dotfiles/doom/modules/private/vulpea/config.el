@@ -68,7 +68,8 @@
            :properties (("DRINKS" . "")
                         ("PHONE" . "")
                         ("EXERCISE" . "")
-                        ("MOOD" . ""))
+                        ("MOOD" . "")
+                        ("SEX" . ""))
            :head "#+created: %<[%Y-%m-%d]>
 
 #+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"%<%Y-%m-%d>\" :tend \"%(my/tomorrow)\"

@@ -71,7 +71,8 @@
               org-duration-format 'h:mm
               diary-file "~/Dokumentoj/Org/diary"
               org-agenda-include-diary t
-              org-agenda-files (list "~/Dokumentoj/Org/Projects/")
+              org-agenda-files (list "~/Dokumentoj/Org/Projects/"
+                                     "~/Dokumentoj/Org/todoist.org")
               org-agenda-skip-scheduled-if-done t
               org-agenda-skip-deadline-if-done t
               org-todo-keywords '((sequence "TODO" "WAITING" "|" "DONE" "CANCELED"))
@@ -104,6 +105,18 @@
 	         "%?" :unnarrowed t)
 	        ("s" "Schedule" entry (file "/home/jon/Dokumentoj/Org/Projects/schedule.org")
 	         "* %?\n :PROPERTIES:\n :LOCATION:\n :END:\n %a\n %i")
+	        ("d" "Todoist")
+	        ;; Capture a TODO directly to the inbox
+	        ("dq" "Inbox (quick)" entry (file+olp "/home/jon/Dokumentoj/Org/todoist.org" "Inbox" "Default Section")
+	         "* TODO %?")
+	        ("di" "Inbox" entry (file+olp "/home/jon/Dokumentoj/Org/todoist.org" "Inbox" "Default Section")
+	         "* TODO %? %^G %^{EFFORT}p \nSCHEDULED: %^t")
+	        ;; Capture to a specific project, section, and parent task, creating them if needed.
+	        ("ds" "Select Project" entry (function org-todoist-find-project-and-section)
+	         "* TODO %^{What is the task} %^G %^{EFFORT}p %(org-todoist-assign-task) %(progn (org-schedule nil) nil) %(progn (org-deadline nil) nil)\n%?")
+	        ;; Capture a note to an ignored subtree
+	        ("dn" "Project Notes" entry (function org-todoist-project-notes)
+	         "* %?")
 	        ))	(setq org-modules '(org-habit org-protocol))
 	;; Disable holidays. Is there an easier way of doing this?
 	(setq holiday-christian-holidays nil
@@ -206,6 +219,17 @@
 	;;     ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
 
 	) ;; End of Org block
+
+;; Org-Todoist
+(after! org-todoist
+  (setq org-todoist-file "todoist.org"
+        org-todoist-api-token
+        (let ((auth-source-pass-filename "/home/jon/Dokumentoj/Personal/.password-store"))
+          (require 'auth-source-pass)
+          (auth-source-pass-get 'secret "todoist.com/api-key"))))
+
+;; Add safe local variable for org-todoist's 4-space markdown list offset
+(add-to-list 'safe-local-variable-values '(org-list-indent-offset . 2))
 
 ;; (use-package! org-clock-reminder
 ;;   :config
